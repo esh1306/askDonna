@@ -61,6 +61,10 @@ flowchart LR
 
 ### See it
 
+**Home: what Donna handled, what she is doing, and the few things that need you.** Live counters, an estimate of admin time saved, your decisions with one-line next steps, and Donna's activity feed in her own words.
+
+![Home](docs/img/v6-home.png)
+
 **Donna does the work; people make the judgement calls.** Every page opens with what Donna handled, what she is waiting on (and will chase), and the few cases that need a person. Each ticket reads as Donna's own account of what she did and will do next; manual controls sit behind "Take over". Ask Donna anything from the floating assistant ("call the landlord for approval") and she does it herself.
 
 ![Donna at work](docs/img/v5-collapsed-donna.png)

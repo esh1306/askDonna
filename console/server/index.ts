@@ -417,6 +417,57 @@ async function handle(req: http.IncomingMessage, res: http.ServerResponse) {
     );
   }
 
+  // Read-only: Donna's recent actions + upcoming follow-ups for the Home page.
+  if (m === "GET" && p === "/api/activity") {
+    const limit = Math.max(1, Math.min(100, Number(new URL(req.url ?? "/", "http://x").searchParams.get("limit")) || 30));
+    const SKIP = ["get_ticket_context", "search_events", "find_tickets", "recall_lessons", "upsert_contact", "link_contact", "add_fact", "import_case", "add_event", "note", "accept_suggestion"];
+    const ph = SKIP.map(() => "?").join(",");
+    const rows = all<any>(
+      `SELECT a.id, a.ticket_id, a.action, a.input_json, a.output_json, a.ts, t.title, t.case_ref, pr.address
+       FROM action_log a LEFT JOIN tickets t ON t.id=a.ticket_id LEFT JOIN properties pr ON pr.id=t.property_id
+       WHERE a.actor='agent' AND a.ok=1 AND a.ticket_id IS NOT NULL AND a.action NOT IN (${ph}) ORDER BY a.id DESC LIMIT ?`,
+      ...SKIP, limit,
+    );
+    const J = (s: any) => { try { return JSON.parse(s ?? "{}") ?? {}; } catch { return {}; } };
+    const clip = (s: string, n: number) => (s.length > n ? s.slice(0, n).replace(/\s+\S*$/, "") + "..." : s);
+    const items = rows.map((r: any) => {
+      const i = J(r.input_json);
+      const where = r.address ? String(r.address).split(",").slice(0, /^flat/i.test(r.address) ? 2 : 1).join(",") : r.title ?? `case ${r.case_ref}`;
+      const at = r.address ? ` at ${where}` : ` on ${where}`;
+      const who = (x: any) => ({ tenant: "the tenant", landlord: "the landlord", contractor: "the contractor" } as Record<string, string>)[String(x ?? "").toLowerCase()] ?? (x ? String(x) : "the other side");
+      let text: string;
+      switch (r.action) {
+        case "move_stage": text = `I moved the case${at} to ${String(i.to ?? "the next stage").replace(/_/g, " ")}`; break;
+        case "place_hold": text = `I put the case${at} on hold${i.waitingOn ? ` until ${who(i.waitingOn)} replies` : ""}`; break;
+        case "request_approval": text = `I asked the landlord to approve ${i.amountGbp ? `£${i.amountGbp} of work` : "the work"}${at}`; break;
+        case "resolve_approval": text = `I recorded the landlord's ${i.status === "rejected" ? "refusal" : "approval"}${at}`; break;
+        case "queue_message": text = i.channel === "call" ? `I lined up a call${at}` : `I drafted ${i.channel === "sms" ? "a text" : "an email"}${at}`; break;
+        case "mark_message": text = `I sent a message${at}`; break;
+        case "escalate": text = `I flagged${at ? at.replace(" at ", " the issue at ") : " an issue"} for you to decide`; break;
+        case "assign_contractor": text = `I assigned ${i.company ?? i.contractor_name ?? "a contractor"}${at}`; break;
+        default: text = `I updated the case${at}`;
+      }
+      return { id: `a${r.id}`, ticket_id: r.ticket_id, ts: r.ts, kind: r.action, text: clip(text, 120), case_ref: r.case_ref };
+    });
+    if (items.length < 8) {
+      const ev = all<any>(
+        `SELECT e.id, e.ticket_id, e.ts, e.body, t.case_ref, pr.address FROM ticket_events e JOIN tickets t ON t.id=e.ticket_id LEFT JOIN properties pr ON pr.id=t.property_id
+         WHERE e.kind='agent_action' ORDER BY e.id DESC LIMIT ?`, limit,
+      );
+      for (const e of ev) items.push({ id: `e${e.id}`, ticket_id: e.ticket_id, ts: e.ts, kind: "event", text: clip(`I noted${e.address ? ` at ${String(e.address).split(",")[0]}` : ""}: ${String(e.body ?? "").replace(/^[A-Z][a-z]+ /, (w: string) => w.toLowerCase())}`, 120), case_ref: e.case_ref });
+      items.sort((a: any, b: any) => String(b.ts).localeCompare(String(a.ts)));
+      items.splice(limit);
+    }
+    const mid = new Date(); mid.setHours(0, 0, 0, 0);
+    const today = one<any>(`SELECT COUNT(*) c FROM action_log WHERE actor='agent' AND ok=1 AND action NOT IN (${ph}) AND ts>=?`, ...SKIP, mid.toISOString());
+    const upcoming = all<any>(
+      `SELECT h.id, h.ticket_id, h.reason, h.waiting_on, h.follow_up_at, t.case_ref, t.title, pr.address FROM holds h JOIN tickets t ON t.id=h.ticket_id LEFT JOIN properties pr ON pr.id=t.property_id
+       WHERE h.released_at IS NULL AND h.follow_up_at IS NOT NULL AND t.status!='closed' AND h.follow_up_at>=? ORDER BY h.follow_up_at LIMIT 5`,
+      new Date(Date.now() - 86400000).toISOString(),
+    );
+    return send(res, 200, { items, upcoming, today_count: today?.c ?? 0 });
+  }
+
   throw new HttpError(404, "not found");
 }
 

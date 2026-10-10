@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { api } from "./api.ts";
 import type { Detail, TicketRow } from "./api.ts";
 import { Button, DonnaMark, EntityHost, useToaster } from "./components/index.ts";
+import Home from "./views/Home.tsx";
 import Lessons from "./views/Lessons.tsx";
 import Queue from "./views/Queue.tsx";
 import Tickets from "./views/Tickets.tsx";
@@ -10,7 +11,7 @@ import DonnaHub from "./views/Donna.tsx";
 import AutoCall from "./AutoCall.tsx";
 
 export default function App() {
-  const [tab, setTab] = useState<"tickets" | "queue" | "lessons">("tickets");
+  const [tab, setTab] = useState<"home" | "tickets" | "queue" | "lessons">(() => (new URLSearchParams(location.search).get("view") === "lessons" ? "lessons" : "home"));
   const [tickets, setTickets] = useState<TicketRow[]>([]);
   const [queue, setQueue] = useState<any[]>([]);
   const [lessonCount, setLessonCount] = useState<number | null>(null);
@@ -40,7 +41,7 @@ export default function App() {
   }, []);
   const refresh = useCallback(async () => { await loadList(); await loadDetail(sel); }, [loadList, loadDetail, sel]);
 
-  useEffect(() => { loadList(); }, [loadList]);
+  useEffect(() => { loadList(); const t = setInterval(loadList, 15000); return () => clearInterval(t); }, [loadList]);
   useEffect(() => { loadDetail(sel); }, [sel, loadDetail]);
 
   // Hidden demo shortcut: Shift+I logs an inbound message.
@@ -67,14 +68,16 @@ export default function App() {
           </button>
           <div className="brand"><DonnaMark size={24} />Donna <span>operations</span></div>
           <div className="tracks">
+            <button className={`track ${tab === "home" ? "on" : ""}`} onClick={() => setTab("home")}>Home</button>
             <button className={`track ${tab === "tickets" ? "on" : ""}`} onClick={() => setTab("tickets")}>Donna's work{count(tickets.length)}</button>
             <button className={`track ${tab === "queue" ? "on" : ""}`} onClick={() => setTab("queue")}>Needs you{queue.length > 0 && <span className="n alert">{queue.length}</span>}</button>
-            <button ref={lessonsTab} className={`track ${tab === "lessons" ? "on" : ""}`} onClick={() => setTab("lessons")}>What Donna learned{count(lessonCount, bump)}</button>
           </div>
           <Button size="sm" onClick={refresh}>Refresh</Button>
         </div>
         {error && <div className="banner" onClick={() => setError("")}>{error}</div>}
-        {tab === "lessons" ? (
+        {tab === "home" ? (
+          <Home tickets={tickets} queue={queue} onOpen={openTicket} />
+        ) : tab === "lessons" ? (
           <Lessons onCount={setLessonCount} />
         ) : tab === "queue" ? (
           <Queue queue={queue} onOpen={openTicket} onResolved={refresh} toast={notify} />
@@ -83,7 +86,7 @@ export default function App() {
         )}
         {toastNode}
         <Demo open={demo} onClose={() => setDemo(false)} tickets={tickets} current={sel} onDone={() => { setArmed(sel); refresh(); }} toast={notify} />
-        <DonnaHub d={tab === "tickets" || sel != null ? detail : null} onChange={refresh} toast={notify} onRan={(id) => setArmed(id)} />
+        <DonnaHub d={tab === "tickets" || (sel != null && tab !== "home") ? detail : null} onChange={refresh} toast={notify} onRan={(id) => setArmed(id)} />
         <AutoCall d={detail} armed={armed} disarm={() => setArmed(null)} onChange={refresh} />
       </div>
     </EntityHost>
