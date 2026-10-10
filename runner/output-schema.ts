@@ -6,6 +6,21 @@ export const resultSchema = z.object({
   case_id: z.string().describe("Identifier of the case being processed"),
   decision: z.enum(DECISIONS).describe("Overall decision for this case"),
   summary: z.string().describe("2-4 sentence summary of what was decided and why"),
+  case_type: z
+    .enum(["maintenance", "maintenance_admin", "out_of_scope", "mixed", "safety_emergency"])
+    .describe("What kind of case this is; out_of_scope means not a maintenance job (rent, deposit, legal, neighbour, other)"),
+  judgement: z
+    .object({
+      why_this_decision: z.string().describe("The key evidence and reasoning behind the decision, citing events"),
+      alternatives_considered: z
+        .array(z.object({ option: z.string(), why_not: z.string() }))
+        .describe("Other reasonable options (e.g. proceed, wait, escalate, do nothing) and why they were rejected"),
+      checks_performed: z
+        .array(z.string())
+        .describe("Checks done before acting: e.g. approval status, amounts vs quote, payee, dates, safety, conflicting facts, duplicates"),
+      assumptions: z.array(z.string()).describe("Assumptions made where information was missing"),
+    })
+    .describe("Make the judgement auditable for a reviewer"),
   situation: z.string().describe("Your understanding of the situation as received"),
   actions_taken: z
     .array(

@@ -1,0 +1,120 @@
+{
+  "case": "3",
+  "decision": "request_info",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 37.158,
+  "decisionLine": "request_info",
+  "sessionId": "wrun_01M4JXE91TG269ZMTDH4DS103E",
+  "startedAt": "2026-10-10T12:43:38.667Z",
+  "finishedAt": "2026-10-10T12:44:15.825Z",
+  "usage": {
+    "inputTokens": 55822,
+    "outputTokens": 3123
+  },
+  "eventCount": 145,
+  "dryRun": false,
+  "result": {
+    "case_id": "54 (R/3)",
+    "decision": "request_info",
+    "summary": "The tenant at 22 Marlow Street says \"the same problem as before\" is back, but doesn't say what the problem is. The CRM has no earlier case for this property in the last 24 months. I texted the tenant to ask what the problem is, where it is, when it happened before, who fixed it and for a photo. The text also covers what to do in an emergency. The ticket is on hold until tomorrow and stays at intake until we know what the problem is.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "Event 001 doesn't name a fault. Event 002 shows no earlier case at this property, and the intake classifier couldn't classify it (event 003). Without knowing the problem we can't set urgency, ask the landlord to approve anything or choose a contractor. Only the tenant can answer quickly, so asking them is the right step. classify_reply flagged the message for review (needs a human response 0.87, dissatisfied 0.93). That is covered by a personal reply asking for the missing details.",
+      "alternatives_considered": [
+        {
+          "option": "Escalate to a human now",
+          "why_not": "The tenant can fill the gap themselves. There's no sign of a safety risk (classifier 0.02) and no formal complaint, so the ask-first rule applies."
+        },
+        {
+          "option": "Contact landlord Mr P. Danvers about the earlier repair",
+          "why_not": "There's no fault to describe to him yet, and no contact details or preferred channel are on file. Once the tenant says what the problem is, we can ask him whether he handled it directly last time."
+        },
+        {
+          "option": "Guess a category and send a contractor",
+          "why_not": "The problem is unknown, and spending without approval isn't allowed."
+        }
+      ],
+      "checks_performed": [
+        "Loaded the ticket: no earlier history at the property, no attachments, holds or approvals",
+        "Searched for other tickets at 22 Marlow Street: only this one exists",
+        "Ran classify_reply: still broken 0.99, safety 0.02, dissatisfied 0.93, flagged for review",
+        "Outbound guard passed the SMS"
+      ],
+      "assumptions": [
+        "The earlier repair may have been done outside the agency (for example by the landlord directly) or more than 24 months ago"
+      ]
+    },
+    "situation": "The tenant texted on 2026-10-05 to say a previous problem has come back and asked for it to be \"sorted properly this time\". The message has no details, and the agency has no earlier record. The landlord on file is Mr P. Danvers.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the case",
+        "result": "3 events, no earlier history, no contact details on file",
+        "ok": true
+      },
+      {
+        "tool": "find_tickets",
+        "description": "Looked for earlier tickets at the address",
+        "result": "Only ticket 54",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the tenant's SMS",
+        "result": "still_broken, flagged for review, dissatisfied 0.93, safety 0.02",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Texted the tenant asking what the problem is, where it is, when it happened before, who fixed it and for a photo, plus emergency guidance",
+        "result": "Queued (message 4), guard passed",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Put the ticket on hold waiting for the tenant, follow-up in 1 day",
+        "result": "hold_id 239",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Noted on the property that the tenant reported a recurring issue with no agency record",
+        "result": "fact 23",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord Mr P. Danvers",
+        "status": "not_needed (we don't know the problem or scope yet)",
+        "channel": "n/a"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "The missing information can come from the tenant, and there's no sign of a safety risk",
+      "handover_summary": "",
+      "recommendation": "If the tenant doesn't reply after a second chase, or turns out to be complaining about an earlier repair, escalate to a human."
+    },
+    "unverified": [
+      "What the problem is",
+      "Whether there really was an earlier repair, when it was and who did it",
+      "Whether the tenant is complaining about how the earlier repair was done",
+      "Whether the property is still tenanted (the 'tenanted' field is null)",
+      "Contact details for the tenant and landlord"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "The tenant is unhappy ('sort it out properly this time'), which could become a complaint",
+      "The earlier repair may have been done outside the agency, so its history and any warranty are unknown",
+      "If the fault involves water, gas or electrics it could become urgent"
+    ],
+    "final_status": "At intake, on hold waiting for the tenant (hold 239)",
+    "next_follow_up": {
+      "when": "2026-10-06",
+      "what": "If the tenant hasn't replied, chase them. Once they reply, classify the issue and, if needed, ask the landlord whether he handled the earlier repair directly"
+    },
+    "confidence": 0.85
+  }
+}

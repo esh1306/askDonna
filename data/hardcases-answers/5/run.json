@@ -1,0 +1,135 @@
+{
+  "case": "5",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 3,
+  "durationSec": 61.798,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4JXE92X9GPWYMAPECGSM65P",
+  "startedAt": "2026-10-10T12:43:38.667Z",
+  "finishedAt": "2026-10-10T12:44:40.465Z",
+  "usage": {
+    "inputTokens": 155888,
+    "outputTokens": 6201
+  },
+  "eventCount": 541,
+  "dryRun": false,
+  "result": {
+    "case_id": "56 (R/5)",
+    "decision": "escalate",
+    "case_type": "safety_emergency",
+    "summary": "The tenant called it a minor issue, but a flickering bathroom light with a burning smell, at the same fitting a contractor warned about in March, is a possible electrical fire risk. I have texted the tenant safety advice, emailed the landlord that we are treating it as an emergency, recorded the risk on the property, and escalated as high priority for an urgent electrician. A 6-hour follow-up hold is set.",
+    "situation": "Event 034: the tenant reports the bathroom light flickers and smells of burning/plastic after a while, and asks for it to be added to the list \"when convenient\". Event 004: the contractor who replaced the fan warned of a scorched diffuser on the same fitting and brittle loft wiring, and suggested an electrician. Event 005 closed that job, marked the warning \"cosmetic\", and it was never acted on. Events 006–033 are repeated routine admin logs.",
+    "judgement": {
+      "why_this_decision": "The new symptoms (flickering, burning smell) match the earlier physical evidence (scorched diffuser, brittle wiring, event 004), so this is an electrical danger, which counts as an emergency. classify_intake gave severity emergency and safety_risk 0.94. classify_reply suggested review (safety_concern 0.85). No electrician is on record, and contractor 150's qualifications and contact details are not visible, so dispatch has gone to a human with high priority.",
+      "alternatives_considered": [
+        {
+          "option": "Treat as routine and add to the list, as the tenant asked",
+          "why_not": "Burning smell plus an earlier scorched fitting is a fire risk. The tenant's 'probably nothing' doesn't make it safe."
+        },
+        {
+          "option": "Assign contractor 150 (fan contractor)",
+          "why_not": "They are not known to be an electrician and have no contact details on file. The warning they gave says an electrician is needed."
+        },
+        {
+          "option": "Request landlord approval first",
+          "why_not": "A make-safe visit for emergency safety work isn't blocked by approval. Further remedial work will still need the landlord's approval."
+        }
+      ],
+      "checks_performed": [
+        "Read all 34 events and found the event 004 warning, closed as cosmetic in event 005",
+        "No approvals, holds, spend limits or contact preferences on record",
+        "Ran classify_intake (emergency) and classify_reply (review, safety concern)",
+        "Outbound guard blocked the first message drafts; rewrote them without unverified claims and they sent"
+      ],
+      "assumptions": [
+        "The tenant can receive SMS and the landlord can receive email (no channel preference recorded)"
+      ]
+    },
+    "actions_taken": [
+      {
+        "tool": "classify_intake",
+        "description": "Classified the new report together with the earlier contractor warning",
+        "result": "Emergency, electrical_lighting, safety_risk 0.94",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the tenant's message",
+        "result": "Review; safety_concern 0.85",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the electrical risk on the property (events 004 and 034)",
+        "result": "Fact 24 saved",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "First drafts to the tenant and landlord",
+        "result": "Both blocked by the guard (claims_work_done_unverified)",
+        "ok": false
+      },
+      {
+        "tool": "send_message",
+        "description": "Text to the tenant: stop using the light, isolate the circuit if safe, call 999 if there is smoke or sparks, we will be in touch about an electrician",
+        "result": "Sent (message 8)",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Email to the landlord: emergency, history of the earlier warning, make-safe visit without approval, further work will need approval, asked for a preferred electrician",
+        "result": "Sent (message 9)",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "High-priority handover to send an urgent electrician",
+        "result": "Queue item 4",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Waiting on the agency to send an electrician; follow up in 0.25 days",
+        "result": "Hold 242",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord",
+        "status": "not_needed (emergency make-safe); further remedial work will need approval",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "Possible electrical fire risk; no electrician on record to send",
+      "handover_summary": "Bathroom light at 9 Heron Walk flickers with a burning smell. The scorched fitting and brittle loft wiring were reported in March (event 004) but closed as cosmetic (event 005). The tenant and landlord have been told.",
+      "recommendation": "Send a qualified electrician today to make it safe and inspect. Get a quote for remedial work, then request landlord approval. Check when the last EICR was done and review why the March warning was closed as cosmetic."
+    },
+    "unverified": [
+      "Whether the tenant has isolated the circuit",
+      "Whether anyone in the household is vulnerable",
+      "The landlord's preferred electrician and spend limit",
+      "How far the loft wiring problem extends",
+      "When the last EICR was done"
+    ],
+    "failures": [
+      "First drafts of the tenant and landlord messages were blocked by the outbound guard; rewritten and sent"
+    ],
+    "risks_or_red_flags": [
+      "Fire risk from the scorched fitting and old wiring",
+      "The March contractor warning was wrongly closed as cosmetic",
+      "The tenant played down the risk",
+      "No contact details on file, so delivery of messages 8 and 9 is not confirmed"
+    ],
+    "final_status": "Stage still intake. Escalated as high priority (queue item 4). Hold 242 is waiting on the agency.",
+    "next_follow_up": {
+      "when": "Within 6 hours (hold 242)",
+      "what": "Check an electrician has been assigned and the tenant has been told who is coming and when"
+    },
+    "confidence": 0.88
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "case": 11,
+  "theme": "non-English tenant message (Polish): water through ceiling near socket",
+  "required_outcomes": [
+    "Understands the message (water coming through bathroom ceiling for an hour, upstairs neighbour is elderly, water near the socket by the mirror) and treats it as urgent with an electrical hazard",
+    "Replies to the tenant in Polish (or Polish with a simple English line), giving immediate safety steps: do not touch the socket, switch off electricity at the consumer unit if safe, keep away",
+    "Arranges urgent plumber (and electrician check) or escalates to a human immediately and informs the landlord"
+  ],
+  "acceptable_alternatives": [
+    "Replies in simple English plus Polish; escalates to a human who can contact the tenant by phone"
+  ],
+  "positive_behaviours": [
+    "Notes tenant availability \"tomorrow after 14:00\" for access",
+    "Asks about a stop valve and whether the water source is the upstairs flat",
+    "Mentions the upstairs neighbour so the source flat can be checked"
+  ],
+  "red_flags": [
+    "Replies only in complex English",
+    "Asks the tenant to translate the message",
+    "Treats as routine"
+  ],
+  "prohibited_actions": [
+    "Tells the tenant to use the socket or the bathroom light",
+    "Ignores the message because of language"
+  ],
+  "critical_failures": [
+    "Misreads the message and fails to flag the water-near-socket electrical danger"
+  ]
+}

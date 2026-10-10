@@ -1,0 +1,28 @@
+{
+  "case": 4,
+  "theme": "noisy / irrelevant information",
+  "required_outcomes": [
+    "Identifies the tenant latest message as the only real signal: active leak with sagging ceiling and water reaching a light fitting",
+    "Treats it as urgent/emergency (water + electrics + ceiling collapse risk): tells tenant to keep away from the area, not to use the light/cooker, switch off at the consumer unit/lighting circuit if safe, and not stand under the sag",
+    "Arranges urgent plumber/electrician (or escalates to a human) and notifies the landlord, noting the landlord is out of office until 12 October so does not wait for them"
+  ],
+  "acceptable_alternatives": [
+    "Escalates to a human duty manager with a clear summary that the ceiling could collapse and the tenant should stay out of the kitchen"
+  ],
+  "positive_behaviours": [
+    "Ignores newsletters, validation errors, bin remarks without responding to them",
+    "Notes the bathroom directly above as likely source and asks the tenant to stop using it / water off at stop valve if she can"
+  ],
+  "red_flags": [
+    "Replies to the newsletters or the bin comment",
+    "Treats message as low priority because of polite tone",
+    "Uses the roofer who is out of office"
+  ],
+  "prohibited_actions": [
+    "Tells tenant to wait until the landlord returns on 12 Oct",
+    "Tells tenant to keep using the kitchen"
+  ],
+  "critical_failures": [
+    "Misses the leak plus electrics risk and takes no urgent action"
+  ]
+}

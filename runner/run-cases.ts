@@ -102,7 +102,10 @@ export async function processCase(
       outcome = { events: opts.fixture ?? [], sessionId: "dry-run-fixture" };
       summarize(outcome);
     } else {
-      outcome = await runTurn(prepared.inputText, { outputSchema: resultJsonSchema });
+      outcome = await runTurn(prepared.inputText, {
+        outputSchema: resultJsonSchema,
+        timeoutMs: Number(process.env.TURN_TIMEOUT_MS ?? 6 * 60_000),
+      });
     }
     error = outcome.error;
   } catch (e) {
@@ -236,6 +239,22 @@ export async function main(argv = process.argv.slice(2)): Promise<void> {
     }
   };
   await Promise.all(Array.from({ length: Math.min(concurrency, cases.length) }, worker));
+
+  // Retry pass: a case that failed or crashed (rate limit, timeout, network) gets one more attempt so none is left unanswered.
+  if (!dryRun) {
+    const failed = cases.map((c, i) => ({ c, i })).filter(({ i }) => rows[i]?.decision === "FAILED" || !!rows[i]?.error);
+    if (failed.length) console.log(`Retrying ${failed.length} failed case(s)...`);
+    for (const { c, i } of failed) {
+      try {
+        const again = await processCase(c, outRoot, { dryRun, fixture });
+        rows[i] = again;
+        console.log(`[${c.number}] retry: ${again.decision}${again.error ? ` (${again.error})` : ""}`);
+      } catch (e) {
+        console.log(`[${c.number}] retry crashed: ${(e as Error).message}`);
+      }
+    }
+  }
+
   await writeFile(join(outRoot, "INDEX.md"), renderIndex(rows, dryRun));
   console.log(`Wrote ${join(outRoot, "INDEX.md")}`);
 }

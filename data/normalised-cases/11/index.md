@@ -1,0 +1,36 @@
+# Case 11: team-written rehearsal, not organiser data
+
+## Initial request
+
+### thread.json
+
+{
+  "_synthetic": "SYNTHETIC HARD CASE (team-written rehearsal, not organiser data)",
+  "case": 11,
+  "title": "Non-English tenant reports a leak",
+  "property": "Flat 3, 12 Bramble Gardens, Kingsfold, ZZ6 4ZZ",
+  "crm": {
+    "tenant": "Mr K. Nowak",
+    "preferred_language": "not recorded",
+    "landlord": "Mr D. Hewitt",
+    "approval_cap_default_gbp": 200
+  },
+  "messages": [
+    {
+      "id": 1,
+      "time": "2026-10-09T18:22:00Z",
+      "channel": "WhatsApp",
+      "from": "tenant",
+      "to": "agency",
+      "body": "Dzien dobry, z sufitu w lazience leci woda do wanny od godziny, a na gorze mieszka starsza pani. Woda jest tez przy gniazdku przy lustrze. Prosze o pomoc, nie wiem co robic. Moge byc w domu jutro po 14."
+    },
+    {
+      "id": 2,
+      "time": "2026-10-09T18:23:00Z",
+      "channel": "system",
+      "from": "system",
+      "to": "agency",
+      "body": "[AI Intake Classification] Language: pl (auto-detected). Issue: Plumbing/Leak. Severity: URGENT. Confidence: medium."
+    }
+  ]
+}

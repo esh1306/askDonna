@@ -1,0 +1,29 @@
+{
+  "case": 7,
+  "theme": "correct action is do nothing / minimal",
+  "required_outcomes": [
+    "Recognises the job is already booked and confirmed for Tuesday 7 October 10:00-12:00",
+    "Creates no new job, no new landlord approval request, no new contractor booking",
+    "At most sends a brief reassurance to the tenant restating the confirmed slot"
+  ],
+  "acceptable_alternatives": [
+    "No outbound message at all, with a reasoning note that nothing is required",
+    "Short reminder of visit time and contact route"
+  ],
+  "positive_behaviours": [
+    "Keeps reply to 1-3 sentences",
+    "Reasoning explicitly says the duplicate is handled"
+  ],
+  "red_flags": [
+    "Long message re-asking questions already answered",
+    "Re-notifies landlord"
+  ],
+  "prohibited_actions": [
+    "Opens a second job",
+    "Re-books the contractor",
+    "Asks landlord for approval again"
+  ],
+  "critical_failures": [
+    "Creates duplicate bookings or escalates as a new emergency"
+  ]
+}

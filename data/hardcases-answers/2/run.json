@@ -1,0 +1,136 @@
+{
+  "case": "2",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 2,
+  "durationSec": 57.32,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4JXE91E29VQQH2NMDGHFFY3",
+  "startedAt": "2026-10-10T12:43:38.667Z",
+  "finishedAt": "2026-10-10T12:44:35.987Z",
+  "usage": {
+    "inputTokens": 135074,
+    "outputTokens": 5061
+  },
+  "eventCount": 357,
+  "dryRun": false,
+  "result": {
+    "case_id": "55 (R/2)",
+    "decision": "escalate",
+    "case_type": "maintenance",
+    "summary": "The landlord approved a plumber visit up to £150 and asked for Brightwell Plumbing (event 004), but the booking email bounced (event 006) and the tenant update failed to send (event 008). I assigned Brightwell, emailed the tenant to say sorry and how to stop the water, and escalated at high priority so a person can phone Brightwell and fix the email address on file. The visit is still not booked.",
+    "situation": "The bathroom basin tap at 3 Kestrel Close is leaking and the puddle is getting bigger. The job was approved 3 days ago but nobody was told: the contractor never got the booking and the tenant never got the update. The tenant has now chased.",
+    "judgement": {
+      "why_this_decision": "The approval is clear and names a contractor (event 004), so assigning Brightwell is the normal next step. But the only Brightwell address on file bounced (event 006, probably misspelt 'brightwel'), so I have no working way to reach them. A person needs to phone them. The tenant is unhappy and there is some water risk (classify_reply: dissatisfied 0.94, safety 0.67), so they needed a reply and safe advice now.",
+      "alternatives_considered": [
+        {
+          "option": "Message the contractor through the CRM",
+          "why_not": "The only address on file bounced, so the message would fail again."
+        },
+        {
+          "option": "Treat as an emergency and send any plumber",
+          "why_not": "A basin tap drip can be stopped at the isolation valve, so it is not water that can't be contained. The landlord also named a contractor."
+        },
+        {
+          "option": "Ask the landlord for approval again",
+          "why_not": "Approval is already given up to £150."
+        }
+      ],
+      "checks_performed": [
+        "Read all 9 events",
+        "Approval scope: up to £150, Brightwell Plumbing (event 004)",
+        "Delivery failures in events 006 and 008",
+        "CRM has no other contractor email or phone",
+        "No existing holds, approvals or human-queue items",
+        "Classified the tenant's reply"
+      ],
+      "assumptions": [
+        "The bounced address is a typo for Brightwell's real address",
+        "The tenant's availability of Mon-Fri 9-5 (from event 005) is still correct"
+      ]
+    },
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the ticket",
+        "result": "9 events, no holds or approvals, contractor record has only the bounced address",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the tenant's chaser (event 009)",
+        "result": "review; dissatisfied 0.94, safety 0.67",
+        "ok": true
+      },
+      {
+        "tool": "search_case",
+        "description": "Searched for any other Brightwell contact details",
+        "result": "None found",
+        "ok": true
+      },
+      {
+        "tool": "assign_contractor",
+        "description": "Assigned Brightwell Plumbing as the landlord asked",
+        "result": "Stage moved to scheduling",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant: apology, explanation of what went wrong, containment advice (isolation valve or stopcock), when to call",
+        "result": "Queued in the outbox (message 6), guard passed",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded: the landlord prefers Brightwell; the Brightwell booking address is invalid; tenant available Mon-Fri 9-5",
+        "result": "Facts 27, 28 and 29 saved",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "High-priority handover: phone Brightwell and fix their email address on file",
+        "result": "Queue item 3",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold waiting on the agency, follow up in 1 day",
+        "result": "Hold 241",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord",
+        "status": "granted (up to £150, Brightwell Plumbing, event 004)",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "The approved job has stalled: we have no working contact for the contractor and the leak is getting worse.",
+      "handover_summary": "The booking email to Brightwell bounced (event 006) and the tenant update failed (event 008). Brightwell is now assigned and the tenant has been emailed containment advice. Someone needs to phone Brightwell.",
+      "recommendation": "Phone Brightwell today and send the booking again: 3 Kestrel Close, basin tap leak, tenant available Mon-Fri 9-5, approved up to £150. Correct their email address in the CRM and check the tenant email was delivered. If Brightwell can't come soon, ask the landlord for another plumber."
+    },
+    "unverified": [
+      "Brightwell's correct email address or phone number",
+      "Whether the tenant email (message 6) is actually delivered; there is no tenant email or phone stored in the CRM",
+      "Whether the tenant has managed to stop the leak"
+    ],
+    "failures": [
+      "Earlier failures (before my turn): the contractor booking bounced (event 006) and the tenant update was not sent (event 008)",
+      "I did not message the contractor because there is no working address on file"
+    ],
+    "risks_or_red_flags": [
+      "The leak is getting worse and may cause water damage",
+      "The tenant is unhappy after 3 days with no contact",
+      "An outbound message may fail again"
+    ],
+    "final_status": "scheduling; on hold waiting on the agency; escalated (high priority)",
+    "next_follow_up": {
+      "when": "2026-10-05",
+      "what": "Check that Brightwell has been reached and the visit booked, and that the tenant got the email"
+    },
+    "confidence": 0.85
+  }
+}

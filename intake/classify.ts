@@ -9,9 +9,30 @@ export type IntakeState = {
   property?: string;
   reporter_role?: string;
   extra?: Record<string, string>;
+  /** Compact landlord/tenant/property facts (see profile.ts buildProfile). */
+  profile?: string;
+  /** Short list of prior jobs at the property. */
+  history?: string[];
 };
 
+export const SCOPES = {
+  maintenance_repair: "A fault or repair at the property that a contractor or the landlord would fix.",
+  maintenance_admin: "Property-maintenance admin: inspections, meter or solar readings, photos, check-out works, access arrangements.",
+  tenancy_finance: "Rent, arrears, deposit, fees, charges, refunds, payment queries.",
+  tenancy_legal_or_dispute: "Eviction or notices, tenancy disputes, legal claims, complaints about the agency or its staff, insurance claims.",
+  neighbour_or_antisocial: "Neighbour noise or nuisance, antisocial behaviour, parking and boundary issues with neighbours.",
+  emergency_safety: "An immediate danger to people or property: gas smell, fire, flooding in progress, electrical burning, break-in.",
+  other_non_property: "Anything else that is not about maintaining a property.",
+} as const;
+export type Scope = keyof typeof SCOPES;
+export const SCOPE_KEYS = Object.keys(SCOPES) as Scope[];
+export const IN_SCOPE: readonly Scope[] = ["maintenance_repair", "maintenance_admin", "emergency_safety"];
+
 export type IntakeResult = {
+  scope: Scope;
+  scope_probs: Record<Scope, number>;
+  /** Informational: the request is written in a language other than English. */
+  non_english: number;
   category: Category;
   category_probs: Record<Category, number>;
   severity: Severity;
@@ -31,6 +52,7 @@ export type Route =
   | "self_fix_first"
   | "request_landlord_approval"
   | "ask_for_info"
+  | "out_of_scope_handover"
   | "standard";
 
 /** Routing thresholds (probabilities from calibrated Jev answers). */
@@ -43,6 +65,8 @@ export const THRESHOLDS = {
   /** likely_self_fixable >= SELF_FIXABLE and safety_risk < SELF_FIX_MAX_SAFETY => self_fix_first */
   SELF_FIXABLE: 0.6,
   SELF_FIX_MAX_SAFETY: 0.2,
+  /** P(scope is not maintenance_* / emergency_safety) >= this => out_of_scope_handover (checked first) */
+  OUT_OF_SCOPE: 0.5,
   /** needs_landlord_approval >= this => request_landlord_approval */
   LANDLORD_APPROVAL: 0.5,
 } as const;
@@ -62,12 +86,32 @@ const SCORE_SEVERITY_LEVELS = SEVERITY_KEYS.map((k) => `${k}: ${SEVERITIES[k]}`)
 
 const CATEGORY_CRITERIA: Record<string, string> = Object.fromEntries(CATEGORY_KEYS.map((k) => [k, CATEGORIES[k]]));
 
+const GENERAL =
+  "The request may be in any language (judge its content, not its language) and may be a ticket title, an email, a chat message or an agency note. " +
+  "Use the profile and history in the state when present. ";
+
+const SCOPE_CRITERIA: Record<string, string> = Object.fromEntries(SCOPE_KEYS.map((k) => [k, SCOPES[k]]));
+
 export function buildQuestions() {
   return {
+    scope: {
+      type: "choice",
+      instructions:
+        GENERAL +
+        "Decide what kind of request this is for a UK residential lettings agency. Only faults/repairs and property-maintenance admin are the agency's maintenance desk work. " +
+        "Rent, arrears, deposits and fees are tenancy_finance. Evictions, disputes, legal or insurance-claim questions and complaints about the agency are tenancy_legal_or_dispute. " +
+        "Neighbour noise or behaviour is neighbour_or_antisocial. A gas smell, fire, active flooding, sparking or a break-in is emergency_safety even if short. " +
+        "A normal repair report, even if angry or in another language, is maintenance_repair.",
+      criteria: SCOPE_CRITERIA,
+    },
+    non_english: {
+      type: "noul",
+      instructions: "Informational only: is the request written wholly or mainly in a language other than English?",
+    },
     category: {
       type: "choice",
       instructions:
-        "You triage maintenance requests for a UK residential lettings agency. Choose the single category that best describes the " +
+        GENERAL + "You triage maintenance requests for a UK residential lettings agency. If the request is not a maintenance job at all (rent, deposit, dispute, neighbour, complaint), choose other. Choose the single category that best describes the " +
         "PRIMARY fault or job in the request. Judge by what is broken or being asked for, not by who reports it. " +
         "Location beats item type for outdoor things: a pipe, tap or drain in the garden or outside the building, and a shed, gate or fence (even its door or hinges), are garden_external, not plumbing or doors_windows_locks. " +
         "But a door or window of the dwelling itself that merely opens onto the garden or balcony (back door, garden door, patio door) stays doors_windows_locks. " +
@@ -79,7 +123,7 @@ export function buildQuestions() {
     severity: {
       type: "score",
       instructions:
-        "Rate how urgent this maintenance request is for a UK lettings agency, from routine to emergency. " +
+        GENERAL + "Rate how urgent this maintenance request is for a UK lettings agency, from routine to emergency. If it is not a maintenance request at all, answer routine unless it states an immediate danger. A recorded vulnerable household (infant, elderly, disabled) makes a loss of heating, hot water or security more urgent. " +
         "Nearly all requests are routine: the agency's own intake note rates ordinary repair requests routine. " +
         "Emergency is rare and needs an explicit, stated danger in progress: active leak or flooding, gas smell, electrical sparking or burning, " +
         "no heating or hot water in cold weather, or an external door/window that cannot be secured at all. " +
@@ -96,7 +140,9 @@ export function buildQuestions() {
         "In UK managed lettings this is the default for any repair or replacement of landlord-owned items or fabric, garden and communal works, redecoration, carpets and check-out works: answer yes. " +
         "Answer no for pure admin (inspections, meter or solar readings, photos, appointment changes), for tenant-owned or tenant-only matters, " +
         "and for genuine emergencies where the agent must act at once. " +
-        "Whether the landlord has pre-authorised small jobs is not visible in the request, so do not guess that: stay near the default for ordinary repairs.",
+        "If the landlord's recorded facts in the profile give standing authority or a spend limit that plausibly covers this job (pre-approved limit, pays contractor directly), answer no. " +
+        "If the profile records that the landlord wants a call or approval before spending, answer yes. " +
+        "With no such facts, the request does not show whether the landlord pre-authorised small jobs, so do not guess: stay near the default for ordinary repairs.",
     },
     likely_self_fixable: {
       type: "noul",
@@ -127,6 +173,8 @@ export function buildQuestions() {
 export function buildRequest(state: IntakeState) {
   const s: Record<string, unknown> = { request: state.request };
   if (state.property) s.property = state.property;
+  if (state.profile) s.profile = state.profile;
+  if (state.history?.length) s.history = state.history;
   if (state.reporter_role) s.reporter_role = state.reporter_role;
   if (state.extra) Object.assign(s, state.extra);
   return { state: s, model: JEV_MODEL, questions: buildQuestions() };
@@ -230,7 +278,14 @@ export function parseResponse(json: unknown, latencyMs = 0): IntakeResult {
   const cat = parseChoice(a.category, CATEGORY_KEYS, "category");
   const sev = parseScore(a.severity, SEVERITY_KEYS, SCORE_SEVERITY_LEVELS, "severity");
   const approvalRaw = parseNoul(a.needs_landlord_approval, "needs_landlord_approval");
+  // scope / non_english tolerated as absent (older responses): default to an in-scope repair.
+  const scope = a.scope
+    ? parseChoice(a.scope, SCOPE_KEYS, "scope")
+    : { value: "maintenance_repair" as Scope, probs: { ...zero(SCOPE_KEYS), maintenance_repair: 1 } };
   return {
+    scope: scope.value,
+    scope_probs: scope.probs,
+    non_english: a.non_english === undefined ? 0 : parseNoul(a.non_english, "non_english"),
     category: cat.value,
     category_probs: cat.probs,
     severity: sev.value,
@@ -248,9 +303,16 @@ export function parseResponse(json: unknown, latencyMs = 0): IntakeResult {
 // ---------- routing ----------
 
 export function decideRoute(
-  r: Pick<IntakeResult, "severity_probs" | "needs_landlord_approval" | "likely_self_fixable" | "safety_risk" | "needs_more_info">,
+  r: Pick<IntakeResult, "severity_probs" | "needs_landlord_approval" | "likely_self_fixable" | "safety_risk" | "needs_more_info"> &
+    Partial<Pick<IntakeResult, "scope" | "scope_probs">>,
 ): Route {
   const T = THRESHOLDS;
+  const oos = r.scope_probs
+    ? SCOPE_KEYS.filter((k) => !IN_SCOPE.includes(k)).reduce((a, k) => a + r.scope_probs![k], 0)
+    : r.scope && !IN_SCOPE.includes(r.scope)
+      ? 1
+      : 0;
+  if (oos >= T.OUT_OF_SCOPE) return "out_of_scope_handover";
   if (r.safety_risk >= T.SAFETY_RISK || r.severity_probs.emergency >= T.EMERGENCY_SEVERITY) return "emergency_dispatch";
   if (r.needs_more_info >= T.NEEDS_MORE_INFO) return "ask_for_info";
   if (r.likely_self_fixable >= T.SELF_FIXABLE && r.safety_risk < T.SELF_FIX_MAX_SAFETY) return "self_fix_first";

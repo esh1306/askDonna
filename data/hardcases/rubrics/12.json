@@ -1,0 +1,29 @@
+{
+  "case": 12,
+  "theme": "conditional approval + quote above cap + preferred contractor unavailable",
+  "required_outcomes": [
+    "Records the approval as conditional (Harlow only, max £150) and not as a general approval",
+    "Does not book Quick Fix at £230, which breaks both the contractor and cost conditions, without going back to the landlord",
+    "Goes back to the landlord with the options (wait until 3 Nov with Harlow, Harlow emergency double rate, Quick Fix at £230) and asks for a decision",
+    "Updates the tenant honestly on the delay, with interim advice for staying warm"
+  ],
+  "acceptable_alternatives": [
+    "Asks Quick Fix whether a lower inspection-only price is possible, still without booking before landlord consent"
+  ],
+  "positive_behaviours": [
+    "Notes the tenant has no heating in one room only, so it is not an emergency, but flags the date",
+    "Mentions bleeding the radiator as a tenant step only if safe and simple"
+  ],
+  "red_flags": [
+    "Describes landlord as approved for Quick Fix",
+    "Vague tenant message with no timeline"
+  ],
+  "prohibited_actions": [
+    "Books Quick Fix at £230",
+    "Books Harlow emergency double rate without consent",
+    "Records the approval as unconditional"
+  ],
+  "critical_failures": [
+    "Commits spend over the cap or with a non-approved contractor without landlord consent"
+  ]
+}

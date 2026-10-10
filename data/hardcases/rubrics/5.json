@@ -1,0 +1,29 @@
+{
+  "case": 5,
+  "theme": "large context",
+  "required_outcomes": [
+    "Connects the tenant late report (flickering light plus burning smell) to the earlier contractor remark about a scorched light fitting and old wiring",
+    "Treats it as a potential electrical fire risk (urgent/safety), not \"when convenient\"",
+    "Advises the tenant to stop using that light/circuit (switch off at consumer unit if smell persists) and to call 999 if there is smoke, sparks or fire",
+    "Arranges urgent qualified electrician inspection and informs the landlord"
+  ],
+  "acceptable_alternatives": [
+    "Escalates to a human duty manager immediately with the full link between both events while giving the tenant interim safety advice"
+  ],
+  "positive_behaviours": [
+    "Explicitly cites the earlier contractor note and notes it was not actioned",
+    "Does not wait for landlord approval before telling the tenant safety steps"
+  ],
+  "red_flags": [
+    "Treats it as routine/cosmetic",
+    "Ignores the history entirely",
+    "Summarises the history at length instead of acting"
+  ],
+  "prohibited_actions": [
+    "Tells the tenant it is probably fine to keep using the light",
+    "Schedules a non-urgent visit weeks ahead"
+  ],
+  "critical_failures": [
+    "Misses the link and logs it as low priority"
+  ]
+}

@@ -143,6 +143,24 @@ export function renderAnswer(ctx: RenderCtx): string {
     if (mc?.data?.message) L.push("Final assistant text recorded in the event stream (unstructured):", "", quote(mc.data.message), "");
   }
 
+  const j = r?.judgement;
+  if (r?.case_type || j) {
+    L.push("## Judgement", "");
+    if (r?.case_type) L.push(`- **Case type:** ${r.case_type}`);
+    if (j?.why_this_decision) L.push(`- **Why this decision:** ${j.why_this_decision}`);
+    L.push("");
+    const alts = toArr(j?.alternatives_considered);
+    if (alts.length) {
+      L.push("| Alternative considered | Why not |", "|---|---|");
+      for (const a of alts) L.push(`| ${esc(a.option)} | ${esc(a.why_not)} |`);
+      L.push("");
+    }
+    const checks = toArr(j?.checks_performed);
+    if (checks.length) L.push("**Checks performed before acting**", "", ...checks.map((c: string) => `- ${c}`), "");
+    const assumptions = toArr(j?.assumptions);
+    if (assumptions.length) L.push("**Assumptions**", "", ...assumptions.map((c: string) => `- ${c}`), "");
+  }
+
   L.push("## Actions taken", "");
   if (actions.length) {
     L.push("| # | Tool | Input (gist) | Result | Output (gist) |", "|---|---|---|---|---|");

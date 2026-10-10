@@ -1,0 +1,137 @@
+{
+  "case": "12",
+  "decision": "request_info",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 53.842,
+  "decisionLine": "request_info",
+  "sessionId": "wrun_01M4JXH2C8D2PF1AKSPSAWW173",
+  "startedAt": "2026-10-10T12:45:10.324Z",
+  "finishedAt": "2026-10-10T12:46:04.166Z",
+  "usage": {
+    "inputTokens": 81006,
+    "outputTokens": 5384
+  },
+  "eventCount": 369,
+  "dryRun": false,
+  "result": {
+    "case_id": "64 (R/12)",
+    "decision": "request_info",
+    "case_type": "maintenance",
+    "summary": "The landlord said yes, but only to Harlow Heating and only up to £150. Neither condition can be met: Harlow is booked until 3 November, unless they do an emergency visit at double rate. Quick Fix Heating can come on Monday 6 October but quoted £230, which is not Harlow and is over the cap. I booked no one and emailed the landlord the three options to choose from. I also emailed the tenant an update with a safe valve and bleeding check, and asked whether anyone in the home is vulnerable. The case is on hold with a follow-up in 1 day.",
+    "situation": "Only the bedroom radiator at 27 Thistle Lane is cold; the rest of the house heats normally. The landlord approved Harlow only, max £150 (event 003). Harlow is booked until 3 Nov and charges double for an emergency visit (event 004). Quick Fix offered Mon 6 Oct at £230 including parts (event 005). The CRM had no approval record and the ticket was still at intake.",
+    "actions_taken": [
+      {
+        "tool": "classify_reply",
+        "description": "Classified the landlord's reply and both contractor emails",
+        "result": "Landlord reply: conditional approval (unconditional 0.02). Both contractor emails: review",
+        "ok": true
+      },
+      {
+        "tool": "classify_intake",
+        "description": "Classified the original report",
+        "result": "heating_hot_water; severity probabilities split (emergency 0.46); route request_landlord_approval",
+        "ok": true
+      },
+      {
+        "tool": "request_landlord_approval",
+        "description": "Emailed the landlord the three options: wait for Harlow (3 Nov), Harlow emergency visit at double rate (price to be obtained), or Quick Fix at £230 on Mon 6 Oct; asked them to reply APPROVE for Quick Fix or DECLINE and name their choice",
+        "result": "approval_id 33 created, email sent, guard passed",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant: update with no booking claimed, valve and bleeding advice, and a question about vulnerability",
+        "result": "Sent, message 22",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Saved the landlord's preferred contractor (Harlow), the landlord's £150 cap and Harlow's availability",
+        "result": "3 facts saved, no conflicts",
+        "ok": true
+      },
+      {
+        "tool": "move_stage",
+        "description": "Moved the ticket from intake to landlord_approval",
+        "result": "ok",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Placed a hold waiting on the landlord, follow-up in 1 day",
+        "result": "hold 248",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (R/12)",
+        "status": "conditional (event 003: Harlow only, ≤£150), conditions cannot be met",
+        "channel": "email"
+      },
+      {
+        "party": "Landlord (R/12)",
+        "status": "requested (approval 33: Quick Fix £230 or choose a Harlow option)",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "The landlord can settle this themselves by picking an option. Escalate if they don't reply after follow-ups or if the tenant turns out to be vulnerable.",
+      "handover_summary": "",
+      "recommendation": "Act on the landlord's choice: assign Quick Fix if they approve £230, ask Harlow for an emergency price if they want that, or book Harlow from 3 Nov."
+    },
+    "unverified": [
+      "How much Harlow's emergency visit would cost (they only said double rate)",
+      "Whether anyone in the home is vulnerable",
+      "Whether the property is tenanted (blank in the CRM)",
+      "The landlord's preferred channel (not recorded, so I used email)",
+      "Quick Fix has not been checked or used before at this property"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "The tenant has a cold bedroom as weather gets colder; becomes urgent if anyone in the home is vulnerable",
+      "The intake classifier gave 'emergency' a 0.46 probability; I treated it as non-emergency because the rest of the house heats",
+      "The landlord explicitly forbade other contractors and anything over £150, so Quick Fix must not be assigned without a new approval"
+    ],
+    "final_status": "landlord_approval stage, on hold waiting on the landlord (hold 248), approval 33 pending",
+    "next_follow_up": {
+      "when": "2026-10-04 (1 day)",
+      "what": "Chase the landlord for a decision on approval 33; check whether the tenant has replied about vulnerability or the valve check"
+    },
+    "confidence": 0.85,
+    "judgement": {
+      "why_this_decision": "Event 003 is a conditional approval: Harlow only, cap of £150, ask before spending more. Events 004 and 005 show that neither condition can be met without the landlord changing it. The landlord can resolve this directly, so I asked them instead of escalating. I didn't treat it as an emergency because only one room is affected and the rest of the heating works.",
+      "alternatives_considered": [
+        {
+          "option": "Assign Quick Fix at £230",
+          "why_not": "The landlord said Harlow only and nothing over £150 without asking"
+        },
+        {
+          "option": "Book Harlow's emergency visit",
+          "why_not": "Double rate is probably over £150 and no price was given"
+        },
+        {
+          "option": "Book Harlow for 3 Nov",
+          "why_not": "A five-week wait with no heat in the bedroom; the landlord should decide that trade-off"
+        },
+        {
+          "option": "Escalate to a human",
+          "why_not": "The landlord can answer this; nothing needs agency judgement yet"
+        }
+      ],
+      "checks_performed": [
+        "Approvals in the CRM (none before mine)",
+        "Landlord's conditions vs both contractor offers",
+        "Severity: one room only",
+        "Classifier results for every inbound message",
+        "Property history and profile facts (empty)"
+      ],
+      "assumptions": [
+        "'Monday 6th' means Monday 6 October 2026",
+        "The landlord's reply in event 003 is a reply to the request in event 002"
+      ]
+    }
+  }
+}

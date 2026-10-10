@@ -26,11 +26,11 @@ const canned = {
   usage: { input_tokens: 100, output_tokens: 5 },
 };
 
-test("buildRequest shapes state, model and all six questions", () => {
+test("buildRequest shapes state, model and all eight questions", () => {
   const req = buildRequest({ request: "Dishwasher broken", property: "Flat 1", reporter_role: "Tenant", extra: { floor: "1" } });
   assert.equal(req.model, "jev-latest");
   assert.deepEqual(req.state, { request: "Dishwasher broken", property: "Flat 1", reporter_role: "Tenant", floor: "1" });
-  assert.deepEqual(Object.keys(req.questions), ["category", "severity", "needs_landlord_approval", "likely_self_fixable", "safety_risk", "needs_more_info"]);
+  assert.deepEqual(Object.keys(req.questions), ["scope", "non_english", "category", "severity", "needs_landlord_approval", "likely_self_fixable", "safety_risk", "needs_more_info"]);
   assert.equal(req.questions.category.type, "choice");
   assert.deepEqual(Object.keys(req.questions.category.criteria), CATEGORY_KEYS);
   assert.equal(req.questions.severity.type, "score");

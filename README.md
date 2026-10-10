@@ -192,10 +192,22 @@ Put a TLS reverse proxy (Caddy or nginx) in front and forward **both** `/eve/` a
 |---|---|---|
 | Practice eval: Donna at **56 of Dwelly's real handoff points across 45 public cases**, judged by Claude against what the operator actually did next | **47 pass, 9 partial, 0 fail, 0 critical failures (84% pass)**; required outcome met 49/56; mean correct outcome 4.09/5, judgement & safety 4.09/5 | `docs/practice-eval.md`; every run's `ANSWER.md`, `REASONING.md` and raw events in `data/practice/answers/` |
 | Held-out check: batches run on decision points never used for tuning | first held-out batch 13/20 pass → after fixes, a new held-out batch **12/16 pass**; both 0 fail | `data/practice/batch2-ids.txt`, `batch3-ids.txt`; pre-fix answers kept in `data/practice/before-fix/` |
+| **Hard-case rehearsal**: 14 synthetic cases built from the Reality Test brief, not the public data (conflicting info, failed action, missing context, noise, 34-event case, gas/CO emergency, do-nothing duplicate, prompt injection, rent arrears and neighbour ASB out of scope, Polish message, conditional approval over cap, vulnerable tenant with silent landlord, invoice amount/payee mismatch), three of them in non-standard formats (`.txt`, `thread.json`, `notes.md` + CSV), each judged against an organiser-style rubric (required outcomes, red flags, prohibited actions, critical failures) | **12 pass, 2 partial, 0 fail, 0 critical failures, 0 prohibited actions**; mean correct outcome 4.57/5 | `docs/hardcases-eval.md`, cases and rubrics in `data/hardcases/`, answers in `data/hardcases-answers/` |
+| Jev scope check on off-topic and non-English requests | **8/8** routed correctly (arrears, deposit, neighbour, agency complaint, insurance → human handover; Polish/Spanish leaks and gas smell → maintenance emergency) | `docs/intake-eval.md` |
 | Jev intake classifier, 50 public cases (tuned on 001–035, held out 036–050) | **category 98%** (held-out 100%), self-fixable 84%, severity agreement with Dwelly's own classifier 100% (12 cases), ~270 ms per request | `docs/intake-eval.md` (with an Iterations log) |
 | Jev outbound guard / reply classifier, hand-labelled sets | guard **12/12**, reply intent **10/10**, auto-vs-human **10/10** | `docs/jev-guards-eval.md` |
 
 The evaluations found and drove these fixes: a Jev score-parsing bug that inflated "emergency" severity; a SQLite lock under concurrent runs; attachments from the future leaking into the practice harness; and over-escalation of routine cases, now addressed by a "be proportionate" rule in `agent/instructions.md`.
+
+## Beyond the public dataset
+
+Donna is not tuned to the 50 public cases only:
+
+- **Any input format.** Case folders, single `.md`/`.txt`/`.json` files, email threads or notes with CSVs are normalised into a ticket before Donna sees them.
+- **Out-of-scope cases.** Jev's scope question and Donna's instructions recognise rent, deposits, legal disputes, neighbour issues, insurance and other non-maintenance work. Donna then does only what is safe (acknowledge, safety advice, record facts) and hands over with a structured summary instead of forcing a repair workflow. Mixed cases get the maintenance part handled and the rest escalated.
+- **Any language.** Messages are understood in any language and replies go back in the person's language.
+- **Doing nothing is a decision.** Duplicates, auto-replies and already-resolved requests get `no_action` with a stated reason.
+- **Measured on cases unlike the training data.** See the hard-case rehearsal above: built from the organisers' description of the Reality Test, not from the public cases.
 
 ## Safety and integrity
 

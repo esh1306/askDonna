@@ -21,3 +21,10 @@ Every `send_message`, `request_landlord_approval` message, and `record_approval_
 ## Measured accuracy (small hand-written sets, see eval doc)
 - Outbound guard: 12/12 (6 should-block, 6 should-pass).
 - Reply intent: 10/10. Autonomy: 9/10; the miss is a clean decline ("I'll arrange my own contractor") that Jev rated 0.72 for needs_human_response, so it goes to review (a defensible conservative error).
+
+## Context, scope and profile rules (intake)
+
+- `classify_intake` now sends a compact `profile` (landlord/tenant/property facts, <= 1.2k chars) and `history` (last 5 jobs at the property) to Jev. Optional `estimate_gbp` input.
+- `approvalFromProfile` (`intake/profile.ts`) runs before trusting Jev: a recorded `pre_approved_limit_gbp` / `call_before_spend_above_gbp` that covers the estimate, or `pays_contractor_directly`, gives needs_landlord_approval = 0; an estimate above the lowest recorded cap gives 1; otherwise Jev. The tool returns `approval_source` ("profile_rule" | "jev"), `approval_rule`, `needs_landlord_approval_jev` and `profile_used`.
+- New `scope` question (maintenance_repair, maintenance_admin, tenancy_finance, tenancy_legal_or_dispute, neighbour_or_antisocial, emergency_safety, other_non_property). If P(not maintenance_*/emergency_safety) >= `THRESHOLDS.OUT_OF_SCOPE` (0.5), `decideRoute` returns `out_of_scope_handover` before any other route.
+- New informational `non_english` noul; all questions are told to judge content in any language.

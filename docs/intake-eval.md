@@ -1,6 +1,6 @@
 # Intake classification eval (Jev)
 
-Run: 2026-10-10T12:24:42.802Z  |  cases: 50  |  model: jev-latest  |  mean latency: 221ms (p95 274ms)
+Run: 2026-10-10T12:42:39.384Z  |  cases: 50  |  model: jev-latest  |  mean latency: 291ms (p95 467ms)
 
 Labels come from `data/intake-labels.json` (derived from case outcomes/history, not from the classifier input). Input text is only the initial request (+ first pre-dispatch tenant message).
 
@@ -15,7 +15,7 @@ Confusion matrix (rows = label, columns = predicted):
 | plumbing | 11 | 0 | 0 | 0 | 0 | 0 | 0 |
 | appliance | 0 | 13 | 0 | 0 | 0 | 0 | 0 |
 | doors_windows_locks | 0 | 0 | 12 | 0 | 0 | 0 | 0 |
-| garden_external | 0 | 0 | 0 | 5 | 0 | 0 | 1 |
+| garden_external | 0 | 0 | 0 | 5 | 1 | 0 | 0 |
 | cleaning_checkout_works | 0 | 0 | 0 | 0 | 5 | 0 | 0 |
 | electrical_lighting | 0 | 0 | 0 | 0 | 0 | 1 | 0 |
 | inspection_admin | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
@@ -28,7 +28,7 @@ Confusion matrix (rows = label, columns = predicted):
 | needs_landlord_approval | accuracy@0.5 | 65.7% | 73.3% | 68.0% |
 | needs_landlord_approval | precision@0.5 | 63.6% | 73.3% | 66.7% |
 | needs_landlord_approval | recall@0.5 | 100.0% | 100.0% | 100.0% |
-| needs_landlord_approval | Brier (base-rate baseline) | 0.217 (0.240) | 0.199 (0.196) | 0.211 (0.230) |
+| needs_landlord_approval | Brier (base-rate baseline) | 0.217 (0.240) | 0.200 (0.196) | 0.212 (0.230) |
 | likely_self_fixable | accuracy@0.5 | 85.7% | 80.0% | 84.0% |
 | likely_self_fixable | precision@0.5 | 60.0% | 100.0% | 75.0% |
 | likely_self_fixable | recall@0.5 | 50.0% | 50.0% | 50.0% |
@@ -43,7 +43,7 @@ Accuracy by decision threshold (tune / held-out / all):
 
 ## needs_landlord_approval
 
-n=50, base rate 64.0%, accuracy@0.5 **68.0%**, precision 66.7%, recall 100.0%, Brier 0.211 (always-base-rate baseline 0.230)
+n=50, base rate 64.0%, accuracy@0.5 **68.0%**, precision 66.7%, recall 100.0%, Brier 0.212 (always-base-rate baseline 0.230)
 
 TP 32 / FP 16 / TN 2 / FN 0
 
@@ -63,43 +63,43 @@ TP 6 / FP 2 / TN 36 / FN 6
 
 | bucket | n | mean predicted | fraction true |
 |---|---|---|---|
-| 0.0-0.2 | 31 | 0.11 | 0.13 |
-| 0.2-0.4 | 9 | 0.27 | 0.11 |
+| 0.0-0.2 | 30 | 0.11 | 0.13 |
+| 0.2-0.4 | 10 | 0.26 | 0.10 |
 | 0.4-0.6 | 4 | 0.52 | 0.25 |
 | 0.6-0.8 | 3 | 0.61 | 1.00 |
 | 0.8-1.0 | 3 | 0.88 | 1.00 |
 
 ## Unlabelled questions (mean predicted probability)
 
-safety_risk: 0.312, needs_more_info: 0.163. No ground truth exists for these in the cases; Dwelly rated every case with an intake note ROUTINE.
+safety_risk: 0.311, needs_more_info: 0.163. No ground truth exists for these in the cases; Dwelly rated every case with an intake note ROUTINE.
 
 ## Severity vs Dwelly's own intake classification
 
-Cases with a Dwelly severity: 12. Agreement: **100.0%**. Predicted severity distribution (all cases): {"routine":45,"urgent":1,"emergency":4}
+Cases with a Dwelly severity: 12. Agreement: **100.0%**. Predicted severity distribution (all cases): {"routine":44,"urgent":2,"emergency":4}
 
 ## Routes
 
-{"request_landlord_approval":40,"standard":2,"self_fix_first":3,"emergency_dispatch":4,"ask_for_info":1}
+{"request_landlord_approval":39,"ask_for_info":2,"standard":2,"self_fix_first":3,"emergency_dispatch":4}
 
 ## Worst misses
 
 | case | question | label | predicted | confidence in label | note |
 |---|---|---|---|---|---|
-| 035 | self_fixable | true | p=0.10 | 0.10 | Shower Repair Request |
 | 028 | self_fixable | true | p=0.11 | 0.11 | Loose Water Pipe in the Back Garden |
-| 041 | self_fixable | true | p=0.12 | 0.12 | Washing Machine Repair Request |
-| 014 | self_fixable | true | p=0.17 | 0.17 | Front Door Repair Request |
-| 009 | category | garden_external | inspection_admin | 0.22 | Front garden maintenance follow-up |
+| 035 | self_fixable | true | p=0.11 | 0.11 | Shower Repair Request |
+| 041 | self_fixable | true | p=0.13 | 0.13 | Washing Machine Repair Request |
+| 014 | self_fixable | true | p=0.15 | 0.15 | Front Door Repair Request |
+| 009 | category | garden_external | cleaning_checkout_works | 0.22 | Front garden maintenance follow-up |
 | 047 | self_fixable | true | p=0.29 | 0.29 | Bedroom Window Repair Request |
-| 006 | needs_landlord_approval | false | p=0.68 | 0.32 | Check-Out Works: Carpet Replacement and Repainting |
-| 022 | needs_landlord_approval | false | p=0.67 | 0.33 | Front Door Lock Repair Request |
-| 003 | needs_landlord_approval | false | p=0.66 | 0.34 | Checkout Cleaning Estimate and Invoice |
+| 006 | needs_landlord_approval | false | p=0.67 | 0.33 | Check-Out Works: Carpet Replacement and Repainting |
 | 015 | needs_landlord_approval | false | p=0.66 | 0.34 | Front Door Repair Request |
-| 005 | needs_landlord_approval | false | p=0.66 | 0.34 | Check-Out Cleaning |
+| 022 | needs_landlord_approval | false | p=0.66 | 0.34 | Front Door Lock Repair Request |
+| 029 | needs_landlord_approval | false | p=0.66 | 0.34 | Cracked basin repair request |
+| 044 | needs_landlord_approval | false | p=0.66 | 0.34 | Window Handle Repair Request |
+| 012 | needs_landlord_approval | false | p=0.66 | 0.34 | Dishwasher Door Repair |
 | 013 | needs_landlord_approval | false | p=0.66 | 0.34 | Integrated Dishwasher Repair Request |
 | 023 | needs_landlord_approval | false | p=0.66 | 0.34 | Balcony Door Lock Repair |
-| 029 | needs_landlord_approval | false | p=0.66 | 0.34 | Cracked basin repair request |
-| 041 | needs_landlord_approval | false | p=0.66 | 0.34 | Washing Machine Repair Request |
+| 024 | needs_landlord_approval | false | p=0.66 | 0.34 | Oven repair request |
 
 ## Iterations
 
@@ -137,3 +137,21 @@ Threshold choices (all in `THRESHOLDS`, unchanged): LANDLORD_APPROVAL 0.5 (sweep
 
 - 003, 005, 006 (agency check-out cleaning/works quotes) are labelled needs_landlord_approval=false, but 006's history says "the landlord approved the quotation" and 003 notes the invoice went to the landlord. The label comes from the absence of the literal "complete landlord approval step" text, so these look like label-derivation misses rather than genuine no-approval cases.
 - 043 (washing machine): the history shows the landlord instructing the repair if simple/cheap and later being informed, i.e. landlord authorisation existed without the literal step marker. 013 and 044 also show "need confirmation from landlord" notes. I did not check every negative's full history.
+
+## Context-aware + scope update (profile, scope question, non-English)
+
+Added: `profile`/`history` state, deterministic `approvalFromProfile` rule (`intake/profile.ts`), `scope` choice question, `non_english` noul. Re-run of the 50 cases (`node intake/eval.ts`): category 98.0% (held-out 100%), self-fixable 84.0% (held-out 80%), approval 68.0% (held-out 73.3%), all unchanged from before; Brier moves by <0.002. The extra scope and non_english questions did not change the others.
+
+With CRM profile context (`node intake/eval.ts --profile`, writes `data/intake-eval-profile.json`, facts and property history of ticket PM/NNN, and the rule applied with no estimate):
+
+| question | no profile (all / held-out) | with profile (all / held-out) |
+|---|---|---|
+| category | 98.0% / 100% | 98.0% / 100% |
+| likely_self_fixable | 84.0% / 80.0% | 86.0% / 86.7% |
+| needs_landlord_approval | 68.0% / 73.3% | 64.0% / 73.3% |
+
+Honest reading: public-case profiles are sparse (only 2 of 50 landlords have a `pays_contractor_directly` fact, none has a recorded spend limit, and the facts were extracted from the same chats the labels come from), so this does NOT demonstrate the approval gain. Approval with profile is slightly worse (64% vs 68%, within noise of 50 cases, 2 rule overrides). The rule is verified only by unit tests (`intake/profile.test.ts`); its value depends on real landlords having `pre_approved_limit_gbp` / `call_before_spend_above_gbp` recorded and an estimate passed to `classify_intake`.
+
+## Scope / language eval (`node intake/scope-eval.ts`, 8 hand-written requests)
+
+Scope accuracy 8/8 (rent arrears, deposit dispute, neighbour noise, Polish leak, Spanish boiler, agency complaint, gas smell, insurance claim); route correct 8/8: the 5 non-maintenance requests give `out_of_scope_handover`, the Polish leak, Spanish boiler and gas smell stay in maintenance (emergency_dispatch) with `non_english` 0.99 for the two foreign-language ones and about 0.02 for English. Tiny, hand-written set: it shows the question works, not a production accuracy. Weak spot: a deposit dispute scored only 0.78 tenancy_finance; the insurance-claim text had safety_risk 0.71 (scope check runs first, so it still hands over).

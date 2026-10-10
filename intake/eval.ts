@@ -1,6 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
 import { buildRequest, classifyIntake, decideRoute, getApiKey, MissingKeyError, type IntakeResult } from "./classify.ts";
+import { getTicketContext, one } from "../crm/repo.ts";
+import { approvalFromProfile, buildHistory, buildProfile } from "./profile.ts";
 import { loadLabels, type CaseLabel } from "./labels.ts";
 import { CATEGORY_KEYS, type Category } from "./taxonomy.ts";
 
@@ -12,8 +14,19 @@ const opt = (n: string) => {
   return i >= 0 ? args[i + 1] : undefined;
 };
 
+/** --profile: add landlord/tenant/property facts + property history from the CRM ticket PM/<case> (same case, so facts may be derived from the same chat). */
 function stateFor(l: CaseLabel) {
-  return { request: l.input_text, property: l.property || undefined, reporter_role: l.reporter_role || undefined };
+  const st: any = { request: l.input_text, property: l.property || undefined, reporter_role: l.reporter_role || undefined };
+  if (flag("--profile")) {
+    const row = one<{ id: number }>("SELECT id FROM tickets WHERE case_ref=?", `PM/${l.case}`);
+    const ctx = row ? getTicketContext(row.id, { events: 0 }) : null;
+    if (ctx && ctx.ok) {
+      st.profile = buildProfile(ctx) || undefined;
+      st.history = buildHistory(ctx.history_for_property);
+      st._facts = ctx.landlord?.facts;
+    }
+  }
+  return st;
 }
 
 export type BinaryReport = {
@@ -158,7 +171,12 @@ async function main() {
   const errors: string[] = [];
   const results = await pool(labels, 5, async (l) => {
     try {
-      return await classifyIntake(stateFor(l));
+      const st = stateFor(l);
+      const { _facts, ...state } = st;
+      const r = await classifyIntake(state);
+      const rule = approvalFromProfile(_facts, undefined, r.category);
+      if (rule.decided) { r.needs_landlord_approval = rule.needs ? 1 : 0; (r as any).rule = true; }
+      return r;
     } catch (e) {
       errors.push(`${l.case}: ${(e as Error).message}`);
       return null;
@@ -243,7 +261,7 @@ async function main() {
   fs.mkdirSync(path.join(ROOT, "data"), { recursive: true });
   fs.mkdirSync(path.join(ROOT, "docs"), { recursive: true });
   const detail = rows.map(({ l, r }) => ({ case: l.case, labels: l.labels, result: { ...r, route: decideRoute(r) } }));
-  fs.writeFileSync(path.join(ROOT, "data/intake-eval.json"), JSON.stringify({ summary, cases: detail }, null, 2));
+  fs.writeFileSync(path.join(ROOT, flag("--profile") ? "data/intake-eval-profile.json" : "data/intake-eval.json"), JSON.stringify({ summary, cases: detail }, null, 2));
   // Keep the hand-written "## Iterations" (and anything after it) across regenerations.
   let tail = "";
   try {
@@ -252,7 +270,7 @@ async function main() {
     if (i >= 0) tail = old.slice(i);
   } catch {}
   const md = renderMd(summary) + tail;
-  fs.writeFileSync(path.join(ROOT, "docs/intake-eval.md"), md);
+  if (!flag("--profile")) fs.writeFileSync(path.join(ROOT, "docs/intake-eval.md"), md);
   console.log(md);
   console.log(`\nwrote data/intake-eval.json and docs/intake-eval.md`);
 }
