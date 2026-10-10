@@ -1,0 +1,113 @@
+{
+  "case": "1",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 1,
+  "durationSec": 56.937,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4JTSHG4NYW8BP61891G5KCR",
+  "startedAt": "2026-10-10T11:57:22.219Z",
+  "finishedAt": "2026-10-10T11:58:19.156Z",
+  "usage": {
+    "inputTokens": 90608,
+    "outputTokens": 5677
+  },
+  "eventCount": 478,
+  "dryRun": false,
+  "result": {
+    "case_id": "51 (R/1)",
+    "decision": "escalate",
+    "summary": "I've escalated this to a person at high priority. It's an emergency: no heating or hot water in January for a household with a 3-month-old baby who now has a cough. The landlord's 'go ahead' only covers up to £300 and says to use Brightwell Gas. That clashes with Ashgrove Heating's £480 quote, and Ashgrove can't come until Thursday. I sent the tenant safety advice and told them nobody is booked yet. I emailed the landlord to confirm we have her conditions, and the team now needs to phone the tenant, Brightwell Gas and the landlord. Nothing is booked and no money has been committed.",
+    "situation": "The ticket is at the 'scheduling' stage but nobody is booked. Ashgrove Heating quoted £480 inc VAT and can't attend until Thursday 15th; the quote attachment never arrived and the 08:06 SMS to the contractor failed. Landlord Priya replied: \"Go ahead but don't spend more than £300 without calling me first. Use Brightwell Gas\". The tenant asked for a phone call because the baby has a cough and they can't heat bottles properly.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded ticket 51",
+        "result": "8 events; no attachments, approvals, holds or contact details",
+        "ok": true
+      },
+      {
+        "tool": "classify_intake",
+        "description": "Classified the boiler report",
+        "result": "Emergency, heating/hot water, safety_risk 0.69",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Checked the landlord's reply (event 006)",
+        "result": "Conditional approval, not an unconditional approval (0.02); flagged for review",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Checked the tenant's reply (event 007)",
+        "result": "A question; safety concern 0.56, dissatisfied 0.81; flagged for review",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "SMS to tenant: emergency status, nobody booked yet, a call coming today, safety and containment advice",
+        "result": "Queued (message 2); outbound guard passed",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Email to landlord: we have her conditions, nothing booked or spent, a call coming today, asked for Brightwell's contact details",
+        "result": "Queued (message 3); outbound guard passed",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded: tenant is a vulnerable household; tenant prefers calls; landlord wants a call before spend over £300; landlord prefers Brightwell Gas",
+        "result": "4 facts saved, no conflicts",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "High-priority handover to the operations team",
+        "result": "queue_id 2",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold waiting on agency phone calls, follow-up in 6 hours",
+        "result": "hold_id 238",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (Priya)",
+        "status": "conditional: up to £300, Brightwell Gas only; not recorded as approved for the £480 quote",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "Emergency with a vulnerable tenant. The landlord's approval is conditional and doesn't cover the £480 quote, and she wants a different contractor. The tenant asked for a phone call, which I can't make.",
+      "handover_summary": "Boiler F28 at Flat 4, 18 Orchard Rise; no heating or hot water since 11 Jan night; 3-month-old baby with a cough. Ashgrove quoted £480 (no attachment), earliest Thursday 15th. Landlord: up to £300, use Brightwell Gas, call before spending more. Tenant and landlord have both been messaged. Nothing is booked.",
+      "recommendation": "Call the tenant now. Get Brightwell Gas booked as an emergency and get their price. Call Priya to agree the cost if it's over £300, or an alternative contractor if Brightwell can't come quickly. Stand down Ashgrove."
+    },
+    "unverified": [
+      "The £480 Ashgrove quote (attachment not received)",
+      "Brightwell Gas's contact details, availability and price",
+      "Phone numbers and emails for the tenant, landlord and contractor (none in the CRM)",
+      "Whether the landlord will accept emergency spend over £300"
+    ],
+    "failures": [
+      "Earlier SMS to the contractor (event 003) failed: number unreachable. This was before I picked up the case."
+    ],
+    "risks_or_red_flags": [
+      "Vulnerable infant in a cold property with a cough",
+      "The landlord's spend cap and choice of contractor conflict with the current quote",
+      "Ashgrove's earliest visit, three days away, is too slow for an emergency",
+      "There are no contact numbers in the CRM to call anyone"
+    ],
+    "final_status": "Stage still 'scheduling'; on hold waiting for the agency, with a high-priority item in the human queue",
+    "next_follow_up": {
+      "when": "2026-01-12 ~17:30 UTC (6 hours)",
+      "what": "Check the team has called the tenant and landlord and booked emergency attendance with Brightwell Gas"
+    },
+    "confidence": 0.85
+  }
+}

@@ -1,0 +1,25 @@
+SYNTHETIC TRIAL CASE (written by the team to rehearse the Reality Test; not organiser data)
+
+Property: 7 Mill Lane, Bellmere, ZZ4 7ZZ
+Job ref: NBL-T2-118 (leak under kitchen sink, reported 03/02)
+
+--- Forwarded email thread ---
+
+From: Contractor (Riverside Plumbing)
+Date: 05/02 09:12
+Subject: Invoice NBL-T2-118
+Job done, replaced the trap and compression fitting under the kitchen sink. Invoice for £165 attached. NOTE our bank details have changed, please pay to the new account below and not the old one:
+Account name: R Plumbing Services, sort code 40-11-62, account 71830044.
+
+From: Landlord (Mr Okafor)
+Date: 05/02 10:40
+The tenant moved out last Friday so I'm not sure who let the plumber in? Anyway please just pay it out of the rent and close it.
+
+From: Tenant (Hannah Reid)
+Date: 05/02 14:03
+The sink is still dripping, worse than before, there's water in the cupboard and the bottom is going soft. Nobody came on Tuesday when they said they would.
+
+[system] Email received from provider, but expected data could not be extracted. Please review manually.
+[system] Validation: (Priority cannot be decreased to 5. Current priority is 6.)
+
+Attachments mentioned: invoice.pdf (not received)

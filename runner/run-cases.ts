@@ -60,11 +60,17 @@ const naturalCmp = (a: string, b: string) => a.localeCompare(b, undefined, { num
 
 export async function discoverCases(dir: string): Promise<{ number: string; dir: string }[]> {
   const out: { number: string; dir: string }[] = [];
+  // Accept the public-case layout (folders with index.md/history.md), folders with any text files,
+  // and single-file cases (.md/.txt/.json) - crmPrepare normalises anything non-standard.
   for (const name of await readdir(dir)) {
     const p = join(dir, name);
-    if (!(await stat(p)).isDirectory()) continue;
-    const has = async (f: string) => stat(join(p, f)).then(() => true, () => false);
-    if ((await has("index.md")) || (await has("history.md"))) out.push({ number: name, dir: p });
+    const s = await stat(p);
+    if (s.isDirectory()) {
+      const files = await readdir(p).catch(() => [] as string[]);
+      if (files.some((f) => /\.(md|txt|json|eml|csv)$/i.test(f))) out.push({ number: name, dir: p });
+    } else if (/\.(md|txt|json|eml)$/i.test(name) && !/^(readme|index)\.md$/i.test(name)) {
+      out.push({ number: name.replace(/\.[^.]+$/, ""), dir: p });
+    }
   }
   return out.sort((a, b) => naturalCmp(a.number, b.number));
 }

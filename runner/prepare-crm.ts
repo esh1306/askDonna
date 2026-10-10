@@ -1,5 +1,5 @@
-import { readdir, readFile } from "node:fs/promises";
-import { join } from "node:path";
+import { copyFile, mkdir, readdir, readFile, rm, stat, writeFile } from "node:fs/promises";
+import { basename, dirname, join, resolve } from "node:path";
 import { importCaseDir } from "../crm/import.ts";
 import { setTicketSource } from "../crm/sources.ts";
 import { all, getTicketContext } from "../crm/repo.ts";
@@ -33,7 +33,33 @@ export function snapshot(ticketId: number) {
  * Reality Test preparation: import the unseen case folder into the CRM as a ticket (profiles, events, stage),
  * then hand the agent the ticket id plus the raw case file. The agent works on the CRM through its tools.
  */
-export async function crmPrepare(caseDir: string, caseNumber: string): Promise<Prepared> {
+/**
+ * Unseen cases may not follow the public layout. Anything without index.md/history.md (a single file, a folder of
+ * emails, JSON...) is copied into a normalised folder: all text goes into index.md as the case file, other files become attachments.
+ */
+export async function normaliseCase(src: string, caseNumber: string): Promise<string> {
+  const isDir = (await stat(src)).isDirectory();
+  const names = isDir ? await readdir(src) : [];
+  if (isDir && (names.includes("index.md") || names.includes("history.md"))) return src;
+  const dst = resolve(process.cwd(), "data", "normalised-cases", caseNumber);
+  await rm(dst, { recursive: true, force: true });
+  await mkdir(join(dst, "attachments"), { recursive: true });
+  const textFiles = isDir ? names.filter((n) => /\.(md|txt|json|eml|csv)$/i.test(n)).sort() : [basename(src)];
+  const base = isDir ? src : dirname(src);
+  const body: string[] = [];
+  for (const f of textFiles) body.push(`### ${f}\n\n${(await readFile(join(base, f), "utf8")).trim()}`);
+  const title = body.join("\n").match(/^#\s+(.+)$/m)?.[1]?.replace(/^Case\s+\S+:\s*/i, "") ?? `Case ${caseNumber}`;
+  await writeFile(join(dst, "index.md"), `# Case ${caseNumber}: ${title}\n\n## Initial request\n\n${body.join("\n\n")}\n`);
+  if (isDir) {
+    for (const n of names) if (!textFiles.includes(n) && (await stat(join(src, n))).isFile()) await copyFile(join(src, n), join(dst, "attachments", n));
+    const att = join(src, "attachments");
+    if (await stat(att).then((s) => s.isDirectory(), () => false)) for (const n of await readdir(att)) await copyFile(join(att, n), join(dst, "attachments", n));
+  }
+  return dst;
+}
+
+export async function crmPrepare(rawCaseDir: string, caseNumber: string): Promise<Prepared> {
+  const caseDir = await normaliseCase(rawCaseDir, caseNumber);
   const imported = importCaseDir(caseDir, { track: "Reality", id: caseNumber });
   if (!imported.ok) throw new Error(`CRM import failed: ${imported.error}`);
   const ticketId = imported.ticket_id;
