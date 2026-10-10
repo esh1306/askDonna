@@ -33,7 +33,7 @@ export type Detail = {
   events: { id: number; ts: string; kind: string; direction: string; party: string | null; body: string | null }[];
   open_holds: { id: number; reason: string | null; waiting_on: string | null; follow_up_at: string | null }[];
   approvals: Approval[];
-  outbox: { id: number; channel: string; to_label: string | null; subject: string | null; body: string; status: string }[];
+  outbox: { id: number; channel: string; to_label: string | null; subject: string | null; body: string; status: string; error?: string | null }[];
   action_log: { id: number; actor: string; action: string; ok: number; ts: string }[];
   runs: { file: string; ts: string; result?: any; error?: string; events?: any[]; sessionId?: string; message: string }[];
 };

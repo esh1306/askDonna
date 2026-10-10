@@ -2,6 +2,7 @@ import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { api, label, STAGES } from "./api.ts";
 import type { Detail, TicketRow, Fact } from "./api.ts";
 import CallPanel from "./CallPanel.tsx";
+import PhoneCall from "./PhoneCall.tsx";
 
 type Filter = "all" | "human" | "approval" | "hold";
 const when = (ts: string) => new Date(ts).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
@@ -218,13 +219,14 @@ function TicketView({ d }: { d: Detail }) {
               <div className="msg-head">
                 <span className={`chan ${o.channel}`}>{o.channel}</span>
                 <span className="who">{o.to_label}</span>
-                <span className={`badge ${o.status === "sent" ? "pass" : "partial"}`}>{o.status}</span>
+                <span className={`badge ${o.status === "sent" ? "pass" : "partial"}`}>{o.status === "queued" && o.error ? "queued (not delivered)" : o.status}</span>
                 {o.status === "queued" && (
                   <button className="btn small" onClick={async () => { await api(`/api/outbox/${o.id}/sent`, { method: "POST", body: {} }); location.reload(); }}>Mark sent</button>
                 )}
               </div>
               {o.subject && <div className="small"><b>{o.subject}</b></div>}
               <div className="pre small">{o.body}</div>
+              {o.error && <div className={`small ${o.status === "sent" ? "muted" : "err"}`}>{o.status === "sent" ? "Delivery: " : ""}{o.error}</div>}
             </div>
           ))}
         </>
@@ -309,6 +311,9 @@ function DonnaPanel({ d, onChange }: { d: Detail | null; onChange: () => void })
         {busy && <div className="muted small">Donna is working, this can take a minute or two</div>}
         {err && <div className="err small">{err}</div>}
       </div>
+
+      {pending && <PhoneCall approvalId={pending.id} ticketId={d.ticket.id} onChange={onChange} />}
+      {!pending && <PhoneCall ticketId={d.ticket.id} onChange={onChange} />}
 
       {pending && (
         <CallPanel

@@ -136,7 +136,7 @@ function argmax<K extends string>(probs: Record<K, number>, keys: readonly K[]):
   return keys.reduce((a, b) => (probs[b] > probs[a] ? b : a), keys[0]);
 }
 
-function parseChoice<K extends string>(answer: unknown, keys: readonly K[], name: string): { value: K; probs: Record<K, number> } {
+export function parseChoice<K extends string>(answer: unknown, keys: readonly K[], name: string): { value: K; probs: Record<K, number> } {
   if (!isObj(answer)) throw new Error(`Jev answer "${name}" missing`);
   const probs = zero(keys);
   const given = numProbs(answer.probabilities);
@@ -193,7 +193,7 @@ function parseScore<K extends string>(answer: unknown, keys: readonly K[], descs
   return { value: idx >= 0 ? keys[idx] : argmax(norm, keys), probs: norm };
 }
 
-function parseNoul(answer: unknown, name: string): number {
+export function parseNoul(answer: unknown, name: string): number {
   if (typeof answer === "number") return answer;
   if (!isObj(answer)) throw new Error(`Jev answer "${name}" missing`);
   const v = answer.noul;

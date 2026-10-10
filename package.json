@@ -12,7 +12,12 @@
     "dev": "eve dev",
     "eval": "eve eval",
     "start": "eve start",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "crm:import": "node crm/import.ts --all --reset",
+    "reality": "node runner/reality.ts --out ANSWERS --concurrency 4 --cases",
+    "practice": "node practice/run.ts",
+    "intake:eval": "node intake/eval.ts",
+    "test": "node --test crm/*.test.ts intake/*.test.ts runner/*.test.ts"
   },
   "dependencies": {
     "@vercel/connect": "2.2.0",

@@ -2,6 +2,8 @@ import { defineTool } from "eve/tools";
 import { z } from "zod";
 import { getTicketContext, queueMessage, requestApproval } from "../../crm/repo.ts";
 import { unwrap } from "../../crm/tool-util.ts";
+import { checkOutbound } from "../../intake/guard.ts";
+import { guardContext, guardFailure } from "../../intake/guard-context.ts";
 
 export default defineTool({
   description:
@@ -16,11 +18,13 @@ export default defineTool({
     message: z.string().min(20).describe("For email: the full email to the landlord. For call: the talking points for the voice agent."),
   }),
   async execute({ ticket_id, summary, amount_gbp, channel, message }) {
-    const ctx = unwrap(getTicketContext(ticket_id, { events: 1 }));
+    const ctx = unwrap(getTicketContext(ticket_id, { events: 15 }));
     if (!ctx.landlord) throw new Error(`no landlord is recorded on ticket ${ticket_id}`);
+    const guard = await checkOutbound({ kind: "message", text: message, recipientRole: "landlord", context: guardContext(ctx) });
+    if (guard.blocked) throw guardFailure("landlord approval request", guard.reasons);
     const approval = unwrap(requestApproval(ticket_id, summary, amount_gbp ?? null, channel));
     const subject = `Approval needed: ${ctx.ticket.title} (${ctx.ticket.case_ref})`;
     const msg = unwrap(queueMessage(ticket_id, channel, ctx.landlord.id, channel === "email" ? subject : "Voice call: approval", message));
-    return { ...approval, message_id: msg.message_id, landlord: ctx.landlord.name };
+    return { ...approval, message_id: msg.message_id, landlord: ctx.landlord.name, guard };
   },
 });

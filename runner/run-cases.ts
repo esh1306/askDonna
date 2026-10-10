@@ -83,7 +83,7 @@ export async function processCase(
   outRoot: string,
   opts: { dryRun: boolean; fixture?: EveEvent[] },
 ): Promise<CaseSummary> {
-  const outDir = join(outRoot, c.number);
+  const outDir = join(outRoot, answerDirName(c.number));
   await mkdir(outDir, { recursive: true });
   const startedAt = new Date();
   let prepared: Prepared = { inputText: "" };
@@ -223,8 +223,8 @@ export async function main(argv = process.argv.slice(2)): Promise<void> {
         rows[i] = await processCase(c, outRoot, { dryRun, fixture });
       } catch (e) {
         rows[i] = { case: c.number, decision: "FAILED", escalated: "n/a", failures: 1, durationSec: 0, error: `runner crash: ${(e as Error).message}` };
-        await mkdir(join(outRoot, c.number), { recursive: true }).catch(() => {});
-        await writeFile(join(outRoot, c.number, "ANSWER.md"), `# Case ${c.number} - Answer\n\n## Decision\n\n**FAILED - ${(e as Error).message}**\n`).catch(() => {});
+        await mkdir(join(outRoot, answerDirName(c.number)), { recursive: true }).catch(() => {});
+        await writeFile(join(outRoot, answerDirName(c.number), "ANSWER.md"), `# Case ${c.number} - Answer\n\n## Decision\n\n**FAILED - ${(e as Error).message}**\n`).catch(() => {});
       }
       console.log(`[${c.number}] ${rows[i]!.decision}${rows[i]!.error ? ` (${rows[i]!.error})` : ""} in ${rows[i]!.durationSec.toFixed(1)}s`);
     }
@@ -236,4 +236,9 @@ export async function main(argv = process.argv.slice(2)): Promise<void> {
 
 if (process.argv[1] && basename(process.argv[1]) === "run-cases.ts") {
   await main();
+}
+
+/** Submission format is ANSWERS/1/, ANSWERS/2/ ...: numeric case folders lose their leading zeros. */
+export function answerDirName(caseNumber: string): string {
+  return /^\d+$/.test(caseNumber) ? String(Number(caseNumber)) : caseNumber;
 }

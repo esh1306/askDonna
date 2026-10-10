@@ -25,3 +25,13 @@ From `dwelly-agent/`:
 4. Queued outbox messages show on the ticket; Mark sent logs them to the timeline. Escalations land in the Human queue tab.
 
 Each Donna run is saved to `data/console-runs/<ticket>-<ts>.json` (raw events included).
+
+## Real calls and email
+
+The console server runs a delivery worker every 10s (`OUTBOX_WORKER=0` disables it; `POST /api/outbox/process` runs it now; `GET /api/calls` lists calls).
+
+- Email: queued `email` outbox rows are sent via Resend to `DEMO_EMAIL_TO` only, subject `[Donna demo -> <recipient>] ...`, with a footer explaining the redirect. Missing keys leave rows queued with a clear message in the row's `error`.
+- Calls: a queued `call` row on a ticket with a pending approval (or the "Place real phone call" button, `POST /api/approvals/:id/phone-call`) starts an ElevenLabs outbound call over Twilio to `DEMO_PHONE_TO` only. Set `PHONE_AUTO_CALL=0` to dial only via the button. State is kept in `data/calls.json`.
+- When the call ends, the worker reads the transcript and the extracted `decision` / `max_amount_gbp` / `conditions`. Clear approve (cap >= amount, no conditions) or reject resolves the approval; anything else stays pending. A call event is always added to the ticket and Donna is triggered on it.
+- Setup: fill the Twilio/ElevenLabs/Resend vars in `.env`, run `node scripts/setup-phone.ts`, put the printed `ELEVENLABS_PHONE_NUMBER_ID` in `.env`.
+- Twilio trial: only verified numbers can be called, and trial calls play a Twilio preamble; press any key to continue before Donna speaks. `onboarding@resend.dev` can only email your own Resend account address.

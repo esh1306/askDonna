@@ -5,6 +5,7 @@ import { addEvent, all, one, getTicketContext, resolveApproval, markMessage, run
 import type { ApprovalRow, HumanQueueRow } from "../../crm/repo.ts";
 import { runTurn, loadEnvFile } from "../../runner/eve-client.ts";
 import { resultJsonSchema } from "../../runner/output-schema.ts";
+import { processOutbox, pollCalls, placeCall, loadCalls, setDonnaTrigger, startWorker } from "./outbox-worker.ts";
 
 loadEnvFile();
 const PORT = Number(process.env.CONSOLE_PORT ?? 5180);
@@ -208,6 +209,21 @@ async function handle(req: http.IncomingMessage, res: http.ServerResponse) {
     return send(res, 200, { ok: true, recorded: b.decision, run: out });
   }
 
+  if (m === "POST" && p === "/api/outbox/process") {
+    const r = await processOutbox();
+    await pollCalls();
+    return send(res, 200, r);
+  }
+  if (m === "GET" && p === "/api/calls") return send(res, 200, loadCalls());
+  if (m === "POST" && (g = /^\/api\/approvals\/(\d+)\/phone-call$/.exec(p))) {
+    const approval = one<ApprovalRow>("SELECT * FROM approvals WHERE id=?", Number(g[1]));
+    if (!approval) throw new HttpError(404, "approval not found");
+    if (approval.status !== "pending") throw new HttpError(409, `approval is ${approval.status}`);
+    const r = await placeCall(null, approval);
+    if (!r.ok) throw new HttpError(/not configured/.test(r.note) ? 503 : 502, r.note);
+    return send(res, 200, r);
+  }
+
   throw new HttpError(404, "not found");
 }
 
@@ -220,3 +236,6 @@ http
     });
   })
   .listen(PORT, () => console.log(`Donna console API on http://127.0.0.1:${PORT} (cwd ${process.cwd()})`));
+
+setDonnaTrigger((ticketId, message) => runDonna(ticketId, message));
+startWorker();
