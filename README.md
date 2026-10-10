@@ -239,11 +239,37 @@ Fixes the evaluations drove: a Jev score-parsing bug that inflated "emergency"; 
 - **Any language:** messages are understood and replies go back in the person's language.
 - **Doing nothing is a decision** for duplicates, auto-replies and already-resolved requests.
 
+## Real email and phone, safely
+
+Donna can send real email (Resend) and place real phone calls (Twilio, via ElevenLabs for conversations and directly for on-call alerts). Because every contact in this project is synthetic, delivery is locked down in code (`console/server/allowlist.ts`):
+
+- **Allowlist only.** Every real email and call is checked against `ALLOWED_EMAILS` / `ALLOWED_PHONES`. Anything else is refused, and an empty allowlist blocks all delivery, so a misconfigured deployment can never contact a real tenant, landlord or contractor. Phone numbers are normalised to E.164 before checking.
+- **What is really delivered in demo mode:** on-call alerts (email; phone for high priority), landlord approval requests by email, and landlord approval calls, all to the team's own allowlisted inbox and phone, with the intended recipient shown in the message.
+- **Everything else is simulated:** messages to tenants and contractors are recorded as sent in the CRM (timeline and outbox, noted "simulated delivery") without leaving the system.
+- **No backlog bursts:** only messages queued after the server starts are eligible for real delivery.
+- **Personal details stay out of the repo:** destinations live only in the git-ignored `.env`.
+
+### Getting the keys
+
+**Resend (email)**
+1. Sign up at [resend.com](https://resend.com) with the email address that should receive the demo emails.
+2. Dashboard → **API Keys** → **Create API key** (permission: "Sending access") → copy it into `RESEND_API_KEY`.
+3. Without a verified domain, Resend only sends from `onboarding@resend.dev` to your own account email, which is exactly the safe demo setup. Set `DEMO_EMAIL_TO`, `ONCALL_EMAIL` and `ALLOWED_EMAILS` to that address. (Optional: verify a domain under **Domains** and set `RESEND_FROM`.)
+
+**Twilio (phone)**
+1. Sign up at [twilio.com](https://www.twilio.com) (the trial is fine) and verify your own mobile number during sign-up.
+2. Console home → **Account Info**: copy **Account SID** → `TWILIO_ACCOUNT_SID` and **Auth Token** → `TWILIO_AUTH_TOKEN`.
+3. **Phone Numbers → Manage → Buy a number** (free on trial; pick one with Voice) → `TWILIO_PHONE_NUMBER` in E.164, e.g. `+44…`.
+4. Trial accounts can only call **verified** numbers: **Phone Numbers → Manage → Verified Caller IDs** should list your mobile. Set `DEMO_PHONE_TO`, `ONCALL_PHONE` and `ALLOWED_PHONES` to it.
+5. For conversational approval calls, run `node scripts/setup-phone.ts` (imports the Twilio number into ElevenLabs) and copy the printed id into `ELEVENLABS_PHONE_NUMBER_ID`. Trial calls start with a short Twilio message; press any key to continue.
+
+Restart the console API after changing `.env`.
+
 ## Integrity
 
 - **No invented facts:** unknowns are listed under "could not be verified" in every answer.
 - **Honest results:** Reality Test answers are rendered from the recorded event stream, failed runs are reported as failed, and nothing is edited by hand.
-- **Demo-mode delivery:** real emails and calls go only to the team's own inbox and verified number; on-call alerts are tagged "(demo)" until delivery keys are configured.
+- **Demo-mode delivery:** real emails and calls only reach allowlisted team destinations; other messages are recorded as simulated deliveries (see "Real email and phone, safely").
 
 ## 6. Key assumptions
 

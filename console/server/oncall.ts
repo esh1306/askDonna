@@ -3,6 +3,7 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { all, insertEvent } from "../../crm/repo.ts";
+import { checkEmail, checkPhone } from "./allowlist.ts";
 
 const STATE = resolve(process.cwd(), "data", "oncall-alerted.json");
 const CONSOLE_URL = process.env.CONSOLE_URL ?? "http://localhost:5181";
@@ -32,8 +33,10 @@ const xml = (s: string) => s.replace(/[<>&'"]/g, (c) => ({ "<": "&lt;", ">": "&g
 
 async function emailAlert(q: QueueItem): Promise<string> {
   const key = process.env.RESEND_API_KEY;
-  const to = process.env.ONCALL_EMAIL ?? process.env.DEMO_EMAIL_TO;
-  if (!key || !to) return "email not configured";
+  const dest = checkEmail(process.env.ONCALL_EMAIL ?? process.env.DEMO_EMAIL_TO);
+  if (!key) return "email not configured";
+  if (!dest.ok) return dest.reason;
+  const to = dest.to;
   const text = [
     `Donna needs a decision on: ${q.title}${q.address ? ` (${q.address})` : ""}`,
     "",
@@ -62,8 +65,10 @@ async function phoneAlert(q: QueueItem): Promise<string> {
   const sid = process.env.TWILIO_ACCOUNT_SID;
   const token = process.env.TWILIO_AUTH_TOKEN;
   const from = process.env.TWILIO_PHONE_NUMBER;
-  const to = process.env.ONCALL_PHONE ?? process.env.DEMO_PHONE_TO;
-  if (!sid || !token || !from || !to) return "phone not configured";
+  const dest = checkPhone(process.env.ONCALL_PHONE ?? process.env.DEMO_PHONE_TO);
+  if (!sid || !token || !from) return "phone not configured";
+  if (!dest.ok) return dest.reason;
+  const to = dest.to;
   const say =
     `Hello, this is Donna from the lettings team. An urgent case needs a person. ${q.title}` +
     `${q.address ? `, at ${q.address}` : ""}. ${q.reason}. ` +

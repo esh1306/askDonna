@@ -1,5 +1,6 @@
 // Real delivery: emails via Resend, phone calls via ElevenLabs Agents over Twilio.
 // SAFETY: everything goes ONLY to DEMO_EMAIL_TO / DEMO_PHONE_TO.
+import { checkEmail, checkPhone } from "./allowlist.ts";
 import { alertOnCall, primeOnCall } from "./oncall.ts";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -53,9 +54,19 @@ function setError(id: number, msg: string) {
   run("UPDATE outbox SET error=? WHERE id=?", msg, id);
 }
 
+/** Demo mode: only landlord approval requests are really emailed (to the allowlisted demo inbox); every other
+ *  message is recorded as sent in the CRM without leaving the system, so no real person is ever contacted. */
+// Only messages queued after this server started are delivered for real, so adding keys never fires a backlog.
+const WORKER_STARTED = new Date().toISOString();
+const isFresh = (row: OutboxRow) => (row.created_at ?? "") >= WORKER_STARTED;
+const REAL_EMAIL = (row: OutboxRow) => isFresh(row) && /^approval needed:/i.test(row.subject ?? "");
+
 async function sendEmail(row: OutboxRow): Promise<{ ok: boolean; note: string }> {
+  if (!REAL_EMAIL(row)) return { ok: true, note: "simulated delivery (demo mode)" };
   const m = missing(["RESEND_API_KEY", "DEMO_EMAIL_TO"]);
-  if (m.length) return { ok: false, note: `Email not configured: set ${m.join(", ")} in .env` };
+  if (m.length) return { ok: true, note: `simulated delivery (email not configured: ${m.join(", ")})` };
+  const allowed = checkEmail(process.env.DEMO_EMAIL_TO);
+  if (!allowed.ok) return { ok: true, note: `simulated delivery (${allowed.reason})` };
   const t = one<{ case_ref: string }>("SELECT case_ref FROM tickets WHERE id=?", row.ticket_id);
   const label = row.to_label ?? "recipient";
   const footer = `\n\n--\nDonna demo: this message was addressed to ${label} for ticket ${t?.case_ref ?? row.ticket_id} and redirected to the demo inbox.`;
@@ -65,7 +76,7 @@ async function sendEmail(row: OutboxRow): Promise<{ ok: boolean; note: string }>
     headers: { authorization: `Bearer ${process.env.RESEND_API_KEY}`, "content-type": "application/json" },
     body: JSON.stringify({
       from: process.env.RESEND_FROM || "Donna <onboarding@resend.dev>",
-      to: [process.env.DEMO_EMAIL_TO],
+      to: [allowed.to],
       subject: `[Donna demo → ${label}] ${row.subject ?? "(no subject)"}`,
       text: row.body + footer,
     }),
@@ -78,6 +89,8 @@ async function sendEmail(row: OutboxRow): Promise<{ ok: boolean; note: string }>
 export async function placeCall(row: OutboxRow | null, approval: ApprovalRow): Promise<{ ok: boolean; note: string; conversation_id?: string }> {
   const m = missing(["ELEVENLABS_API_KEY", "ELEVENLABS_AGENT_ID", "ELEVENLABS_PHONE_NUMBER_ID", "DEMO_PHONE_TO"]);
   if (m.length) return { ok: false, note: `Phone calls not configured: set ${m.join(", ")} in .env (see scripts/setup-phone.ts)` };
+  const allowedTo = checkPhone(process.env.DEMO_PHONE_TO);
+  if (!allowedTo.ok) return { ok: false, note: `Call refused: ${allowedTo.reason}` };
   const live = loadCalls().find((c) => c.approval_id === approval.id && !c.finished);
   if (live) return { ok: true, note: `call already in progress (${live.conversation_id})`, conversation_id: live.conversation_id };
   const ctx = getTicketContext(approval.ticket_id);
@@ -100,7 +113,7 @@ export async function placeCall(row: OutboxRow | null, approval: ApprovalRow): P
     body: JSON.stringify({
       agent_id: process.env.ELEVENLABS_AGENT_ID,
       agent_phone_number_id: process.env.ELEVENLABS_PHONE_NUMBER_ID,
-      to_number: process.env.DEMO_PHONE_TO,
+      to_number: allowedTo.to,
       conversation_initiation_client_data: { dynamic_variables: vars },
     }),
   });
@@ -188,12 +201,13 @@ export async function processOutbox(): Promise<{ processed: number; results: str
           else markMessage(row.id, "failed", r.note);
           results.push(`email #${row.id}: ${r.ok ? "sent" : r.note}`);
         } else if (row.channel === "sms") {
-          markMessage(row.id, "sent", "SMS delivery not configured (logged only)");
+          markMessage(row.id, "sent", "simulated delivery (demo mode)");
           results.push(`sms #${row.id}: logged only`);
         } else if (row.channel === "call") {
           if (process.env.PHONE_AUTO_CALL === "0") continue;
           const approval = one<ApprovalRow>("SELECT * FROM approvals WHERE ticket_id=? AND status='pending' ORDER BY id DESC", row.ticket_id);
           if (!approval) continue; // calls only for pending approvals
+          if (!isFresh(row)) { markMessage(row.id, "sent", "simulated delivery (queued before this server started)"); results.push(`call #${row.id}: simulated (backlog)`); continue; }
           const r = await placeCall(row, approval);
           if (r.ok) markMessage(row.id, "sent", r.note);
           else if (/not configured/.test(r.note)) setError(row.id, r.note);
