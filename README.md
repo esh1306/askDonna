@@ -14,7 +14,7 @@ Donna runs residential maintenance and compliance work end to end. She reads eve
 | **Learns from the team** | Every human decision becomes a reusable lesson |
 | **Results** | All 76 handoff points in the 50 public cases: **0 fail, 0 critical** (57 pass). 16 unseen hard cases: **14 pass, 0 fail**. See [docs/accuracy-report.md](docs/accuracy-report.md) |
 
-![Home](docs/img/v6-home.png)
+![Home](docs/img/v8-home.png)
 
 ---
 
@@ -119,7 +119,7 @@ sequenceDiagram
 
 **Home.** What Donna handled, what she is waiting on, what needs you, and her live activity feed.
 
-![Home](docs/img/v6-home.png)
+![Home](docs/img/v8-home.png)
 
 **A ticket, told by Donna.** Autonomy badge, what she's doing next, and a compact typed timeline of what she did: flagged for you, stage moves, approvals asked by phone with the amount, emails with one-line previews.
 
@@ -127,15 +127,15 @@ sequenceDiagram
 
 **Needs you: decisions, not paperwork.** What is wrong, what you need to do, and one-click actions. References, people and amounts are chips.
 
-![Needs you](docs/img/v4-queue.png)
+![Needs you](docs/img/v8-queue.png)
 
 **Documents in context.** An invoice reference opens the actual file next to Donna's notes.
 
 ![Document drawer](docs/img/v4-file-drawer.png)
 
-**Ask Donna.** A floating assistant that carries out instructions on the case.
+**Donna's work as a board.** Cases flow across stages; open any case in a drawer, with the Donna assistant following the case you are on.
 
-![Ask Donna](docs/img/v5-collapsed-donna.png)
+![Board and case drawer](docs/img/v8-board-drawer.png)
 
 ### Repository layout
 

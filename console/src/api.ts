@@ -21,7 +21,7 @@ export const label = (s: string | null | undefined) => (s ? s.replace(/_/g, " ")
 export type TicketRow = {
   id: number; case_ref: string; title: string; category: string | null; severity: string | null;
   stage: string; status: string; address: string | null;
-  pending_approvals: number; open_escalations: number; queued_outbox: number;
+  pending_approvals: number; open_escalations: number; queued_outbox: number; updated_at?: string;
 };
 export type Fact = { id: number; key: string; value: string; status: string; source_ref: string | null };
 export type Party = { id: number; name: string; role?: string; company?: string | null; email?: string | null; phone?: string | null; facts: Fact[] } | null;
