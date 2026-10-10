@@ -13,8 +13,11 @@ function Header({ d, onChange, toast }: { d: Detail; onChange: () => void; toast
   const esc: any[] = (d as any).open_human_queue ?? [];
   const hold = d.open_holds[0];
   const who = (n: string | null | undefined) => (n && n !== "null" ? n : "the other side");
+  // The badge stays a short label; the escalation's reason is a short headline next to it (full text on hover).
+  const escReason: string = String(esc[0]?.reason ?? "").trim();
+  const escHeadline = escReason.split(/[:;.!?]|,\s| — | - /)[0].trim().split(/\s+/).slice(0, 8).join(" ");
   const auto: [string, string] = esc.length
-    ? ["bad", `Needs your judgement: ${(esc[0].reason ?? "").split(/(?<=[.!?])\s/)[0]}`]
+    ? ["bad", "Needs your judgement"]
     : pend.length
       ? ["warn", `Donna is waiting on ${nm(d.landlord?.name)}${hold?.follow_up_at ? ` · chases ${when(hold.follow_up_at)}` : ""}`]
       : hold
@@ -31,7 +34,12 @@ function Header({ d, onChange, toast }: { d: Detail; onChange: () => void; toast
           <Pill tone={t.status === "open" ? "good" : "warn"}>{label(t.status)}</Pill>
         </div>
       </div>
-      <div className="autonomy"><Pill tone={auto[0] as any}>{auto[1]}</Pill></div>
+      <div className="autonomy">
+        <Pill tone={auto[0] as any}>{auto[1]}</Pill>
+        {esc.length > 0 && escHeadline && (
+          <span className="autonomy-why" title={escReason}>{escHeadline}{escHeadline.length < escReason.length ? "…" : ""}</span>
+        )}
+      </div>
       <Stepper steps={STAGES} current={t.stage} extra={t.stage === "paused" ? "paused" : undefined} />
       <div className="takeover"><button className="link" onClick={() => setTake(!take)}><Chev open={take} /> Take over</button>{take && <span className="muted small">Routine steps are Donna's job. Use these only if you want to step in.</span>}</div>
       {take && <div className="actionbar" data-learn-src>

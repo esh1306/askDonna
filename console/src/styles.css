@@ -321,3 +321,7 @@ details.calls .stack{padding-top:var(--s2)}
 .row-item.calm:not(.on){opacity:.82}
 .autonomy{margin-top:var(--s3)}.takeover{display:flex;gap:var(--s3);align-items:center;margin-top:var(--s3)}
 .dnext{list-style:none;margin:0;padding:0;display:grid;gap:8px}.dnext li{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--ink-2)}
+
+/* Autonomy badge: short label + one-line headline of why */
+.autonomy { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.autonomy-why { color: var(--ink-2, #5b5650); font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; max-width: 60ch; }
