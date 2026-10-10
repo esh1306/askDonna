@@ -1,15 +1,14 @@
 import { eveChannel } from "eve/channels/eve";
-import { localDev, placeholderAuth, vercelOidc } from "eve/channels/auth";
+import { httpBasic, localDev } from "eve/channels/auth";
 
+// Self-hosted on a VPS: callers (the runner, the console, the voice bridge) use HTTP Basic auth.
+// localDev() only applies under `eve dev`; it never opens a production `eve start` server.
 export default eveChannel({
   auth: [
-    // Lets the eve TUI and your Vercel deployments reach the deployed agent.
-    vercelOidc(),
-    // Open on localhost for `eve dev` and the REPL; ignored in production.
+    httpBasic({
+      username: process.env.DONNA_API_USER ?? "donna",
+      password: process.env.DONNA_API_PASSWORD ?? "",
+    }),
     localDev(),
-    // This placeholder will not allow browser requests in production.
-    // Replace it with your app's auth provider, like Auth.js or Clerk,
-    // or use none() for a public demo.
-    placeholderAuth(),
   ],
 });

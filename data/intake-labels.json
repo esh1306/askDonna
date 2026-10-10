@@ -1,0 +1,1180 @@
+[
+  {
+    "case": "001",
+    "title": "Communal Garden and Hedge Maintenance Request",
+    "property": "Flat 26, 46 Copperfield Walk, Kingshaven, ZZ5 7ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "Communal  garden full of weeds, hedge along side path overgrown, peice of no man's land at side  of my property  was going to be cleared  last summer and wasn't thanks",
+    "labels": {
+      "category": "garden_external",
+      "needs_landlord_approval": true,
+      "resolved_without_contractor": false,
+      "dwelly_severity": "routine",
+      "dwelly_issue": "External & Communal"
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [
+        "/Please complete landlord approval step first/i",
+        "/Reason: Waiting for Landlord/i",
+        "/Landlord approval confirmed/i"
+      ],
+      "completed_without_payment": true,
+      "provider_assigned": true,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": false,
+      "outcome_excerpt": "The communal garden works were completed; the landlord pays the contractor directly."
+    }
+  },
+  {
+    "case": "002",
+    "title": "Blocked toilet at Flat 3, 15 Willowmere Road, Alderwick, ZZ3 2ZZ",
+    "property": "Flat 3, 15 Willowmere Road, Alderwick, ZZ3 2ZZ",
+    "reporter_role": "Agency manager",
+    "input_text": "Toilet need to be removed to clear blockage. Run block lodged by pan connector.",
+    "labels": {
+      "category": "plumbing",
+      "needs_landlord_approval": true,
+      "resolved_without_contractor": false
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [
+        "/Reason: Waiting for Landlord/i",
+        "/Landlord approval confirmed/i",
+        "/Quote was approved by landlord/i"
+      ],
+      "completed_without_payment": false,
+      "provider_assigned": true,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": false,
+      "outcome_excerpt": "The provider confirmed the toilet work was completed and supplied a completion image and invoice. The request was ultimately marked completed by a supervisor."
+    }
+  },
+  {
+    "case": "003",
+    "title": "Checkout Cleaning Estimate and Invoice",
+    "property": "Flat 30, 30 Harbour View, Northbridge, ZZ9 0ZZ",
+    "reporter_role": "Agency manager",
+    "input_text": "Please provide an estimate to clean property as per check out to include the removal of dumped items left in the property and a carpet clean.",
+    "labels": {
+      "category": "cleaning_checkout_works",
+      "needs_landlord_approval": false,
+      "resolved_without_contractor": false
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [],
+      "completed_without_payment": false,
+      "provider_assigned": true,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": false,
+      "outcome_excerpt": "The cleaning request was completed and closed after the invoice was sent to the landlord; the landlord later confirmed payment."
+    }
+  },
+  {
+    "case": "004",
+    "title": "Checkout Clean",
+    "property": "Flat 2, 172 Alder Lane, Bellmere, ZZ3 1ZZ",
+    "reporter_role": "Agency manager",
+    "input_text": "Quote for:\n\nLiving space:\n1. Vacuum\n2. Light clean\n\nEn-Suite:\n1. Limescale removal",
+    "labels": {
+      "category": "cleaning_checkout_works",
+      "needs_landlord_approval": true,
+      "resolved_without_contractor": false
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [
+        "/Reason: Waiting for Landlord/i",
+        "/Landlord approval confirmed/i"
+      ],
+      "completed_without_payment": false,
+      "provider_assigned": true,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": false,
+      "outcome_excerpt": "The provider confirmed that the clean was complete and sent the invoice. Northbridge Lettings forwarded it to the landlord, and the request was closed after final checks. Before-and-after photos were not uploaded."
+    }
+  },
+  {
+    "case": "005",
+    "title": "Check-Out Cleaning",
+    "property": "Flat 10, 160 Alder Lane, Westmarsh, ZZ8 9ZZ",
+    "reporter_role": "Agency manager",
+    "input_text": "Following the tenant vacating please provide an estimate to; \n1) Clean property through out as per check out to include all appliances, freezer defrost  and a carpet clean in bedroom two.",
+    "labels": {
+      "category": "cleaning_checkout_works",
+      "needs_landlord_approval": false,
+      "resolved_without_contractor": false
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [],
+      "completed_without_payment": false,
+      "provider_assigned": true,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": false,
+      "outcome_excerpt": "The cleaning was completed, the keys were returned, and the property was ready for move-in."
+    }
+  },
+  {
+    "case": "006",
+    "title": "Check-Out Works: Carpet Replacement and Repainting",
+    "property": "Flat 21, 11 Juniper Mews, Northbridge, ZZ7 0ZZ",
+    "reporter_role": "Agency manager",
+    "input_text": "Following the tenant vacating please provide an estimate to; \n1) Replace burnt carpet\n2) Repaint through out",
+    "labels": {
+      "category": "cleaning_checkout_works",
+      "needs_landlord_approval": false,
+      "resolved_without_contractor": false
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [],
+      "completed_without_payment": false,
+      "provider_assigned": true,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": false,
+      "outcome_excerpt": "The landlord approved the quotation, and the contractor was recorded as having completed the work. Key return was confirmed and the request was closed after final checks."
+    }
+  },
+  {
+    "case": "007",
+    "title": "Check-Out Works: Lounge Lighting and Ceiling Repair",
+    "property": "Flat 8, 168 Alder Lane, Kingshaven, ZZ4 3ZZ",
+    "reporter_role": "Agency manager",
+    "input_text": "Please quote for the following works based on the check out report:\n\n Lounge:\n1. Two spotlights not working\n2. Fix water damage to ceiling tile",
+    "labels": {
+      "category": "electrical_lighting",
+      "needs_landlord_approval": true,
+      "resolved_without_contractor": false
+    },
+    "evidence": {
+      "category_source": "override",
+      "approval_signals": [
+        "/Reason: Waiting for Landlord/i",
+        "/Landlord approval confirmed/i",
+        "/Quote was approved by landlord/i"
+      ],
+      "completed_without_payment": false,
+      "provider_assigned": true,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": false,
+      "outcome_excerpt": "The works were reported as completed, the invoice was sent to the landlord for payment, and the request was closed after final checks."
+    }
+  },
+  {
+    "case": "008",
+    "title": "Check-Out Works",
+    "property": "Flat 5, 55 Lantern Quay, Cedarford, ZZ2 4ZZ",
+    "reporter_role": "Agency manager",
+    "input_text": "Following the tenant vacating please provide an estimate to; \nRepaint bedroom any other rooms if needed\nReplace bedroom carpet that is burnt\nReplace bathroom flooring \nRepair broken plug \nRepair dripping bath tap \nRepair damaged shelf in bathroom",
+    "labels": {
+      "category": "cleaning_checkout_works",
+      "needs_landlord_approval": true,
+      "resolved_without_contractor": false
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [
+        "/Reason: Waiting for Landlord/i"
+      ],
+      "completed_without_payment": false,
+      "provider_assigned": true,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": false,
+      "outcome_excerpt": "The requested works were completed, and the final cost was lower than the original quote because the tap did not need replacing. The invoice was sent to the landlord, who approved payment."
+    }
+  },
+  {
+    "case": "009",
+    "title": "Front garden maintenance follow-up",
+    "property": "Flat 4, 174 Beacon Close, Westmarsh, ZZ5 5ZZ",
+    "reporter_role": "Agency manager",
+    "input_text": "FRONT GARDEN - PICKED UP AT INSPECTION\n\nFirst tenant message:\nSorry for the delay will be finished this evening will get photos to you tomorrow morning\n\nThanks",
+    "labels": {
+      "category": "garden_external",
+      "needs_landlord_approval": false,
+      "resolved_without_contractor": false
+    },
+    "evidence": {
+      "category_source": "override",
+      "approval_signals": [],
+      "completed_without_payment": false,
+      "provider_assigned": false,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": true,
+      "outcome_excerpt": "After receiving the photograph of the completed garden work, the task was closed."
+    }
+  },
+  {
+    "case": "010",
+    "title": "Solar panel readings photo request",
+    "property": "Flat 10, 180 Alder Lane, Cedarford, ZZ3 4ZZ",
+    "reporter_role": "Agency manager",
+    "input_text": "Solar panel readings every 3 months w photo needed from Ts for LL. Next due Mid June.\n\nFirst tenant message:\nThanks & Regards, Miles Fletcher, 07700 900978",
+    "labels": {
+      "category": "inspection_admin",
+      "needs_landlord_approval": false,
+      "resolved_without_contractor": false
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [],
+      "completed_without_payment": false,
+      "provider_assigned": false,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": true,
+      "outcome_excerpt": "The solar panel readings photo was sent to the landlord, who confirmed receiving it and said the next readings would be needed on 15th September."
+    }
+  },
+  {
+    "case": "011",
+    "title": "Dishwasher Repair Request",
+    "property": "Flat 12, 78 Copperfield Walk, Kingshaven, ZZ3 1ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "Request summary with context: The Riverside Services dishwasher runs perpetually and does not complete its cycle, suggesting a malfunction.\n\nTenant's original query: Dish washer repair, the dish washer turns on, fills up and seems to wash but never ever stops it’s cycle\n\nAdditional details provided:\n- Has this issue been persistent, or did it start recently? Started recently\n- Are there any pets at the property? Yes two guinea pigs",
+    "labels": {
+      "category": "appliance",
+      "needs_landlord_approval": true,
+      "resolved_without_contractor": false,
+      "dwelly_severity": "routine",
+      "dwelly_issue": "Appliances · Dishwasher not completing cycle"
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [
+        "/Please complete landlord approval step first/i",
+        "/Reason: Waiting for Landlord/i",
+        "/Landlord approval confirmed/i"
+      ],
+      "completed_without_payment": false,
+      "provider_assigned": true,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": false,
+      "outcome_excerpt": "The provider removed water from the dishwasher base, tightened a loose connection and tested the appliance, which was running as it should. A replacement dial was identified as needed and quoted at £95 including parts, labour and VAT; the tenant was told they would install the replacement knob thems"
+    }
+  },
+  {
+    "case": "012",
+    "title": "Dishwasher Door Repair",
+    "property": "Flat 9, 89 Juniper Mews, Willowbank, ZZ2 0ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "Dishwasher door not closing,\n\nFirst tenant message:\nHi Maya,\n\nAll checks done, door still doesn’t close.\n\nThanks\nLeo\nSent from my synthetic-a79211876cc8",
+    "labels": {
+      "category": "appliance",
+      "needs_landlord_approval": false,
+      "resolved_without_contractor": false
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [],
+      "completed_without_payment": false,
+      "provider_assigned": true,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": true,
+      "outcome_excerpt": "The contractor freed the prematurely engaged door lock and tested the dishwasher, confirming it was working normally."
+    }
+  },
+  {
+    "case": "013",
+    "title": "Integrated Dishwasher Repair Request",
+    "property": "Flat 2, 42 Beacon Close, Bellmere, ZZ4 2ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "Dishwasher starts then beeps and powers light flashes.  Just stops working. It’s  an integrated dishwasher .",
+    "labels": {
+      "category": "appliance",
+      "needs_landlord_approval": false,
+      "resolved_without_contractor": false
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [],
+      "completed_without_payment": false,
+      "provider_assigned": true,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": false,
+      "outcome_excerpt": "The agency confirmed that the dishwasher was repaired on site and was working again."
+    }
+  },
+  {
+    "case": "014",
+    "title": "Front Door Repair Request",
+    "property": "Flat 12, 52 Meadow Row, Kingshaven, ZZ9 5ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "Front door you have to slam to shut like the back. when fridge man arrived he even commented and said it will cause a shatter in glass- he said he was also going to report to you.",
+    "labels": {
+      "category": "doors_windows_locks",
+      "needs_landlord_approval": true,
+      "resolved_without_contractor": true,
+      "dwelly_severity": "routine",
+      "dwelly_issue": "Appliances"
+    },
+    "evidence": {
+      "category_source": "override",
+      "approval_signals": [
+        "/Please complete landlord approval step first/i",
+        "/Reason: Waiting for Landlord/i"
+      ],
+      "completed_without_payment": true,
+      "provider_assigned": false,
+      "self_or_landlord_signal": true,
+      "used_first_tenant_message": false,
+      "outcome_excerpt": "The tenant tried opening the latch with the key before closing the door, and it worked. She will continue using this method, monitor the issue and let the agency know if it recurs. The request was closed without payment."
+    }
+  },
+  {
+    "case": "015",
+    "title": "Front Door Repair Request",
+    "property": "Flat 16, 76 Alder Lane, Kingshaven, ZZ8 8ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "The front door feels stuck making it difficult to open and close. It stucks at the base but there's no item beneath preventing it from closing or opening which i have checked.",
+    "labels": {
+      "category": "doors_windows_locks",
+      "needs_landlord_approval": false,
+      "resolved_without_contractor": false
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [],
+      "completed_without_payment": false,
+      "provider_assigned": true,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": false,
+      "outcome_excerpt": "The agency confirmed that the door had been adjusted and warned the landlord that swelling could cause the issue to recur and that replacement may be needed."
+    }
+  },
+  {
+    "case": "016",
+    "title": "Garden Door Repair Request",
+    "property": "Flat 17, 113 Juniper Mews, Northbridge, ZZ8 6ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "From Tenant:\nI seem to have a slight problem with my back / garden door. It is a little difficult to close. It could possibly be the heat, but it is also creaking and not closing smoothly. The hinges seem to be misaligned.\n\nPlease fix if simple quote if expensive. Thanks!",
+    "labels": {
+      "category": "doors_windows_locks",
+      "needs_landlord_approval": true,
+      "resolved_without_contractor": true
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [
+        "/Please complete landlord approval step first/i",
+        "/Reason: Waiting for Landlord/i",
+        "/Landlord approval confirmed/i"
+      ],
+      "completed_without_payment": true,
+      "provider_assigned": true,
+      "self_or_landlord_signal": true,
+      "used_first_tenant_message": false,
+      "outcome_excerpt": "The door was functioning well after naturally settling; no repair or invoice was required. The request was completed without payment."
+    }
+  },
+  {
+    "case": "017",
+    "title": "Kitchen Extractor Fan Repair Request",
+    "property": "Flat 1, 31 Juniper Mews, Cedarford, ZZ7 7ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "Extractor fan in kitchen does not seem to work (turn on). May be a simple technician fix. Thank you\n\nFirst tenant message:\nThank you!",
+    "labels": {
+      "category": "appliance",
+      "needs_landlord_approval": true,
+      "resolved_without_contractor": true
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [
+        "/Please complete landlord approval step first/i"
+      ],
+      "completed_without_payment": true,
+      "provider_assigned": false,
+      "self_or_landlord_signal": true,
+      "used_first_tenant_message": true,
+      "outcome_excerpt": "The tenant found the switch following the landlord’s instructions and confirmed that the extractor fan was working. The job was closed without payment."
+    }
+  },
+  {
+    "case": "018",
+    "title": "Garden Maintenance Request",
+    "property": "Flat 17, 67 Willowmere Road, Alderwick, ZZ7 4ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "Request summary with context: Garden vegetation, including a tree and weeds, has become overgrown and too large for the tenant to maintain.\n\nTenant's original query: Garden is a mess to big to maintain myself we had at least 1 gardener come out once a year to sort this over grown tree weeds",
+    "labels": {
+      "category": "garden_external",
+      "needs_landlord_approval": true,
+      "resolved_without_contractor": false,
+      "dwelly_severity": "routine",
+      "dwelly_issue": "External & Communal · Overgrown tree and weeds"
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [
+        "/Please complete landlord approval step first/i",
+        "/Landlord approval confirmed/i"
+      ],
+      "completed_without_payment": false,
+      "provider_assigned": true,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": false,
+      "outcome_excerpt": "The agency reported that the garden work was done and would be invoiced off the rent; the landlord acknowledged the message. The request was marked complete by a supervisor."
+    }
+  },
+  {
+    "case": "019",
+    "title": "Garden Maintenance Request",
+    "property": "Flat 25, 185 Copperfield Walk, Alderwick, ZZ4 0ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "Hi dear Maintenance team,\nAs this garden is part of the house included in our tenancy, we would like it to be cleaned and finished properly. The ground also needs to be levelled and covered with stones (gravel) so that we can use the space safely. We would like to sit there in the afternoon, but at the moment it is not possible due to the condition.\n\nI have attached pictures for your reference. Could you please arrange:\n• Removal of all rubbish and construction waste\n• Levelling of the ground\n• Proper gravel/stone covering\n• Making the garden safe and usable",
+    "labels": {
+      "category": "garden_external",
+      "needs_landlord_approval": true,
+      "resolved_without_contractor": false
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [
+        "/Please complete landlord approval step first/i",
+        "/Reason: Waiting for Landlord/i",
+        "/Landlord approval confirmed/i"
+      ],
+      "completed_without_payment": false,
+      "provider_assigned": true,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": false,
+      "outcome_excerpt": "The garden was cleared, the landlord was sent the invoice, and the request was closed."
+    }
+  },
+  {
+    "case": "020",
+    "title": "Property inspection",
+    "property": "Flat 12, 162 Beacon Close, Cedarford, ZZ9 5ZZ",
+    "reporter_role": "auto",
+    "input_text": "Inspection\n\nFirst tenant message:\nThe customer requests to change the inspection date to Friday, 15th February due to a concern about their dog being overly excited.",
+    "labels": {
+      "category": "inspection_admin",
+      "needs_landlord_approval": false,
+      "resolved_without_contractor": false
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [],
+      "completed_without_payment": false,
+      "provider_assigned": false,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": true,
+      "outcome_excerpt": "The inspection was completed, and the report stated that no issues were identified. A report was referenced in the email, but its contents are unavailable. The landlord subsequently raised the dog flap and spare key matters."
+    }
+  },
+  {
+    "case": "021",
+    "title": "Key Replacement Request",
+    "property": "Flat 22, 148 Lantern Quay, Westmarsh, ZZ4 1ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "Hi Clara,\n\nThe tenants have advised that the key snapped for the back door for the conservatory and they do not have a spare.\n\nPlease can you replace the lock and provide 4 new keys, 2 for the tenants, 1 for us and 1 for the landlord. The ones for us and the landlord will need to be given to the office.",
+    "labels": {
+      "category": "doors_windows_locks",
+      "needs_landlord_approval": true,
+      "resolved_without_contractor": false
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [
+        "/Please complete landlord approval step first/i",
+        "/Landlord approval confirmed/i"
+      ],
+      "completed_without_payment": false,
+      "provider_assigned": true,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": false,
+      "outcome_excerpt": "The provider reported replacing the cylinder and handles and said the remaining keys would be delivered to the office the following day. The request was marked completed and closed."
+    }
+  },
+  {
+    "case": "022",
+    "title": "Front Door Lock Repair Request",
+    "property": "Flat 23, 155 Willowmere Road, Alderwick, ZZ5 2ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "Front door lock, the keys gets very hard to turn to unlock, thos sometimes leads to me standing at the door fiddling with the keys for a couple of minutes just so I can go outside.",
+    "labels": {
+      "category": "doors_windows_locks",
+      "needs_landlord_approval": false,
+      "resolved_without_contractor": false
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [],
+      "completed_without_payment": false,
+      "provider_assigned": true,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": false,
+      "outcome_excerpt": "The contractor confirmed the work was complete, including replacement of the lock; the new key was then added to the office set and copied."
+    }
+  },
+  {
+    "case": "023",
+    "title": "Balcony Door Lock Repair",
+    "property": "Flat 20, 110 Meadow Row, Northbridge, ZZ2 5ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "The tenant has reported that the locking mechanism on the glass door which leads out to the balcony is not turning / locking. Can you please get in touch with them to schedule a date and time to attend the property and quote to have the issue resolved. Thank you.",
+    "labels": {
+      "category": "doors_windows_locks",
+      "needs_landlord_approval": false,
+      "resolved_without_contractor": false
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [],
+      "completed_without_payment": false,
+      "provider_assigned": true,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": false,
+      "outcome_excerpt": "The provider confirmed the balcony-door repair was completed and the invoice had been sent. The request was closed after final checks and confirmation of the key return."
+    }
+  },
+  {
+    "case": "024",
+    "title": "Oven repair request",
+    "property": "Flat 6, 56 Juniper Mews, Northbridge, ZZ1 0ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "Oven not/cooking warming food\n\nFor reference it takes more than double the amount of time to cook anything than usual\nE.g. nuggets or chips still uncooked after 1.30hrs\n\nFirst tenant message:\nThe customer reports that the oven has not worked since moving in, despite trying the recommended settings, and requests someone be sent to inspect the problem.",
+    "labels": {
+      "category": "appliance",
+      "needs_landlord_approval": false,
+      "resolved_without_contractor": false
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [],
+      "completed_without_payment": true,
+      "provider_assigned": true,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": true,
+      "outcome_excerpt": "Northbridge Lettings told the tenant that the oven had been fixed and the request was closed. The request was marked completed without payment."
+    }
+  },
+  {
+    "case": "025",
+    "title": "Oven Repair Request",
+    "property": "Flat 2, 176 Lantern Quay, Westmarsh, ZZ8 5ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "The oven has stopped heating up. Does not work on any settings, the light still switches on and it makes a sound but does not heat up on oven or grill settings. It was replaced sometime last year as the last one stopped working too.",
+    "labels": {
+      "category": "appliance",
+      "needs_landlord_approval": true,
+      "resolved_without_contractor": false
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [
+        "/Please complete landlord approval step first/i",
+        "/Reason: Waiting for Landlord/i",
+        "/Landlord approval confirmed/i"
+      ],
+      "completed_without_payment": true,
+      "provider_assigned": true,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": false,
+      "outcome_excerpt": "The contractor confirmed that the oven repair was completed under warranty, with no charge to the landlord. The task was marked complete without payment."
+    }
+  },
+  {
+    "case": "026",
+    "title": "Oven Repair Request",
+    "property": "Flat 3, 3 Willowmere Road, Alderwick, ZZ9 6ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "Hi there,\n\nHope you are well.\n\nApologies for bringing something to attention not long after moving in. Apart from this one small issue, everything else seems fine, and we are really enjoying the comforts of the property! :)\n\nI am not sure if I am missing something on the fan oven. We finally managed to get around to using the oven on Tuesday evening,\n(It's been a long and stressful move-in from the old place to here, so apologies for not checking this sooner).\nThe oven doesn't seem to heat up using the main oven section. I can confirm that the grill heating element works, as I used this last night to cook with, but the main oven heating element doesn't seem to work. On Tuesday evening, we had the oven running for at least an hour to try and get it up to 200 degrees, but it was not heating up at all.\n\nI looked through the instruction booklet I found and am certain I am not missing anything in relation to how the oven operates.\n\nIs this something that could be looked at, please?\n\nKind regards\nClara",
+    "labels": {
+      "category": "appliance",
+      "needs_landlord_approval": true,
+      "resolved_without_contractor": false,
+      "dwelly_severity": "routine",
+      "dwelly_issue": "Appliances"
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [
+        "/Please complete landlord approval step first/i",
+        "/Reason: Waiting for Landlord/i",
+        "/Landlord approval confirmed/i"
+      ],
+      "completed_without_payment": false,
+      "provider_assigned": true,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": false,
+      "outcome_excerpt": "The oven’s heating element was replaced. The tenant confirmed by phone that the oven was working normally afterward; the technician also cleaned the hobs."
+    }
+  },
+  {
+    "case": "027",
+    "title": "Blocked Bath Drain Request",
+    "property": "Flat 10, 30 Copperfield Walk, Willowbank, ZZ2 3ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "Goodmorning, I writing concerning Flat 10, bathtub and we have been experiencing some water residual after taking a shower for about 2 days now and currently the water keep take hours b4 draining. I would be glad if the maintenance guys could come take a look at it\n\nFirst tenant message:\nOh, thank you so much, apparently its some a plunger could do. its now clear. thanks for the help.",
+    "labels": {
+      "category": "plumbing",
+      "needs_landlord_approval": false,
+      "resolved_without_contractor": true
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [],
+      "completed_without_payment": true,
+      "provider_assigned": false,
+      "self_or_landlord_signal": true,
+      "used_first_tenant_message": true,
+      "outcome_excerpt": "The tenant confirmed that they had cleared the bath blockage themselves using a plunger. The request was completed without a contractor or payment."
+    }
+  },
+  {
+    "case": "028",
+    "title": "Loose Water Pipe in the Back Garden",
+    "property": "Flat 7, 87 Alder Lane, Bellmere, ZZ3 8ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "Hi. The pipe become loose at the back garden as shown in the photo below.",
+    "labels": {
+      "category": "garden_external",
+      "needs_landlord_approval": true,
+      "resolved_without_contractor": true
+    },
+    "evidence": {
+      "category_source": "override",
+      "approval_signals": [
+        "/Please complete landlord approval step first/i",
+        "/Reason: Waiting for Landlord/i"
+      ],
+      "completed_without_payment": true,
+      "provider_assigned": false,
+      "self_or_landlord_signal": true,
+      "used_first_tenant_message": false,
+      "outcome_excerpt": "The landlord confirmed that the outdoor pipe had been repaired; the task was completed without payment."
+    }
+  },
+  {
+    "case": "029",
+    "title": "Cracked basin repair request",
+    "property": "Flat 6, 24 Lantern Quay, Westmarsh, ZZ3 9ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "Hello, \nI would like my sink from the batroom fixt .",
+    "labels": {
+      "category": "plumbing",
+      "needs_landlord_approval": false,
+      "resolved_without_contractor": false
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [],
+      "completed_without_payment": false,
+      "provider_assigned": true,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": false,
+      "outcome_excerpt": "The request was closed after all checks were completed. An internal note recorded that Miles advised the basin repair was done; the referenced completion document was not uploaded."
+    }
+  },
+  {
+    "case": "030",
+    "title": "Plumbing request: slow-filling toilet and bathroom tap",
+    "property": "Flat 7, 31 Willowmere Road, Alderwick, ZZ4 0ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "The toilet is running slow to fill up and the cold water tap in the hand basin in the bathroom isn't working at all this has become a issue recently on our return from our holiday.\n\nAdditional details provided:\n- Is this the only toilet at the property? Yes\n- Is the toilet not flushing, blocked and overflowing, constantly running or trickling, or something else? Trickling to fill up\n- When you flush, does the water drain away at all, or does it rise up toward the rim of the bowl? Drains away\n- Are there any access considerations we should know about, such as entry codes or alarms and security systems that would need to be disarmed? No\n- Are there any pets at the property? Yes",
+    "labels": {
+      "category": "plumbing",
+      "needs_landlord_approval": true,
+      "resolved_without_contractor": false,
+      "dwelly_severity": "routine",
+      "dwelly_issue": "Plumbing"
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [
+        "/Please complete landlord approval step first/i",
+        "/Landlord approval confirmed/i"
+      ],
+      "completed_without_payment": true,
+      "provider_assigned": true,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": false,
+      "outcome_excerpt": "The provider replaced the toilet cistern inlet valve. The tenants reported that the basin taps were working normally."
+    }
+  },
+  {
+    "case": "031",
+    "title": "Plumbing request",
+    "property": "Flat 14, 134 Copperfield Walk, Cedarford, ZZ4 4ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "The toilet cistern keeps filling with water and never stops. I have received a letter from Oakfield Services about a water leakage over two weeks ago.",
+    "labels": {
+      "category": "plumbing",
+      "needs_landlord_approval": true,
+      "resolved_without_contractor": false
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [
+        "/Please complete landlord approval step first/i",
+        "/Landlord approval confirmed/i"
+      ],
+      "completed_without_payment": false,
+      "provider_assigned": true,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": false,
+      "outcome_excerpt": "The provider confirmed the cistern repair was completed and uploaded an invoice. The request was closed after final checks."
+    }
+  },
+  {
+    "case": "032",
+    "title": "Toilet flush mechanism repair",
+    "property": "Flat 10, 130 Lantern Quay, Willowbank, ZZ5 1ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "Issue with toilet flusher in second bedroom.\nAssuming this is straightforward and cheap enough but please quote if it's a big job! Thank you",
+    "labels": {
+      "category": "plumbing",
+      "needs_landlord_approval": true,
+      "resolved_without_contractor": false
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [
+        "/Please complete landlord approval step first/i",
+        "/Reason: Waiting for Landlord/i",
+        "/Landlord approval confirmed/i"
+      ],
+      "completed_without_payment": false,
+      "provider_assigned": true,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": false,
+      "outcome_excerpt": "The provider confirmed that the toilet flush mechanism repair was complete and that the invoice had been uploaded."
+    }
+  },
+  {
+    "case": "033",
+    "title": "Bathroom Tap Plumbing Request",
+    "property": "Flat 19, 159 Juniper Mews, Kingshaven, ZZ9 2ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "The tap in the bathroom has started to squirt water out when the shower is running",
+    "labels": {
+      "category": "plumbing",
+      "needs_landlord_approval": true,
+      "resolved_without_contractor": false
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [
+        "/Quote was approved by landlord/i"
+      ],
+      "completed_without_payment": false,
+      "provider_assigned": true,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": false,
+      "outcome_excerpt": "The contractor confirmed the plumbing work was complete and supplied images and an invoice; the request was closed after the checks were completed."
+    }
+  },
+  {
+    "case": "034",
+    "title": "Shower Repair Request",
+    "property": "Flat 9, 9 Willowmere Road, Bellmere, ZZ9 7ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "The cold side of the shower isn’t working. Water not coming out. \nMostly, the warm side is ok but sometimes too hot to pour on body. If cold side is repaired the water could be mixed to equalise temperature. Thanks",
+    "labels": {
+      "category": "plumbing",
+      "needs_landlord_approval": true,
+      "resolved_without_contractor": false
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [
+        "/Please complete landlord approval step first/i",
+        "/Landlord approval confirmed/i"
+      ],
+      "completed_without_payment": false,
+      "provider_assigned": true,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": false,
+      "outcome_excerpt": "The provider cleaned and greased the shower mechanism, resolving the temperature problem. The request was closed after checks were completed."
+    }
+  },
+  {
+    "case": "035",
+    "title": "Shower Repair Request",
+    "property": "Flat 23, 63 Meadow Row, Bellmere, ZZ6 6ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "I would like to report an issue with the shower in my property.\n\nThe water pressure from the shower has become very low compared to its normal performance. In addition, the shower hose/pipe appears to be loose where it connects to the shower head, and I am concerned that it may be damaged or starting to break.\n\nThe low water pressure is affecting normal use of the shower. I would appreciate it if someone could inspect the shower, hose, and connections to determine the cause of the problem and carry out any necessary repairs.\n\nFirst tenant message:\nThat's great, thank you.",
+    "labels": {
+      "category": "plumbing",
+      "needs_landlord_approval": true,
+      "resolved_without_contractor": true,
+      "dwelly_severity": "routine",
+      "dwelly_issue": "Plumbing"
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [
+        "/Please complete landlord approval step first/i",
+        "/Reason: Waiting for Landlord/i"
+      ],
+      "completed_without_payment": true,
+      "provider_assigned": false,
+      "self_or_landlord_signal": true,
+      "used_first_tenant_message": true,
+      "outcome_excerpt": "The landlord confirmed that he had resolved the shower issue."
+    }
+  },
+  {
+    "case": "036",
+    "title": "Shower Tap Repair",
+    "property": "Flat 13, 73 Juniper Mews, Northbridge, ZZ1 6ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "shower pull knob is broken. every time i need to use the shower the cap comes off. i have a video but there’s no way to attach here.",
+    "labels": {
+      "category": "plumbing",
+      "needs_landlord_approval": true,
+      "resolved_without_contractor": false
+    },
+    "evidence": {
+      "category_source": "override",
+      "approval_signals": [
+        "/Please complete landlord approval step first/i",
+        "/Reason: Waiting for Landlord/i",
+        "/Landlord approval confirmed/i"
+      ],
+      "completed_without_payment": true,
+      "provider_assigned": true,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": false,
+      "outcome_excerpt": "The provider confirmed the replacement bath tap was fitted at no charge because the previously fitted tap was faulty. The request was marked complete without payment."
+    }
+  },
+  {
+    "case": "037",
+    "title": "Shower Repair Request",
+    "property": "Flat 14, 44 Lantern Quay, Alderwick, ZZ9 8ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "Shower cable leading to the shower handle is damaged and leaking. \nPlease replace",
+    "labels": {
+      "category": "plumbing",
+      "needs_landlord_approval": false,
+      "resolved_without_contractor": false
+    },
+    "evidence": {
+      "category_source": "override",
+      "approval_signals": [],
+      "completed_without_payment": false,
+      "provider_assigned": true,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": false,
+      "outcome_excerpt": "The contractor replaced the snapped shower hose and sent an attachment-91-document."
+    }
+  },
+  {
+    "case": "038",
+    "title": "Washing Machine Replacement Request",
+    "property": "Flat 9, 59 Alder Lane, Eastmere, ZZ4 4ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "Request summary with context: The Willow Maintenance washing machine is experiencing a power failure and is not operational.\n\nTenant's original query: Washing machine broken, it’s LG , we have googled it, it has power failure and can’t be fixed, I am willing to replace, this one was here when I moved in, but if I replace it will be mine and not become part of the property, if I ever was to move out I would take it with me.",
+    "labels": {
+      "category": "appliance",
+      "needs_landlord_approval": true,
+      "resolved_without_contractor": true,
+      "dwelly_severity": "routine",
+      "dwelly_issue": "Appliances · Power failure"
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [
+        "/Please complete landlord approval step first/i"
+      ],
+      "completed_without_payment": true,
+      "provider_assigned": false,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": false,
+      "outcome_excerpt": "The landlord approved the tenant installing her own washing machine and taking it with her when she vacates. The tenant arranged for her brother to take the old machine to the tip."
+    }
+  },
+  {
+    "case": "039",
+    "title": "Washing Machine Repair Request",
+    "property": "Flat 29, 19 Copperfield Walk, Northbridge, ZZ9 1ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "Washing machine clicking while rotating -it doesn’t sound healthy.\nIt is still working at this point.\n\nFirst tenant message:\nNora reports a mechanical clicking noise from the machine during washes and offers to provide a video if needed.",
+    "labels": {
+      "category": "appliance",
+      "needs_landlord_approval": true,
+      "resolved_without_contractor": false
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [
+        "/Reason: Waiting for Landlord/i"
+      ],
+      "completed_without_payment": false,
+      "provider_assigned": true,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": true,
+      "outcome_excerpt": "The provider confirmed that the washing machine repair was completed and attached an invoice. The request was closed after the final checks."
+    }
+  },
+  {
+    "case": "040",
+    "title": "Washing Machine Repair Request",
+    "property": "Flat 15, 55 Alder Lane, Northbridge, ZZ1 6ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "Request summary with context: The Juniper Services NBL-040-4451 washing machine fills with water but does not start the wash cycle.\n\nTenant's original query: The washing machine is no longer working.\n\nIt fills with water as normal, but the wash cycle never starts. There are no error codes displayed, and we've tried resetting the machine, and other settings, but unfortunately that hasn't resolved the issue.\n\nWe do have our own washing machine that could be installed as a replacement if necessary. However, I thought it would be best to have the existing machine checked first before making any changes.\n\nIf it does need replacing, could someone carry out the swap? There isn't any isolation valves on the water pipes.\n\nPlease let us know how you'd like to proceed.\n\nFirst tenant message:\nRowan resolved the washing machine issue himself by swapping machines and storing the faulty one in the garage as he is leaving for holiday soon.",
+    "labels": {
+      "category": "appliance",
+      "needs_landlord_approval": true,
+      "resolved_without_contractor": true,
+      "dwelly_severity": "routine",
+      "dwelly_issue": "Appliances · Washing machine not starting cycle"
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [
+        "/Please complete landlord approval step first/i"
+      ],
+      "completed_without_payment": true,
+      "provider_assigned": false,
+      "self_or_landlord_signal": true,
+      "used_first_tenant_message": true,
+      "outcome_excerpt": "The tenant replaced the faulty washing machine with their own and stored the faulty machine in the garage. The agency recorded the case as complete with no further action and without payment. The landlord later asked for an update and whether any action was required from them."
+    }
+  },
+  {
+    "case": "041",
+    "title": "Washing Machine Repair Request",
+    "property": "Flat 18, 108 Lantern Quay, Westmarsh, ZZ6 1ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "Hey, the washing machine isn't spinning when it comes to the end of a cycle with washing inside the washer. No matter the cycle, with clothes in it doesn't spin/drain resulting in powering off the machine and draining it mainly front the front drain pipe. The cycle says at \"0:01\" minute left indefinitely as it continues to spin, presumably to try and remove the water.\n\nI have cleaned/empited out the front filter and fully drained the machine twice since it started. Both times because the door wouldn't unlock due to water being left in the machine. \n\nThanks,\nTurner\n\nFirst tenant message:\nThe customer reports that the washing machine problem has not been resolved after attempting the advised solution twice. The machine still does not spin or drain properly.",
+    "labels": {
+      "category": "appliance",
+      "needs_landlord_approval": false,
+      "resolved_without_contractor": true
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [],
+      "completed_without_payment": true,
+      "provider_assigned": false,
+      "self_or_landlord_signal": true,
+      "used_first_tenant_message": true,
+      "outcome_excerpt": "The landlord confirmed that the repair company had fixed the washing machine. The request was marked completed without payment."
+    }
+  },
+  {
+    "case": "042",
+    "title": "Washing Machine Repair Request",
+    "property": "Flat 20, 120 Alder Lane, Cedarford, ZZ9 0ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "The washing machine is not heating the water during wash cycles set to 60°C or higher. As a result, it is unable to properly wash clothing that requires hot water according to the care instructions.\n\nCould someone please arrange for an engineer or maintenance person to inspect the machine and carry out any necessary repairs",
+    "labels": {
+      "category": "appliance",
+      "needs_landlord_approval": true,
+      "resolved_without_contractor": false,
+      "dwelly_severity": "routine",
+      "dwelly_issue": "Heating & Hot Water"
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [
+        "/Please complete landlord approval step first/i",
+        "/Reason: Waiting for Landlord/i",
+        "/Landlord approval confirmed/i"
+      ],
+      "completed_without_payment": false,
+      "provider_assigned": true,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": false,
+      "outcome_excerpt": "The engineer repaired the washing machine by replacing the wiring to the heating element. The landlord was informed, and the request was closed."
+    }
+  },
+  {
+    "case": "043",
+    "title": "Washing Machine Repair Request",
+    "property": "Flat 8, 118 Meadow Row, Alderwick, ZZ3 6ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "Washing machine not draining any water \n\nHave manually drained by removing filter. Have also cleaned the filter. Still the drum is not draining.",
+    "labels": {
+      "category": "appliance",
+      "needs_landlord_approval": false,
+      "resolved_without_contractor": false
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [],
+      "completed_without_payment": false,
+      "provider_assigned": true,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": false,
+      "outcome_excerpt": "The washing machine repair was completed: the drain-pipe propeller was re-fitted and the washing machine re-installed. The request was closed."
+    }
+  },
+  {
+    "case": "044",
+    "title": "Window Handle Repair Request",
+    "property": "Flat 21, 129 Juniper Mews, Northbridge, ZZ9 4ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "Opened the blind above this window this morning and the window handle fell off.... Now unable to open the window.\n\nFirst tenant message:\nGood Morning Turner,\n\nThis is the one at the top of our staircase that has the broken latch.\n\nKind Regards\nHarriet",
+    "labels": {
+      "category": "doors_windows_locks",
+      "needs_landlord_approval": false,
+      "resolved_without_contractor": false
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [],
+      "completed_without_payment": false,
+      "provider_assigned": true,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": true,
+      "outcome_excerpt": "The provider reported that the window repair was complete and that an invoice was attached. Northbridge Lettings subsequently marked the request closed after completing its recorded checks."
+    }
+  },
+  {
+    "case": "045",
+    "title": "Kitchen Window and Patio Door Window Repair",
+    "property": "Flat 26, 116 Copperfield Walk, Alderwick, ZZ7 8ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "Kitchen window + patio door windows\n\nFirst tenant message:\nDue to the phone call no it's not requested by landlord",
+    "labels": {
+      "category": "doors_windows_locks",
+      "needs_landlord_approval": true,
+      "resolved_without_contractor": true
+    },
+    "evidence": {
+      "category_source": "override",
+      "approval_signals": [
+        "/Please complete landlord approval step first/i",
+        "/Reason: Waiting for Landlord/i"
+      ],
+      "completed_without_payment": true,
+      "provider_assigned": false,
+      "self_or_landlord_signal": true,
+      "used_first_tenant_message": true,
+      "outcome_excerpt": "The landlord confirmed that the window work was completed. The request was closed as completed without payment."
+    }
+  },
+  {
+    "case": "046",
+    "title": "Bedroom Window Repair",
+    "property": "Flat 23, 143 Willowmere Road, Alderwick, ZZ2 6ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "Bedroom window is not closing  properly one of the hinges are rusted",
+    "labels": {
+      "category": "doors_windows_locks",
+      "needs_landlord_approval": true,
+      "resolved_without_contractor": false
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [
+        "/Please complete landlord approval step first/i",
+        "/Reason: Waiting for Landlord/i",
+        "/Landlord approval confirmed/i"
+      ],
+      "completed_without_payment": false,
+      "provider_assigned": true,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": false,
+      "outcome_excerpt": "Northbridge Lettings confirmed to the landlord that the window issue had been resolved and forwarded the contractor's invoice. The request was subsequently closed."
+    }
+  },
+  {
+    "case": "047",
+    "title": "Bedroom Window Repair Request",
+    "property": "Flat 24, 150 Copperfield Walk, Kingshaven, ZZ3 7ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "Hello. can come and fix the window from the bedroom because it isn’t closing properly.Thank you!\n\nFirst tenant message:\nHi.My mother managed to fix the toilet.You can just send somebody to fix the window,thank you!",
+    "labels": {
+      "category": "doors_windows_locks",
+      "needs_landlord_approval": true,
+      "resolved_without_contractor": true
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [
+        "/Reason: Waiting for Landlord/i"
+      ],
+      "completed_without_payment": true,
+      "provider_assigned": true,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": true,
+      "outcome_excerpt": "The landlord’s contractor confirmed the job was complete. The task was marked completed without payment."
+    }
+  },
+  {
+    "case": "048",
+    "title": "Bathroom Window Repair Request",
+    "property": "Flat 20, 120 Lantern Quay, Northbridge, ZZ8 2ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "Bathroom window will not open -please can you fix",
+    "labels": {
+      "category": "doors_windows_locks",
+      "needs_landlord_approval": true,
+      "resolved_without_contractor": false
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [
+        "/Please complete landlord approval step first/i",
+        "/Reason: Waiting for Landlord/i",
+        "/Landlord approval confirmed/i",
+        "/Quote was approved by landlord/i"
+      ],
+      "completed_without_payment": false,
+      "provider_assigned": true,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": false,
+      "outcome_excerpt": "Riverside Solutions confirmed the window repair was completed, with the handle, gearbox, and hinges replaced."
+    }
+  },
+  {
+    "case": "049",
+    "title": "Shed Door Repair Request",
+    "property": "Flat 13, 103 Meadow Row, Bellmere, ZZ3 7ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "Minor issue / weathering: Shed door is sagging and needs to be lifted from the bottom to close properly\n\nWe don't mind lifting it from the bottom, but wanted to report it in case it gets worse",
+    "labels": {
+      "category": "garden_external",
+      "needs_landlord_approval": true,
+      "resolved_without_contractor": true,
+      "dwelly_severity": "routine",
+      "dwelly_issue": "Structural"
+    },
+    "evidence": {
+      "category_source": "override",
+      "approval_signals": [
+        "/Please complete landlord approval step first/i",
+        "/Landlord approval confirmed/i"
+      ],
+      "completed_without_payment": true,
+      "provider_assigned": false,
+      "self_or_landlord_signal": true,
+      "used_first_tenant_message": false,
+      "outcome_excerpt": "The tenants fixed the shed door themselves. The task was completed without payment."
+    }
+  },
+  {
+    "case": "050",
+    "title": "Bedroom Window Repair",
+    "property": "Flat 3, 171 Willowmere Road, Alderwick, ZZ6 0ZZ",
+    "reporter_role": "Tenant",
+    "input_text": "Bedroom window not shutting, handle not engaging.",
+    "labels": {
+      "category": "doors_windows_locks",
+      "needs_landlord_approval": true,
+      "resolved_without_contractor": false,
+      "dwelly_severity": "routine",
+      "dwelly_issue": "Windows & Glazing"
+    },
+    "evidence": {
+      "category_source": "rule",
+      "approval_signals": [
+        "/Please complete landlord approval step first/i",
+        "/Reason: Waiting for Landlord/i",
+        "/Landlord approval confirmed/i"
+      ],
+      "completed_without_payment": false,
+      "provider_assigned": true,
+      "self_or_landlord_signal": false,
+      "used_first_tenant_message": false,
+      "outcome_excerpt": "The bedroom window repair was completed. The agency informed the landlord and sent an invoice for their records; the request was then closed."
+    }
+  }
+]
