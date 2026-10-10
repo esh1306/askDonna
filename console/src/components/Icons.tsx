@@ -10,6 +10,12 @@ const paths: Record<string, React.ReactNode> = {
   phone: <><path d="M5 3h3l1.4 3.6-1.8 1.2a9 9 0 0 0 4.6 4.6l1.2-1.8L17 12v3a2 2 0 0 1-2 2A12 12 0 0 1 3 5a2 2 0 0 1 2-2z" {...P} /></>,
   check: <path d="M5 10.5l3.3 3.3L15 7" {...P} />,
   x: <path d="M5 5l10 10M15 5L5 15" {...P} />,
+  flag: <><path d="M5 17V3.5M5 4.5h9l-2 3.2 2 3.2H5" {...P} /></>,
+  bell: <><path d="M5 14.5V9a5 5 0 0 1 10 0v5.5l1.2 1.2H3.8zM8.5 17.5h3" {...P} /></>,
+  clock: <><circle cx="10" cy="10" r="7" {...P} /><path d="M10 6v4.2l2.8 1.6" {...P} /></>,
+  wrench: <><path d="M12.5 3.5a4 4 0 0 0-3.7 5.4L3.8 14a1.6 1.6 0 0 0 2.2 2.2l5.1-5a4 4 0 0 0 5.4-3.7l-2.4 2.4-2.2-.6-.6-2.2z" {...P} /></>,
+  sms: <><path d="M3.5 5.5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H9l-3.5 3v-3a2 2 0 0 1-2-2z" {...P} /></>,
+  dot: <circle cx="10" cy="10" r="2.2" fill="currentColor" />,
   open: <><path d="M8 4H4.5v11.5H16V12M11 4h5v5M16 4l-7 7" {...P} /></>,
 };
 export function Icon({ name, size = 16 }: { name: string; size?: number }) {

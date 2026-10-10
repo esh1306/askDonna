@@ -1,7 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import { scrub } from "../components/Activity.tsx";
+﻿import { useEffect, useMemo, useState } from "react";
 import { api, label, nm, STAGES, when } from "../api.ts";
 import type { Detail, Fact, Lesson } from "../api.ts";
 import { ActionButton, Avatar, Button, Card, Check, Chev, DonnaMark, DonnaVoice, Pill, Popover, Reveal, RichText, Section, Stepper } from "../components/index.ts";
+import { ActivityList } from "../components/Activity.tsx";
 import type { Notify } from "../components/index.ts";
 import { reduced } from "../components/Toast.tsx";
 
@@ -146,14 +148,14 @@ function NeedsYou({ d, onChange, toast }: { d: Detail; onChange: () => void; toa
         {esc.map((h) => (
           <div key={`e${h.id}`} className="need">
             <Pill tone="bad">Needs a person</Pill>
-            <div className="need-t"><RichText text={h.reason ?? ""} ticketId={id} /></div>
+            <div className="need-t"><RichText text={scrub(h.reason ?? "")} ticketId={id} /></div>
             <ActionButton kind="resolve" size="sm" ticketId={id} queueId={h.id} toast={toast} onDone={onChange} />
           </div>
         ))}
         {pend.map((a) => (
           <div key={`a${a.id}`} className="need">
             <Pill tone="warn">Approval</Pill>
-            <div className="need-t"><RichText text={a.summary ?? "Landlord approval needed"} ticketId={id} />{a.amount_gbp != null && <> <span className="ent money">£{a.amount_gbp}</span></>}</div>
+            <div className="need-t"><RichText text={scrub(a.summary ?? "Landlord approval needed")} ticketId={id} />{a.amount_gbp != null && !String(a.summary ?? "").includes(`£${a.amount_gbp}`) && <> <span className="ent money">£{a.amount_gbp}</span></>}</div>
             <span className={`dstatus ${a.channel === "call" || d.outbox.some((o) => o.channel === "call" && o.status === "queued") ? "calling" : ""}`}>
               {a.channel === "call" || d.outbox.some((o) => o.channel === "call" && o.status === "queued") ? <><i className="ldot" />Donna is calling {nm(d.landlord?.name)}…</> : <>Donna asked {nm(d.landlord?.name)} and is waiting</>}
             </span>
@@ -162,13 +164,13 @@ function NeedsYou({ d, onChange, toast }: { d: Detail; onChange: () => void; toa
         {d.open_holds.map((h) => (
           <div key={`h${h.id}`} className="need">
             <Pill tone="warn">On hold</Pill>
-            <div className="need-t"><RichText text={h.reason ?? "Waiting"} ticketId={id} /><span className="muted small">{h.waiting_on ? ` · waiting on ${h.waiting_on}` : ""}{h.follow_up_at ? `, Donna will chase on ${when(h.follow_up_at)}` : ""}</span></div>
+            <div className="need-t"><RichText text={scrub(h.reason ?? "Waiting")} ticketId={id} /><span className="muted small">{h.waiting_on ? ` · waiting on ${h.waiting_on}` : ""}{h.follow_up_at ? `, Donna will chase on ${when(h.follow_up_at)}` : ""}</span></div>
           </div>
         ))}
         {queued.map((o) => (
           <div key={`o${o.id}`} className="need">
             <Pill tone="accent">{o.error ? "Not delivered" : "Donna is sending"}</Pill>
-            <div className="need-t" title={o.body}>{o.channel === "sms" ? "Text" : o.channel === "call" ? "Call" : "Email"} to {o.to_label}{o.subject ? `: ${o.subject}` : ""}</div>
+            <div className="need-t" title={o.body}>{o.channel === "sms" ? "Text" : o.channel === "call" ? "Call" : "Email"} to {who2(o.to_label)}{o.subject ? `: ${scrub(o.subject)}` : ""}</div>
             <Button size="sm" onClick={async () => { await api(`/api/outbox/${o.id}/sent`, { method: "POST", body: {} }); onChange(); }}>Mark sent</Button>
           </div>
         ))}
@@ -179,11 +181,11 @@ function NeedsYou({ d, onChange, toast }: { d: Detail; onChange: () => void; toa
 
 const first = (b: string) => b.replace(/^Donna[:,]?\s+/, "I ");
 function DonnaWork({ d }: { d: Detail }) {
-  const did = d.events.filter((e) => e.kind === "agent_action" || e.direction === "out").slice(-6).reverse();
+  const did = d.events.filter((e) => e.kind === "agent_action" || e.direction === "out");
   const next: string[] = [
     ...d.approvals.filter((a) => a.status === "pending").map((a) => `I'm waiting on ${nm(d.landlord?.name)} to approve${a.amount_gbp != null ? ` £${a.amount_gbp}` : ""}.`),
-    ...d.open_holds.map((h) => `I'll chase ${h.waiting_on ?? "them"}${h.follow_up_at ? ` on ${when(h.follow_up_at)}` : ""}${h.reason ? `: ${h.reason}` : ""}`),
-    ...d.outbox.filter((o) => o.status === "queued").map((o) => `I'm ${o.channel === "call" ? "calling" : "sending a message to"} ${o.to_label ?? "them"}.`),
+    ...d.open_holds.map((h) => `I'll chase ${h.waiting_on ?? "them"}${h.follow_up_at ? ` on ${when(h.follow_up_at)}` : ""}${h.reason ? `: ${scrub(h.reason)}` : ""}`),
+    ...d.outbox.filter((o) => o.status === "queued").map((o) => `I'm ${o.channel === "call" ? "calling" : "sending a message to"} ${who2(o.to_label)}.`),
   ];
   return (
     <>
@@ -191,72 +193,19 @@ function DonnaWork({ d }: { d: Detail }) {
         {next.length ? <ul className="dnext">{next.map((n, i) => <li key={i}><DonnaMark size={16} /><span>{n}</span></li>)}</ul> : <div className="muted small">Nothing queued. I'll pick this up again when something changes.</div>}
       </Section>
       <Section title="What I did" count={did.length}>
-        <ol className="tline">
-          {did.map((e) => (
-            <li key={e.id} className="tl-ev donna">
-              <span className="dotm"><DonnaMark size={18} /></span>
-              <div className="tl-body">
-                <div className="tl-h"><b>{e.direction === "out" ? `I messaged ${e.party ?? "them"}` : "I acted"}</b><span className="when">{when(e.ts)}</span></div>
-                <div className="tl-t pre clamp2"><RichText text={first(e.body ?? "")} ticketId={d.ticket.id} /></div>
-              </div>
-            </li>
-          ))}
-        </ol>
-        {!did.length && <div className="muted small">I haven't acted on this one yet.</div>}
+        <ActivityList events={did} d={d} empty="I haven't acted on this one yet." />
       </Section>
     </>
   );
 }
 
 function Timeline({ d }: { d: Detail }) {
-  const [all, setAll] = useState(false);
-  const [sys, setSys] = useState<Record<number, boolean>>({});
-  const [exp, setExp] = useState<Record<number, boolean>>({});
-  type Item = { kind: "ev"; e: Detail["events"][number] } | { kind: "sys"; es: Detail["events"]; key: number };
-  const items = useMemo(() => {
-    const out: Item[] = [];
-    [...d.events].reverse().forEach((e) => {
-      const isSys = e.direction === "internal" && e.kind !== "agent_action" && e.party !== "human";
-      const last = out[out.length - 1];
-      if (isSys) { if (last?.kind === "sys") last.es.push(e); else out.push({ kind: "sys", es: [e], key: e.id }); }
-      else out.push({ kind: "ev", e });
-    });
-    return out;
-  }, [d.events]);
-  const vis = all ? items : items.slice(0, 5);
+  const [open, setOpen] = useState(false);
   return (
-    <Section title="Full history" count={d.events.length}>
-      <ol className="tline">
-        {vis.map((it) => {
-          if (it.kind === "sys") {
-            const o = !!sys[it.key];
-            return (
-              <li key={`s${it.key}`} className="tl-sys">
-                <button className="link" onClick={() => setSys({ ...sys, [it.key]: !o })}><Chev open={o} /> {it.es.length} system note{it.es.length > 1 ? "s" : ""}</button>
-                <Reveal open={o}>{it.es.map((e) => <div key={e.id} className="quiet"><span>{when(e.ts)}</span><span className="pre">{e.body}</span></div>)}</Reveal>
-              </li>
-            );
-          }
-          const e = it.e;
-          const donna = e.kind === "agent_action" || e.direction === "out";
-          const team = e.party === "human" && e.direction === "internal";
-          const who = e.kind === "agent_action" ? "Donna" : e.direction === "out" ? `Donna to ${e.party ?? "unknown"}` : team ? "Team" : label(e.party ?? "unknown");
-          const long = (e.body ?? "").length > 140 || (e.body ?? "").includes("\n");
-          const o = !!exp[e.id];
-          return (
-            <li key={e.id} className={`tl-ev ${donna ? "donna" : team ? "team" : "in"}`} onClick={() => long && setExp({ ...exp, [e.id]: !o })} style={{ cursor: long ? "pointer" : "default" }}>
-              <span className="dotm">{donna ? <DonnaMark size={18} /> : <i className={team ? "t" : ""} />}</span>
-              <div className="tl-body">
-                <div className="tl-h"><b>{who}</b>{e.kind !== "agent_action" && <span className="chan">{e.kind}</span>}<span className="when">{when(e.ts)}</span></div>
-                <div className={`tl-t pre ${long && !o ? "clamp2" : ""}`}><RichText text={e.body ?? ""} ticketId={d.ticket.id} /></div>
-              </div>
-            </li>
-          );
-        })}
-      </ol>
-      {items.length > 5 && <button className="link" onClick={() => setAll(!all)}>{all ? "Show fewer" : `Show ${items.length - 5} earlier`}</button>}
-      {items.length === 0 && <div className="muted small">Nothing has happened on this ticket yet.</div>}
-    </Section>
+    <section className="sec">
+      <button className="link every" onClick={() => setOpen(!open)}><Chev open={open} /> Everything that happened <span className="muted">{d.events.length}</span></button>
+      <Reveal open={open}><div style={{ paddingTop: 8 }}><ActivityList events={d.events} d={d} groupSystem limit={8} empty="Nothing has happened on this ticket yet." /></div></Reveal>
+    </section>
   );
 }
 
@@ -302,6 +251,12 @@ function People({ d }: { d: Detail }) {
     </Section>
   );
 }
+
+// "Tenant (R/15) (tenant)" -> "the tenant"; "Mr Dunmore (landlord)" -> "Mr Dunmore"
+const who2 = (l?: string | null) => {
+  const t = String(l ?? "").replace(/\s*\((tenant|landlord|contractor)\)\s*$/i, "").trim();
+  return /^(tenant|landlord|contractor)\s*\(/i.test(t) ? "the " + t.split(/\s*\(/)[0].toLowerCase() : t || "them";
+};
 
 export default function Ticket({ d, onChange, toast }: { d: Detail; onChange: () => void; toast: Notify }) {
   return (
