@@ -44,3 +44,16 @@ export type Lesson = {
   weight: number; uses: number; created_at: string;
 };
 export const when = (ts: string) => new Date(ts).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+
+export async function humanAction(ticketId: number, action: string, details: Record<string, unknown>, note: string | undefined, toast: (lead: string, lesson?: string) => void) {
+  const out = await api<{ lesson: Lesson | null; learn_error?: string }>(`/api/tickets/${ticketId}/human-action`, { method: "POST", body: { action, details, note } });
+  if (out.lesson) toast("Logged.", out.lesson.action);
+  else toast(`Logged.${out.learn_error ? " Lesson not saved: " + out.learn_error : ""}`);
+}
+
+export const ago = (ts: string) => {
+  const m = Math.max(0, Math.round((Date.now() - new Date(ts).getTime()) / 60000));
+  if (m < 60) return `${m || 1} min`;
+  const h = Math.round(m / 60);
+  return h < 48 ? `${h} h` : `${Math.round(h / 24)} days`;
+};
