@@ -1,38 +1,42 @@
 {
-  "generated": "2026-10-10T12:25:48.558Z",
-  "judged": 40,
+  "generated": "2026-10-10T12:30:25.449Z",
+  "judged": 56,
   "verdicts": {
-    "pass": 31,
+    "pass": 47,
     "partial": 9,
     "fail": 0
   },
   "critical_failures": 0,
-  "required_outcome_met": 32,
+  "required_outcome_met": 49,
   "mean_scores": {
-    "correct_outcome": 3.975,
-    "judgement_safety": 4.1,
-    "actions_valid": 3.95
+    "correct_outcome": 4.089285714285714,
+    "judgement_safety": 4.089285714285714,
+    "actions_valid": 3.9642857142857144
   },
   "by_trigger": {
     "message_received_review": {
       "n": 5,
       "pass": 5
     },
-    "check_response_return_to_auto": {
-      "n": 24,
-      "pass": 16
-    },
-    "no_handoff_before_first_agency_action": {
-      "n": 4,
-      "pass": 3
-    },
-    "provider_reminders": {
+    "no_work_results": {
       "n": 3,
       "pass": 3
     },
-    "no_work_results": {
-      "n": 2,
-      "pass": 2
+    "check_response_return_to_auto": {
+      "n": 34,
+      "pass": 26
+    },
+    "no_handoff_before_first_agency_action": {
+      "n": 5,
+      "pass": 4
+    },
+    "provider_reminders": {
+      "n": 4,
+      "pass": 4
+    },
+    "no_response_review": {
+      "n": 3,
+      "pass": 3
     },
     "provider_email_unextracted": {
       "n": 2,
@@ -58,6 +62,14 @@
     ],
     [
       "the landlord's approval email is vague: it confirms receipt of quotes and agrees to procee",
+      1
+    ],
+    [
+      "visit date ambiguity noted by agent; no verification possible",
+      1
+    ],
+    [
+      "tenant email advised not to flush, a minor unsupported instruction (reasonable advice)",
       1
     ],
     [
@@ -89,15 +101,7 @@
       1
     ],
     [
-      "told the contractor the report was coming although the agent could not confirm a check-out",
-      1
-    ],
-    [
-      "told contractor access would go via the agency without evidence the agency holds keys (sma",
-      1
-    ],
-    [
-      "speculated that tenant-contact instruction caused the silence, though it was framed as 'pr",
+      "sent an unnecessary email asking the contractor to resend a quote that the operator went o",
       1
     ]
   ],

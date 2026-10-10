@@ -1,0 +1,112 @@
+{
+  "case": "PM004-1",
+  "decision": "request_info",
+  "escalated": "no",
+  "failures": 1,
+  "durationSec": 60.76,
+  "decisionLine": "request_info",
+  "sessionId": "wrun_01M4JWF1RDAFRQSZC4G2M8MN4M",
+  "startedAt": "2026-10-10T12:26:35.488Z",
+  "finishedAt": "2026-10-10T12:27:36.248Z",
+  "usage": {
+    "inputTokens": 96751,
+    "outputTokens": 3875
+  },
+  "eventCount": 236,
+  "dryRun": false,
+  "result": {
+    "case_id": "46 (R/PM004-1)",
+    "decision": "request_info",
+    "summary": "The contractor says they've sent the quote, but it isn't on the ticket, so I've emailed them asking them to resend it with the reference. Nothing else needs saying to them. The case was paused automatically because the flat is empty. That's normal for an end-of-tenancy clean, so I've moved it back to provider selection and put it on hold for 2 days while we wait for the quote. When the quote arrives, the landlord should confirm the price before anything is booked, because their approval had no amount on it.",
+    "situation": "This is an end-of-tenancy clean at an empty flat: vacuum and light clean of the living space, and limescale removal in the en-suite. A system note recorded landlord approval with no amount and assigned a contractor. The case was then paused automatically because the property isn't tenanted. Amelia asked the contractor to quote and put the case on hold. The contractor replied, in what looks like an automated message, that the quote has been sent. No quote document or amount can be seen on the ticket.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the ticket, profiles, events and approvals",
+        "result": "Approval 25 is approved with no amount. No open holds. One attachment (checkout report).",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the contractor's message from event 009",
+        "result": "auto; intent 'other' (0.64), quote 0.35, mentions an amount 0.02",
+        "ok": true
+      },
+      {
+        "tool": "read_attachment",
+        "description": "Read the checkout inspection report",
+        "result": "Supports the cleaning scope. It has no quote or prices.",
+        "ok": true
+      },
+      {
+        "tool": "search_case",
+        "description": "Searched the case for 'quote'",
+        "result": "Only the request, the agency's email and the contractor's confirmation. No quote document or amount.",
+        "ok": true
+      },
+      {
+        "tool": "search_case",
+        "description": "Tried to search the case for '£'",
+        "result": "Rejected: the search needs at least 2 characters",
+        "ok": false
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the contractor asking them to resend the quote (price and what it covers) with ref R/PM004-1, and not to book or start work yet",
+        "result": "Queued (message 60). Passed the outbound guard.",
+        "ok": true
+      },
+      {
+        "tool": "move_stage",
+        "description": "Moved the case from paused to provider_selection, because an empty flat doesn't block an end-of-tenancy clean",
+        "result": "Now provider_selection, status open",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Put the case on hold, waiting on the contractor for the quote, with a 2-day follow-up",
+        "result": "Hold 127 created",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the checkout clean scope on the property",
+        "result": "Fact 74 saved, no conflict",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (R/PM004-1)",
+        "status": "granted (system note, no amount); the quoted price still needs confirming",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "This is a routine missing document that the contractor can supply.",
+      "handover_summary": "",
+      "recommendation": ""
+    },
+    "unverified": [
+      "Contents and price of the contractor's quote (can't see it on the ticket)",
+      "Whether the landlord's approval covers any particular amount",
+      "Access arrangements for the empty flat",
+      "The checkout report's appointment date (23 June 2026) doesn't match its signature date (24 Oct 2025)"
+    ],
+    "failures": [
+      "The search for '£' was rejected because the query was under 2 characters. I searched for 'quote' instead."
+    ],
+    "risks_or_red_flags": [
+      "The landlord approval was logged before any quote and has no amount, so the price must be confirmed before booking",
+      "The contractor's 'quote sent' message looks automated, so the quote may be on an external portal",
+      "Possible date error in the checkout report"
+    ],
+    "final_status": "provider_selection; on hold waiting for the contractor's quote (hold 127)",
+    "next_follow_up": {
+      "when": "In 2 days (hold 127 follow-up)",
+      "what": "Chase the contractor for the quote if it hasn't arrived. Once it's in, check the price and scope, then ask the landlord to confirm the amount before booking."
+    },
+    "confidence": 0.8
+  }
+}

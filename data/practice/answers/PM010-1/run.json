@@ -1,0 +1,84 @@
+{
+  "case": "PM010-1",
+  "decision": "request_info",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 33.051,
+  "decisionLine": "request_info",
+  "sessionId": "wrun_01M4JWF1S4Y41MVTVRM04J12TD",
+  "startedAt": "2026-10-10T12:26:35.488Z",
+  "finishedAt": "2026-10-10T12:27:08.539Z",
+  "usage": {
+    "inputTokens": 73039,
+    "outputTokens": 2585
+  },
+  "eventCount": 137,
+  "dryRun": false,
+  "result": {
+    "case_id": "50 (R/PM010-1)",
+    "decision": "request_info",
+    "summary": "This is a routine admin task: every 3 months the landlord wants a photo of the solar panel readings from the tenant. We've asked the tenant three times (email on 11 Jan, a call on 13 Jan, email on 17 Jan). Their latest reply (event 012) was only a signature, and no photo is visible. I emailed them to say no photo came through and asked them to send it again. I also saved their phone number and put the case on hold for 4 days.",
+    "situation": "Recurring request for a solar panel readings photo at Flat 10, 180 Alder Lane, Cedarford, ZZ3 4ZZ. It's still in the intake stage and waiting on the tenant's photo. The tenant's reply on 17 Jan, three minutes after our second email, contained only 'Thanks & Regards, Miles Fletcher, 07700 900978'. The case has no attachments.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the ticket, profiles and events",
+        "result": "12 events, no open holds, approvals or attachments",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the tenant's reply that only had a signature",
+        "result": "intent=other, flagged for review (needs_human_response 0.71), safety 0.01. Our handling: it doesn't answer the request, so we asked the tenant again rather than escalating",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant: we can't see a photo in their reply, please resend a clear photo of the readings",
+        "result": "message 56 queued, guard passed",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Saved the tenant's phone number from their email signature",
+        "result": "fact 68 saved, no conflict",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Put the case on hold waiting for the tenant's photo",
+        "result": "hold 123, follow-up in 4 days",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord",
+        "status": "not_needed",
+        "channel": "n/a"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "Routine admin request with no cost and no safety issue. The tenant can sort it out",
+      "handover_summary": "",
+      "recommendation": "If there's still no photo at the follow-up, call the tenant on 07700 900978. Escalate only if there's still no response after that."
+    },
+    "unverified": [
+      "Whether the tenant tried to attach a photo to event 012. No attachment is visible.",
+      "The call note in event 008 calls the person on the call 'the caller from Oakfield Compliance'. It's unclear whether that was the tenant or a third party.",
+      "The case file says the readings are 'Next due mid June', yet the requests were sent in January. It's unclear which reading period this is for."
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "We've asked the tenant three times and still have no photo.",
+      "Event 008 mentions Oakfield Compliance, which may be a records mix-up."
+    ],
+    "final_status": "Intake stage, on hold waiting for the tenant's photo (hold 123)",
+    "next_follow_up": {
+      "when": "2025-01-21",
+      "what": "Check whether the solar readings photo has arrived. If not, call the tenant on 07700 900978. When it arrives, pass it to the landlord and set up the next 3-monthly reminder."
+    },
+    "confidence": 0.82
+  }
+}

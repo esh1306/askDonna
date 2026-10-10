@@ -1,0 +1,101 @@
+{
+  "case": "PM042-2",
+  "decision": "request_info",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 39.078,
+  "decisionLine": "request_info",
+  "sessionId": "wrun_01M4JWK2F3E7EPZR23PPMWQEA2",
+  "startedAt": "2026-10-10T12:28:47.398Z",
+  "finishedAt": "2026-10-10T12:29:26.476Z",
+  "usage": {
+    "inputTokens": 106700,
+    "outputTokens": 3914
+  },
+  "eventCount": 223,
+  "dryRun": false,
+  "result": {
+    "case_id": "66 (R/PM042-2)",
+    "decision": "request_info",
+    "summary": "Lantern Services sent an invoice for £75.11 (event 024). Nothing on file shows the engineer actually attended or what they did. The contractor's call on 27 Feb (event 022) asked for a callback to book the visit, which suggests the 23 Feb \"confirmed\" slot never happened. I haven't processed the invoice. I've asked the contractor for the visit date, what they found and did, and the itemised invoice, and asked the tenant whether the engineer came and whether the machine now works. The case is on hold with a follow-up in 2 days.",
+    "situation": "The washing machine doesn't heat water on 60°C cycles. On 23 Feb the landlord replied by email \"Yes please arrange an engineer\", with no cost cap. Lantern Services was assigned. The visit times on file don't agree: a 23 Feb 3:25pm slot was \"confirmed\" in a note written after that time had passed, and the tenant's call talks about Tuesday at 1pm. On 26 Feb a system note said there were no work results. On 27 Feb the contractor asked for a callback to schedule the visit. On 28 Feb an invoice email for £75.11 arrived, due 22 July 2026. The invoice document itself isn't visible on the ticket.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the ticket, profiles, events and approvals",
+        "result": "Stage is works; approval 34 is approved with no amount; no attachments visible; a related ticket R/PM042-1 is on hold at provider_selection",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the contractor's invoice email",
+        "result": "Intent: invoice; autonomy: auto; needs_human_response 0.33",
+        "ok": true
+      },
+      {
+        "tool": "search_case",
+        "description": "Searched the case for 'invoice'",
+        "result": "Only the hold note (event 021) and the invoice email (event 024)",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the contractor asking for the visit date, what was found and done, and the itemised invoice",
+        "result": "Sent (message 83); guard did not block it",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant asking whether the engineer attended and whether the machine now heats properly",
+        "result": "Sent (message 84); guard did not block it",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Put the case on hold waiting for the contractor to verify attendance and the invoice",
+        "result": "Hold 166; follow-up in 2 days",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the contractor's company name (Lantern Services) and engineer name (Harper)",
+        "result": "Fact 88 recorded",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (Mercer)",
+        "status": "granted (attendance of an engineer, no cost cap stated)",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "The contractor and tenant can confirm whether the work happened; nothing yet needs agency judgement",
+      "handover_summary": "",
+      "recommendation": "If the contractor can't show the visit took place, or the invoice doesn't match, escalate as a disputed invoice"
+    },
+    "unverified": [
+      "Whether the engineer has attended at all, and on what date",
+      "What work was done, and whether the machine is fixed",
+      "The invoice document: its number, line items and payee details (not visible)",
+      "The invoice due date of 22 July 2026, which looks wrong",
+      "Which visit time was actually agreed (23 Feb 3:25pm or Tuesday 1pm)"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "The invoice arrived after a contractor call that still asked to schedule the visit, so we may be billed before any work is done",
+      "The invoice due date (2026) looks wrong",
+      "The earlier contractor email (event 018) said 'Pets: multiple tenants', but the property record says no pets",
+      "A related ticket for the same job, R/PM042-1, is still open and on hold, so there is a risk of duplicate handling or payment",
+      "Event 013 sent the tenant's phone number with a note to 'enter this code when calling'; no code is stored or should be stored"
+    ],
+    "final_status": "On hold in works stage, waiting on the contractor to verify attendance and the invoice (hold 166)",
+    "next_follow_up": {
+      "when": "2024-03-01",
+      "what": "Chase Lantern Services for the visit date, what was done and the itemised invoice, and check whether the tenant has replied. Process the invoice only once attendance is confirmed, the invoice matches the job and the amount is reasonable for the approved engineer visit. Otherwise escalate as a disputed invoice."
+    },
+    "confidence": 0.78
+  }
+}

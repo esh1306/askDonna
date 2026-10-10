@@ -1,0 +1,99 @@
+{
+  "case": "PM006-2",
+  "decision": "request_info",
+  "escalated": "yes",
+  "failures": 0,
+  "durationSec": 41.104,
+  "decisionLine": "request_info",
+  "sessionId": "wrun_01M4JWF1S1W6T7S5CPJ9BZ58KA",
+  "startedAt": "2026-10-10T12:26:35.488Z",
+  "finishedAt": "2026-10-10T12:27:16.592Z",
+  "usage": {
+    "inputTokens": 99284,
+    "outputTokens": 4412
+  },
+  "eventCount": 334,
+  "dryRun": false,
+  "result": {
+    "case_id": "R/PM006-2 (ticket 49)",
+    "decision": "request_info",
+    "summary": "Cedar Utilities finally replied with a quote, but the CRM only has a one-line summary of it, with no figures or attachment. That means I can't send it to the landlord for approval. I asked the contractor to resend an itemised quote and not to start any work. I put the ticket on hold for 3 days. I also escalated to ops to find the original email, add the missing landlord contact details, deal with the possible deposit claim and the duplicate ticket R/PM006-1.",
+    "situation": "This is a check-out job: a quote to replace a burnt carpet and repaint throughout after the tenant moved out. The contractor didn't reply to the instruction or 2 reminders. On 9 Oct a reply arrived that is described as a detailed list of tasks and costs, but no amounts are visible. There is no landlord approval yet, and no landlord contact details are on record.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded tickets 49 and 5 (duplicate R/PM006-1)",
+        "result": "No attachments or approvals. Landlord contact details are empty. Ticket 5 is on hold, with an open queue item",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the contractor's email from event 012",
+        "result": "quote_or_estimate, routing review, mentions_amount 0.21",
+        "ok": true
+      },
+      {
+        "tool": "search_case",
+        "description": "Searched the ticket for 'quote'",
+        "result": "No quote document or figures in the history",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed Cedar Utilities to thank them for the quote and ask them to resend it as an itemised attachment with VAT, photos and timescale. Told them not to start work until written approval, and not to contact the former tenant",
+        "result": "msg 57, guard passed",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the contractor's responsiveness and the missing quote figures",
+        "result": "fact 69",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Put the ticket on hold waiting on the contractor's itemised quote",
+        "result": "hold 124, follow up in 3 days",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Handover to ops: original quote email, landlord contact details, possible deposit claim, duplicate ticket",
+        "result": "queue 15",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (R/PM006-2)",
+        "status": "not_yet_requested: quote figures not visible and no landlord contact details",
+        "channel": "n/a"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "Quote figures aren't visible and there are no landlord contact details, so no approval request can be sent. Possible deposit claim. Duplicate ticket.",
+      "handover_summary": "Cedar Utilities sent a quote on 9 Oct, but only a summary is in the CRM. I asked them to resend it itemised (msg 57) and put the ticket on hold for 3 days. The landlord's contact details and spend limit are unknown. R/PM006-1 duplicates this job and its queue item is still open.",
+      "recommendation": "Find the original quote email and attach it. Add the landlord's contact details and preferred channel. Merge or close R/PM006-1. Send the burnt carpet to the deposit or check-out team. Consider getting a second quote."
+    },
+    "unverified": [
+      "Quote amounts, scope and VAT",
+      "Whether 'studio' in the quote summary refers to Flat 21",
+      "Landlord identity and contact details",
+      "Whether the burnt carpet will be charged to the tenant's deposit"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "Duplicate tickets for the same job (R/PM006-1 and R/PM006-2)",
+      "Contractor has been slow to respond",
+      "Earlier automated emails sent the contractor to the former tenant",
+      "Possible deposit claim needs evidence from the check-out report"
+    ],
+    "final_status": "scheduling, on hold waiting on contractor (hold 124); human queue item 15 open",
+    "next_follow_up": {
+      "when": "in 3 days",
+      "what": "Chase Cedar Utilities for the itemised quote. When it arrives, send it to the landlord for approval (once ops has added the landlord's contact details)"
+    },
+    "confidence": 0.75
+  }
+}

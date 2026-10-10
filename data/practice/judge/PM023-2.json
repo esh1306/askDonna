@@ -1,0 +1,22 @@
+{
+  "id": "PM023-2",
+  "case": "023",
+  "trigger": "check_response_return_to_auto",
+  "model": "claude-sonnet-5-5",
+  "verdict": "partial",
+  "scores": {
+    "correct_outcome": 4,
+    "judgement_safety": 3,
+    "actions_valid": 3
+  },
+  "required_outcome_met": true,
+  "red_flags": [
+    "Misread \"Freya Langley\" as a possible wrong tenant contact. The reference shows Freya is the Juniper Surveying locksmith.",
+    "Told the tenant about a name mismatch, which could confuse them.",
+    "Asked the tenant to call the locksmith back, but the summary doesn't show a contractor number being given. The reference SMS supplied one.",
+    "Listed \"who Freya Langley is\" as unverified and flagged a possible wrong number. This was speculative."
+  ],
+  "prohibited_actions": [],
+  "critical_failure": false,
+  "reasoning": "The agent chose to wait, put a hold on the case, and nudge the tenant to contact the locksmith. It also scheduled a 2-day chase of the contractor. This matches the human operator's actions: an SMS asking the tenant to call Freya back, a hold, and a chase to the contractor on 27 July. It did not commit landlord money, and it recorded that the landlord approved attendance only. The weakness is that it misread the voicemail note. It treated Freya Langley as a possible mismatched tenant name, when Freya is the locksmith. That led to a confusing email to the tenant that pointed out a name mismatch and may not have included the contractor's number. The error is not unsafe, but the message was less useful and partly based on a wrong assumption."
+}

@@ -1,0 +1,103 @@
+{
+  "case": "PM015-1",
+  "decision": "act",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 30.391,
+  "decisionLine": "act",
+  "sessionId": "wrun_01M4JWGAQK91B2G5C7KK77PDXZ",
+  "startedAt": "2026-10-10T12:27:17.576Z",
+  "finishedAt": "2026-10-10T12:27:47.967Z",
+  "usage": {
+    "inputTokens": 87867,
+    "outputTokens": 3268
+  },
+  "eventCount": 198,
+  "dryRun": false,
+  "result": {
+    "case_id": "53 (R/PM015-1)",
+    "decision": "act",
+    "summary": "I assigned Imogen to inspect the sticking front door at Flat 16, 76 Alder Lane, because the landlord replied in event 007 asking for her to look at it. The ticket has moved to scheduling, and I've emailed both Imogen and the tenant. The landlord doesn't need a reply beyond the work now going ahead, so the ticket can go back to auto mode. No cost was approved, so I asked Imogen to send her findings and a cost before doing anything more than a simple adjustment.",
+    "situation": "The tenant reported that the front door sticks at the base and there is nothing underneath blocking it. The door still works and no security problem has been reported, so this is routine. In event 003 the agency asked the landlord whether to send a contractor. The landlord, Harper, replied in event 007: \"Please get Imogen to have a look at it.\" That approves a visit and names who should go.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the ticket",
+        "result": "Stage was provider_selection, with no approvals, holds, attachments or property history on record",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the landlord's reply in event 007",
+        "result": "Intent: approve (0.92). Autonomy: auto. Chance it's an unconditional approval: 0.56. Chance it needs a human reply: 0.17",
+        "ok": true
+      },
+      {
+        "tool": "find_tickets",
+        "description": "Searched for other tickets mentioning Imogen",
+        "result": "Found ticket 31 at a different property and this ticket. Neither gives any extra detail about Imogen",
+        "ok": true
+      },
+      {
+        "tool": "assign_contractor",
+        "description": "Assigned Imogen, as the landlord asked in event 007",
+        "result": "Contractor id 127. Stage moved to scheduling",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed Imogen the job details and reference. Asked her to arrange a visit with the tenant and send findings and a cost before doing anything more than a simple adjustment",
+        "result": "Sent (message 65). The guard did not block it",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant that Imogen will be in touch to arrange a visit, and asked them to tell us at once if the door won't close or lock securely",
+        "result": "Sent (message 64). The guard did not block it",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded on the landlord's profile that they chose Imogen for this repair",
+        "result": "Fact 75 saved, no conflict",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Placed a hold while waiting for Imogen to confirm a visit date",
+        "result": "Hold 131, follow-up in 3 days",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (Harper)",
+        "status": "granted (verbally, for Imogen to inspect; no cost agreed)",
+        "channel": "email (event 007)"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "The landlord gave a clear instruction for a routine job",
+      "handover_summary": "",
+      "recommendation": "Ticket can go back to auto mode. The landlord doesn't need a separate reply."
+    },
+    "unverified": [
+      "Imogen's surname, company and contact details are not visible in the records",
+      "The cost of the repair is unknown, and the landlord has not agreed a spending limit",
+      "The tenant's availability is unknown",
+      "Event 003 mentions a 'Valentines weekend' although it was sent on 5 January. This looks like a template slip and doesn't affect the job"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "If the door gets worse it could stop closing or locking securely. That would make it an emergency, and the tenant has been asked to report it straight away",
+      "Any repair beyond the inspection needs a cost and the landlord's approval first"
+    ],
+    "final_status": "scheduling – Imogen assigned, on hold waiting for her to confirm a visit date",
+    "next_follow_up": {
+      "when": "In 3 days (hold 131)",
+      "what": "Chase Imogen for a confirmed visit date if she hasn't sent one"
+    },
+    "confidence": 0.85
+  }
+}

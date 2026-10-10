@@ -1,0 +1,117 @@
+{
+  "case": "PM033-2",
+  "decision": "act",
+  "escalated": "no",
+  "failures": 2,
+  "durationSec": 44.361,
+  "decisionLine": "act",
+  "sessionId": "wrun_01M4JWJP3JBXV58RFR0Y5WS10D",
+  "startedAt": "2026-10-10T12:28:34.736Z",
+  "finishedAt": "2026-10-10T12:29:19.097Z",
+  "usage": {
+    "inputTokens": 135747,
+    "outputTokens": 4351
+  },
+  "eventCount": 292,
+  "dryRun": false,
+  "result": {
+    "case_id": "64 (R/PM033-2)",
+    "decision": "act",
+    "summary": "Juniper Solutions has been assigned to replace the bath taps and change the TRV, and both the contractor and the tenant have been told. The landlord, Freya Mercer, clearly approved the quote in event 023. Juniper Solutions inspected the problem and wrote the quote, so they were the obvious choice. The ticket is on hold in scheduling until they confirm an appointment date, with a follow-up in 2 days.",
+    "situation": "The tenant at Flat 19, 159 Juniper Mews reported that the bathroom tap squirts water when the shower runs. The landlord agreed for us to instruct a contractor (event 008), and Juniper Solutions attended (event 019). They said the bath taps need replacing, recommended changing the TRV, and sent a quote. The quote went to the landlord (event 020), who approved raising an order for the works (event 023). The case was in scheduling, waiting for the order to be raised and an appointment booked.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the ticket, events, property history and profiles",
+        "result": "23 events; no open holds or approvals; the quote file (event 020) is not visible in the ticket's attachments; there is a second open ticket R/PM033-1 at the same property",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the landlord's reply in event 023",
+        "result": "Intent: approve. 86% likely to be an unconditional approval. Autonomy: auto (handle without review).",
+        "ok": true
+      },
+      {
+        "tool": "find_tickets",
+        "description": "Checked for other tickets at this property",
+        "result": "Found ticket 63 (R/PM033-1): same title, still open, in provider_selection",
+        "ok": true
+      },
+      {
+        "tool": "assign_contractor",
+        "description": "Assigned Juniper Solutions to the approved works",
+        "result": "Done; ticket stays in scheduling",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "First email to the contractor",
+        "result": "Blocked by the outbound guard: it read the wording about keeping to the quoted price as committing the landlord's money",
+        "ok": false
+      },
+      {
+        "tool": "send_message",
+        "description": "Rewrote and resent the contractor email: landlord happy for the quoted works to go ahead, please call the tenant on 07700 900324 to book, confirm the date, and send details before doing anything beyond the quote",
+        "result": "Sent (message 82)",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant: works approved, Juniper Solutions will be in touch, plus advice to contain any leak (towel down, stopcock if needed)",
+        "result": "Sent (message 79)",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Put the ticket on hold until the contractor confirms an appointment",
+        "result": "Hold 164 placed; follow-up in 2 days",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded on the property that the landlord approved the taps and TRV works",
+        "result": "Fact 87 saved",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded on the landlord's profile that they prefer the agency to instruct contractors",
+        "result": "Fact 86 saved",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (Freya Mercer)",
+        "status": "granted",
+        "channel": "email (event 023)"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "Routine approved works with a clear landlord approval",
+      "handover_summary": "",
+      "recommendation": "An agent should check whether ticket 63 (R/PM033-1) duplicates this one and close it if so."
+    },
+    "unverified": [
+      "The quote amount and its details: the quote file is not visible in the CRM",
+      "Whether the gas safety check engineer in event 013 is from Juniper Solutions",
+      "The visit date in events 014–016 is 03/10/2026, which is earlier than the email confirming it; the actual attendance date is unknown"
+    ],
+    "failures": [
+      "The first contractor email was blocked by the outbound guard for wording that seemed to commit the landlord's money. I rewrote it and the second version sent."
+    ],
+    "risks_or_red_flags": [
+      "Ticket 63 (R/PM033-1) is a possible duplicate: same title and property, still open in provider_selection",
+      "The quote amount isn't visible, so any invoice must be checked against the original quote before payment",
+      "The tap leaks while the shower runs, so there is a minor risk of water escaping; the tenant has been given advice on containing it"
+    ],
+    "final_status": "In scheduling: Juniper Solutions assigned, on hold until they confirm an appointment (hold 164)",
+    "next_follow_up": {
+      "when": "2026-10-12 (2 days)",
+      "what": "If Juniper Solutions hasn't confirmed an appointment date with the tenant, chase them"
+    },
+    "confidence": 0.85
+  }
+}

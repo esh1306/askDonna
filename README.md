@@ -6,18 +6,18 @@ Donna runs residential maintenance requests end to end. She reads everything kno
 
 | | |
 |---|---|
-| **Agent** | [eve](https://eve.dev) + Claude Opus 5.5 (direct Anthropic API), 14 tools |
+| **Agent** | [eve](https://eve.dev) + Claude Opus 5.5 (direct Anthropic API), 15 tools |
 | **Memory** | SQLite CRM with per-person and per-property profiles, every fact sourced |
 | **Calibrated judgement** | Jev (TypeSafe AI) at intake, on every inbound reply, on every outbound action, and on call consent |
 | **Voice** | ElevenLabs Agents: browser calls, and real phone calls over Twilio |
-| **Results** | Practice eval 18/20 pass, 0 fail, 0 critical failures; Jev intake 94% category accuracy |
+| **Results** | Practice eval on 56 real handoff points: 84% pass, 0 fail, 0 critical failures; Jev intake 98% category accuracy |
 
 ---
 
 ## 1. What we built
 
 - **A CRM that remembers.** Every property, tenant, landlord and contractor has a profile of facts: preferred channel, pets, access considerations, pre-approved spend limit, "pays contractor directly", appliance history. Each fact records the event it came from. A contradicting fact is stored next to the old one and flagged as a conflict, never overwritten, so the next call or email starts with full, honest context.
-- **An agent that acts.** Donna works through 14 tools: read the ticket and profiles, search the history, read attachments (PDF invoices and reports, photos), classify the request and each reply, record facts, move the pipeline stage, place and release holds with follow-up dates, request landlord approval by email or call, record the landlord's answer, message tenants, landlords and contractors, find existing cases, and escalate to a human queue with a structured handover.
+- **An agent that acts.** Donna works through 15 tools: read the ticket and profiles, search the history, read attachments (PDF invoices and reports, photos), classify the request and each reply, record facts, move the pipeline stage, place and release holds with follow-up dates, request landlord approval by email or call, record the landlord's answer, message tenants, landlords and contractors, find existing cases, and escalate to a human queue with a structured handover.
 - **Calibrated autonomy with Jev.** Jev returns calibrated probabilities in about 250 ms, which lets thresholds mean the same thing every time:
   1. *Intake:* category, severity, and the probability that a request needs landlord approval, is safely self-fixable, is a safety risk, or needs more information.
   2. *Every inbound reply:* intent (approve, decline, conditional, question, quote, invoice, completion...) and whether a human needs to respond. This is the exact "check if we need to respond, else return to auto mode" handoff that Dwelly's current system sends to a person every time.
@@ -44,7 +44,7 @@ Donna takes those handoff decisions herself (reply, advance the stage, hold with
 ```mermaid
 flowchart LR
     IN["📨 Event<br/>tenant report · landlord reply<br/>contractor email · case file"] --> D
-    D["🤖 Donna<br/>eve + Claude Opus 5.5"] <-->|14 tools| CRM[("🗂️ CRM<br/>tickets · profiles · history")]
+    D["🤖 Donna<br/>eve + Claude Opus 5.5"] <-->|15 tools| CRM[("🗂️ CRM<br/>tickets · profiles · history")]
     D <-->|calibrated checks| J["⚖️ Jev<br/>classify · guard · consent"]
     D -->|approval call| V["📞 ElevenLabs voice"]
     V -->|decision| CRM
@@ -102,7 +102,7 @@ sequenceDiagram
 
 | Folder | What it is |
 |---|---|
-| `agent/` | The eve agent: `agent.ts` (Claude via the Anthropic API, no gateway), `instructions.md` (judgement rules), `tools/` (14 tools), `channels/eve.ts` (HTTP Basic auth for self-hosting) |
+| `agent/` | The eve agent: `agent.ts` (Claude via the Anthropic API, no gateway), `instructions.md` (judgement rules), `tools/` (15 tools), `channels/eve.ts` (HTTP Basic auth for self-hosting) |
 | `crm/` | SQLite schema (`node:sqlite`), typed repository, case importer, attachment reader, source tracking |
 | `intake/` | Jev layers: intake classifier, reply classifier + autonomy thresholds, outbound guard, consent check, and their evals |
 | `runner/` | Reality Test runner: case normalisation, CRM import, eve HTTP client, ANSWER/REASONING renderer |
@@ -190,10 +190,10 @@ Put a TLS reverse proxy (Caddy or nginx) in front and forward **both** `/eve/` a
 
 | Evaluation | Result | Evidence |
 |---|---|---|
-| Practice eval: Donna at Dwelly's real handoff points in the public cases, judged by Claude against what the operator actually did next | **18/20 pass, 2 partial, 0 fail, 0 critical failures**; mean correct outcome 4.2/5, judgement & safety 4.1/5 | `docs/practice-eval.md`; every run's `ANSWER.md`, `REASONING.md` and raw events in `data/practice/answers/` |
-| Jev intake classifier, all 50 public cases | **94% category accuracy** (47/50), ~250 ms per request | `docs/intake-eval.md` |
-| Jev outbound guard, hand-labelled set | **12/12** | `docs/jev-guards-eval.md` |
-| Jev reply intent / autonomy, hand-labelled set | **10/10** intent, 9/10 autonomy (one conservative miss) | `docs/jev-guards-eval.md` |
+| Practice eval: Donna at **56 of Dwelly's real handoff points across 45 public cases**, judged by Claude against what the operator actually did next | **47 pass, 9 partial, 0 fail, 0 critical failures (84% pass)**; required outcome met 49/56; mean correct outcome 4.09/5, judgement & safety 4.09/5 | `docs/practice-eval.md`; every run's `ANSWER.md`, `REASONING.md` and raw events in `data/practice/answers/` |
+| Held-out check: batches run on decision points never used for tuning | first held-out batch 13/20 pass → after fixes, a new held-out batch **12/16 pass**; both 0 fail | `data/practice/batch2-ids.txt`, `batch3-ids.txt`; pre-fix answers kept in `data/practice/before-fix/` |
+| Jev intake classifier, 50 public cases (tuned on 001–035, held out 036–050) | **category 98%** (held-out 100%), self-fixable 84%, severity agreement with Dwelly's own classifier 100% (12 cases), ~270 ms per request | `docs/intake-eval.md` (with an Iterations log) |
+| Jev outbound guard / reply classifier, hand-labelled sets | guard **12/12**, reply intent **10/10**, auto-vs-human **10/10** | `docs/jev-guards-eval.md` |
 
 The evaluations found and drove these fixes: a Jev score-parsing bug that inflated "emergency" severity; a SQLite lock under concurrent runs; attachments from the future leaking into the practice harness; and over-escalation of routine cases, now addressed by a "be proportionate" rule in `agent/instructions.md`.
 
@@ -216,7 +216,7 @@ The evaluations found and drove these fixes: a Jev score-parsing bug that inflat
 
 ## 7. Known limitations
 
-- **Practice sample size.** 20 of 76 decision points were judged, to conserve API credits; the judge is itself an LLM.
+- **Practice sample size.** 56 of 76 decision points were judged (the rest were skipped to conserve API credits); the judge is itself an LLM, and some tuning used judged cases, which is why we report the held-out batches separately.
 - **Remaining partials are over-caution.** Donna sometimes holds or escalates where the human operator proceeded, for example a landlord deferring a door repair after a reported glass-safety concern. We kept the safety bias.
 - **Synthetic contacts.** Case contacts have no real addresses or numbers, hence the demo-mode redirect.
 - **Inbound email** is simulated in the console; real inbound needs a verified domain and a webhook.
