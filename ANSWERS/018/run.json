@@ -1,0 +1,138 @@
+{
+  "case": "018",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 0,
+  "durationSec": 61.607,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4K79HAYWK86HBFTH566ANKY",
+  "startedAt": "2026-10-10T15:35:49.262Z",
+  "finishedAt": "2026-10-10T15:36:50.869Z",
+  "usage": {
+    "inputTokens": 134942,
+    "outputTokens": 6173
+  },
+  "eventCount": 446,
+  "dryRun": false,
+  "result": {
+    "case_id": "R/018 (ticket 92)",
+    "decision": "escalate",
+    "case_type": "maintenance",
+    "summary": "The landlord is arranging the rat treatment and proofing himself, and the proofing has stalled. Pest control finished on 7 Sept, but the proofing contractor didn't turn up on 8 Sept, and two waiting periods have passed with no word from the landlord. I emailed the landlord asking for the contractor's name, a new date and the pest report. I texted the tenant an update and placed a 2-day hold. I also escalated to the human queue at normal priority, recommending a phone call to the landlord, because the deadlines have passed twice, the tenant sounds unhappy and there's a health risk.",
+    "situation": "Rats are getting into the kitchen, including under the sink, at 14 Mosswold Crescent. On 18 Aug the landlord took on the works himself. Pest control's final visit was 7 Sept. Sealing the openings is still outstanding: the expected contractor didn't attend on 8 Sept, and nothing has been confirmed since. The ticket is still at intake. Before today the landlord hadn't been contacted in writing since 18 Aug.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the ticket, profiles and the 19 events",
+        "result": "No attachments, approvals, holds or facts on file",
+        "ok": true
+      },
+      {
+        "tool": "recall_lessons",
+        "description": "Looked for team lessons on stalled landlord-arranged works",
+        "result": "No lessons found",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the tenant's latest update (ev 17)",
+        "result": "Review: likely complaint 0.95, dissatisfied 0.86",
+        "ok": true
+      },
+      {
+        "tool": "classify_intake",
+        "description": "Classified the original report",
+        "result": "Urgent, safety risk 0.67",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the landlord asking for the proofing contractor's name, a new date and the pest report, or whether he wants Northbridge to arrange it",
+        "result": "Message 71 queued; guard passed",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Texted the tenant: landlord chased, update by 15 Sept, plus safe containment advice",
+        "result": "Message 70 queued; guard passed",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold while waiting for the landlord's reply",
+        "result": "Hold 274, follow up in 2 days",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Handed over at normal priority because the works have stalled and the deadlines passed twice",
+        "result": "Queue item 33",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded: tenant prefers calls, dog at the property, pest history, landlord arranges his own pest contractor, landlord prefers calls",
+        "result": "Facts 114-118 recorded; no conflicts",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Gareth Vale (Landlord)",
+        "status": "not_needed - landlord arranging works directly",
+        "channel": "call (ev 6) / email (ev 7)"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "Landlord-arranged proofing has stalled: no landlord update after two waiting periods, the contractor didn't attend, and the tenant is unhappy about rats indoors",
+      "handover_summary": "Pest treatment finished 7 Sept. The proofing visit expected on 8 Sept didn't happen. The waiting periods expired 8 and 11 Sept with no landlord update. I chased the landlord by email today (msg 71) and texted the tenant (msg 70). Hold 274 runs to 13 Sept.",
+      "recommendation": "Property manager to phone the landlord on the number he gave in ev 4. Get a firm proofing date and contractor, or his approval for Northbridge to instruct one. Phone the tenant with the outcome by 15 Sept."
+    },
+    "judgement": {
+      "why_this_decision": "Two waiting periods have passed (ev 15, 18) with no landlord update, which meets the escalation rule. The tenant reports the contractor didn't attend (ev 17), and the classifier flags her message as a likely complaint. Rats getting into the kitchen is a health issue. The landlord hadn't been contacted in writing since 18 Aug, so I chased him myself as well as escalating.",
+      "alternatives_considered": [
+        {
+          "option": "Keep waiting without escalating",
+          "why_not": "The deadlines have already passed twice and the tenant is unhappy"
+        },
+        {
+          "option": "Instruct a Northbridge contractor",
+          "why_not": "The landlord chose to arrange the works himself, and there's no approval or spend limit on record"
+        },
+        {
+          "option": "Treat as an emergency",
+          "why_not": "Pest treatment has been done, and this isn't one of the listed emergency types"
+        }
+      ],
+      "checks_performed": [
+        "Approvals and holds: none on file",
+        "No pest report or completion evidence visible",
+        "Scope differs between accounts (under-sink openings in ev 10 vs wall work in ev 14)",
+        "No spend limit on record"
+      ],
+      "assumptions": [
+        "The landlord is still responsible for arranging the proofing"
+      ]
+    },
+    "unverified": [
+      "Who the landlord's proofing contractor is, and any new appointment date",
+      "What the proofing covers (under-sink openings or wall)",
+      "Whether rats are still getting in after treatment",
+      "The December 2024 record the landlord described (not on file)"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "Rats getting into the kitchen: health risk while openings stay unsealed",
+      "The tenant is unhappy, and this could become a formal complaint",
+      "Ticket stage is still 'intake' and lags behind events; it can't move to 'works' without an approval on record",
+      "Dog at the property: bait safety"
+    ],
+    "final_status": "Intake stage, on hold waiting for the landlord (hold 274), escalated to the human queue (item 33)",
+    "next_follow_up": {
+      "when": "2025-09-13",
+      "what": "Chase the landlord for the proofing contractor and date. Phone the tenant with an update by 15 Sept."
+    },
+    "confidence": 0.8
+  }
+}

@@ -1,0 +1,167 @@
+{
+  "case": "013",
+  "decision": "request_info",
+  "escalated": "no",
+  "failures": 2,
+  "durationSec": 59.969,
+  "decisionLine": "request_info",
+  "sessionId": "wrun_01M4K78C4STD1Q8DH8QS2QFPQK",
+  "startedAt": "2026-10-10T15:35:11.140Z",
+  "finishedAt": "2026-10-10T15:36:11.109Z",
+  "usage": {
+    "inputTokens": 169663,
+    "outputTokens": 5884
+  },
+  "eventCount": 367,
+  "dryRun": false,
+  "result": {
+    "case_id": "87 (R/013)",
+    "decision": "request_info",
+    "case_type": "maintenance",
+    "summary": "Clearfirth Glazing has sent invoice NBL-013-INV-09, but it shows no amount, and nothing on file confirms a visit or the fitting. The last update (event 021) was that the glass was delayed. I'm holding the invoice rather than forwarding it. I asked the contractor for the amount with a VAT breakdown and the fitting date, asked the tenant whether the pane was fitted and the problem has stopped, and told the landlord. The ticket is on hold with a 3-day follow-up.",
+    "situation": "Tenant reported misted double glazing in the kitchen, with water at the frame and cold and damp concerns (event 001). Landlord agreed to Clearfirth if £180 was the total (event 010). The quote was £150 + VAT = £180 (events 009/011) and the agency recorded it as approved (event 012). Glass was ordered but delayed, with no appointment ever made (events 018, 021). On 9 September the case was moved to awaiting post-visit documents without any visit evidence (event 022). An invoice with no amount was uploaded on 10 September (event 023).",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the ticket context",
+        "result": "Stage is intake. The CRM has no approval record, no holds and no profile facts.",
+        "ok": true
+      },
+      {
+        "tool": "read_attachment",
+        "description": "Read glazing-invoice.pdf",
+        "result": "Ref NBL-013-INV-09, dated 10 Sep 2025, correct property, 'Supply and fit 1 pane of glass to the kitchen glazing'. Amount blank; no VAT, work date or billed-to party.",
+        "ok": true
+      },
+      {
+        "tool": "recall_lessons",
+        "description": "Looked for team lessons on invoice problems",
+        "result": "No lessons found",
+        "ok": true
+      },
+      {
+        "tool": "search_case",
+        "description": "Searched the case for 'fitted' to find any completion evidence",
+        "result": "0 matches",
+        "ok": true
+      },
+      {
+        "tool": "move_stage",
+        "description": "Tried to move the stage forward to works to reflect the approved, ordered job",
+        "result": "Refused: the CRM has no structured landlord approval on record",
+        "ok": false
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the contractor asking for the invoice amount with a net/VAT breakdown and the fitting date",
+        "result": "Queued (message 65)",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant asking whether the pane has been fitted and the misting, water and cold have stopped",
+        "result": "Queued (message 66)",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the landlord that the invoice is on hold pending the amount and completion confirmation",
+        "result": "Queued (message 67)",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Put the ticket on hold waiting for the contractor and tenant answers",
+        "result": "Hold 269, follow-up in 3 days",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded on the landlord's profile his conditional approval: £180 total",
+        "result": "Fact 99",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded that there are pets at the property",
+        "result": "Fact 100",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded that the tenant wants to be present for visits",
+        "result": "Fact 101",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded a reliability note on the contractor",
+        "result": "Fact 102",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Orren Vale (Landlord)",
+        "status": "granted (conditional on £180 total), from events 010/012; not recorded as a structured CRM approval",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "The contractor and tenant can answer what is missing (amount and completion). Nothing on the invoice conflicts with the approval yet.",
+      "handover_summary": "",
+      "recommendation": "Escalate if the contractor's amount is above £180, the tenant says the work hasn't been done, or there's still no reply after a second follow-up."
+    },
+    "judgement": {
+      "why_this_decision": "An invoice can't be forwarded without an amount to check against the approved £180. The records also don't show that the work was done: event 021 says the glass hadn't arrived, and event 022 moved the case to awaiting post-visit documents without any visit evidence. The contractor (amount, date) and tenant (whether it was fitted) can answer both questions, so I asked them instead of escalating.",
+      "alternatives_considered": [
+        {
+          "option": "Forward the invoice to the landlord for payment",
+          "why_not": "There is no amount to compare with the £180 cap and no evidence the work was done."
+        },
+        {
+          "option": "Escalate to a human now",
+          "why_not": "This is resolvable by asking the contractor and tenant. It isn't a real conflict yet."
+        },
+        {
+          "option": "Close the ticket",
+          "why_not": "Completion isn't verified, and the tenant's damp and cold concern hasn't been confirmed resolved."
+        }
+      ],
+      "checks_performed": [
+        "Invoice property matches 8 Brackenmere Walk",
+        "Invoice issuer Clearfirth Glazing matches the contractor on the job",
+        "Invoice amount is blank, so it can't be checked against £180",
+        "Searched the case for completion evidence and found none",
+        "Approval condition: £150 + VAT = £180 total meets the landlord's condition (events 009–012)",
+        "Not a safety emergency: the sash opens and locks"
+      ],
+      "assumptions": [
+        "The landlord's approval in event 010 covers the £180 total quote that the agency recorded in event 012",
+        "The 'NBL-013' prefix on the invoice relates to this job"
+      ]
+    },
+    "unverified": [
+      "Whether the glass was fitted, and when",
+      "The invoice amount and VAT",
+      "Whether the landlord replied separately to the confirmation request in event 011 (only the agency note in event 012 is visible)",
+      "Whether the misting, water and cold problem is resolved, and whether there's wider damp"
+    ],
+    "failures": [
+      "move_stage to works was refused because the CRM has no structured approval record. The stage stays at intake, behind the real position."
+    ],
+    "risks_or_red_flags": [
+      "The invoice was issued with no amount and no visit on record",
+      "The stage was moved to awaiting post-visit documents without any evidence of a visit (event 022)",
+      "The tenant's damp and cold concern was never assessed (event 005)",
+      "The CRM stage is behind the case because the approval isn't recorded in structured form"
+    ],
+    "final_status": "On hold (hold 269) waiting for the contractor's invoice amount and fitting date and the tenant's confirmation. The stage is still intake.",
+    "next_follow_up": {
+      "when": "In 3 days (hold 269)",
+      "what": "Chase Clearfirth for the amount and fitting date and check the tenant's reply. If the amount is £180 or less and the work is confirmed, forward the invoice to the landlord and move to close-out. Otherwise escalate."
+    },
+    "confidence": 0.8
+  }
+}

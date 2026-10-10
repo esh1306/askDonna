@@ -1,0 +1,123 @@
+{
+  "case": "027",
+  "decision": "wait",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 59.879,
+  "decisionLine": "wait",
+  "sessionId": "wrun_01M4K7CV0XCZHS53JW3SD008QP",
+  "startedAt": "2026-10-10T15:37:37.474Z",
+  "finishedAt": "2026-10-10T15:38:37.353Z",
+  "usage": {
+    "inputTokens": 138796,
+    "outputTokens": 5308
+  },
+  "eventCount": 351,
+  "dryRun": false,
+  "result": {
+    "case_id": "101 (R/027)",
+    "decision": "wait",
+    "case_type": "maintenance",
+    "summary": "The Alderwick Property Works quote (NBL-027-Q1, £3,865.68) is over the approval threshold. The landlord has not answered: the email went out a few hours ago and the call reached only a recording, so nothing is approved yet. I moved the ticket to landlord approval and sent the landlord a formal approval request by email. It sets out what the quote covers and which checkout items it leaves out, including the taped boiler casing and the carpets. I also asked the contractor about VAT and the extractor fan listed twice, and set a 2-day follow-up.",
+    "situation": "This is a vacant property being got ready to let again. The quote asked for in event 13 came in and was emailed to the landlord (event 14). The workflow says landlord approval is needed (event 15). The call to the landlord recorded no answer either way (event 17). No approval record or hold was in the CRM, and the ticket was still at intake.",
+    "judgement": {
+      "why_this_decision": "Event 15 says the quote is over the threshold and needs landlord approval, and nobody has approved it (events 16–17). The note in event 2 that approval is 'normally already in place', and the job email saying the works were agreed (event 4), are not an approval of this particular £3,865.68 quote. The landlord was only contacted the same day, so the right move is to log a proper approval request, point out what the quote leaves out, and wait with a follow-up date. No recalled lessons applied.",
+      "alternatives_considered": [
+        {
+          "option": "Assign Alderwick and move to scheduling",
+          "why_not": "The landlord hasn't approved the cost, and it is over the threshold."
+        },
+        {
+          "option": "Escalate to a human",
+          "why_not": "Nobody has missed a follow-up deadline yet. The questions about the quote can be put to the landlord and the contractor. The property is empty, so no one is at immediate risk."
+        },
+        {
+          "option": "Just wait without a new approval request",
+          "why_not": "There was no approval record in the CRM to track. Event 14 also didn't mention the gaps in the quote or ask for a clear APPROVE/DECLINE."
+        }
+      ],
+      "checks_performed": [
+        "Read the quote: one total of £3,865.68, no VAT shown, no price per item, 'renew an extractor fan' appears twice, no validity date",
+        "Read the checkout report and compared it with the quote. Not quoted: boiler casing, kitchen worktop and water ingress, kitchen flooring and laminate, curtain pole/curtains/bulbs, other rusting radiators, carpets",
+        "Property and contractor match (46 Fernwick Lane, Alderwick/Iris Bell)",
+        "No approvals, holds or lessons were on file",
+        "Safety: smoke detector and boiler items noted. Property is empty, so no immediate occupant risk"
+      ],
+      "assumptions": [
+        "The landlord's preferred channel isn't recorded, so I used email, the channel already used in event 14",
+        "The 'NBL' prefix on the quote reference is the agency's client code (Northbridge Lettings), not a mismatch"
+      ]
+    },
+    "actions_taken": [
+      {
+        "tool": "move_stage",
+        "description": "Moved the ticket from intake to landlord approval",
+        "result": "Done: now at landlord approval",
+        "ok": true
+      },
+      {
+        "tool": "request_landlord_approval",
+        "description": "Emailed the landlord to APPROVE or DECLINE quote NBL-027-Q1 at £3,865.68, listing what it includes, what it leaves out, and offering separate quotes for the boiler inspection, carpets and other items",
+        "result": "Approval request 41 created; message 88 sent",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Asked the contractor whether the price includes VAT, which rooms the two extractor fans are in, and for a rough cost split. Told her the quote isn't approved yet, so not to book",
+        "result": "Message 91 sent",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Put the ticket on hold waiting for the landlord, follow-up in 2 days",
+        "result": "Hold 283 placed",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded that the property is vacant and keys are at the office",
+        "result": "Fact 144 saved",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded that the boiler casing needs a Gas Safe inspection and isn't in the quote",
+        "result": "Fact 145 saved",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Owen Vale (landlord)",
+        "status": "requested",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "Routine wait for the landlord's approval; no follow-up deadline has passed yet",
+      "handover_summary": "",
+      "recommendation": "If the landlord hasn't replied by the follow-up date, phone them through request_landlord_approval with channel 'call'. Escalate if they still don't respond after that."
+    },
+    "unverified": [
+      "Whether the £3,865.68 includes VAT",
+      "Whether the quote means two separate extractor fans, and in which rooms",
+      "The state of the boiler and whether there is a current gas safety certificate",
+      "The cause of the water damage and water ingress",
+      "The landlord's preferred contact channel"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "The taped boiler casing needs a Gas Safe engineer to inspect it before anyone moves in. It isn't in the quote, and I can't see a gas safety certificate on file",
+      "The top-floor smoke detector isn't working; it must work before a new tenancy starts",
+      "Water damage in five rooms plus water getting in at the worktop could share one cause. The quote stain-blocks the ceilings but doesn't look for the source",
+      "The quote has a single total with no item prices and no validity date"
+    ],
+    "final_status": "At landlord approval, on hold waiting for the landlord (approval 41, hold 283)",
+    "next_follow_up": {
+      "when": "2025-09-17",
+      "what": "Chase the landlord for APPROVE or DECLINE, by phone if no email reply. Check whether the contractor has answered about VAT and the fans."
+    },
+    "confidence": 0.82
+  }
+}

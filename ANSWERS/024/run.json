@@ -1,0 +1,147 @@
+{
+  "case": "024",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 0,
+  "durationSec": 66.398,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4K7BPBH48XJTJJY46YGSKCS",
+  "startedAt": "2026-10-10T15:36:59.928Z",
+  "finishedAt": "2026-10-10T15:38:06.326Z",
+  "usage": {
+    "inputTokens": 116793,
+    "outputTokens": 5776
+  },
+  "eventCount": 401,
+  "dryRun": false,
+  "result": {
+    "case_id": "98 (R/024)",
+    "decision": "escalate",
+    "summary": "An internal note dated 23 Sep says the clear-out and property service at 7 Brackenmere Walk were done. The landlord never approved the £216 quote, even after being asked and chased. The quote also leaves out removing the left items, and the deposit claim decision was still pending. I escalated this to a human at high priority and emailed Larkspan to confirm what was actually done, ask for completion photos and say whether the items were removed. I did not tell the landlord the work is finished. That isn't verified, and explaining work done without her approval is a decision for the agency.",
+    "case_type": "maintenance_admin",
+    "judgement": {
+      "why_this_decision": "Event 020 says the work was done, but there is no landlord approval (events 018 and 019 got no reply, and no approval record exists). The 'approval already obtained' flag has no supporting evidence (events 002 and 005). The quote NBL-024-Q1 covers cleaning only, while the request and checkout report include removing items, so the scope doesn't match. Event 015 said the deposit claim decision had to come before work went ahead. That combines spending without approval, a scope conflict and a deposit matter, so a human has to decide. The contractor can answer the factual questions, so I asked them directly.",
+      "alternatives_considered": [
+        {
+          "option": "Tell the landlord the work is finished, as the note asks",
+          "why_not": "Nothing verifies the work was done (no contractor confirmation or photos), and it was done without approval. The agency needs to decide how to explain this and seek approval after the event."
+        },
+        {
+          "option": "Record a landlord approval based on the move-out approval flag",
+          "why_not": "No landlord words or document support it, and the quote was sent for approval separately and never answered."
+        },
+        {
+          "option": "Request approval again by phone myself",
+          "why_not": "The work has apparently already happened, so this would be approval after the event for unapproved work with an unpriced removal element. That is agency judgement, not a routine request."
+        },
+        {
+          "option": "Move to closeout",
+          "why_not": "There is no approval, no verified completion and no invoice."
+        }
+      ],
+      "checks_performed": [
+        "Checked whether an approval exists: none in the CRM and no landlord reply",
+        "Checked the quote £180 + 20% VAT = £216: arithmetic correct, property matches",
+        "Compared quote scope with request and checkout report: item removal missing from the quote",
+        "Looked for a contractor completion message, photos or invoice: none visible",
+        "Checked the deposit claim status: pending as of events 015/016, with no later update",
+        "Checked the landlord profile: no spend limit or preferred channel"
+      ],
+      "assumptions": [
+        "Event 020 is an internal colleague note and doesn't confirm the work from the contractor's side",
+        "The postcode ZZ1 1ZZ is the property's address as recorded"
+      ]
+    },
+    "situation": "Vacant property after the tenancy ended. A clear-out plus final clean was quoted by Larkspan at £216 including VAT, cleaning only. The landlord hasn't answered two approval emails. An internal note says the work was done on 23 Sep. The deposit claim decision is pending.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the ticket, 21 events and attachment list",
+        "result": "No approvals, holds or profile facts on file",
+        "ok": true
+      },
+      {
+        "tool": "read_attachment",
+        "description": "Read the quotation and the checkout report",
+        "result": "Quote NBL-024-Q1 is £180 + £36 VAT = £216 and covers cleaning only; the checkout report lists items for removal",
+        "ok": true
+      },
+      {
+        "tool": "recall_lessons",
+        "description": "Looked for team lessons on similar cases",
+        "result": "No lessons found",
+        "ok": true
+      },
+      {
+        "tool": "move_stage",
+        "description": "Moved the stage from intake to landlord_approval to match events 017 and 018",
+        "result": "Stage now landlord_approval",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed Larkspan asking for attendance dates, what was done, whether and how the items were removed and disposed of, and photos, noting that no cost is approved",
+        "result": "Message 83 queued; the outbound check passed",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "High-priority handover: work apparently done without approval, scope mismatch, deposit claim pending",
+        "result": "Queue item 39",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Waiting on the contractor's confirmation, with a 2-day follow-up",
+        "result": "Hold 280",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the property as vacant with access via agency-held keys",
+        "result": "Fact 136",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded that the landlord didn't reply to the emailed approval request or the reminder",
+        "result": "Fact 137",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Sella Voss (landlord)",
+        "status": "requested by email 18 Sep and chased 21 Sep; no reply; not granted",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "Work reportedly done without recorded landlord approval; the quote leaves out item removal; the deposit claim decision is pending.",
+      "handover_summary": "£216 cleaning-only quote, no landlord reply after two emails, internal note says work was done 23 Sep, the 'approval obtained' flag is unsupported, and the deposit claim is pending. I've asked the contractor to confirm what was done and to send photos.",
+      "recommendation": "The property manager should confirm who authorised the attendance. Then phone Sella Voss to explain and seek approval after the event. Hold any invoice until approval and the removal scope are agreed. The deposits team should confirm the deposit claim status."
+    },
+    "unverified": [
+      "That the clear-out and cleaning were actually done on 23 Sep (internal note only)",
+      "Whether the left items were removed, and whether the cellar cleaning equipment was inventory that should have stayed",
+      "Who instructed the contractor to attend",
+      "The basis of the 'landlord approval already obtained' flag",
+      "The final cost, including any charge for removal",
+      "Deposit claim outcome"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "Landlord money may have been committed without approval (£216 or more)",
+      "Possible invoice for removal work that was never quoted",
+      "The deposit claim may be affected by work done before a decision",
+      "The cellar cleaning equipment may have belonged to the property and been disposed of"
+    ],
+    "final_status": "Stage landlord_approval; on hold waiting for the contractor (hold 280); escalated to a human (queue 39, high priority)",
+    "next_follow_up": {
+      "when": "2025-09-26",
+      "what": "Chase Larkspan for the completion confirmation, photos and item-disposal details if nothing has arrived; check the human queue for the agency's decision on approving the work after the event."
+    },
+    "confidence": 0.85
+  }
+}

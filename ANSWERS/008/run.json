@@ -1,0 +1,138 @@
+{
+  "case": "008",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 0,
+  "durationSec": 64.212,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4K76DCWR2Z055X8ZHQPMDD2",
+  "startedAt": "2026-10-10T15:34:06.919Z",
+  "finishedAt": "2026-10-10T15:35:11.131Z",
+  "usage": {
+    "inputTokens": 180168,
+    "outputTokens": 6419
+  },
+  "eventCount": 517,
+  "dryRun": false,
+  "result": {
+    "case_id": "R/008 (ticket 82)",
+    "decision": "escalate",
+    "case_type": "safety_emergency",
+    "summary": "This is a safety emergency that I've escalated to the duty team as high priority (queue 25). Water is still coming through a wet ceiling light fitting in Flat 2, and the ceiling bulge there is reported to be getting larger. The suspected source flat, Flat 3, can't be accessed: the tenant refuses entry, the landlord hasn't authorised it, and the duty manager found no agency authority to enter. That decision belongs to the agency director, or to the emergency services if there is immediate danger. I sent the Flat 3 tenant the plumber's details and proposed work in writing, as she asked. I also updated the landlord, recorded who can authorise access, and set a 6-hour hold.",
+    "situation": "Flat 2 has active water ingress through a bedroom ceiling light fitting, with a growing bulge. The electrician (Vellum Electrical) is due 12:30–13:15. The plumber (Brindle Flow Plumbing) and building manager Selka Venn checked Flat 2 and the common riser and found no source or isolation valve. Flat 3 tenant Yara refuses entry until about 17:30. Landlord Niko does not authorise entry, and duty manager Devra found no delegated entry authority.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the case",
+        "result": "24 events; no attachments, holds, approvals or profile facts",
+        "ok": true
+      },
+      {
+        "tool": "recall_lessons",
+        "description": "Looked for past lessons on this kind of case",
+        "result": "None found",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified Bevin's latest SMS (event 23)",
+        "result": "review; safety_concern 0.83; still_broken",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "High-priority handover: decision on Flat 3 entry, possible emergency-services route, electrician follow-up",
+        "result": "queue_id 25",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed Flat 3 tenant the plumber's name and proposed work in writing, as she asked at event 20, and asked about access with her present",
+        "result": "message 54, guard passed",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed landlord a status update; no money committed, no entry claimed",
+        "result": "message 56, guard passed",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold waiting on the tenant's consent and the director's decision",
+        "result": "hold 263, follow-up in 0.25 days",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded access conditions for the Flat 3 tenant, the landlord's position on entry, and that the isolation point is unknown",
+        "result": "facts 80, 81, 82",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Niko Pell (landlord, Flat 3)",
+        "status": "not requested: no cost known yet; entry not authorised by landlord",
+        "channel": "email/call"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "Active leak with a wet fitting and growing ceiling bulge; whether to enter Flat 3 without the occupant's consent is a decision for the agency director.",
+      "handover_summary": "Flat 2 ceiling is dripping at the light fitting and the bulge is growing. Electrician due 12:30–13:15. Plumber found no source from Flat 2 or the riser. Yara refuses Flat 3 entry until about 17:30, and Niko does not authorise entry. No delegated authority on file (event 22).",
+      "recommendation": "Director to review the full tenancy agreement and decide on access. Call emergency services if the ceiling or electrics get worse. Get the electrician's findings. Have Daro ready to attend Flat 3 with Yara at about 17:30. Notify Flat 2's landlord or agent and check the building insurance."
+    },
+    "unverified": [
+      "Whether Flat 3 is actually the source",
+      "Whether the circuit is live or isolated",
+      "The full tenancy access and emergency wording",
+      "Who is paying for the plumber's and electrician's attendance, and what it costs",
+      "Who Flat 2's landlord is"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "Ceiling bulge is growing next to a wet electrical fitting: risk of collapse and electrical danger",
+      "The source can't be isolated without access to Flat 3",
+      "Bevin asked that the details be kept within the maintenance team (event 7)",
+      "No landlord approval is recorded for the contractor attendances already arranged"
+    ],
+    "final_status": "Intake stage; escalated high (queue 25); hold 263 waiting on the tenant and the director's decision",
+    "next_follow_up": {
+      "when": "2025-06-18 ~19:00 UTC (6-hour hold), or earlier when the electrician reports or Yara replies",
+      "what": "Chase Yara's consent for accompanied access at about 17:30, check the director's decision and the electrician's findings, and update Bevin and Niko"
+    },
+    "confidence": 0.82,
+    "judgement": {
+      "why_this_decision": "Under the emergency rules, an escape of water at an electrical fitting with a growing ceiling bulge (events 17, 23) needs a high-priority escalation. Entry is blocked: Yara refused (events 9, 20), Niko declined to authorise it (events 11, 19), and Devra found no delegated authority and named the director as the route (event 22). I sent Yara the written details she asked for because that is the most likely way to get consent.",
+      "alternatives_considered": [
+        {
+          "option": "Assign Daro to enter Flat 3",
+          "why_not": "No consent and no authority. The landlord explicitly refused forced or unaccompanied entry."
+        },
+        {
+          "option": "Wait without escalating",
+          "why_not": "Active safety risk that is getting worse, and the access decision isn't mine to make."
+        },
+        {
+          "option": "Message Bevin again",
+          "why_not": "Bevin already has the safety advice and is meeting the electrician. Another message wouldn't move the job on."
+        },
+        {
+          "option": "Move stage forward",
+          "why_not": "No approval recorded and no contractor assignment possible for the source flat."
+        }
+      ],
+      "checks_performed": [
+        "Checked the full event history",
+        "No attachments, so the tenancy agreement isn't on file",
+        "No approvals, holds or spend limits",
+        "Checked the latest tenant SMS for safety risk with the classifier",
+        "Reviewed the entry-authority evidence from tenant, landlord and duty manager"
+      ],
+      "assumptions": [
+        "The ticket's tenant contact is Yara (Flat 3), and the landlord contact is Niko"
+      ]
+    }
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "case": "025",
+  "decision": "request_info",
+  "escalated": "yes",
+  "failures": 6,
+  "durationSec": 89.258,
+  "decisionLine": "request_info",
+  "sessionId": "wrun_01M4K7C7AT81B4CR8FKKPRGAM5",
+  "startedAt": "2026-10-10T15:37:17.306Z",
+  "finishedAt": "2026-10-10T15:38:46.564Z",
+  "usage": {
+    "inputTokens": 228101,
+    "outputTokens": 8702
+  },
+  "eventCount": 676,
+  "dryRun": false,
+  "result": {
+    "case_id": "99 (R/025)",
+    "decision": "request_info",
+    "case_type": "maintenance",
+    "summary": "The corrected invoice NBL-025-INV-15 now has the right postcode, but it shows no price, VAT, total or work date. No quote was ever received and the landlord approved no amount. I can't send the invoice for payment yet, so I've asked the contractor for a priced invoice and their findings. I've asked the tenant whether the plumber attended, whether the drip has stopped and whether the water is still cloudy. I've told the landlord the invoice is on hold until we have an amount. A hold is set with a 3-day follow-up. I also escalated at low priority because the landlord's approval isn't recorded in the CRM, which blocks the stage move. The new drawer repair and the boiler query in the handover need someone to pick them up.",
+    "situation": "Dripping kitchen tap and cloudy water at 18 Thistlewick Row. The landlord approved the works by email on 5 Aug with no amount. The contractor was slow, and a visit was arranged for 10 Sept using the agency's spare key. An invoice for a new mono sink tap was queried because the postcode was wrong. The corrected version arrived for review on 15 Sept and has no amounts on it.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the ticket",
+        "result": "Stage is intake. No approvals, holds or facts on record.",
+        "ok": true
+      },
+      {
+        "tool": "read_attachment",
+        "description": "Read the corrected invoice",
+        "result": "Ref NBL-025-INV-15, right postcode, covers supplying and installing a mono sink tap. No amounts, work date or payee details.",
+        "ok": true
+      },
+      {
+        "tool": "recall_lessons",
+        "description": "Looked for lessons on similar invoice situations",
+        "result": "None found",
+        "ok": true
+      },
+      {
+        "tool": "search_case",
+        "description": "Searched for 'quote'",
+        "result": "Only the agency's requests for a quote (events 004 and 005). No quote received.",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the corrected invoice",
+        "result": "Invoice, review suggested, mentions_amount 0.03",
+        "ok": true
+      },
+      {
+        "tool": "move_stage",
+        "description": "Tried to move the stage to works",
+        "result": "Refused: no landlord approval on record in the CRM",
+        "ok": false
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the contractor asking for a priced invoice, the attendance date and findings on the cloudy water",
+        "result": "Sent (message 85)",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant asking about the tap and cloudy water, and acknowledged the drawer report",
+        "result": "Blocked by the guard on the first try. The rewrite was sent (message 86).",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Updated the landlord that the invoice is on hold pending an amount",
+        "result": "Blocked by the guard twice. The third version was sent (message 89).",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Placed a hold waiting on the contractor's priced invoice and the tenant's confirmation",
+        "result": "Hold 281, follow-up in 3 days",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the landlord's preferred channel (email), the spare-key access arrangement, and the contractor's scheduling notes",
+        "result": "Facts 138, 139 and 140 recorded",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Low-priority handover: approval missing from the CRM, drawer repair and boiler query",
+        "result": "Queue item 42",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Orin Bell (Landlord)",
+        "status": "granted per event 003 (no amount), but not recorded in the CRM",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "The landlord's approval isn't recorded in the CRM, which blocks stage moves. The new drawer repair and the boiler query are outside this job.",
+      "handover_summary": "Corrected invoice NBL-025-INV-15 has no amount. The contractor and tenant have been asked to fill the gaps and the landlord has been told. Hold 281 has a 3-day follow-up.",
+      "recommendation": "Log the event 003 approval. When the priced invoice arrives, send the amount to the landlord to confirm. Open a separate ticket for the drawer. Check the boiler work with the relevant engineer."
+    },
+    "unverified": [
+      "Whether the tap was actually replaced and the drip fixed (no completion report from the contractor or the tenant)",
+      "The cost of the work",
+      "The date of the work",
+      "The cause of the cloudy water",
+      "Boiler work mentioned in event 021"
+    ],
+    "failures": [
+      "move_stage to works was refused: no approval on record in the CRM",
+      "The guard blocked one tenant draft and two landlord drafts. The rewrites were sent."
+    ],
+    "risks_or_red_flags": [
+      "The invoice has no amount, payee details or work date",
+      "A full tap replacement was invoiced but the landlord never approved a cost or saw a quote",
+      "The cloudy water was never assessed",
+      "The contractor was confused about the address once and the first invoice had the wrong postcode",
+      "The invoice prefix 'NBL' doesn't obviously match the contractor's name",
+      "The drawer repair is unaddressed and has been waiting since 5 Sept"
+    ],
+    "final_status": "On hold at intake (stage move blocked by the CRM), waiting on the contractor's priced invoice and the tenant's confirmation. Low-priority human queue item 42 is open.",
+    "next_follow_up": {
+      "when": "2025-09-18",
+      "what": "Chase Bracken & Vale for a priced invoice and the tenant for confirmation. Then send the amount to the landlord to confirm."
+    },
+    "confidence": 0.75,
+    "judgement": {
+      "why_this_decision": "The corrected invoice (event 022 and the attachment) shows no amount. The landlord's approval in event 003 had no cost attached, and no quote was ever received. So there is nothing to check against an approval and nothing to send for payment. The contractor and tenant can fill these gaps, so I asked them rather than escalating the invoice itself.",
+      "alternatives_considered": [
+        {
+          "option": "Forward the invoice to the landlord for payment and move to close-out",
+          "why_not": "There's no amount and no confirmed completion. The CRM also refused the stage move."
+        },
+        {
+          "option": "Escalate the invoice as disputed",
+          "why_not": "Nothing is disputed. The amount is just missing, and the contractor can supply it."
+        },
+        {
+          "option": "Request landlord approval now",
+          "why_not": "The cost is unknown. It's better to ask once we have a priced invoice."
+        }
+      ],
+      "checks_performed": [
+        "Invoice property and postcode match the record",
+        "Invoice contractor matches the contractor on the job",
+        "Invoice amount: none shown",
+        "Searched for a quote: none received",
+        "CRM approval status: none recorded",
+        "Completion confirmation: none on file"
+      ],
+      "assumptions": [
+        "The landlord's email in event 003 approved the attendance but not any specific cost"
+      ]
+    }
+  }
+}

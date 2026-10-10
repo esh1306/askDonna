@@ -1,0 +1,158 @@
+{
+  "case": "002",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 0,
+  "durationSec": 85.049,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4K74THDF9VTCPBP1VVFPQTG",
+  "startedAt": "2026-10-10T15:33:14.572Z",
+  "finishedAt": "2026-10-10T15:34:39.621Z",
+  "usage": {
+    "inputTokens": 176460,
+    "outputTokens": 7731
+  },
+  "eventCount": 590,
+  "dryRun": false,
+  "result": {
+    "case_id": "76 (R/002)",
+    "decision": "escalate",
+    "summary": "I escalated this to the ops queue as high priority (item 22). The last signed gas safety record on file is dated 16 Oct 2024, so its 12-month cycle ended on 16 Oct 2025. Flintmere checked the boiler and cooker on 9 Oct and recorded them as satisfactory, but has paused the signed record over an unexplained \"installation detail\" query and given no date. I asked Flintmere for the details of that query, a date for the signed record and a price for a boiler lockout diagnostic, and told them not to book or do any work. I told the landlord what is outstanding without committing any spend, and updated the tenant with gas-smell safety advice. A hold is set to chase Flintmere in 2 days.",
+    "case_type": "mixed",
+    "judgement": {
+      "why_this_decision": "Event 2: the latest signed record is dated 16 Oct 2024, so a renewed record is due by 16 Oct 2025. The 9 Oct check is satisfactory in the job app (events 9, 15, 19), but the signed record is paused (event 19) with no date (event 24). The portal PDF says 'Customer document: Processing' and has no certificate number or Gas Safe ID, so it does not count as the certificate. A certificate that may have lapsed and an unexplained installation query are compliance risks, which the rules say to escalate. The lockouts recur (events 3, 17, 22), but there is no gas smell and the boiler restarts each time, so this is routine to urgent, not an emergency. The landlord explicitly withheld approval for a diagnostic and asked what is outstanding (events 5, 16, 23). So I asked for a price only and kept her informed.",
+      "alternatives_considered": [
+        {
+          "option": "Book a lockout diagnostic for after 21 Oct",
+          "why_not": "The landlord explicitly has not approved any extra charges (event 23), the cost is unknown, and it is not an emergency."
+        },
+        {
+          "option": "Request formal landlord approval for the diagnostic now",
+          "why_not": "There is no price yet, and the landlord asked first to know what is outstanding. Asking for a price first is proportionate."
+        },
+        {
+          "option": "Send the portal screenshot to the tenant as the gas safety record",
+          "why_not": "It is not a signed record: the document shows as Processing and has no certificate number or engineer Gas Safe details."
+        },
+        {
+          "option": "Wait without escalating",
+          "why_not": "The 12-month cycle has passed with no signed record and the contractor has given no date. The rules say to escalate a lapsed or unresolved certificate."
+        }
+      ],
+      "checks_performed": [
+        "Read all 24 events and the portal attachment",
+        "Compared the last record date (16 Oct 2024) with the 12-month cycle",
+        "Checked approvals: none on record; landlord has declined extra spend for now",
+        "Safety check: no gas smell reported each time, boiler restarts after reset",
+        "Checked holds and queue: none were open before this turn",
+        "Classified the landlord's reply (review, decline/question) and the intake (heating, routine, safety_risk 0.56)"
+      ],
+      "assumptions": [
+        "The 16 Oct 2024 record was a landlord gas safety record (CP12) with a 12-month validity",
+        "Flintmere is a Gas Safe registered firm (registration not visible)"
+      ]
+    },
+    "situation": "Tenant wants the current gas safety record and reports recurring boiler lockouts. The annual check was done on 9 Oct 2025 and is satisfactory in the job app, but Flintmere has paused the signed record over an installation-detail query with no date. The previous record (16 Oct 2024) has passed its 12-month cycle. The landlord has not authorised a diagnostic and asked what is outstanding.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the case",
+        "result": "24 events; no holds, approvals or history",
+        "ok": true
+      },
+      {
+        "tool": "read_attachment",
+        "description": "Read gas-portal-record.pdf",
+        "result": "Portal summary for job NBL-48217, outcome satisfactory, customer document 'Processing'; no certificate number or Gas Safe ID",
+        "ok": true
+      },
+      {
+        "tool": "recall_lessons",
+        "description": "Looked for similar past cases",
+        "result": "No lessons",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the landlord's email (event 23)",
+        "result": "review; decline 0.64 / question 0.35",
+        "ok": true
+      },
+      {
+        "tool": "classify_intake",
+        "description": "Classified the lockout and paperwork request",
+        "result": "heating, routine, needs landlord approval 0.65",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "High-priority handover on the gas record gap and installation query",
+        "result": "Queue item 22",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Contractor: asked about the query, the signed record date and a diagnostic price; told them not to book",
+        "result": "Message 53 queued",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Landlord: summary of what is outstanding, no spend committed",
+        "result": "Message 51 queued",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Tenant: update, safety advice, next update by 21 Oct",
+        "result": "Message 52 queued",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Waiting on Flintmere, follow-up in 2 days",
+        "result": "Hold 262",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded gas record date, landlord spend stance and gas appliances",
+        "result": "Facts 77, 78, 79 saved",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Nessa Wold (Landlord)",
+        "status": "not_granted – diagnostic/extra spend explicitly not approved (event 23); price being obtained first",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "The gas record cycle (16 Oct 2024) has passed with no signed record; Flintmere has an unexplained installation-detail query and no issue date; boiler lockouts recur.",
+      "handover_summary": "Check done 9 Oct and recorded satisfactory (boiler, cooker), but the signed record is paused by Flintmere's quality desk with no date. The portal PDF is only a summary. Tenant reports repeated lockouts, no gas smell, access available after 21 Oct. The landlord has approved no extra spend. Contractor asked for details and a price; landlord and tenant updated.",
+      "recommendation": "Phone Flintmere's office today. Get the query details, a date for issuing the record and confirmation that the appliances are safe. Treat it as a safety issue if the installation query suggests danger. Make sure the tenant gets a copy by 6 Nov. Put the diagnostic price to the landlord for approval and book for after 21 Oct."
+    },
+    "unverified": [
+      "Whether a valid signed gas safety record exists for after 16 Oct 2025",
+      "What Flintmere's installation-detail query is",
+      "Flintmere and engineer Gas Safe registration",
+      "Cause of the lockouts and the cost of a diagnostic",
+      "Whether the 16 Oct 2024 record was a CP12"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "Gas safety record may have lapsed (12 months since 16 Oct 2024)",
+      "Unexplained appliance installation query could point to a defect",
+      "Recurring boiler lockouts could lead to loss of heating as weather gets colder",
+      "Tenant has not received a gas record copy; it is due within 28 days of the check (6 Nov)"
+    ],
+    "final_status": "Open, stage intake; escalated high (queue 22); hold 262 waiting on Flintmere",
+    "next_follow_up": {
+      "when": "2025-10-20",
+      "what": "Chase Flintmere for the signed record date, details of the query and the diagnostic price. Put the price to the landlord for approval, and update the tenant by 21 Oct."
+    },
+    "confidence": 0.82
+  }
+}

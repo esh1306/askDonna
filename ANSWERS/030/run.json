@@ -1,0 +1,134 @@
+{
+  "case": "030",
+  "decision": "request_info",
+  "escalated": "yes",
+  "failures": 0,
+  "durationSec": 68.254,
+  "decisionLine": "request_info",
+  "sessionId": "wrun_01M4K7DQ6R1022QSEJ5HTA9KNN",
+  "startedAt": "2026-10-10T15:38:06.332Z",
+  "finishedAt": "2026-10-10T15:39:14.586Z",
+  "usage": {
+    "inputTokens": 152405,
+    "outputTokens": 6769
+  },
+  "eventCount": 574,
+  "dryRun": false,
+  "result": {
+    "case_id": "104 (R/030)",
+    "decision": "request_info",
+    "case_type": "maintenance",
+    "summary": "The landlord did the smoke alarm and socket repairs himself and says they were finished on 31 Aug. None of it is verified, and he mentions fixing only one socket after the tenant's report of several loose sockets. I've asked the tenant to confirm the alarm works and all sockets are secure, with a hold to chase in 3 days. I've asked the landlord for the alarm's make and model or a photo, and whether any other sockets were checked. I've recorded the facts and passed the safety and compliance angle to a person at normal priority. The ticket isn't closed yet.",
+    "situation": "The tenant removed a beeping landing smoke alarm, leaving a ceiling opening, and had reported several loose sockets. The landlord declined an agency contractor and did the work himself. He now says it's complete and asks for the property record to be updated.",
+    "judgement": {
+      "why_this_decision": "The landlord's completion claim (events 012 and 014) is unverified. A working smoke alarm on each floor is a legal requirement. The tenant reported several loose sockets (event 005), but the landlord mentions only one fix after the report; the kitchen one was 5 Aug, before it. Jev gave a safety concern of 0.76. The tenant can confirm all of this directly, so I asked her before closing. I escalated because DIY electrical work and a possible damp issue (the dehumidifier) need agency judgement.",
+      "alternatives_considered": [
+        {
+          "option": "Close the ticket on the landlord's word",
+          "why_not": "It's safety-critical compliance work with no evidence, and the sockets may only be partly fixed."
+        },
+        {
+          "option": "Assign an electrician now",
+          "why_not": "The landlord declined agency contractors and nothing is approved. I offered to arrange one with his approval instead."
+        },
+        {
+          "option": "Escalate at high priority",
+          "why_not": "No live hazard has been confirmed, and the landlord says the alarm is fitted. The tenant has safe-use advice meanwhile."
+        }
+      ],
+      "checks_performed": [
+        "Read all 15 events; there are no attachments",
+        "No approvals or holds were already in place",
+        "Compared the reported sockets (several) with the ones the landlord says he fixed (two)",
+        "classify_reply: review, safety concern 0.76",
+        "recall_lessons: none found"
+      ],
+      "assumptions": [
+        "The tenant's earlier report of loose sockets is accurate, as the agency relayed it in event 005"
+      ]
+    },
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the case",
+        "result": "Stage is intake. No holds, approvals or attachments.",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the landlord's completion emails",
+        "result": "Review; safety concern 0.76",
+        "ok": true
+      },
+      {
+        "tool": "recall_lessons",
+        "description": "Looked for past lessons on similar cases",
+        "result": "None found",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant to confirm the alarm works, the ceiling is covered and the sockets are secure, with safe-use advice",
+        "result": "Message 92 queued",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold while waiting for the tenant's confirmation, 3-day follow-up",
+        "result": "Hold 284",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded that the landlord does his own repairs, the unverified alarm claim, the socket history, the dehumidifier and the tenant's cats",
+        "result": "Facts 148–152 saved",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the landlord: noted his claim, asked for the alarm make/model or a photo and whether other sockets were checked, and offered an electrician",
+        "result": "Message 95 queued",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Passed the DIY electrical work, the unverified alarm and the possible damp to a person",
+        "result": "Queue item 44",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Tavian Rusk (landlord)",
+        "status": "not_needed – landlord did the work himself",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "The landlord's DIY smoke alarm and socket repairs are unverified and the socket fix may be partial",
+      "handover_summary": "The landlord says the job was finished on 31 Aug (10-year alarm, one bedroom socket tightened, kitchen socket fixed 5 Aug, dehumidifier given 6 Aug). The tenant and landlord have been asked to confirm; the tenant hold follows up in 3 days.",
+      "recommendation": "Close if the tenant confirms. Otherwise push for an electrician and treat the alarm as urgent. Consider asking for the EICR and checking the bathroom for damp."
+    },
+    "unverified": [
+      "Smoke alarm fitted and working on 31 Aug",
+      "Alarm has a 10-year life",
+      "All loose sockets are secured",
+      "Kitchen socket came loose after boiler work in Feb 2025",
+      "Tenant has the dehumidifier and is using it"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "A smoke alarm may be missing or not working (legal requirement)",
+      "DIY electrical work by the landlord on several loose sockets",
+      "The dehumidifier suggests an undisclosed damp or mould issue",
+      "No EICR on file"
+    ],
+    "final_status": "Stage still intake; on hold waiting for tenant confirmation; passed to a person at normal priority",
+    "next_follow_up": {
+      "when": "2025-09-09",
+      "what": "Chase the tenant to confirm the alarm works and the sockets are secure; also check whether the landlord has sent the alarm details"
+    },
+    "confidence": 0.75
+  }
+}

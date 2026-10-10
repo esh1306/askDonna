@@ -1,0 +1,157 @@
+{
+  "case": "012",
+  "decision": "wait",
+  "escalated": "no",
+  "failures": 2,
+  "durationSec": 69.628,
+  "decisionLine": "wait",
+  "sessionId": "wrun_01M4K77DB6BT6Z80TPRG4QM5ER",
+  "startedAt": "2026-10-10T15:34:39.628Z",
+  "finishedAt": "2026-10-10T15:35:49.256Z",
+  "usage": {
+    "inputTokens": 167510,
+    "outputTokens": 6798
+  },
+  "eventCount": 450,
+  "dryRun": false,
+  "result": {
+    "case_id": "86 (R/012)",
+    "decision": "wait",
+    "case_type": "maintenance",
+    "summary": "Keypath Repairs (Edrin Moss) says on the phone that the window-lock work was done on 19 Sept. Nothing on file backs this up. On 17 Sept Edrin said he had not collected the management keys and could not find the tenant at home. There is also no visit record and no invoice. I've asked the tenant to confirm whether anyone came and whether the locks and keys now work, and asked about the bathroom mould. I've asked Keypath to send its invoice with the visit date, how they got in, what was done to each window and how many keys were supplied. The ticket is on hold until 27 Sept. No invoice goes to the landlord until both replies are in and they match.",
+    "situation": "The tenant reported faulty window sash locks and missing keys at Unit 2, 18 Brindlewick Mews. On 4 Sept the landlord said we could use the agency's own provider, with no cost limit (event 003). Hearthline Access was swapped for Keypath Repairs. Keypath never confirmed a visit time. On 17 Sept they said they had tried three times without keys. Since then they have said on the phone that the work was done on 19 Sept (events 023/025) and promised an invoice on 25 Sept. Nothing confirms the work, and no invoice has arrived. The tenant also mentioned bathroom mould on 9 Sept, and nothing has been done about it. The CRM still shows stage 'intake'.",
+    "judgement": {
+      "why_this_decision": "The only evidence the work was done is Edrin's word (events 023/025). It conflicts with his 17 Sept statement (event 022): no keys collected, tenant out at work. The tenant can settle this quickly, so I asked them rather than escalating. Paying or forwarding an invoice would need proof the work was done and a check of the amount, especially as the landlord set no cost limit (event 003). So the right move is to get both sides' accounts and hold the ticket with a follow-up date. classify_reply suggested human review (needs_human_response 0.72, dissatisfied 0.45). That fits holding off on closing, not escalating straight away. recall_lessons returned no lessons to follow.",
+      "alternatives_considered": [
+        {
+          "option": "Accept the completion claim and move to close-out",
+          "why_not": "Nothing on file shows a visit, and the claim contradicts event 022. That breaks the rule against treating work as done without confirmation."
+        },
+        {
+          "option": "Escalate to a human now",
+          "why_not": "The tenant and contractor can answer the open questions. Escalating now would stall a routine job. If the replies conflict or the invoice doesn't match, I'll escalate."
+        },
+        {
+          "option": "Ask the landlord for approval again so the CRM stage can move",
+          "why_not": "The landlord already approved by email (event 003). Asking again would be noise. I recorded the approval as a profile fact instead."
+        }
+      ],
+      "checks_performed": [
+        "Approvals: the landlord approved by email (event 003) with no cost limit or scope. There is no approval record in the CRM, so moving to scheduling was refused.",
+        "Contractor: Hearthline Access was stood down (event 012) and Keypath Repairs instructed (event 018).",
+        "Dates and access: Keypath said on 17 Sept they had no keys and no access, then claimed the work was done on 19 Sept. The two statements conflict.",
+        "Invoice: none on file and no attachments, so there is no amount to check.",
+        "Safety: the tenant reported bathroom mould (event 006). There are no emergency signs. A bedroom sash that won't lock is a security issue to keep an eye on.",
+        "Lessons: none found."
+      ],
+      "assumptions": [
+        "The landlord's 'proceed' in event 003 covers inspection and repair of the sash locks and keys, but not an open-ended amount."
+      ]
+    },
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the ticket, profiles and all 25 events",
+        "result": "Stage intake; no holds, no approval records, no attachments",
+        "ok": true
+      },
+      {
+        "tool": "recall_lessons",
+        "description": "Looked for past lessons on unverified completion claims",
+        "result": "No lessons",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified Edrin's latest call (completion claim)",
+        "result": "completion_report 0.71; autonomy review; needs_human_response 0.72",
+        "ok": true
+      },
+      {
+        "tool": "move_stage",
+        "description": "Tried to move the ticket from intake to scheduling, based on the landlord's approval in event 003",
+        "result": "Refused: no landlord approval or standing authority is recorded in the CRM",
+        "ok": false
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant asking whether Keypath attended, whether the locks and keys now work, and about the bathroom mould; follow-up on 27 Sept",
+        "result": "Queued, message 62",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed Keypath asking for the invoice plus visit date, how they got in, work done per window, keys supplied and an itemised breakdown",
+        "result": "Queued, message 63",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the tenant's access preference (at work in the day; management keys)",
+        "result": "Fact 92",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the landlord's approval for the lock work (no cost limit)",
+        "result": "Fact 93",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the reported bathroom mould on the property",
+        "result": "Fact 94",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded a reliability note on Keypath Repairs",
+        "result": "Fact 95",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Put the ticket on hold waiting for the tenant's confirmation and Keypath's invoice",
+        "result": "Hold 268, follow-up in 2 days",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Sella Marr (landlord)",
+        "status": "granted by email (event 003), no cost limit; not recorded as an approval in the CRM",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "Not needed yet: the tenant and contractor can answer the open questions.",
+      "handover_summary": "",
+      "recommendation": "Escalate if the tenant says nobody came or the locks still don't work, if the invoice doesn't match the work described, or if Keypath doesn't send it by the follow-up date. Separately, someone should add the landlord's event 003 approval to the CRM so the stage can move past intake."
+    },
+    "unverified": [
+      "That Keypath went to the property on 19 Sept or did any work",
+      "How Keypath got in, given they said on 17 Sept they had no keys",
+      "Whether keys were supplied for the bedroom, bathroom and kitchen sashes",
+      "The invoice amount (nothing received)",
+      "What date and time Tarin Vale and the tenant agreed (event 016)",
+      "How bad the bathroom mould is now"
+    ],
+    "failures": [
+      "move_stage to scheduling was refused because the landlord's email approval (event 003) isn't recorded as an approval in the CRM, so the ticket is still at 'intake'"
+    ],
+    "risks_or_red_flags": [
+      "Keypath says the work is done, but this contradicts their own 17 Sept statement about having no access",
+      "The landlord set no cost limit, so any invoice needs checking before it goes to the landlord",
+      "The bedroom sash may still not lock (a security issue) if the work wasn't actually done",
+      "Bathroom mould reported on 9 Sept with nothing done; the stuck sash may be limiting ventilation",
+      "Keypath has been unreliable about confirming visit times"
+    ],
+    "final_status": "On hold (hold 268) waiting for the tenant's confirmation and Keypath's invoice with visit details; stage is still intake in the CRM",
+    "next_follow_up": {
+      "when": "2025-09-27",
+      "what": "Chase the tenant for confirmation and Keypath for the invoice and visit details. Then check the invoice against the work described. If it is all confirmed and matches, pass the invoice to the landlord and move to close-out. If not, escalate. Raise the bathroom mould as its own job."
+    },
+    "confidence": 0.8
+  }
+}

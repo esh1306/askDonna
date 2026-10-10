@@ -1,0 +1,160 @@
+{
+  "case": "011",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 0,
+  "durationSec": 71.28,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4K776ACJ7Z9WXZCABPKCWNG",
+  "startedAt": "2026-10-10T15:34:32.436Z",
+  "finishedAt": "2026-10-10T15:35:43.716Z",
+  "usage": {
+    "inputTokens": 125976,
+    "outputTokens": 6824
+  },
+  "eventCount": 479,
+  "dryRun": false,
+  "result": {
+    "case_id": "85 (R/011)",
+    "decision": "escalate",
+    "case_type": "maintenance",
+    "summary": "The landlord approved a leak repair at 16 Brindlewick Mews, but it has stopped. The contractor saw an unidentified fibrous ceiling lining (possibly asbestos, not confirmed) where he needed to cut. A young child lives in the flat. The landlord's approval covers the plumbing only, and she wants the cost and timing before agreeing to a specialist check. Nobody has priced one yet. I escalated to a human at high priority so staff can get a surveyor quote and take it to the landlord. I moved the ticket on to landlord_approval, placed a 2-day hold, updated the tenant with safety advice and recorded the key facts.",
+    "situation": "A compression joint above the kitchen ceiling leaks whenever the kitchen tap is used. Kellan Orve (Mossbarrow Pipe Services) can't reach it through the hatch. Making the approved ceiling opening would mean cutting near a pale, fibrous-looking lining that nobody has identified. There is no material survey (asbestos check) on file. The work stopped and nothing was disturbed. The tenant has stopped using the tap. The landlord has declined to cover anything beyond the plumbing until she knows the cost and timing.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded ticket, contacts and the 24 events",
+        "result": "Stage intake, no holds or approvals, no attachments; CRM contractor record is the building manager, not Kellan",
+        "ok": true
+      },
+      {
+        "tool": "recall_lessons",
+        "description": "Looked for team lessons on similar cases",
+        "result": "No lessons found",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the landlord's email in event 22",
+        "result": "Question; needs a human response 0.90; autonomy review",
+        "ok": true
+      },
+      {
+        "tool": "classify_intake",
+        "description": "Classified the current problem",
+        "result": "Plumbing; severity emergency 0.94; safety_risk 0.85",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Handed over at high priority: an assessment of the unidentified material is needed but has no price or approval, and a child is in the flat",
+        "result": "queue_id 27",
+        "ok": true
+      },
+      {
+        "tool": "move_stage",
+        "description": "Moved the stage from intake to landlord_approval to match the evidence",
+        "result": "intake -> landlord_approval",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold while the agency gets an assessment quote and the landlord decides",
+        "result": "hold_id 267, follow-up in 2 days",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "SMS to the tenant: keep the tap out of use and the hatch closed, the ceiling check needs landlord agreement, no date booked, update within 2 days, when to call us",
+        "result": "message_id 64, passed the guard",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Tenant: contractors must call on arrival, young child at home, weekday access after 10:00",
+        "result": "fact 96",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Landlord: must be contacted before any scope or cost increase",
+        "result": "fact 97",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Property: unidentified fibrous ceiling lining, no survey, don't disturb",
+        "result": "fact 98",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Ossa Fenlow (Landlord)",
+        "status": "granted by email for the quoted plumbing scope only (event 13); not recorded as an approval in the CRM",
+        "channel": "email"
+      },
+      {
+        "party": "Ossa Fenlow (Landlord)",
+        "status": "pending: her decision on extra assessment or repair scope, which needs a cost and timing first (events 22, 24)",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "A suspected hazardous ceiling lining blocks the approved leak repair. The specialist assessment needed is outside the landlord's approval and has no price. A young child lives in the flat.",
+      "handover_summary": "The leaking joint can only be reached by cutting near an unidentified fibrous lining, so the work stopped and nothing was disturbed. The tenant has stopped using the kitchen tap. The landlord's approval covers the plumbing only, and she wants the cost and timing before agreeing to more. The plumbing estimate amount isn't visible in the CRM. The CRM contractor record shows the building manager instead of Kellan Orve.",
+      "recommendation": "Get a quote and earliest date for an asbestos survey or sample from a licensed or UKAS-accredited firm. Ask Bren Talwick (building manager) whether the block has an asbestos register. Take the cost and timing to Ossa Fenlow for approval. Ask Kellan whether the pipe can be isolated meanwhile without disturbing the ceiling. Fix the CRM contractor record."
+    },
+    "judgement": {
+      "why_this_decision": "There is a possible hazardous material in a home with a young child (event 17), and the leak keeps coming back (event 20). The landlord has said her approval doesn't cover an assessment and asked for cost and timing first (event 22). Nobody can give that cost yet: Kellan can't price it (event 23). Getting a specialist quote and judging the safety risk needs agency staff, so I escalated at high priority. The stage was behind the evidence, so I moved it to landlord_approval. The tenant was told what to do next and when they'll hear from us.",
+      "alternatives_considered": [
+        {
+          "option": "Assign or rebook Kellan for the repair",
+          "why_not": "The lining hasn't been identified and the landlord has ruled out work beyond the quote. Cutting could disturb hazardous material."
+        },
+        {
+          "option": "Ask the landlord to approve an assessment now with request_landlord_approval",
+          "why_not": "She asked for the cost and timing first, and we have no figure. Asking without one would be invented or premature."
+        },
+        {
+          "option": "Just wait for the landlord",
+          "why_not": "She is waiting on us for a cost, so the case would stall. There is also a safety question."
+        }
+      ],
+      "checks_performed": [
+        "Landlord approval scope (events 13, 22): plumbing only, with a cost cap",
+        "Survey records: none from the landlord or the building manager (events 6, 13, 22)",
+        "Nothing disturbed (events 18, 23)",
+        "Tenant safety: tap out of use, no sagging, hatch closed (event 20)",
+        "No attachments, so the estimate amount can't be seen",
+        "CRM contractor record doesn't match the contractor actually on the job"
+      ],
+      "assumptions": [
+        "The tenant can be reached by SMS through the outbox",
+        "The estimate amount exists in Kellan's email (event 11) but wasn't captured in the CRM"
+      ]
+    },
+    "unverified": [
+      "What the lining is made of (possibly asbestos-containing, not confirmed)",
+      "The plumbing estimate amount",
+      "The cost and lead time of a specialist assessment",
+      "Whether the pipe can be isolated without disturbing the ceiling",
+      "Whether the block has an asbestos register"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "Possible asbestos-containing material near the repair point, with a young child in the household",
+      "The leak keeps coming back, and repeated water could damage the ceiling (there is already a narrow crack)",
+      "The CRM contractor field (id 229) shows building manager Bren Talwick instead of Kellan Orve",
+      "The landlord's approval isn't recorded in the CRM approvals table",
+      "The tenant has lost use of the kitchen tap"
+    ],
+    "final_status": "Stage landlord_approval, on hold (hold 267) waiting on the agency, escalated to the human queue (item 27) at high priority",
+    "next_follow_up": {
+      "when": "2025-06-15 (2 days)",
+      "what": "Check whether the agency has a surveyor quote and timing and has sent it to the landlord. Give the tenant the promised update."
+    },
+    "confidence": 0.82
+  }
+}

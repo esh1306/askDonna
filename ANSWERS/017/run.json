@@ -1,0 +1,119 @@
+{
+  "case": "017",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 0,
+  "durationSec": 76.198,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4K79BYE5YW23PZNRQZJ9WQA",
+  "startedAt": "2026-10-10T15:35:43.722Z",
+  "finishedAt": "2026-10-10T15:36:59.920Z",
+  "usage": {
+    "inputTokens": 148990,
+    "outputTokens": 6890
+  },
+  "eventCount": 550,
+  "dryRun": false,
+  "result": {
+    "case_id": "R/017 (ticket 91)",
+    "decision": "escalate",
+    "case_type": "maintenance",
+    "summary": "I've passed this case to a person because the agency needs to decide the scope and the fire-door question. The landlord hasn't approved the £186 painting quote: he asked whether it could come from the repair budget, and wants the scope and the building's response confirmed before booking. The quote covers paint only. It doesn't deal with a door the building lists as fire-resisting, which catches at the top and was noted closing slowly. I moved the stage forward to landlord approval and placed a hold to chase the building manager. I also updated the tenant, saved key facts to the CRM and briefed the team.",
+    "situation": "The tenant at 14 Lantern Mews reported flaking paint and the entrance door catching at the top. The door latches only after a firm pull. The building file lists flat entrance doors as fire-resisting, but there is no inspection record, and a building check last month noted the door closing slowly. Pale Finch Decorating made a visual-only visit and quoted £186 for painting only, valid to 28 Feb. The landlord's latest email (event 017) is a question, not an approval. The building manager hasn't yet replied to the 12 Feb scope query.",
+    "judgement": {
+      "why_this_decision": "Event 017 asks a question with conditions (confirm scope and building response first). The reply classifier agreed: question, with a 0.02 chance of being an unconditional approval. No spend limit or repair budget is recorded, so I couldn't approve or book. The door is fire-resisting and doesn't close properly (events 005, 010, 013). The quote expressly excludes the closing problem and any fire-safety assessment (event 016 and the attachment). Deciding what to do about the door, and who is responsible for it, needs agency judgement. Nothing is overdue: the building manager was asked only on 12 Feb, so I placed a hold to chase them.",
+      "alternatives_considered": [
+        {
+          "option": "Record the landlord's reply as approval and assign Pale Finch",
+          "why_not": "It isn't an unconditional approval, the landlord asked for the building's response first, and painting doesn't fix the door's closing problem."
+        },
+        {
+          "option": "Send a formal £186 approval request to the landlord now",
+          "why_not": "The scope isn't settled (the fire-door question and the building's response are both outstanding), so asking him to approve now would be premature."
+        },
+        {
+          "option": "Wait only, without escalating",
+          "why_not": "The landlord's budget question and the fire-door scope need a decision from the agency. A hold alone would leave those unanswered."
+        }
+      ],
+      "checks_performed": [
+        "Read the quote attachment: amount, contractor, address and exclusions",
+        "Classified the landlord's reply in event 017",
+        "Checked approvals and holds (none existed) and the landlord's spend limit (none recorded)",
+        "Recall_lessons returned no lessons",
+        "Checked the building manager's statements on fire-resisting doors and the request to be consulted first",
+        "Checked tenant access and vulnerability notes"
+      ],
+      "assumptions": [
+        "'Repair budget' refers to something not recorded in the CRM",
+        "The family member receiving home care may make the household vulnerable"
+      ]
+    },
+    "actions_taken": [
+      {
+        "tool": "move_stage",
+        "description": "Moved the ticket from intake to landlord_approval, because the quote has been received and is with the landlord",
+        "result": "Moved to landlord_approval",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Placed a hold while waiting for the building manager's reply to the 12 Feb scope query",
+        "result": "Hold 272 placed, follow-up in 3 days",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant: no work booked; checking with building management whether painting is suitable; advance notice before visits, which will be after 10:30; keep pulling the door shut and report straight away if it stops latching; update by 17 Feb",
+        "result": "Message 73 queued; guard passed",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Saved the tenant's access preferences, the household care note, the landlord's approval requirements and the fire-resisting door / building consultation requirement",
+        "result": "Facts 110–113 saved",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Handover covering the fire-door scope, the landlord's budget question and the recommended next steps",
+        "result": "Queue item 34",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Elian Moss (landlord)",
+        "status": "inspection approved (event 007); £186 painting quote not approved (only a question asked, event 017)",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "The door is listed as fire-resisting and catches and closes slowly; the quote is decorative only; and the landlord's 'repair budget' question needs agency judgement.",
+      "handover_summary": "£186 paint-only quote (NBL-017-Q1, valid to 28 Feb). The door catches at the top and closes slowly, and has no inspection record. The building manager's reply is pending, and the landlord wants scope and building confirmation before booking. Nothing is booked.",
+      "recommendation": "Chase the building manager (hold 272) and ask whether the building's fire-door programme covers this door. Advise the landlord that the closing problem needs a competent inspection or adjustment coordinated with the building. Then request formal approval for specific amounts before booking anything."
+    },
+    "unverified": [
+      "Whether the £186 includes VAT",
+      "Whether painting is suitable for this fire-resisting door",
+      "Who is responsible for the door set (freeholder/building or landlord)",
+      "What 'repair budget' the landlord means",
+      "Whether the tenant's 10 Feb question about painting was answered before today"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "A fire-resisting flat entrance door is catching and closing slowly, and there is no inspection or certification record",
+      "Painting could affect the door's fire performance if the wrong materials are used",
+      "The household includes a family member receiving home care (possible vulnerability)",
+      "The quote expires on 28 Feb",
+      "The CRM contractor on this ticket (id 247) is the building manager, not Pale Finch Decorating"
+    ],
+    "final_status": "landlord_approval stage; on hold for the building manager (hold 272); handed to a person (queue 34)",
+    "next_follow_up": {
+      "when": "2025-02-15",
+      "what": "Chase the building manager for the scope response. Update the tenant by 17 Feb."
+    },
+    "confidence": 0.82
+  }
+}

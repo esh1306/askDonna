@@ -1,0 +1,125 @@
+{
+  "case": "009",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 0,
+  "durationSec": 70.168,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4K773Q6CEE7AHCNKGXNZ5D6",
+  "startedAt": "2026-10-10T15:34:29.789Z",
+  "finishedAt": "2026-10-10T15:35:39.957Z",
+  "usage": {
+    "inputTokens": 159126,
+    "outputTokens": 5954
+  },
+  "eventCount": 452,
+  "dryRun": false,
+  "result": {
+    "case_id": "83 (R/009)",
+    "decision": "escalate",
+    "summary": "The tenant says the bedroom window work, which the landlord arranged himself, is done, and the contractor will send a report. I've asked the landlord to confirm it's complete and send the report, and set a 3-day hold. The gas safety record the landlord forwarded is for a different property (8 Thistledown Mews), and the EICR he says he sent isn't visible on the file. I've asked him for the correct documents and passed the compliance gap to the human queue at normal priority.",
+    "case_type": "mixed",
+    "judgement": {
+      "why_this_decision": "Event 20: the tenant reports the work done, and the landlord's own contractor (Richard) is to send a report. The agency committed no spend and holds no approval, so we only need the landlord's confirmation and the report to close the window job. Event 19: the attached gas safety record is for 8 Thistledown Mews, not this property, and has no credentials or next-due date. Event 11: the EICR is not visible on the file. A compliance gap with an unknown certificate status needs agency judgement, so it went to the queue. The landlord was told directly as well.",
+      "alternatives_considered": [
+        {
+          "option": "Close the ticket now on the tenant's word",
+          "why_not": "No report or landlord confirmation yet, and 'all jobs' is vague. A short hold to get confirmation costs little."
+        },
+        {
+          "option": "Move the stage to closeout",
+          "why_not": "The agency has no approval or works on record, so the CRM would refuse the move. The landlord ran the job himself."
+        },
+        {
+          "option": "Treat the gas record as valid",
+          "why_not": "It names another property and has no Gas Safe number or next-due date."
+        },
+        {
+          "option": "Message the tenant again",
+          "why_not": "The tenant's message already answered our question. The next step sits with the landlord."
+        }
+      ],
+      "checks_performed": [
+        "Read forwarded-document.pdf: the property address doesn't match and engineer credentials are missing",
+        "Searched for 'Richard' and 'electrical' in the event history",
+        "No approvals, holds or property history on file",
+        "Classified the tenant reply: confirms_fixed 0.99, autonomy review",
+        "Recalled lessons: none found"
+      ],
+      "assumptions": [
+        "The landlord arranged and pays for the window contractor himself (events 14, 18, 20)"
+      ]
+    },
+    "situation": "Bedroom window not sealing at 24 Bramblewick Lane. The landlord inspected and sent his own contractor. The tenant now reports all jobs done. The landlord also forwarded a gas safety record for another property, and an EICR that is not visible on file.",
+    "actions_taken": [
+      {
+        "tool": "read_attachment",
+        "description": "Read the forwarded gas safety record",
+        "result": "Ref NBL-009-GSR-25, for 8 Thistledown Mews, Vellumby. No Gas Safe number, no expiry date, no signature.",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the tenant's 10 September message",
+        "result": "confirms_fixed 0.99, review",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the landlord: confirm the window is complete and send Richard's report; flagged that the gas record is for the wrong property and asked for the correct record and the EICR",
+        "result": "Queued as message 61",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold while waiting for the landlord",
+        "result": "Hold 265, follow up in 3 days",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Tenant contact preference (no unknown calls), landlord arranges his own contractors, property gas record status",
+        "result": "Facts 86, 87, 88 recorded",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Compliance gap: gas record is for the wrong property, EICR not visible",
+        "result": "Queue item 29",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Dorian Pike (Landlord)",
+        "status": "not_needed",
+        "channel": "n/a – the landlord arranged the work himself"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "No valid gas safety record for this property on file; the forwarded one is for 8 Thistledown Mews, and the EICR is not visible.",
+      "handover_summary": "Window repair reported done by the tenant; landlord asked to confirm and send the report (hold 265, 3 days). The gas record forwarded in event 19 names another property and has no credentials. The EICR from event 11 is not on file.",
+      "recommendation": "Compliance team to check the CP12 and EICR status for 24 Bramblewick Lane and chase the landlord or book a Gas Safe engineer if needed. Close the window job once the landlord confirms."
+    },
+    "unverified": [
+      "Window repair completion: only the tenant has said so, and no report is visible yet",
+      "Identity and details of the contractor 'Richard'",
+      "Whether the property has gas appliances, and its current CP12 and EICR status",
+      "What 'all jobs' covers"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "The gas safety record is for a different address (8 Thistledown Mews)",
+      "The gas record has no Gas Safe registration, expiry date or signature",
+      "The engineer's surname on the record (Voss) matches the tenant's; noted as fact only",
+      "The EICR mentioned in event 11 is not visible on file"
+    ],
+    "final_status": "Stage intake; on hold waiting for the landlord (hold 265); compliance item in the human queue (29)",
+    "next_follow_up": {
+      "when": "2025-09-13",
+      "what": "Chase the landlord for window completion confirmation or Richard's report, plus the correct CP12 and the EICR"
+    },
+    "confidence": 0.8
+  }
+}

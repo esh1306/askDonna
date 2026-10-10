@@ -1,0 +1,140 @@
+{
+  "case": "022",
+  "decision": "request_info",
+  "escalated": "yes",
+  "failures": 1,
+  "durationSec": 50.181,
+  "decisionLine": "request_info",
+  "sessionId": "wrun_01M4K7BA075X0RV946PW29D20A",
+  "startedAt": "2026-10-10T15:36:47.287Z",
+  "finishedAt": "2026-10-10T15:37:37.468Z",
+  "usage": {
+    "inputTokens": 121832,
+    "outputTokens": 5532
+  },
+  "eventCount": 411,
+  "dryRun": false,
+  "result": {
+    "case_id": "96 (R/022)",
+    "decision": "request_info",
+    "summary": "The tenant's latest reply contradicts itself. It says \"the job is completed\" but also asks whether the washing-machine replacement is still happening, and the day before they said nothing had been delivered. So I have not closed the ticket. I asked the tenant whether the new machine is fitted and working, asked the landlord for the delivery and installation date, placed a hold to follow up on 29 September, and escalated the landlord's complaint about slow response to a human at normal priority.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "Event 31 says the job is completed, but in the same message the tenant asks whether the machine change is still happening. Event 30 (24 Sep) says no replacement had arrived. classify_reply rated the message a question (0.82) for review, with only 0.17 that it confirms the fix. The tenant can settle this, so I asked them rather than closing. The landlord complained about slow response in event 29, and complaints go to a human.",
+      "alternatives_considered": [
+        {
+          "option": "Close the ticket based on 'job is completed'",
+          "why_not": "It contradicts event 30 and the tenant's own question in the same message, and no delivery or installation is confirmed."
+        },
+        {
+          "option": "Move the stage to works or closeout",
+          "why_not": "There is no approval on record and the landlord is arranging the replacement directly, so the move would be refused and isn't supported by the evidence."
+        },
+        {
+          "option": "Wait without messaging",
+          "why_not": "The tenant asked a direct question and is waiting for an answer."
+        }
+      ],
+      "checks_performed": [
+        "Read all 31 events",
+        "No approvals, invoices, attachments or contractor on the ticket",
+        "No delivery or installation date anywhere in the records",
+        "classify_reply on event 31",
+        "recall_lessons (none found)"
+      ],
+      "assumptions": [
+        "The 'maintenance follow-up' the tenant replied to may be an automated message, and their 'completed' may refer to something else"
+      ]
+    },
+    "situation": "Washer-dryer E13 fault at 8 Brackenmere Walk. An engineer was due on 9 September but the outcome isn't recorded. The landlord then ordered a replacement and arranged delivery, fitting and removal of the old machine themselves, and complained about delays. The tenant's latest reply is contradictory about whether the work is done.",
+    "actions_taken": [
+      {
+        "tool": "classify_reply",
+        "description": "Classified tenant reply in event 31",
+        "result": "Question, needs review, dissatisfied 0.41",
+        "ok": true
+      },
+      {
+        "tool": "recall_lessons",
+        "description": "Looked for lessons from similar cases",
+        "result": "No lessons found",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant: answered their question and asked whether the new machine is fitted and working",
+        "result": "Sent, message 79",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the landlord: apologised for the delay and asked for the delivery and installation date or order reference",
+        "result": "Sent, message 78",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold waiting on the tenant's clarification",
+        "result": "Hold 277, follow up in 4 days",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Landlord fact: arranges appliance replacement directly",
+        "result": "First attempt failed (wrong entity_type); retry saved as fact 125",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Tenant fact: needs at least 3 hours' notice before visits",
+        "result": "Fact 126",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Property fact: integrated washer-dryer, recess about 835 mm",
+        "result": "Fact 127",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Landlord complaint and contradictory completion reply",
+        "result": "Queue item 37",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (Nessa Orin)",
+        "status": "not_needed",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "The landlord complained about slow response (event 29), and the tenant's completion reply contradicts earlier records.",
+      "handover_summary": "Landlord ordered a replacement washing machine and arranged fitting themselves, and complained about delays. On 24 Sep the tenant said nothing had been delivered. On 25 Sep they said 'job completed' but asked if the change is still happening. I have asked both parties to clarify; hold 277 follows up on 29 Sep.",
+      "recommendation": "A property manager should personally acknowledge the landlord's complaint and cancel any outstanding agency quote request from event 28. Close the ticket once the tenant confirms the new machine is fitted and working."
+    },
+    "unverified": [
+      "Whether the new machine has been delivered or installed",
+      "Delivery date",
+      "Outcome of the 9 September engineer visit",
+      "Whether the quote requested in event 28 went to a contractor"
+    ],
+    "failures": [
+      "First add_profile_fact call failed because of an invalid entity_type ('landlord'). The retry with 'contact' succeeded."
+    ],
+    "risks_or_red_flags": [
+      "Landlord is dissatisfied",
+      "Tenant has been without a working machine since August",
+      "A possible duplicate agency quote (event 28) alongside the replacement the landlord arranged"
+    ],
+    "final_status": "Stage intake, on hold (277) waiting on tenant clarification; human queue item 37 open",
+    "next_follow_up": {
+      "when": "2025-09-29",
+      "what": "If the tenant hasn't replied, chase them on whether the new machine is fitted and working; also check whether the landlord has sent a delivery date"
+    },
+    "confidence": 0.8
+  }
+}

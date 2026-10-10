@@ -1,0 +1,154 @@
+{
+  "case": "001",
+  "decision": "request_info",
+  "escalated": "yes",
+  "failures": 0,
+  "durationSec": 77.19,
+  "decisionLine": "request_info",
+  "sessionId": "wrun_01M4K74TFZ6DSGBGMSXJJVB110",
+  "startedAt": "2026-10-10T15:33:14.571Z",
+  "finishedAt": "2026-10-10T15:34:31.761Z",
+  "usage": {
+    "inputTokens": 150119,
+    "outputTokens": 7054
+  },
+  "eventCount": 546,
+  "dryRun": false,
+  "result": {
+    "case_id": "R/001 (ticket 75)",
+    "decision": "request_info",
+    "case_type": "maintenance",
+    "summary": "I haven't asked the landlord to approve anything yet, because the Hearthline pricing can't be put to him as it stands. The quote PDF shows a different property's address, and the itemised breakdown (£1,270 + £1,170 = £2,440) doesn't match the quoted subtotal of £2,370. The breakdown also adds a \"10% Northbridge commission\" and a 50% deposit. I've asked the contractor for one corrected quote, explained the mix-up to the landlord, sent the tenant an update with safety advice and passed the commission question to the team.",
+    "situation": "The tenant's shower-pipe leak and damp wall have been going on since 4 Sept. The landlord authorised only the inspection and quote. Hearthline inspected and quoted £2,844 including VAT, then sent a breakdown that doesn't add up to the same figure. The agency's follow-up didn't name an amount, so the landlord asked \"Which quote do you mean? There are a couple.\"",
+    "judgement": {
+      "why_this_decision": "The landlord's reply (event 023) is a question, not an approval (classifier: question 1.0, unconditional approval 0.01). The quote PDF names 8 Wrenfold Mews, Brindlewick instead of this property. The breakdown in event 021 adds up to £2,440 against the PDF's £2,370 subtotal, and it brings in a commission and a deposit that aren't on the quote. Asking for approval on an amount that doesn't reconcile would be unsafe. The contractor can fix these problems, so I asked him. Whether an agency commission should be added is for the agency to decide, so I passed that to the team.",
+      "alternatives_considered": [
+        {
+          "option": "Ask the landlord to approve £2,844 now",
+          "why_not": "The amount is disputed by the contractor's own breakdown, the quote shows the wrong address, and the extra commission and deposit are unclear."
+        },
+        {
+          "option": "Just wait",
+          "why_not": "The landlord asked a direct question and the leak is getting worse, so the job needed to keep moving."
+        },
+        {
+          "option": "Treat the leak as an emergency and send someone without approval",
+          "why_not": "The tenant reports no water outside the bathroom and no electrical danger. It's an urgent repair, not an emergency."
+        }
+      ],
+      "checks_performed": [
+        "Approval status: none recorded; the landlord authorised the inspection and quote only (event 005)",
+        "Quote PDF read: address mismatch; VAT arithmetic is correct internally",
+        "Breakdown checked against the quote: £2,440 vs £2,370; commission and deposit not on the quote",
+        "Classified the landlord's reply",
+        "Checked for past team lessons: none found",
+        "Safety: water ingress is contained to the bathroom wall as far as reported"
+      ],
+      "assumptions": [
+        "The 'couple of quotes' the landlord means are the PDF quote and the later breakdown",
+        "The wrong address on the PDF is probably a template error, but this isn't confirmed"
+      ]
+    },
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the ticket",
+        "result": "Stage intake, no approvals or holds",
+        "ok": true
+      },
+      {
+        "tool": "read_attachment",
+        "description": "Read the Hearthline quotation",
+        "result": "£2,370 + £474 VAT = £2,844; property shown as 8 Wrenfold Mews; no itemisation",
+        "ok": true
+      },
+      {
+        "tool": "recall_lessons",
+        "description": "Checked for past team lessons on similar cases",
+        "result": "None found",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the landlord's question",
+        "result": "Question; needs review",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Asked the contractor for one reissued, itemised quote with the correct address, no commission line and clear deposit terms",
+        "result": "Queued (id 47)",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Explained the two pricing versions to the landlord and asked him not to approve either yet",
+        "result": "Queued (id 46)",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Sent the tenant a progress update with containment advice and an update date of 25 Sept",
+        "result": "Queued (id 45)",
+        "ok": true
+      },
+      {
+        "tool": "move_stage",
+        "description": "Moved the ticket from intake to landlord_approval",
+        "result": "Moved",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold while waiting for the corrected quote",
+        "result": "Hold 259, follow up in 2 days",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded that the tenant authorised entry with office keys (property) and that the landlord wants an itemised quote before approving (landlord)",
+        "result": "Both recorded, no conflicts",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Passed the commission and quote discrepancies to the team",
+        "result": "Queue item 24",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Orin Vale (landlord)",
+        "status": "inspection and quote approved; repair not yet requested, waiting for the corrected quote",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "The contractor's breakdown adds a 10% Northbridge commission and a deposit, and it doesn't match the quoted subtotal. How commission is handled and disclosed is an agency decision.",
+      "handover_summary": "Leak at 4 Thistlewick Rise. Hearthline quoted £2,844 including VAT, but the PDF shows the wrong address and the breakdown comes to £2,440 before VAT, not £2,370. The breakdown also adds a 10% commission and a 50% deposit. I've asked Hearthline for a corrected quote and told the landlord not to approve yet. Hold 259 is set for 2 days.",
+      "recommendation": "The property manager should settle the commission question with Hearthline and make sure any fee is disclosed to the landlord. When the corrected quote arrives, it should go to the landlord for APPROVE or DECLINE."
+    },
+    "unverified": [
+      "Whether the agency and Hearthline have agreed a 10% commission",
+      "How the 50% deposit would be calculated",
+      "Why the quote shows 8 Wrenfold Mews",
+      "Which two quotes the landlord means",
+      "The tenant's current whereabouts and whether she can give access"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "The leak has gone on for about 3 weeks and the wall damage is getting worse",
+      "The quote shows another property's address",
+      "The breakdown doesn't match the quoted subtotal",
+      "An agency commission appears in the contractor's pricing"
+    ],
+    "final_status": "landlord_approval, on hold waiting for the contractor's corrected quote; also with the team (queue item 24)",
+    "next_follow_up": {
+      "when": "2025-09-25",
+      "what": "Chase Hearthline for the corrected quote. When it arrives, ask the landlord to approve it by email, or by phone if he still can't be reached, and update the tenant."
+    },
+    "confidence": 0.82
+  }
+}

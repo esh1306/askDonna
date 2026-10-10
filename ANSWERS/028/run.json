@@ -1,0 +1,115 @@
+{
+  "case": "028",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 0,
+  "durationSec": 52.709,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4K7D80ER7T0XMNAFX117BRZ",
+  "startedAt": "2026-10-10T15:37:50.757Z",
+  "finishedAt": "2026-10-10T15:38:43.466Z",
+  "usage": {
+    "inputTokens": 115573,
+    "outputTokens": 4396
+  },
+  "eventCount": 277,
+  "dryRun": false,
+  "result": {
+    "case_id": "102 (R/028)",
+    "decision": "escalate",
+    "summary": "The repair work is finished as far as the agency is concerned. The landlord turned down Pineglass's £564.48 quote, used her own company, and emailed on 18 Sep to say the work was done. I've closed the maintenance ticket. One question is still open: her costs and which items she thinks the former tenant should pay for. That's a deposit and tenancy-account matter, so I've passed it to the human queue (item 41) with a recommendation for next steps. I didn't send any messages: the agency already asked her for this on 18 Sep, and the deposit team should be the ones to chase it.",
+    "case_type": "mixed",
+    "judgement": {
+      "why_this_decision": "Event 017: the landlord turned down the quote and arranged her own contractor. Event 020: the agency told Pineglass not to attend. Event 021: the landlord said the work was done. The agency spent nothing, so there is nothing to approve, assign or pay. What's left (events 023–025) is the landlord's costs and a possible charge to the former tenant. That affects the deposit, which is for a person to decide, and nobody is currently following it up.",
+      "alternatives_considered": [
+        {
+          "option": "No action (leave as dismissed)",
+          "why_not": "The question about the costs and who pays would never be followed up, and the ticket would sit at 'intake' even though the work is finished."
+        },
+        {
+          "option": "Chase the landlord myself and place a hold",
+          "why_not": "The breakdown is evidence for deciding deposit deductions, which isn't maintenance work. The agency asked her only on 18 Sep, so the deposit team should decide whether and how to chase."
+        },
+        {
+          "option": "Keep the ticket open",
+          "why_not": "The landlord arranged the repairs and says they are done. Leaving the ticket open would misstate where the job is."
+        }
+      ],
+      "checks_performed": [
+        "Read all 25 events",
+        "Read the checkout report: 3 items, no costs, no photos, no split of who is responsible",
+        "Read the quote: one bundled £564.48 line with no breakdown, VAT not stated",
+        "No approvals, holds or human-queue items on the ticket",
+        "Event 001 has an internal 'approval already given' marker, but the landlord later turned the quote down. This no longer matters because the agency spent nothing.",
+        "Looked for lessons from past cases: none found"
+      ],
+      "assumptions": [
+        "The landlord's word that the work is done is enough to close the maintenance ticket, because she arranged the work herself"
+      ]
+    },
+    "situation": "This is a vacant property after the tenant moved out. The landlord turned down the agency's contractor quote, used her own company, and said the work was finished, without sending any evidence. The agency's request for her cost breakdown and for which items are the former tenant's responsibility has had no reply, and nobody is following it up.",
+    "actions_taken": [
+      {
+        "tool": "read_attachment",
+        "description": "Read the checkout report and the Pineglass quote",
+        "result": "Both have no breakdown by item, no evidence and no split of responsibility",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded on the landlord's profile that she arranges her own contractor for move-out works (event 017)",
+        "result": "fact 146",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded on the property that it is vacant after move-out (event 001)",
+        "result": "fact 147",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Passed the costs/former-tenant question (a deposit matter) to the human queue",
+        "result": "queue item 41",
+        "ok": true
+      },
+      {
+        "tool": "move_stage",
+        "description": "Closed the maintenance ticket (moved from intake to closed): the landlord arranged the works and says they are complete",
+        "result": "closed",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Elowen Quill (landlord)",
+        "status": "declined (agency quote £564.48, event 017)",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "The landlord's costs and any charge to the former tenant are a deposit/tenancy-account matter, and it isn't being followed up",
+      "handover_summary": "The landlord did the move-out repairs herself and says they are complete (event 021), with no evidence. The agency asked for an itemised cost breakdown and which items are the tenant's responsibility (event 023). No reply, and no active task.",
+      "recommendation": "Deposit team: chase the landlord for an itemised invoice, the completion date and photos before proposing any deduction to the former tenant. Optionally arrange a post-works check while the property is vacant."
+    },
+    "unverified": [
+      "That the works are complete (landlord's word only, with no date, photos or invoice)",
+      "What the landlord's contractor cost",
+      "Whether any items are tenant damage rather than fair wear and tear",
+      "Deposit status and scheme"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "No evidence of completion before re-letting",
+      "A deposit deduction without an invoice or photos could be disputed",
+      "The meter cabinet may be shared or owned by the utility company; it isn't clear whether the landlord's contractor was allowed to work on it"
+    ],
+    "final_status": "Maintenance ticket closed; deposit/tenancy-account follow-up in human queue (item 41)",
+    "next_follow_up": {
+      "when": "When the human queue picks up item 41",
+      "what": "Deposit team chases the landlord for the invoice, completion evidence and her view on who is responsible"
+    },
+    "confidence": 0.8
+  }
+}

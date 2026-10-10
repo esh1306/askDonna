@@ -1,0 +1,184 @@
+{
+  "case": "014",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 4,
+  "durationSec": 78.611,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4K78X8XA7E7XKJ2YXBXZ9KR",
+  "startedAt": "2026-10-10T15:35:28.669Z",
+  "finishedAt": "2026-10-10T15:36:47.280Z",
+  "usage": {
+    "inputTokens": 230238,
+    "outputTokens": 8924
+  },
+  "eventCount": 724,
+  "dryRun": false,
+  "result": {
+    "case_id": "88 (R/014)",
+    "decision": "escalate",
+    "case_type": "safety_emergency",
+    "summary": "I treated this as an emergency: Leah Venn has a mobility impairment, the heating has failed and her living room was down to 10°C. I escalated it as high priority (queue 30), assigned Brackenridge Heat Services under the landlord's confirmed £250 urgent-repair authority, and asked them to hold the 15 Jan 09:00–11:00 diagnostic slot. The slot is not confirmed yet. I also told Leah and the landlord where things stand. A duty manager needs to act tonight on interim heating or transport, because no spending authority covers it.",
+    "situation": "Heating failure at 7 Mallowmere Walk on 14 Jan. Boiler display blank, hot water working, no gas smell. The tenant has a mobility impairment and the living room fell to 10°C at 16:25. Her only plug-in heater overheats and she has stopped using it. The landlord confirmed that the £250 per-incident urgent-repair authority covers the £168 diagnostic (event 14). At 17:08 the contractor offered a 15 Jan 09:00–11:00 cancellation slot that had to be booked by 17:30. No authority covers temporary heating, transport or accommodation (events 7 and 17).",
+    "actions_taken": [
+      {
+        "tool": "classify_reply",
+        "description": "Classified the contractor's slot offer",
+        "result": "Scheduling; review suggested (needs a human response p=0.84)",
+        "ok": true
+      },
+      {
+        "tool": "recall_lessons",
+        "description": "Looked for team lessons on similar cases",
+        "result": "No lessons found",
+        "ok": true
+      },
+      {
+        "tool": "classify_intake",
+        "description": "Classified the heating report",
+        "result": "Heating/hot water, severity emergency, safety risk p=0.81",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "High-priority handover: vulnerable tenant at 10°C and no authority for interim heating or transport",
+        "result": "Queue item 30",
+        "ok": true
+      },
+      {
+        "tool": "assign_contractor",
+        "description": "Assigned Daniel Hart (Brackenridge Heat Services) under the landlord's urgent authority",
+        "result": "Assigned; stage moved to scheduling",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Landlord's urgent-repair authority: £250 per incident, excluding heaters, transport and accommodation",
+        "result": "Fact 104",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Tenant's access requirements",
+        "result": "Fact 105",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Tenant vulnerability: mobility impairment, internal only",
+        "result": "Fact 103",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Landlord email: diagnostic under his authority, booking awaiting confirmation, consent needed for interim costs",
+        "result": "Sent (message 69)",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Contractor email (first draft)",
+        "result": "Blocked by the guard: it committed the landlord's money",
+        "ok": false
+      },
+      {
+        "tool": "send_message",
+        "description": "Tenant SMS (first draft)",
+        "result": "Blocked by the guard: it promised an unconfirmed date",
+        "ok": false
+      },
+      {
+        "tool": "send_message",
+        "description": "Tenant SMS rewritten: slot requested but not yet confirmed, call-ahead arrangement, keep the heater off, duty manager will contact her tonight, 111/999",
+        "result": "Sent (message 72)",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Contractor email (second draft)",
+        "result": "Blocked by the guard: it implied the booking was already approved",
+        "ok": false
+      },
+      {
+        "tool": "send_message",
+        "description": "Contractor email rewritten: hold the 15 Jan slot, fault details, access protocol, diagnosis only with a quote before further work",
+        "result": "Sent (message 74)",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Waiting for the contractor to confirm the booking",
+        "result": "Hold 273, follow-up in 0.5 days",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Owen Pike (landlord)",
+        "status": "granted (standing £250 urgent-repair authority, confirmed for the £168 diagnostic in event 14)",
+        "channel": "email"
+      },
+      {
+        "party": "Owen Pike (landlord)",
+        "status": "not yet requested; the duty manager will raise consent for interim heater or transport costs",
+        "channel": "email/call"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "Vulnerable tenant at 10°C with no safe heating, and no spending authority for an interim heater, transport or accommodation. The contractor booking is also time-critical.",
+      "handover_summary": "Brackenridge was assigned under the landlord's £250 urgent authority, and we asked them to hold the 15 Jan 09:00–11:00 diagnostic slot (£168). Their confirmation is pending, and the 17:30 cut-off may have been missed. Leah has a mobility impairment, no safe heater, and an unconfirmed option to stay at her niece's (step-free access not known). Access: a direct call with at least 30 minutes' notice, then a call from outside. The niece cannot give access, the agency holds no key, and no medical details go to contractors.",
+      "recommendation": "Duty manager tonight: phone Daniel Hart to secure the slot; phone Leah to check on her welfare; arrange or fund a safe heater delivery or accessible transport and get the landlord's consent by phone; refer any repair cost above the £250 total to the landlord."
+    },
+    "unverified": [
+      "Whether the 15 Jan slot was secured before the 17:30 cut-off",
+      "Whether the niece's home is step-free",
+      "Repair cost after diagnosis",
+      "Whether the landlord will agree to interim heating or transport costs"
+    ],
+    "failures": [
+      "Three outbound drafts were blocked by the guard (two to the contractor, one to the tenant). All were rewritten and sent successfully."
+    ],
+    "risks_or_red_flags": [
+      "Vulnerable tenant at 10°C and the temperature is falling",
+      "Unsafe heater in the property",
+      "The 17:30 booking cut-off may have been missed",
+      "Leah can't attend on 17 Jan (hospital appointment), so the fallback slot doesn't work",
+      "Repair costs may go over the £250 limit while the landlord is travelling"
+    ],
+    "final_status": "scheduling; high-priority escalation open (queue 30); hold 273 waiting for contractor confirmation",
+    "next_follow_up": {
+      "when": "2025-01-15 morning (hold 273, 0.5 days)",
+      "what": "Confirm the Brackenridge booking and tell Leah. If the slot is lost, rebook urgently. Check the duty manager has dealt with interim heating."
+    },
+    "confidence": 0.8,
+    "judgement": {
+      "why_this_decision": "No heating for a tenant with a mobility impairment at 10°C in January (events 3, 18) counts as an emergency under policy. The landlord explicitly confirmed that the standing authority covers the £168 diagnostic (event 14), so booking the earliest slot (event 19) is within authority. Interim heater or transport spending has no authority (events 7, 17), so that needs a human tonight.",
+      "alternatives_considered": [
+        {
+          "option": "Request a fresh landlord approval before booking",
+          "why_not": "Approval is already on record (event 14), the landlord is travelling, and the slot had to be booked within minutes"
+        },
+        {
+          "option": "Take the 17 Jan slot",
+          "why_not": "Leah can't guarantee access because of a hospital appointment, and it is too late for a vulnerable tenant"
+        },
+        {
+          "option": "Arrange a heater or transport myself",
+          "why_not": "Not covered by any spending authority. That spend needs a human decision and landlord consent"
+        }
+      ],
+      "checks_performed": [
+        "£168 diagnostic against the £250 incident limit",
+        "Landlord's clarification in event 14 against his earlier quote-first email in event 10",
+        "Tenant availability: 15 Jan possible, 17 Jan not",
+        "Access and confidentiality restrictions (events 3, 4, 13)",
+        "No gas smell or leak reported (event 3)"
+      ],
+      "assumptions": [
+        "The engineer is Gas Safe registered (Brackenridge is the heating contractor on the job)",
+        "Messages reach recipients through the outbox despite missing contact details"
+      ]
+    }
+  }
+}

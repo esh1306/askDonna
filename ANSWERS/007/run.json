@@ -1,0 +1,160 @@
+{
+  "case": "007",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 0,
+  "durationSec": 88.954,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4K766C5627DFK1Z2GY63NZA",
+  "startedAt": "2026-10-10T15:33:59.706Z",
+  "finishedAt": "2026-10-10T15:35:28.660Z",
+  "usage": {
+    "inputTokens": 196798,
+    "outputTokens": 8331
+  },
+  "eventCount": 658,
+  "dryRun": false,
+  "result": {
+    "case_id": "81 (R/007)",
+    "decision": "escalate",
+    "summary": "Bracken Spark Services (Rian Sol) has offered 29 Sep after 15:00, which is one of the tenant's slots. I assigned him, confirmed the slot with him and the tenant, and asked him to come earlier if he can. The downstairs light flickers and pops, which may be a wiring fault, and the landlord has never approved work on it. I escalated it as a high-priority safety risk and queued a call to the landlord for approval. The same call asks who owns the TV. I also asked the tenant whether the rear door still shuts and locks, since the handle has come off.",
+    "case_type": "mixed",
+    "judgement": {
+      "why_this_decision": "Ev 19 gives a slot that matches ev 16, so the visit can be scheduled. The landlord's 'Please sort it' (ev 3) only answered the TV request (ev 2). The light was added later (ev 5) and never approved. A light that flickers and pops may mean arcing. Jev rated it an emergency-level safety risk (0.88), so I escalated with high priority before assigning without approval for the light. The landlord's 'I don't remember leaving a TV' means the TV may be the tenant's. So I limited the electrician to assessing it and asked the landlord to confirm ownership before any repair or disposal cost goes to him. The rear-door handle (ev 15, 18) could leave the property insecure, so I asked the tenant whether the door still locks.",
+      "alternatives_considered": [
+        {
+          "option": "Just confirm 29 Sep and carry on",
+          "why_not": "The light has never been approved, and popping is a possible safety risk that should be escalated and put to the landlord. The TV ownership question also has cost consequences."
+        },
+        {
+          "option": "Hold the whole visit until the landlord answers",
+          "why_not": "The landlord was away (ev 7). The TV attendance is approved and the light is a safety concern, so stalling would leave the risk in place."
+        },
+        {
+          "option": "Approve TV repair or disposal",
+          "why_not": "Ownership is unconfirmed and the landlord gave no disposal instruction (ev 4)."
+        },
+        {
+          "option": "Open a lock or handyman job now",
+          "why_not": "I don't yet know whether the door still secures, so I asked the tenant first."
+        }
+      ],
+      "checks_performed": [
+        "Approvals: ev 2-3 cover the TV only, the light is not covered, no spending limit recorded",
+        "The contractor's proposed slot matches the tenant's availability (ev 16 vs ev 19)",
+        "Safety: Jev intake gave emergency 0.92 and safety_risk 0.88 for the light",
+        "Contractor reply classifier said 'review'",
+        "No lessons on file for this situation",
+        "No existing holds, approvals or property history",
+        "Access: dog at the property, contractor to phone on arrival"
+      ],
+      "assumptions": [
+        "The landlord's 'Please sort it' approves the electrician attending for the TV, not any repair cost",
+        "The tenant is still not using the downstairs light (ev 15)"
+      ]
+    },
+    "situation": "Ticket is in intake but the evidence puts it at scheduling. The electrician has proposed 29 Sep after 15:00. The light is unapproved and may be unsafe, TV ownership is unclear, and the rear-door handle fault was raised only by phone.",
+    "actions_taken": [
+      {
+        "tool": "classify_reply",
+        "description": "Classified the contractor's slot proposal",
+        "result": "Scheduling; autonomy review; safety_concern 0.34",
+        "ok": true
+      },
+      {
+        "tool": "recall_lessons",
+        "description": "Looked for lessons on similar cases",
+        "result": "No lessons found",
+        "ok": true
+      },
+      {
+        "tool": "classify_intake",
+        "description": "Classified the light and TV report",
+        "result": "electrical_lighting, emergency, safety_risk 0.88",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "High-priority handover: light safety risk, TV ownership, rear door",
+        "result": "queue_id 26",
+        "ok": true
+      },
+      {
+        "tool": "assign_contractor",
+        "description": "Assigned Rian Sol (Bracken Spark Services)",
+        "result": "Assigned; stage is now scheduling",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the contractor: confirmed 29 Sep after 15:00, light first, TV assessment only, phone on arrival, earlier slot if possible",
+        "result": "message 55 sent",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant: visit details, safety advice for the light, asked whether the rear door secures",
+        "result": "message 59 sent",
+        "ok": true
+      },
+      {
+        "tool": "request_landlord_approval",
+        "description": "Queued a call to the landlord for light approval and TV ownership",
+        "result": "approval 40 pending",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold on the landlord, 1-day follow-up",
+        "result": "hold 264",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded dog access arrangements, uncertain TV ownership, and that the tenant answers calls better than email/SMS",
+        "result": "facts 83, 84, 85",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Corin Wex (landlord) – TV fault attendance",
+        "status": "granted (ev 3, no cost limit, ownership queried)",
+        "channel": "email"
+      },
+      {
+        "party": "Corin Wex (landlord) – downstairs light investigation and TV ownership",
+        "status": "requested (approval 40)",
+        "channel": "call"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "Light popping is a possible electrical safety risk with no landlord approval; TV ownership is unclear; the rear-door fault is unlogged",
+      "handover_summary": "Queue item 26: Bracken assigned for 29 Sep after 15:00 and asked to come earlier. Landlord call queued for light approval and TV ownership. Tenant asked whether the rear door still secures.",
+      "recommendation": "Decide whether the light needs earlier attendance. Settle TV responsibility before any cost goes to the landlord. Raise an urgent lock job if the tenant says the door won't secure."
+    },
+    "unverified": [
+      "Who owns the TV",
+      "Whether the TV main board has failed (tenant's view only)",
+      "Cause of the light fault",
+      "Whether the rear door still locks",
+      "Whether Bracken can attend earlier",
+      "Cost of the work"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "Light popping may be arcing in the fixed wiring",
+      "Rear door may be insecure",
+      "TV repair or disposal cost could be wrongly charged to the landlord if the TV is the tenant's",
+      "Landlord may still be away (ev 7)",
+      "Tenant has been slow to answer email and SMS"
+    ],
+    "final_status": "scheduling; contractor assigned; on hold waiting for the landlord (approval 40); escalated with high priority (queue 26)",
+    "next_follow_up": {
+      "when": "In 1 day (hold 264)",
+      "what": "Chase the landlord call outcome (light approval, TV ownership), the tenant's answer on the rear door, and Bracken's answer on an earlier slot"
+    },
+    "confidence": 0.72
+  }
+}

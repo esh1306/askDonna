@@ -1,0 +1,164 @@
+{
+  "case": "003",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 2,
+  "durationSec": 75.209,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4K74THZARK2N9ECR8XRNA44",
+  "startedAt": "2026-10-10T15:33:14.572Z",
+  "finishedAt": "2026-10-10T15:34:29.781Z",
+  "usage": {
+    "inputTokens": 146356,
+    "outputTokens": 7034
+  },
+  "eventCount": 574,
+  "dryRun": false,
+  "result": {
+    "case_id": "R/003 (ticket 78)",
+    "decision": "escalate",
+    "summary": "I've put the Copper Finch tap-works invoice on hold. It names a different property (28 Larkspur Quay, Brindlewick) and has no amounts or work date. I've asked the contractor for a corrected, itemised invoice and for findings on the vent leak and bedroom damp, which the invoice doesn't cover. I've asked the tenant to confirm the taps are fixed and given them containment advice, and updated the landlord. I escalated the landlord's insurance and roof-leak history requests, plus the invoice mismatch, to a human. A 3-day hold is set on the contractor.",
+    "case_type": "mixed",
+    "judgement": {
+      "why_this_decision": "The landlord approved the work by email (event 004), but the invoice (event 022 / attachment) names another property and shows no amount. It can't be forwarded or paid, and the contractor needs to correct it. The vent and damp issues were in scope (event 008) but there are no findings on them (event 021). The landlord's requests about building insurance and roof-leak history (events 004 and 005) were never actioned. Insurance is outside the maintenance remit, and the repeated water ingress needs agency judgement. That calls for a human handover, while the contractor and tenant are asked for what only they can answer.",
+      "alternatives_considered": [
+        {
+          "option": "Forward the invoice to the landlord and move to close-out",
+          "why_not": "The property address doesn't match, there is no amount, and the vent and damp are unresolved."
+        },
+        {
+          "option": "Close the tap work and open a separate ticket for the roof",
+          "why_not": "The invoice isn't verified yet, and the tenant hasn't confirmed the taps are fixed."
+        },
+        {
+          "option": "Send a new approval request to the landlord so the stage can move forward",
+          "why_not": "The landlord already said yes clearly. Asking again would be redundant, so I've asked a human to record the existing approval instead."
+        }
+      ],
+      "checks_performed": [
+        "Invoice property checked against the ticket property: they differ (28 Larkspur Quay, Brindlewick vs 8-12 Juniper Mews, Vellumford)",
+        "Invoice amount: none shown",
+        "Contractor on the invoice matches the assigned contractor (Copper Finch Plumbing)",
+        "Invoice scope checked against the approved scope: taps only, nothing on the vent or damp",
+        "Approval records: none in the CRM, so move_stage was refused",
+        "Booking conflict in events 014-017: resolved by event 017, the visit happened on 12 Sept (event 020)",
+        "No lessons found"
+      ],
+      "assumptions": [
+        "The contractor's \"8-10 Juniper Mews\" in event 020 was a slip, since the tenant confirmed the right building",
+        "The invoice probably belongs to this job despite the wrong address, but that is unconfirmed"
+      ]
+    },
+    "situation": "Taps, vent leak and damp job at Flat 4, 8-12 Juniper Mews. The landlord approved it, and the contractor attended on 12 Sept and invoiced the tap work only. The invoice gives a different property address and no amounts. The landlord's insurance and roof-history requests are still open.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the ticket",
+        "result": "Stage intake; no approvals or holds on record",
+        "ok": true
+      },
+      {
+        "tool": "read_attachment",
+        "description": "Read the invoice",
+        "result": "Wrong property address, no amounts, no work date",
+        "ok": true
+      },
+      {
+        "tool": "recall_lessons",
+        "description": "Looked for team lessons on similar cases",
+        "result": "None found",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the invoice",
+        "result": "Invoice; flagged for review (needs_human 0.83)",
+        "ok": true
+      },
+      {
+        "tool": "move_stage",
+        "description": "Tried to move the ticket to works",
+        "result": "Refused: no approval on record in the CRM",
+        "ok": false
+      },
+      {
+        "tool": "send_message",
+        "description": "Queried the invoice with the contractor and asked for vent and damp findings",
+        "result": "Sent (id 44)",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Asked the tenant to confirm the taps are fixed, gave containment advice and a follow-up date",
+        "result": "Sent (id 42)",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Updated the landlord: invoice on hold, insurance and history questions passed on",
+        "result": "Sent (id 43)",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Waiting on the contractor, 3 days",
+        "result": "Hold 260",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Handed over the invoice mismatch, insurance and roof-history requests, and the missing approval record",
+        "result": "Queue 23",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded on the property that roof leaks are recurring",
+        "result": "Fact 71",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded that the tenant permits key access",
+        "result": "Fact 72",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Owen Vale (Landlord)",
+        "status": "granted by email in event 004, not recorded in the CRM",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "Invoice shows the wrong property and no amount; the insurance and roof-leak history requests are unhandled; recurring water ingress",
+      "handover_summary": "The tap work is invoiced, but the invoice gives the wrong address and no amount, so it is queried with the contractor. Vent and damp findings are outstanding. The landlord asked for an insurance check and a review of the roof-leak history, and neither has been actioned. The landlord's approval needs recording in the CRM.",
+      "recommendation": "Record the event-004 approval in the CRM. Hold the invoice until a corrected version arrives. Handle the insurance and freeholder questions. Arrange a roofer or damp survey once the contractor's findings are in."
+    },
+    "unverified": [
+      "Whether the invoice relates to this property",
+      "Cost of the work",
+      "Whether the taps are now fixed",
+      "Whether the vent and damp were inspected",
+      "Building insurance cover",
+      "Source of the leak"
+    ],
+    "failures": [
+      "move_stage to works refused: no approval record in the CRM"
+    ],
+    "risks_or_red_flags": [
+      "Invoice property address mismatch",
+      "Invoice has no amount",
+      "Recurring roof water ingress and damp left unaddressed",
+      "Possible water near electrics at the bathroom vent"
+    ],
+    "final_status": "Open at intake (stage move refused); on hold waiting on the contractor; escalated to a human",
+    "next_follow_up": {
+      "when": "2025-09-17",
+      "what": "Chase Copper Finch for the corrected invoice and vent/damp findings; check the tenant's reply on the taps"
+    },
+    "confidence": 0.82
+  }
+}

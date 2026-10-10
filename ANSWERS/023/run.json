@@ -1,0 +1,148 @@
+{
+  "case": "023",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 0,
+  "durationSec": 72.583,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4K7BDGMBSXSDEN926TMR84V",
+  "startedAt": "2026-10-10T15:36:50.875Z",
+  "finishedAt": "2026-10-10T15:38:03.458Z",
+  "usage": {
+    "inputTokens": 125385,
+    "outputTokens": 6764
+  },
+  "eventCount": 443,
+  "dryRun": false,
+  "result": {
+    "case_id": "97 (R/023)",
+    "decision": "escalate",
+    "case_type": "maintenance_admin",
+    "summary": "I've escalated the case at high priority. Copper Finch sent two invoices for the 5 February visit that overlap. Invoice A (£138, diagnosis) is within what the landlord authorised. Invoice B (£372) charges for an actuator replacement that was never authorised and that the records suggest never happened. Meanwhile a household with a child still has intermittent heating. Neither invoice should be paid until the contractor says which one is current. I moved the ticket to the landlord-approval stage, recorded the key facts, updated the tenant with safety advice and a date to expect news, and placed a 2-day hold.",
+    "situation": "Tenant with a child reports intermittent radiator heating; hot water still works. The landlord authorised diagnosis only, up to £180 including VAT. The diagnostic visit on 5 Feb found a fault in the heating valve actuator. The landlord has not decided on the £372 replacement estimate. On 10 Feb the contractor sent invoice A (£138) and invoice B (£372), both with a 5 Feb service date. B says the replacement was done, but the evidence says otherwise. The contractor can't say which invoice is current. The landlord was asked on 12 Feb how to proceed and hasn't replied.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded ticket, profiles, events",
+        "result": "23 events, no holds or approvals, stage intake",
+        "ok": true
+      },
+      {
+        "tool": "read_attachment",
+        "description": "Read invoice A",
+        "result": "£138 inc VAT, attendance/diagnosis/actuator inspection/test, service date 5 Feb, no itemisation or job sheet",
+        "ok": true
+      },
+      {
+        "tool": "read_attachment",
+        "description": "Read invoice B",
+        "result": "£372 inc VAT, actuator supply and replacement plus diagnosis/testing, service date 5 Feb, no itemisation, VAT breakdown or job sheet",
+        "ok": true
+      },
+      {
+        "tool": "recall_lessons",
+        "description": "Looked for past team decisions on similar invoice disputes",
+        "result": "No lessons found",
+        "ok": true
+      },
+      {
+        "tool": "move_stage",
+        "description": "Moved intake to landlord_approval, which is where the case really is",
+        "result": "Moved",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded: child in household, tenant access weekdays after 14:00, landlord wants to be consulted before remedial work, contractor's invoice reliability note",
+        "result": "4 facts recorded, no conflicts",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Handed over the invoice dispute and the stalled heating repair for a vulnerable household",
+        "result": "queue_id 38, priority high",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant: repair not yet approved, update by 14 Feb, heater safety and gas emergency advice",
+        "result": "message 84 sent; guard passed",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold waiting on landlord decision and contractor's invoice clarification",
+        "result": "hold 279, follow-up in 2 days",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Soren Dallow (landlord)",
+        "status": "granted for diagnosis only, up to £180 inc VAT (event 005); remedial work £372 not approved (event 012), decision outstanding (event 023)",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "Overlapping invoices, one charging £372 for actuator work that was never authorised or evidenced, while a household with a child still has intermittent heating.",
+      "handover_summary": "Invoice A £138 matches the diagnostic quote and is within the £180 authority. Invoice B £372 claims the actuator was replaced on 5 Feb. That contradicts the contractor's own 5 Feb update (no remedial work), her estimate sent later that day asking for authorisation, the 7 Feb parts check, and the tenant's account (no visit since 5 Feb). No payment is recorded and no bank-detail change was requested. The contractor can't say whether B replaces A. The landlord was asked how to proceed on 12 Feb and hasn't replied.",
+      "recommendation": "Don't pay either invoice yet. Ask Copper Finch in writing to withdraw invoice B and confirm A (£138) as the only charge; then send A to the landlord for payment. Phone the landlord for a decision on the repair, and consider a second quote if Copper Finch can't provide clear documents."
+    },
+    "unverified": [
+      "Whether the actuator was replaced (evidence says no)",
+      "Whether invoice B replaces invoice A or is charged on top",
+      "Whether the £138 diagnosis would be credited against the repair",
+      "Whether the actuator could be repaired instead, and parts availability",
+      "The landlord's decision on further work"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "Invoice B charges for work that was not authorised and not evidenced, and its service date is earlier than the estimate requesting authorisation",
+      "Possible double charge for attendance and diagnosis across A and B",
+      "Child in household with intermittent heating in February, using a portable heater",
+      "Repair stalled since 5 Feb with the landlord undecided"
+    ],
+    "final_status": "Stage landlord_approval; on hold (279) waiting on landlord and contractor; escalated to ops (queue 38, high priority); no invoices paid or forwarded",
+    "next_follow_up": {
+      "when": "2025-02-14",
+      "what": "Chase the landlord for a decision on the repair and the invoices, and the contractor for clarification of invoices A/B; update the tenant as promised"
+    },
+    "confidence": 0.85,
+    "judgement": {
+      "why_this_decision": "The rules say never to pay or forward an invoice that doesn't match what was approved. Invoice B (£372) is for work outside the diagnosis-only authority (events 005, 012) and the records don't support it (events 008, 009, 016, 019, 020, 022). A disputed invoice and a vulnerable household both call for a human. Invoice A on its own would match, but it overlaps with B and the contractor can't say whether B replaces it (event 022), so A is held too. The landlord was asked on 12 Feb (event 023), so I didn't message him again or open a duplicate approval request.",
+      "alternatives_considered": [
+        {
+          "option": "Send invoice A to the landlord for payment now",
+          "why_not": "The contractor hasn't confirmed whether B replaces A or overlaps it; paying A now risks a double charge or a muddled settlement."
+        },
+        {
+          "option": "Request landlord approval for £372 via a call",
+          "why_not": "The landlord was emailed the same question hours earlier (event 023) and asked questions the contractor still hasn't answered (event 012). A duplicate request would be premature, so I've recommended a phone chase to the human instead."
+        },
+        {
+          "option": "Treat as an emergency and dispatch a contractor",
+          "why_not": "Heating is intermittent, not fully off, hot water works, and there is no leak, gas smell or warning. It's urgent for a vulnerable household, but it doesn't meet the emergency threshold for acting without approval."
+        },
+        {
+          "option": "Just wait without escalating",
+          "why_not": "A disputed invoice plus a vulnerable tenant needs agency judgement."
+        }
+      ],
+      "checks_performed": [
+        "Approval status: diagnosis only up to £180, no remedial approval",
+        "Invoice amounts compared with the quote (£138) and estimate (£372)",
+        "Contractor, property and customer the same on both invoices",
+        "Service dates checked against the event timeline",
+        "Tenant's account of no return visit",
+        "Payment status: none recorded",
+        "Bank-detail change requests: none seen",
+        "Open holds and approvals: none before this turn"
+      ],
+      "assumptions": [
+        "Landlord's preferred channel is unknown; recent contact has been by email",
+        "Hot water working and no gas or leak symptoms means this is not an emergency"
+      ]
+    }
+  }
+}

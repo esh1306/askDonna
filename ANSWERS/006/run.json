@@ -1,0 +1,136 @@
+{
+  "case": "006",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 0,
+  "durationSec": 44.99,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4K74TJ20MXBGXGMN3946431",
+  "startedAt": "2026-10-10T15:33:14.702Z",
+  "finishedAt": "2026-10-10T15:33:59.692Z",
+  "usage": {
+    "inputTokens": 101684,
+    "outputTokens": 4527
+  },
+  "eventCount": 338,
+  "dryRun": false,
+  "result": {
+    "case_id": "80 (R/006)",
+    "decision": "escalate",
+    "case_type": "out_of_scope",
+    "summary": "The landlord asked for solar generation readings, which is a request for information, not a repair. After 4 reminders, the tenant says his wife already phoned and emailed the readings about two weeks ago, and he is unhappy. Nothing is visible on the ticket. I apologised to the tenant and said we'll stop chasing him. I've passed the case to the office team to check the inbox and call log, and set a 3-day follow-up.",
+    "situation": "Landlord Edwin Vale asked on 3 Sep for the current solar readings at 14 Brindlefern Walk. The agency chased tenant Ivo Mercer 4 times. On 18 Sep he replied that his wife had already given the readings by phone and email around 4 Sep. He gave no figures.",
+    "judgement": {
+      "why_this_decision": "The tenant's reply (event 17) says the readings were already given through office channels I can't search. The classifier flagged it for review as a complaint (0.86) with dissatisfaction (0.74). Only staff can check the shared inbox and call log. Another chaser would make the complaint worse. This is not a maintenance job (event 7), so I didn't move it through the repair stages.",
+      "alternatives_considered": [
+        {
+          "option": "Ask the tenant again to give the readings",
+          "why_not": "He says they were already supplied, and he is clearly frustrated after 4 chasers. Asking again would make it worse. I only offered, optionally, that he could forward the original email."
+        },
+        {
+          "option": "Move to the repair pipeline or ask for landlord approval",
+          "why_not": "No work is needed; it is a request for information."
+        },
+        {
+          "option": "Close the ticket",
+          "why_not": "The landlord still doesn't have the readings."
+        },
+        {
+          "option": "Update the landlord now",
+          "why_not": "I have nothing concrete to tell him yet. The handover recommends sending him the readings once they're found."
+        }
+      ],
+      "checks_performed": [
+        "Read all 17 events",
+        "Searched the case for 'kWh': only our own outbound request",
+        "find_tickets on the address: no other ticket holding the readings",
+        "No attachments, approvals or holds",
+        "Recalled lessons: none on file",
+        "classify_reply on event 17"
+      ],
+      "assumptions": [
+        "The wife's contact around 4 Sep may be in an office mailbox or call log that isn't linked to this ticket"
+      ]
+    },
+    "actions_taken": [
+      {
+        "tool": "classify_reply",
+        "description": "Classified the tenant's reply (event 17)",
+        "result": "Complaint 0.86, dissatisfied 0.74; flagged for review",
+        "ok": true
+      },
+      {
+        "tool": "recall_lessons",
+        "description": "Looked for lessons on similar cases",
+        "result": "No lessons on file",
+        "ok": true
+      },
+      {
+        "tool": "find_tickets",
+        "description": "Checked for other tickets at the property",
+        "result": "Only ticket 80",
+        "ok": true
+      },
+      {
+        "tool": "search_case",
+        "description": "Searched the case for 'kWh' to find any readings",
+        "result": "Only our outbound request",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant: apologised, said we'll stop chasing and are checking office records, offered optional forwarding of the original email, update by 22 Sep",
+        "result": "Queued (message 41)",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Asked the office team to check the inbox and call log for the readings and send them to the landlord",
+        "result": "Queue item 20",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold waiting on the agency, 3-day follow-up",
+        "result": "Hold 257",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded that the tenant's wife may contact the office for the household",
+        "result": "Fact 68",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord Edwin Vale",
+        "status": "not_needed",
+        "channel": "n/a"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "Readings reportedly sent by phone and email aren't visible on the ticket; the office inbox and call log need checking, and the tenant is unhappy.",
+      "handover_summary": "Landlord asked for solar readings on 3 Sep. We chased the tenant 4 times. The tenant says his wife phoned and emailed the readings around 4 Sep. Nothing is on the ticket. The tenant has had an apology and been promised an update by 22 Sep.",
+      "recommendation": "Search the shared inbox and call log from 3–5 Sep. If the readings are found, attach them, send them to Edwin Vale and close the ticket. If not, ask the tenant to forward the original email. No more chasers."
+    },
+    "unverified": [
+      "That the tenant's wife phoned or emailed the readings around 4 Sep",
+      "What the readings are",
+      "Whether the landlord already has the readings"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "Tenant unhappy after 4 chasers",
+      "Office messages may not be reaching the ticket (a process gap)",
+      "Landlord has had no update since 3 Sep"
+    ],
+    "final_status": "Open, stage intake, on hold (waiting on the agency) and in the human queue",
+    "next_follow_up": {
+      "when": "2025-09-21 (3 days); tenant promised an update by 22 Sep",
+      "what": "Check the office has found the readings and sent them to the landlord; update the tenant"
+    },
+    "confidence": 0.82
+  }
+}

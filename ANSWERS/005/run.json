@@ -1,0 +1,160 @@
+{
+  "case": "005",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 2,
+  "durationSec": 77.857,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4K74TJ5BMV2P8GYNX1K8WMN",
+  "startedAt": "2026-10-10T15:33:14.572Z",
+  "finishedAt": "2026-10-10T15:34:32.429Z",
+  "usage": {
+    "inputTokens": 167857,
+    "outputTokens": 7290
+  },
+  "eventCount": 579,
+  "dryRun": false,
+  "result": {
+    "case_id": "79 (R/005, NBL-005-184)",
+    "decision": "escalate",
+    "summary": "Invoice NBL-005-INV-71 (£114 including VAT) matches the diagnostic visit the landlord approved (£95 + VAT). The day after sending it, the contractor emailed asking us to pay a different, unverified bank account. That is a payment-diversion red flag, so payment is frozen and I escalated the case to a human (high priority) to verify by phone using independently sourced contact details. I told the landlord about the hold, asked the contractor for the job sheet, the itemised estimate and a corrected invoice, and gave the tenant the update she asked for. A follow-up hold is set.",
+    "case_type": "maintenance_admin",
+    "judgement": {
+      "why_this_decision": "The invoice amount, property and description match the landlord's approval in event 008. But event 019 asks for payment to a new account with no verification, and the invoice's own remittance details look like placeholders. Changed bank details are a real fraud signal, and only accounts/ops can verify and release payment. The £460 + VAT repair stays unapproved (event 016). No relevant lessons were found. classify_reply returned 'review' (needs_human_response 0.85).",
+      "alternatives_considered": [
+        {
+          "option": "Forward the invoice to the landlord for payment",
+          "why_not": "The payee bank details are disputed and unverified. Paying either account risks payment to a fraudster."
+        },
+        {
+          "option": "Ask the contractor to confirm the new bank details by email",
+          "why_not": "Email confirmation from a possibly compromised mailbox proves nothing. Verification has to be by phone using contact details found independently."
+        },
+        {
+          "option": "Request landlord approval for the £460 repair",
+          "why_not": "The landlord explicitly asked for an itemised breakdown and attendance record first, and neither has arrived."
+        }
+      ],
+      "checks_performed": [
+        "Read the invoice PDF: £95 + £19 VAT = £114; correct property; description is the 7 May diagnostic",
+        "Compared with the approval in event 008 (diagnostic up to £95 + VAT): matches",
+        "Payee: invoice remittance details look like placeholders; event 019 requests a different, unverified account",
+        "Repair approval: not given (event 016); parts/works stopped (event 017)",
+        "Job sheet: requested 3 times (events 012, 015, 017); not visible",
+        "Safety: tenant reports no leak or smell and the heating is currently running (events 004, 013); hot water available"
+      ],
+      "assumptions": [
+        "The heating is still running on the temporary reset, based on the last tenant report (event 013)",
+        "The 'did not recur' comment in event 018 refers to the visit itself and doesn't change the diagnosis"
+      ]
+    },
+    "situation": "This is a heating fault. The landlord approved a diagnostic visit only. The contractor diagnosed a failed control board, reset the boiler as a temporary fix, quoted £460 + VAT for a new board (not approved) and invoiced £114 for the diagnostic. He then asked for payment to a new bank account without any verification.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the case",
+        "result": "20 events; no approvals or holds on record",
+        "ok": true
+      },
+      {
+        "tool": "read_attachment",
+        "description": "Read invoice NBL-005-INV-71",
+        "result": "£114 including VAT for the 7 May diagnostic; placeholder bank details; supplier details missing",
+        "ok": true
+      },
+      {
+        "tool": "recall_lessons",
+        "description": "Looked for past lessons on bank-detail changes",
+        "result": "None found",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the contractor's bank-change email",
+        "result": "invoice intent, autonomy 'review'",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "High priority: unverified bank-change request; freeze payment and verify by phone",
+        "result": "queue_id 19",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the landlord: invoice matches the approval but payment is on hold pending verification; repair still awaiting his decision",
+        "result": "message 49",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "First email to the contractor",
+        "result": "Blocked by the outbound guard (bank-details wording)",
+        "ok": false
+      },
+      {
+        "tool": "send_message",
+        "description": "Rewrote and resent the contractor email: asks for the job sheet, itemised estimate and revised invoice with full business details; says verification will be by phone; repeats that the repair is not authorised",
+        "result": "message 50",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant: the reset is temporary, the repair awaits the landlord's decision, update by 16 May, plus safety advice",
+        "result": "message 48",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold waiting on the contractor's documents; ops verifying",
+        "result": "hold 261, follow-up in 3 days",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded: contractor's unverified bank-change request, unreliable buzzer, control board fault, landlord's approval preference",
+        "result": "facts 73–76 saved",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Jonas Reed (landlord)",
+        "status": "granted (diagnostic only, up to £95 + VAT, event 008)",
+        "channel": "email"
+      },
+      {
+        "party": "Jonas Reed (landlord)",
+        "status": "not granted (£460 + VAT repair, pending breakdown, event 016)",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "Unverified request to change the payee bank account on invoice NBL-005-INV-71",
+      "handover_summary": "The £114 invoice matches the approved diagnostic, but the contractor has asked for payment to a new account without verification, and the invoice's own bank details look like placeholders. No payment has been made. The job sheet is still outstanding and the repair is not approved.",
+      "recommendation": "Call Hearthline on an independently sourced number to verify the bank details. Get a corrected invoice and the job sheet, then pay the £114. Keep the repair on hold for the landlord's decision."
+    },
+    "unverified": [
+      "Whether the bank-change email in event 019 really came from Hearthline Heating",
+      "Which bank account, if either, is genuine",
+      "Whether the heating is still working after the reset",
+      "Hearthline's business details (none on the invoice)"
+    ],
+    "failures": [
+      "First contractor email was blocked by the outbound guard; rewritten and sent successfully"
+    ],
+    "risks_or_red_flags": [
+      "Request to change payee bank details with no verification: possible payment-diversion fraud",
+      "Invoice bank details look like placeholders; no supplier address or VAT number",
+      "Job sheet requested 3 times and still not provided",
+      "Heating is on a temporary fix and the fault could come back"
+    ],
+    "final_status": "Intake stage, on hold (261) waiting on contractor documents. Human queue item 19 open for bank-detail verification. Payment frozen.",
+    "next_follow_up": {
+      "when": "2025-05-16",
+      "what": "Chase Hearthline for the job sheet, itemised estimate and revised invoice. Check ops verification before the 19 May due date. Update the tenant and landlord."
+    },
+    "confidence": 0.88
+  }
+}

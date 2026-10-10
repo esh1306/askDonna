@@ -1,0 +1,133 @@
+{
+  "case": "004",
+  "decision": "wait",
+  "escalated": "yes",
+  "failures": 2,
+  "durationSec": 52.34,
+  "decisionLine": "wait",
+  "sessionId": "wrun_01M4K74THSVM54508D4BBPA1PT",
+  "startedAt": "2026-10-10T15:33:14.572Z",
+  "finishedAt": "2026-10-10T15:34:06.912Z",
+  "usage": {
+    "inputTokens": 116074,
+    "outputTokens": 4971
+  },
+  "eventCount": 310,
+  "dryRun": false,
+  "result": {
+    "case_id": "77 (R/004)",
+    "decision": "wait",
+    "summary": "The landlord's own contractor, Dorian Wren, is due today (16 Sept) after 10:00 to replace the front-door lock, and the tenant has said she will update us. So I'm waiting, with a hold to follow up tomorrow, and I haven't messaged anyone. On 9 Sept the tenant also raised three other problems that nobody has picked up: a broken blind, door glazing, and hot water that is too hot. The landlord has told us not to bring in other contractors, so I passed those to the human queue at normal priority.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "Event 023: the tenant says the contractor is coming today and she will update the agency. The next step is theirs and nothing is overdue, so I'm waiting with a follow-up date set. The landlord told us to use his own contractor and not instruct anyone else (events 011, 016), so there is nothing for us to assign. The other problems from event 021 have had no owner for a week. Because of the landlord's instruction, someone at the agency needs to decide who handles them.",
+      "alternatives_considered": [
+        {
+          "option": "Message the tenant or contractor now",
+          "why_not": "The tenant has just said she will update us. Chasing before the visit adds nothing."
+        },
+        {
+          "option": "Re-instruct Peregrine Keyworks",
+          "why_not": "The landlord told us not to instruct another contractor (event 011)."
+        },
+        {
+          "option": "Request formal landlord approval so the ticket can move to scheduling",
+          "why_not": "The landlord is arranging and presumably paying his own contractor, so the agency isn't spending his money. A new approval request would only irritate a landlord who has already complained."
+        },
+        {
+          "option": "Treat as an emergency",
+          "why_not": "The tenant says the lock gets worse but the door can still be locked. No report of an insecure property."
+        }
+      ],
+      "checks_performed": [
+        "Read all 23 events",
+        "No approvals, holds, attachments or property history in the CRM",
+        "classify_reply: auto, about access/availability, safety 0.02, dissatisfied 0.38",
+        "recall_lessons: no matching lessons",
+        "Checked the door can still be locked (events 001, 020)"
+      ],
+      "assumptions": [
+        "The landlord pays Dorian Wren directly (not confirmed)",
+        "Moving the date to 16 Sept is all the tenant meant in event 023"
+      ]
+    },
+    "situation": "Loose, intermittent front-door lock at 18 Larkspur Quay. The landlord chose his own contractor, Dorian Wren. He inspected around 9 Sept, said a new lock is needed, and is due back today after 10:00. The tenant will update us. Three other problems are unresolved.",
+    "actions_taken": [
+      {
+        "tool": "classify_reply",
+        "description": "Classified the tenant's 16 Sept email",
+        "result": "auto; about access/availability; low safety concern",
+        "ok": true
+      },
+      {
+        "tool": "recall_lessons",
+        "description": "Looked for past team decisions on similar cases",
+        "result": "No lessons found",
+        "ok": true
+      },
+      {
+        "tool": "move_stage",
+        "description": "Tried to move the ticket from intake to scheduling",
+        "result": "Refused: no landlord approval on record in the CRM",
+        "ok": false
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded that the landlord prefers email (event 005)",
+        "result": "fact 66",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded that the landlord uses his own contractor, Dorian Wren (events 011/016)",
+        "result": "fact 67",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Waiting on the tenant to confirm the lock outcome; follow up in 1 day",
+        "result": "hold 258",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Handed over the unowned extra problems and the landlord complaint, normal priority",
+        "result": "queue 21",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Tomas Elde (landlord)",
+        "status": "granted per agency note (event 006), then changed to use his own contractor; not recorded in the CRM approvals",
+        "channel": "call/email"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "The tenant's other problems (blind, door glazing, hot water too hot) have had no owner since 9 Sept. The landlord has told us not to instruct other contractors, and he complained about our coordination in event 011.",
+      "handover_summary": "Dorian Wren is due today to replace the lock and I'll chase the tenant on 17 Sept. A person needs to agree with the landlord who handles the three other problems. Hot water should come first because it could scald.",
+      "recommendation": "The property manager should email the landlord about the three problems and ask whether Dorian will handle them or the agency should. Ask the tenant for more detail on the hot water. Consider opening separate tickets."
+    },
+    "unverified": [
+      "Whether Dorian attends today or replaces the lock",
+      "Who pays Dorian Wren",
+      "How hot the water actually is, and whether anyone in the household is vulnerable",
+      "The earlier Saturday visit described by the landlord"
+    ],
+    "failures": [
+      "move_stage to scheduling was refused because the CRM has no approval on record. The ticket is still at intake."
+    ],
+    "risks_or_red_flags": [
+      "The tenant says the lock is getting worse. If it stops locking, the property is insecure and this becomes an emergency.",
+      "Hot water that is too hot could scald someone.",
+      "The landlord has complained before, and the tenant is unhappy that the problems are still unresolved."
+    ],
+    "final_status": "On hold waiting on the tenant (hold 258). The ticket is still at intake because the CRM refused the move. The extra problems are in the human queue (21).",
+    "next_follow_up": {
+      "when": "2025-09-17",
+      "what": "Ask the tenant whether Dorian Wren attended on 16 Sept and replaced the lock. If he did, confirm and move towards close-out. If not, chase the landlord and Dorian."
+    },
+    "confidence": 0.8
+  }
+}

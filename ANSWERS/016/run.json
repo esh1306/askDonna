@@ -1,0 +1,117 @@
+{
+  "case": "016",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 0,
+  "durationSec": 53.726,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4K7988ZAWYSA1CGYKQX9ACH",
+  "startedAt": "2026-10-10T15:35:39.964Z",
+  "finishedAt": "2026-10-10T15:36:33.690Z",
+  "usage": {
+    "inputTokens": 127607,
+    "outputTokens": 5087
+  },
+  "eventCount": 411,
+  "dryRun": false,
+  "result": {
+    "case_id": "90 (R/016 / NBL-016)",
+    "decision": "escalate",
+    "summary": "The smoke alarm at 26 Tallowmere Close has been unmounted for about 6 weeks. The landlord said he would use his own electrician, but we have no confirmation it's done. The tenant is recovering from a hospital stay and has asked for limited contact. They also reported an unannounced visitor nobody has identified. I emailed the landlord asking for the electrician's details, whether he sent the visitor, and a refit date. I escalated to a human at high priority and put a 2-day hold on the landlord. I did not contact the tenant, at their request.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "A missing smoke alarm is a fire-safety and compliance risk, and it has gone on for weeks (ev 10–14). The tenant is vulnerable after a hospital stay and has asked for less contact (ev 13), so tenant messages need a person's judgement. The visitor report (ev 15–16) is unverified and could be a security problem. Jev rated it review, with safety concern at 0.72. The landlord can answer who the electrician is, whether he sent the visitor and when the alarm will be fixed, so I asked him directly. The safety, vulnerability and visitor questions need agency judgement, so I escalated at high priority.",
+      "alternatives_considered": [
+        {
+          "option": "Message the tenant",
+          "why_not": "The tenant asked the agency to leave them alone while they recover (ev 13). A human should send one careful reply about the visitor."
+        },
+        {
+          "option": "Assign an agency electrician now",
+          "why_not": "The landlord chose his own electrician and nothing is approved. Overriding that is a judgement call for staff, so I put it in the escalation."
+        },
+        {
+          "option": "Just wait for the tenant to report completion",
+          "why_not": "The alarm has been down for weeks with no working replacement confirmed, and there is a security concern."
+        }
+      ],
+      "checks_performed": [
+        "Read all 17 events",
+        "No contractor, approvals, holds, attachments or profile facts on file",
+        "Jev classify_reply on ev 15: review, safety 0.72",
+        "No lessons found",
+        "Outbound guard passed the landlord email"
+      ],
+      "assumptions": [
+        "The tenant prefers email (they emailed on ev 12 and 13)",
+        "The visitor's link to the alarm work is unknown"
+      ]
+    },
+    "situation": "The smoke alarm came down in early August. The landlord took the job on with his own electrician. A fitter attended around 31 Aug but couldn't refit it because there was no bracket. The tenant was in hospital and asked for no contact. On 20 Sep an unverified person called at the property unannounced, and the ticket was then marked pending review.",
+    "actions_taken": [
+      {
+        "tool": "send_message",
+        "description": "Emailed the landlord asking for the electrician's name and company, whether he sent the 20 Sep visitor, and a refit and test date, and asked that visits are arranged through the agency with notice",
+        "result": "message_id 68, guard passed",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "High-priority handover covering the safety, vulnerability and unverified-visitor issues",
+        "result": "queue_id 31",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Waiting on the landlord, follow up in 2 days",
+        "result": "hold_id 270",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Tenant: vulnerability and contact preference",
+        "result": "fact 106",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Landlord: uses his own contractors",
+        "result": "fact 107",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Ronan Vale (Landlord)",
+        "status": "not_needed",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "A smoke alarm missing for weeks at a vulnerable tenant's home, plus an unverified visitor",
+      "handover_summary": "The alarm has been unmounted since about 31 Aug, done by the landlord's own unnamed fitter. The tenant was in hospital until 11 Sep and asked for no contact. An unannounced visitor came on 20 Sep and has not been identified. I emailed the landlord today for the electrician's details and a refit date.",
+      "recommendation": "Find out who the visitor was and send the tenant one sensitive email about it. If the landlord hasn't answered within 2 days, consider an agency electrician. Consider a temporary battery alarm, delivered by appointment."
+    },
+    "unverified": [
+      "The electrician's or fitter's identity",
+      "Who the 20 Sep visitor was and what they wanted",
+      "Whether any other working smoke alarm is in the property",
+      "Whether the alarm is mains-wired or battery",
+      "The building-management referral mentioned in ev 16"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "No confirmed working smoke alarm for about 6 weeks",
+      "Vulnerable tenant",
+      "Unannounced, unverified visitor could be a scam or security risk",
+      "The landlord's contractor is not identified and nothing is confirmed"
+    ],
+    "final_status": "intake; on hold waiting on the landlord (hold 270); escalated to the human queue (31)",
+    "next_follow_up": {
+      "when": "2025-09-24",
+      "what": "Chase the landlord for the electrician's details, the visitor question and a refit date. If he hasn't replied, the human queue should decide whether to send an agency electrician."
+    },
+    "confidence": 0.8
+  }
+}

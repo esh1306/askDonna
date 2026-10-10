@@ -1,0 +1,147 @@
+{
+  "case": "015",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 0,
+  "durationSec": 64.225,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4K796NWRCSRVBB1QQ7EV26H",
+  "startedAt": "2026-10-10T15:35:38.338Z",
+  "finishedAt": "2026-10-10T15:36:42.563Z",
+  "usage": {
+    "inputTokens": 91758,
+    "outputTokens": 5735
+  },
+  "eventCount": 341,
+  "dryRun": false,
+  "result": {
+    "case_id": "89 (R/015)",
+    "decision": "escalate",
+    "case_type": "mixed",
+    "summary": "The £665 post-tenancy quote from Brindlewick does not have a clear, unconditional approval. The landlord made approval depend on recovering the cost from the deposit (events 8 and 10). The deposit is £650 and is in dispute. Her later \"approved quote\" message (event 16) doesn't say which quote it means. I escalated the approval and deposit questions to the property manager. I placed a hold until 30 Sep to match the agency's \"wait 3 working days\" instruction. I moved the stage to landlord_approval. I did not assign or book the contractor.",
+    "situation": "18 Thistlevaunt Lane is vacant and needs post-tenancy cleaning, waste removal and garden clearance. Brindlewick quoted £665 (NBL-015-Q1). The contractor was told the quote was approved without the landlord's deposit condition (event 9), then asked to hold. The latest instruction (event 21) is to wait 3 working days because separate major maintenance must be finished first. Nothing is booked. A prospective tenant wants to move in on 28 Sep.",
+    "judgement": {
+      "why_this_decision": "Event 8 is a conditional approval: 'Happy to approve if they are recovered from the bond'. Event 10 repeats the condition. Whether the cost can be recovered depends on a disputed £650 deposit claim (event 11), which is less than the £665 quote. Deposits are not mine to decide. Event 16 ('approved quote') doesn't say which quote it means, and when it arrived the separate maintenance quote was the one awaiting approval (event 15). So there is no unconditional approval for this work. The agency has also told the contractor to hold until the major maintenance is done (events 15, 18, 20, 21).",
+      "alternatives_considered": [
+        {
+          "option": "Treat event 16 as approval and assign or book Brindlewick",
+          "why_not": "The message doesn't identify which quote it approves and doesn't remove the deposit condition. The agency has also told the contractor to hold until the major maintenance is done."
+        },
+        {
+          "option": "Email the landlord myself to ask which quote she approved",
+          "why_not": "Her answer is tied to the deposit dispute, which the property manager is already handling (event 11). I left it to Mira in the handover so the landlord doesn't get two parallel conversations."
+        },
+        {
+          "option": "Chase the contractor for dates",
+          "why_not": "The contractor has already agreed to wait (events 13 and 19), and the agency says not to book yet. Another message would not move the job on."
+        },
+        {
+          "option": "Only place a hold",
+          "why_not": "The conditional and ambiguous approval and the deposit issue need a person's judgement. A hold alone would leave them unresolved."
+        }
+      ],
+      "checks_performed": [
+        "Approval status: no approval record and no spend limit on the landlord's profile; the landlord's replies are conditional (events 8, 10) and ambiguous (event 16)",
+        "Amount: the quote is £665 lump sum with no VAT shown, against a £650 deposit",
+        "Scope: compared the quote with the inspection report. Disturbed soil is not covered, and carpet shampooing is extra to the original request",
+        "The contractor was told 'approved' without the condition (event 9), then told to hold (events 12, 15)",
+        "Dates: the 28 Sep move-in (event 15) against no booking; latest instruction to wait 3 working days (event 21)",
+        "No open holds, queue items or lessons before this action"
+      ],
+      "assumptions": [
+        "3 working days from Thu 25 Sep runs to about Tue 30 Sep, so the follow-up is set 5 calendar days out",
+        "There is no current tenant to notify because the property is vacant"
+      ]
+    },
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the ticket, its 21 events and the profiles",
+        "result": "Stage intake; no holds, approvals or queue items",
+        "ok": true
+      },
+      {
+        "tool": "read_attachment",
+        "description": "Read the quotation",
+        "result": "£665 lump sum, ref NBL-015-Q1; no VAT shown, no breakdown, no validity date; disturbed soil not mentioned",
+        "ok": true
+      },
+      {
+        "tool": "read_attachment",
+        "description": "Read the move-out inspection report",
+        "result": "Five items, including disturbed soil (an observation with no action); undated",
+        "ok": true
+      },
+      {
+        "tool": "recall_lessons",
+        "description": "Looked for lessons on similar cases",
+        "result": "No lessons found",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Handed over the conditional/ambiguous approval and the deposit dependency",
+        "result": "Queue item 32",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold waiting on the agency, matching the event 21 instruction",
+        "result": "Hold 271, follow-up in 5 days",
+        "ok": true
+      },
+      {
+        "tool": "move_stage",
+        "description": "Moved from intake to landlord_approval to match the evidence",
+        "result": "Now landlord_approval (on hold)",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the landlord's condition that post-tenancy costs come from the deposit",
+        "result": "Fact 108",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded property access: vacant, keys held at the office",
+        "result": "Fact 109",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Nessa Quill (landlord)",
+        "status": "conditional/ambiguous: depends on recovery from the deposit (events 8, 10); event 16 'approved quote' doesn't say which quote",
+        "channel": "email/update"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "The approval depends on a disputed deposit (£650, less than the £665 quote), and the later approval doesn't say which quote it covers.",
+      "handover_summary": "£665 Brindlewick quote (NBL-015-Q1). The landlord approved only if the cost comes from the deposit; the deposit is £650 and disputed. Her 'approved quote' message on 17 Sep doesn't say which quote. The contractor was told 'approved' without the condition, then told to hold. The sanitation work waits on separate major maintenance, which isn't scheduled. Move-in wanted for 28 Sep.",
+      "recommendation": "Mira: get written confirmation from the landlord of which quote she approved and whether the £665 approval stands regardless of what the deposit recovers. Ask Brindlewick about VAT and the disturbed soil. Release the contractor only once the approval is unconditional and the major maintenance has a date. Check the move-in date."
+    },
+    "unverified": [
+      "Which quote the landlord's 'approved quote' (event 16) refers to",
+      "Whether £665 includes VAT",
+      "Whether the deposit claim will recover the cost",
+      "Status and date of the separate major maintenance",
+      "Whether the 28 Sep move-in still stands"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "The contractor was told the quote was approved without the landlord's condition (event 9)",
+      "The £665 quote is more than the £650 deposit, so the landlord's condition may not be met",
+      "The 28 Sep move-in is at risk because nothing is booked",
+      "The quote doesn't cover the disturbed soil from digging",
+      "The quote has no VAT, terms or contractor contact details"
+    ],
+    "final_status": "landlord_approval, on hold (hold 271), escalated (queue 32)",
+    "next_follow_up": {
+      "when": "2025-09-30",
+      "what": "Check whether the major maintenance is complete and whether the landlord has given unconditional approval for the £665 quote; if both are done, release Brindlewick to propose a date"
+    },
+    "confidence": 0.82
+  }
+}

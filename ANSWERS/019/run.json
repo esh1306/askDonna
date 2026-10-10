@@ -1,0 +1,140 @@
+{
+  "case": "019",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 0,
+  "durationSec": 66.181,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4K7A6P0T6YWKCM6417E8ND8",
+  "startedAt": "2026-10-10T15:36:11.116Z",
+  "finishedAt": "2026-10-10T15:37:17.297Z",
+  "usage": {
+    "inputTokens": 112761,
+    "outputTokens": 6015
+  },
+  "eventCount": 476,
+  "dryRun": false,
+  "result": {
+    "case_id": "93 (R/019)",
+    "decision": "escalate",
+    "summary": "I haven't paid or forwarded the Alder & Finch invoice for £174, and I've escalated the case at high priority (queue 35). We asked the contractor for a quotation only and told him in writing not to start, but he did the work anyway. Nobody knows how he got into the empty property. The invoice is one lump sum with no breakdown, and some items go beyond the original repairs. I've asked the contractor for the details we need, told the landlord the invoice is on hold, and set a 2-day follow-up.",
+    "case_type": "maintenance_admin",
+    "judgement": {
+      "why_this_decision": "The landlord approved the remedial works with no cost stated (ev 005), but the agency asked Alder & Finch for a quote only and said no work until written authority (ev 007/008). The contractor says he did the work anyway on 9 Sep (ev 013). Invoice NBL-019-INV-11 is a single £174 line with no itemised breakdown, VAT, work date or payment terms. It also includes replacements that weren't authorised: a floorboard plus carpet reinstatement, and a new Venetian blind. The property is vacant and the agency held the keys, so how he got in is a security question. The rules say an invoice that doesn't match an approved quote gets escalated, not paid. Jev also flagged the invoice for review (needs a human response: 0.84).",
+      "alternatives_considered": [
+        {
+          "option": "Forward the invoice to the landlord for payment and move to close-out",
+          "why_not": "No price or scope was ever agreed, the work went ahead against our written instruction, and nothing proves it was done."
+        },
+        {
+          "option": "Just wait for the contractor",
+          "why_not": "How he got into the empty property and whether the work was unauthorised both need a staff decision. The landlord also needs to know the invoice is on hold."
+        },
+        {
+          "option": "Reject the invoice outright",
+          "why_not": "The landlord did approve the works in general, so whether to accept the invoice is a decision for agency staff and the landlord."
+        }
+      ],
+      "checks_performed": [
+        "Read the invoice: correct property and contractor, £174 lump sum, no itemised breakdown, VAT or work date",
+        "Checked approvals: no amount approved and no approval record in the CRM",
+        "Compared the invoiced scope with the inspection items: the floorboard and blind were replaced, not repaired",
+        "Checked access: tenant gone, agency holds the keys, no access arrangement on file",
+        "Looked for completion evidence: none visible",
+        "Lessons: none found"
+      ],
+      "assumptions": [
+        "The landlord's general approval did not authorise any price without a quote, since the agency made the quote a condition (ev 007/008)"
+      ]
+    },
+    "situation": "Move-out remedial works at an empty property. The contractor was asked for a quote only but says he did all six items, and has sent an unitemised £174 invoice. How he got in, and proof of the work, are both missing.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the case",
+        "result": "Stage: intake. No approvals, holds or profile facts on record",
+        "ok": true
+      },
+      {
+        "tool": "read_attachment",
+        "description": "Read the invoice",
+        "result": "NBL-019-INV-11, £174.00 lump sum, not itemised",
+        "ok": true
+      },
+      {
+        "tool": "recall_lessons",
+        "description": "Looked for similar past cases",
+        "result": "None found",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the contractor's invoice email",
+        "result": "Invoice; flagged for review (needs a human response: 0.84)",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Escalated: work done without authority, unknown access, unverified invoice",
+        "result": "Queue 35, high priority",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the contractor asking for the visit date, how he got in, photos, an itemised breakdown and why items were replaced",
+        "result": "Message 76 sent",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the landlord that the invoice is on hold and why",
+        "result": "Message 75 sent",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold while we wait for the contractor's details",
+        "result": "Hold 275, follow-up in 2 days",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the property as vacant, the tenant's status and a reliability note on the contractor",
+        "result": "Facts 119-121 saved",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Ivo Marlow (landlord)",
+        "status": "granted in general terms with no amount (ev 005); not granted for the £174 invoice",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "Contractor did the work without authority, access to the empty property is unexplained, and the invoice can't be checked against any agreed quote",
+      "handover_summary": "The landlord approved the works in general. We asked Alder & Finch for a quote only, but they did the work and invoiced a £174 lump sum. We don't know how they got in, there is no proof of completion, and the floorboard and blind were replaced without authorisation.",
+      "recommendation": "Confirm the property is secure and check the key log. Get the work verified. Decide with the landlord whether to accept the invoice. Check whether any costs can be recovered from the former tenant's deposit."
+    },
+    "unverified": [
+      "Whether the work was done, and to what standard",
+      "The contractor's claimed work date of 9 Sep",
+      "How the contractor got in",
+      "Whether £174 includes VAT or is reasonable"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "Unexplained entry to an empty property",
+      "Work done against a written instruction to quote only",
+      "Invoice not itemised, with unauthorised replacements",
+      "Earlier email to the landlord (ev 009) wrongly said a time was being agreed with the tenant, who had already left"
+    ],
+    "final_status": "Stage: intake. On hold waiting for the contractor (hold 275). Escalated to queue 35. Invoice not paid.",
+    "next_follow_up": {
+      "when": "In 2 days (hold 275)",
+      "what": "Chase Alder & Finch for the visit date, how they got in, photos and an itemised breakdown; check the human queue outcome"
+    },
+    "confidence": 0.85
+  }
+}
