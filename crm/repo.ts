@@ -606,6 +606,20 @@ export type EscalateInput = {
 export function escalate(ticketId: number, e: EscalateInput, opts?: Opts): Result<{ queue_id: number }> {
   return logged(ticketId, "escalate", e, opts, () => {
     if (!getTicket(ticketId)) return fail(`ticket ${ticketId} not found`);
+    // Don't stack duplicate escalations: an open item with the same reason is updated instead.
+    const dup = one<HumanQueueRow>("SELECT * FROM human_queue WHERE ticket_id=? AND status='open' AND reason=?", ticketId, e.reason);
+    if (dup) {
+      run(
+        "UPDATE human_queue SET summary=COALESCE(?,summary), checked=COALESCE(?,checked), uncertain=COALESCE(?,uncertain), recommendation=COALESCE(?,recommendation), priority=COALESCE(?,priority) WHERE id=?",
+        e.summary ?? null,
+        e.checked ?? null,
+        e.uncertain ?? null,
+        e.recommendation ?? null,
+        e.priority ?? null,
+        dup.id,
+      );
+      return { ok: true, queue_id: dup.id };
+    }
     const ts = opts?.ts ?? nowIso();
     const id = run(
       `INSERT INTO human_queue (ticket_id, reason, summary, checked, uncertain, recommendation, priority, status, created_at)

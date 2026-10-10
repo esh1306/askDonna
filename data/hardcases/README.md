@@ -18,3 +18,5 @@ Rehearsal set for unseen Reality Test cases. Rubrics in `rubrics/<n>.json`. Answ
 12. conditional landlord approval + over cap + preferred contractor unavailable - folder
 13. vulnerable tenant, landlord silent after two chases - folder
 14. invoice mismatch (amount + payee) - folder with notes.md + invoices.csv
+15. compliance: gas safety certificate (CP12) expiring in 9 days, landlord unresponsive - folder
+16. compliance: EICR with C2 findings needing remedial work - folder

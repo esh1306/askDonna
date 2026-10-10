@@ -1,0 +1,157 @@
+{
+  "case": "16",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 0,
+  "durationSec": 69.971,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4K15ER8FZKBC9CMTYK20VQX",
+  "startedAt": "2026-10-10T13:48:43.943Z",
+  "finishedAt": "2026-10-10T13:49:53.914Z",
+  "usage": {
+    "inputTokens": 139853,
+    "outputTokens": 6983
+  },
+  "eventCount": 545,
+  "dryRun": false,
+  "result": {
+    "case_id": "73 (R/16)",
+    "decision": "escalate",
+    "case_type": "safety_emergency",
+    "summary": "I treated this as an electrical safety emergency. The EICR is unsatisfactory, with a C2 for a scorched, loose neutral connection in the consumer unit, and the tenant has since reported an odd smell from the fuse box cupboard. Two young children live there. I escalated it to a human as high priority, then booked Sparkwell (the electrician who did the EICR) to come back urgently and make the consumer unit safe, without landlord approval. I emailed the landlord asking her to approve the roughly £620 replacement, gave the tenant safety advice, and put a 12-hour hold on the case for follow-up.",
+    "situation": "Sparkwell Electrical (NICEIC) emailed an unsatisfactory EICR for 8 Kestrel Lane: two C2s (no RCD on the socket circuits; a scorched, loose neutral with heat damage in the consumer unit) and one C3 (no surge protection). They recommend fixing it within 28 days, sooner because of the scorching, at roughly £620. The tenant, Mr Leo Brandt, has two young children and reports an odd smell from the fuse box cupboard. The landlord, Mrs Whitcombe, has no spend limit on file and hasn't been asked for approval yet. The EICR PDF isn't on our file.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the case",
+        "result": "3 events, no attachments, no profile facts, no approvals or holds",
+        "ok": true
+      },
+      {
+        "tool": "recall_lessons",
+        "description": "Looked for past team decisions on similar cases",
+        "result": "None relevant (all were about scheduling or close-out)",
+        "ok": true
+      },
+      {
+        "tool": "classify_intake",
+        "description": "Classified the report",
+        "result": "Emergency, compliance, safety risk 0.96, route emergency_dispatch",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the tenant's question",
+        "result": "Needs review; safety concern 0.96",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "High-priority handover: electrical danger in a household with children",
+        "result": "Queue item 15",
+        "ok": true
+      },
+      {
+        "tool": "assign_contractor",
+        "description": "Booked Sparkwell Electrical for an urgent make-safe visit (emergency safety work)",
+        "result": "Assigned; ticket moved to scheduling",
+        "ok": true
+      },
+      {
+        "tool": "request_landlord_approval",
+        "description": "Emailed Mrs Whitcombe for approval of the consumer unit replacement up to about £620",
+        "result": "Approval 37 pending",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Asked Sparkwell to attend urgently to make the unit safe, not to start the replacement yet, and to send the EICR PDF and written quote",
+        "result": "Sent (message 34)",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Gave the tenant safety advice and told him the next steps, with an update by tomorrow afternoon",
+        "result": "Sent (message 35)",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold while Sparkwell confirms the visit and sends the documents",
+        "result": "Hold 255, follow up in 0.5 days",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the EICR status on the property, plus the household's vulnerability and the tenant's availability",
+        "result": "Facts 61, 62, 63",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Mrs Whitcombe (landlord)",
+        "status": "requested",
+        "channel": "email"
+      },
+      {
+        "party": "Mrs Whitcombe (landlord)",
+        "status": "not_needed (emergency make-safe visit only)",
+        "channel": "n/a"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "Electrical danger: C2 scorched neutral plus a smell report, in a household with young children; no landlord approval or spend limit",
+      "handover_summary": "Unsatisfactory EICR with two C2s. Tenant reports a smell from the fuse box cupboard. Sparkwell has been asked to make it safe urgently. Approval for the ~£620 replacement has been requested by email. The EICR PDF isn't on file.",
+      "recommendation": "Phone Sparkwell today to confirm the urgent visit. Phone Mrs Whitcombe for approval, since we have no preferred channel or contact details for her. Get the EICR PDF and the written quote."
+    },
+    "unverified": [
+      "The EICR document itself: its date, engineer and certificate details aren't visible",
+      "The £620 is approximate; there is no written quote",
+      "Contact details and preferred channel for the landlord, tenant and contractor",
+      "Whether Sparkwell can attend urgently"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "Heat damage plus a smell suggests a possible fire risk",
+      "No RCD protection on the sockets in a home with young children",
+      "No contact details on file, so messages rely on the team routing them",
+      "The Jev guard gave the landlord email a 0.51 chance of an unverified 'work done' claim, but did not block it. The email says only that we have asked Sparkwell to attend, not that the work is done"
+    ],
+    "final_status": "scheduling; on hold waiting for Sparkwell (hold 255); landlord approval 37 pending; human queue item 15 open (high)",
+    "next_follow_up": {
+      "when": "2026-10-10 (12 hours after the hold was placed)",
+      "what": "Check that Sparkwell has confirmed the make-safe visit and sent the EICR PDF and quote; check the landlord's reply to approval 37; update the tenant by tomorrow afternoon as promised"
+    },
+    "confidence": 0.82,
+    "judgement": {
+      "why_this_decision": "Event 001 records scorching and heat damage at the neutral bar, and event 002 adds a smell from the cupboard. With young children in the home, that counts as electrical danger under the emergency rules. Event 003 shows no spend limit, so the £620 replacement needs Mrs Whitcombe's approval, while the make-safe visit can go ahead as emergency work once escalated as high priority. No past lessons applied.",
+      "alternatives_considered": [
+        {
+          "option": "Just ask the landlord for approval and wait",
+          "why_not": "A smell plus a scorched neutral is a live risk to a family with children, so waiting isn't safe"
+        },
+        {
+          "option": "Approve the full £620 replacement as emergency work",
+          "why_not": "The emergency only covers making the unit safe; the permanent replacement can wait a short time for the landlord's decision"
+        },
+        {
+          "option": "Tell the tenant to keep the power off",
+          "why_not": "I'm not an electrician and the sockets work normally; I gave conditional advice instead and left the decision to the electrician"
+        }
+      ],
+      "checks_performed": [
+        "Approval status (none) and spend limit (none recorded)",
+        "Attachments (none; EICR PDF not on file)",
+        "Contractor accreditation (NICEIC, per event 001)",
+        "Safety signals: scorching, smell, children",
+        "Duplicates and history (no other tickets for this property)"
+      ],
+      "assumptions": [
+        "Sparkwell Electrical is the contractor on this ticket (they sent the EICR)",
+        "The tenant's name is Mr Leo Brandt, as given in the case description"
+      ]
+    }
+  }
+}

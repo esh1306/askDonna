@@ -6,110 +6,111 @@
 
 ## Summary
 
-I've treated ticket R/13 as a safety emergency and handed it to the team at high priority. Mr Finch is 84, lives alone and has a heart condition. He has had no heating or hot water since 6 Oct, it is near freezing overnight, and he now says he feels dizzy. The landlord hasn't replied to three emails and is away until 20 Oct. Emergency safety work doesn't need the landlord's approval, but there is no contractor on record for me to assign. So the team needs to phone Mr Finch to check on him and send an emergency engineer. I texted Mr Finch with health and keep-warm advice, texted the landlord, recorded both people's details on file, moved the ticket forward and set a follow-up for 6 hours.
+I've treated this as an emergency and escalated it to the team as high priority. Mr Finch is 84, has a heart condition and lives alone. He has had no heating or hot water since 6 October, overnight temperatures are around 3C, and he now says he feels dizzy. The landlord hasn't answered three emails and is away until 20 October. Once the case was escalated, I booked Calder Heating to attend urgently without landlord approval. I sent Mr Finch safety advice, including to call NHS 111 now and 999 if he gets worse, and queued a phone call to the landlord's mobile to explain and ask approval for up to £200.
 
 ## Judgement
 
 - **Case type:** safety_emergency
-- **Why this decision:** Under the emergency rule, no heating for a vulnerable tenant in cold weather is an emergency. Mr Finch is 84 with a heart condition (event 001), the landlord hasn't replied in two days and is away until 20 Oct (event 005), and he now feels dizzy (event 006). Approval doesn't hold up emergency safety work, but there is no contractor on record to assign, and checking on his welfare needs a person on the phone. So I escalated at high priority, gave safe advice and told the landlord.
+- **Why this decision:** Event 001: Mr Finch is 84, lives alone and has a heart condition. His heating and hot water stopped on 6 October and overnight temperatures are around 3C. Events 002–005: the landlord got three emails with no reply and is away until 20 October. Event 006: the tenant now feels dizzy. This fits the emergency rule for no heating for a vulnerable tenant in cold weather. The classifiers agreed: severity emergency 1.0, safety risk 0.93, safety concern in the tenant's SMS 0.9. Approval can't block emergency safety work, so I escalated as high priority first and then booked the engineer. I recorded the reason in the escalation and in the assignment.
 
 | Alternative considered | Why not |
 |---|---|
-| Ask the landlord for approval again by phone and wait | Emergency safety work doesn't need approval, and waiting risks Mr Finch's health |
-| Assign a contractor myself | There is no contractor on the ticket or in the property's history, and I won't make up a name |
-| Wait until 20 Oct | That would leave a vulnerable tenant without heating, which is unacceptable |
+| Keep waiting for the landlord and chase again (lessons #15 and #23) | Those lessons are for routine jobs. Here a vulnerable tenant with a heart condition is in a cold home and has symptoms, so waiting until 20 October risks his health. |
+| Only escalate, without booking an engineer | That leaves him without heat until a person picks it up. The rules say to book urgent attendance and escalate at the same time. |
+| Send another email to the landlord | Email isn't reaching them because of the out-of-office. I queued a call to the mobile number on file instead. |
 
 **Checks performed before acting**
 
-- Approval status: none on record; three emails unanswered; out-of-office until 20 Oct
-- Mr Finch's vulnerability from the event 001 tenancy notes
-- Contractor history: none
-- Both classifiers flagged an emergency and a safety risk
-- No pre-approved spend limit on record
+- Approvals: none on record, no pre-approved limit and no standing authority
+- Contractor: none on the ticket and no jobs at this property before; found heating contractors to choose from
+- Safety: elderly tenant with a heart condition, dizziness, about 3C overnight, no heating or hot water
+- Landlord contactability: out-of-office until 20 October; mobile number in event 005 with no call recorded
+- Classified the tenant SMS and the request
+- Checked team lessons: #15 and #23 apply to routine jobs only, so I didn't follow them
 
 **Assumptions**
 
-- The overnight cold continues
-- The agency has an emergency Gas Safe engineer on its panel
+- The £200 estimate from event 002 is a reasonable cap for emergency attendance
+- The landlord mobile in event 005 is current
+- Calder Heating can do boiler work (chosen because its name matches heating; no history at this property)
 
 ## Actions taken
 
 | # | Tool | Input (gist) | Result | Output (gist) |
 |---|---|---|---|---|
-| 1 | `get_ticket_context` | {"ticket_id":45} | ok | {"ok":true,"ticket":{"id":45,"case_ref":"R/13","property_id":34,"tenant_id":112,"landlord_id":113,"contractor_id":null,… |
-| 2 | `classify_reply` | {"ticket_id":45,"text":"Still no heating. I am wearing my coat indoors and feel a bit dizzy. Don't want to bother anyone.","sender_role":"t… | ok | {"autonomy":"review","intent":"still_broken","intent_probs":{"confirms_fixed":0,"still_broken":1,"access_or_availabilit… |
-| 3 | `classify_intake` | {"ticket_id":45,"estimate_gbp":200,"text":"No heating or hot water since 6 Oct, boiler display blank. Tenant 84, lives alone, heart conditi… | ok | {"route":"emergency_dispatch","scope":"maintenance_repair","scope_probs":{"maintenance_repair":0.71,"maintenance_admin"… |
-| 4 | `send_message` | {"ticket_id":45,"to":"tenant","channel":"sms","body":"Dear Mr Finch, you are not bothering anyone. Thank you for letting us know. 6 Primros… | FAILED: Blocked by Jev outbound guard (message). claims_work_done_unverified (p=0.77): claims work is done/booked/paid/approved… |  |
-| 5 | `send_message` | {"ticket_id":45,"to":"landlord","channel":"sms","body":"Urgent: 6 Primrose Court, ref R/13. Your tenant, who is 84 and has a heart conditio… | FAILED: Blocked by Jev outbound guard (message). claims_work_done_unverified (p=0.71): claims work is done/booked/paid/approved… |  |
-| 6 | `escalate_to_human` | {"ticket_id":45,"reason":"Vulnerable tenant (84, heart condition) has had no heating or hot water for 3+ days, now feels dizzy. Landlord un… | ok | {"ok":true,"queue_id":21} |
-| 7 | `send_message` | {"ticket_id":45,"to":"tenant","channel":"sms","body":"Dear Mr Finch, you are not bothering anyone, and thank you for telling us (6 Primrose… | ok | {"ok":true,"message_id":63,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.29,"promises_… |
-| 8 | `send_message` | {"ticket_id":45,"to":"landlord","channel":"sms","body":"Urgent: 6 Primrose Court, ref R/13. Your tenant is 84 and has a heart condition. He… | ok | {"ok":true,"message_id":64,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.24,"promises_… |
-| 9 | `add_profile_fact` | {"entity_type":"contact","entity_id":112,"key":"vulnerability","value":"Aged 84, lives alone, heart condition, uses walking frame; daughter… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":68,"entity_type":"contact","entity_id":112,"key":"vulnerabil… |
-| 10 | `add_profile_fact` | {"entity_type":"contact","entity_id":113,"key":"email_responsiveness","value":"No reply to 3 emails 6-8 Oct 2026; out-of-office away until … | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":69,"entity_type":"contact","entity_id":113,"key":"email_resp… |
-| 11 | `move_stage` | {"ticket_id":45,"to":"provider_selection","reason":"Emergency (vulnerable 84-year-old tenant, no heating since 6 Oct, now dizzy, event 006)… | ok | {"ok":true,"from":"intake","to":"provider_selection","status":"open"} |
-| 12 | `place_hold` | {"ticket_id":45,"reason":"Ops to phone tenant for a welfare check and dispatch an emergency heating engineer (human queue 21). Check again … | ok | {"ok":true,"hold_id":100} |
+| 1 | `get_ticket_context` | {"ticket_id":71} | ok | {"ok":true,"ticket":{"id":71,"case_ref":"R/13","property_id":65,"tenant_id":184,"landlord_id":185,"contractor_id":null,… |
+| 2 | `recall_lessons` | {"ticket_id":71,"situation_text":"Elderly vulnerable tenant (84, heart condition) with no heating or hot water in cold weather, now feels d… | ok | {"ok":true,"count":5,"lessons":[{"id":23,"situation":"A minor maintenance request (a sticking, creaking door with misal… |
+| 3 | `classify_reply` | {"ticket_id":71,"text":"Still no heating. I am wearing my coat indoors and feel a bit dizzy. Don't want to bother anyone.","sender_role":"t… | ok | {"autonomy":"review","intent":"still_broken","intent_probs":{"confirms_fixed":0,"still_broken":1,"access_or_availabilit… |
+| 4 | `classify_intake` | {"ticket_id":71,"estimate_gbp":200,"text":"No heating or hot water since 6 Oct, boiler display blank. Tenant 84, lives alone, heart conditi… | ok | {"route":"emergency_dispatch","scope":"maintenance_repair","scope_probs":{"maintenance_repair":0.72,"maintenance_admin"… |
+| 5 | `escalate_to_human` | {"ticket_id":71,"reason":"Emergency: 84-year-old tenant with heart condition, no heating/hot water for 3+ days in cold weather, now reports… | ok | {"ok":true,"queue_id":16} |
+| 6 | `find_contractors` | {"ticket_id":71,"trade":"gas engineer","text":"Emergency boiler fault, no heating or hot water, boiler display blank, vulnerable elderly te… | ok | {"ok":true,"category":"heating_hot_water","contractors":[{"contact_id":162,"name":"Calder Heating","company":"Calder He… |
+| 7 | `assign_contractor` | {"ticket_id":71,"contractor_name":"Calder Heating","company":"Calder Heating","reason":"Emergency (escalated high, queue 16): vulnerable 84… | ok | {"ok":true,"contractor_id":162,"stage":"scheduling"} |
+| 8 | `send_message` | {"ticket_id":71,"to":"contractor","channel":"email","subject":"EMERGENCY attendance – no heating/hot water – 6 Primrose Court, Oldacre ZZ2 … | ok | {"ok":true,"message_id":37,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.05,"promises_… |
+| 9 | `send_message` | {"ticket_id":71,"to":"tenant","channel":"sms","body":"Mr Finch, this is Donna from the lettings agency about your heating at 6 Primrose Cou… | ok | {"ok":true,"message_id":38,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.25,"promises_… |
+| 10 | `request_landlord_approval` | {"ticket_id":71,"summary":"Emergency boiler repair at 6 Primrose Court (R/13). Elderly tenant has had no heating or hot water since 6 Oct a… | ok | {"ok":true,"approval_id":39,"message_id":39,"landlord":"Landlord (R/13)","guard":{"blocked":false,"reasons":[],"probs":… |
+| 11 | `add_profile_fact` | {"entity_type":"contact","entity_id":184,"key":"vulnerability","value":"Aged 84, lives alone, heart condition, uses a walking frame; daught… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":64,"entity_type":"contact","entity_id":184,"key":"vulnerabil… |
+| 12 | `add_profile_fact` | {"entity_type":"contact","entity_id":185,"key":"email_unresponsive_away_until","value":"Out-of-office: away until 20 Oct 2026, limited emai… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":65,"entity_type":"contact","entity_id":185,"key":"email_unre… |
+| 13 | `place_hold` | {"ticket_id":71,"reason":"Emergency dispatch: waiting for Calder Heating to confirm an arrival time today. If there's no reply, switch to H… | ok | {"ok":true,"hold_id":256} |
 
 Agent's own account of its actions (from the structured result):
 
-- `get_ticket_context` - Loaded the ticket -> Stage was intake. No contractor, job history, profile facts, holds or approvals on record
-- `classify_reply` - Classified Mr Finch's text of 9 Oct (event 006) -> Still broken. Safety concern 0.88, needs a human reply 0.95, flagged for review
-- `classify_intake` - Classified the problem -> Emergency, heating and hot water, safety risk 0.93, suggested route: emergency dispatch
-- `escalate_to_human` - High-priority handover: phone Mr Finch to check on him, send an emergency engineer, provide temporary heaters, phone the landlord's mobile, consider a safeguarding referral -> Queue item 21
-- `send_message` (FAILED) - First text to Mr Finch -> Blocked by the outbound check: it read as claiming work was arranged and committing the landlord's money
-- `send_message` (FAILED) - First text to the landlord -> Blocked by the outbound check: it read as claiming work was arranged
-- `send_message` - Rewritten text to Mr Finch: call NHS 111, or 999 if worse; keep-warm steps; being treated as an emergency; the team will phone this evening -> Sent (message 63)
-- `send_message` - Rewritten text to the landlord: the emergency, their emails going unanswered, a request to call the office -> Sent (message 64)
-- `add_profile_fact` - Recorded Mr Finch's vulnerability -> Fact 68
-- `add_profile_fact` - Recorded that the landlord didn't answer emails and is away; use the mobile for urgent matters -> Fact 69
-- `move_stage` - Moved the ticket from intake to provider selection -> Done
-- `place_hold` - Waiting on the agency team to check on Mr Finch and send an engineer; follow-up in 6 hours -> Hold 100
+- `get_ticket_context` - Loaded the ticket -> Stage was intake; no approvals, holds, contractor or property history
+- `recall_lessons` - Checked how the team handled similar cases -> Lessons #15 and #23 are for routine jobs; I didn't follow them because this is an emergency
+- `classify_reply` - Classified the tenant SMS from event 006 -> Still broken; safety concern 0.9; needs a person to check (review)
+- `classify_intake` - Classified the job -> Heating and hot water; severity emergency; route emergency_dispatch
+- `escalate_to_human` - Escalated to the team as high priority: emergency, vulnerable tenant, landlord can't be reached -> Queue item 16
+- `find_contractors` - Searched for a gas or heating engineer -> Calder Heating and Harlow Heating
+- `assign_contractor` - Assigned Calder Heating for emergency work without landlord approval (reason recorded) -> Ticket moved to scheduling
+- `send_message` - Emailed Calder Heating: emergency job details, tenant's needs, £200 limit and a request for their arrival time -> Message 37 queued
+- `send_message` - Texted Mr Finch: engineer requested, NHS 111 and 999 advice, how to keep warm, colleague will ring -> Message 38 queued
+- `request_landlord_approval` - Queued a phone call to the landlord's mobile explaining the emergency work and asking approval up to £200 -> Approval 39 pending
+- `add_profile_fact` - Recorded Mr Finch's vulnerability on his profile -> Fact 64
+- `add_profile_fact` - Recorded that the landlord is away until 20 October and not answering email -> Fact 65
+- `place_hold` - Put the ticket on hold while waiting for Calder Heating's arrival time, with a 6-hour follow-up -> Hold 256
 
 ## Approvals
 
 | Party | Status | Channel |
 |---|---|---|
-| Landlord | not_needed: emergency safety work. Approval was asked for by email three times with no reply; landlord away until 20 Oct | email (earlier); SMS notice sent now |
+| Landlord (R/13) | requested (approval 39 pending, emergency work proceeding without it) | call |
 
 ## Escalation & handover
 
 - Escalation needed: **yes**
-- Reason: Mr Finch is vulnerable and has had no heating for over 3 days, now with dizziness. The landlord can't be reached and there is no contractor on record to send.
-- Handover summary: Mr Finch, 84, 6 Primrose Court (R/13): no heating or hot water since 6 Oct, now dizzy. The landlord didn't answer three emails and is away until 20 Oct. I texted Mr Finch health and keep-warm advice and texted the landlord. Queue item 21.
-- Recommendation: 1) Phone Mr Finch now to check on him; call NHS 111 or 999 for him if needed, and get an emergency contact. 2) Send an emergency Gas Safe engineer from the agency's panel, then assign them on R/13. 3) Get him temporary electric heaters. 4) Phone the landlord's mobile, 07700 900456, and record why the work went ahead without approval. 5) Consider a safeguarding referral.
+- Reason: Emergency: vulnerable 84-year-old with a heart condition, no heating or hot water in cold weather, now dizzy; landlord can't be reached
+- Handover summary: Queue item 16. Calder Heating has been asked to attend urgently, the tenant has been sent safety and NHS 111/999 advice, and a call to the landlord is queued (approval 39). Still needed: a welfare call to the tenant, confirmation the engineer is attending today, and a backup engineer if Calder can't come.
+- Recommendation: Phone Mr Finch now; call 999 if he is getting worse. Make sure an engineer attends today; use Harlow Heating if Calder can't. Phone the landlord on 07700 900456. Consider a welfare check, contacting his next of kin, and temporary heaters.
 
 ## What could not be verified
 
-- How Mr Finch is now, beyond his text of 9 Oct
-- Whether the landlord's mobile has ever been called
-- No phone number or email for Mr Finch on his profile
-- Which engineer can attend, and when
-- What is wrong with the boiler (the blank display could be a power or supply fault)
-- Whether the £200 estimate came from an actual quote
+- Mr Finch's current health
+- Whether Calder Heating can attend today
+- Cause of the fault and the final cost
+- Whether the landlord's mobile number is current
+- How the engineer will get in
 
 ## What failed
 
-- Tool `send_message` failed: Blocked by Jev outbound guard (message). claims_work_done_unverified (p=0.77): claims work is done/booked/paid/approved without evidence in the records: rewrite without claiming completion; say only what is confirmed | commits_landlord_money (p=0.77): agrees a cost on the landlord's behalf: ask for…
-- Tool `send_message` failed: Blocked by Jev outbound guard (message). claims_work_done_unverified (p=0.71): claims work is done/booked/paid/approved without evidence in the records: rewrite without claiming completion; say only what is confirmed. Rewrite the text to fix this and retry, or escalate_to_human if you cannot.
-- Agent reported: The first texts to Mr Finch and the landlord were blocked by the outbound check. I rewrote both without claiming an engineer was arranged or committing the landlord's money, and both then sent.
+_No failures recorded._
 
 ## Risks & red flags
 
-- Health risk: Mr Finch is 84 with a heart condition, has had no heating for over 3 days in near-freezing weather, and now feels dizzy
-- He plays things down ('don't want to bother anyone') and his daughter is away
-- The 48-hour approval timer ran out on 8 Oct and nothing was done, so there has been a day of delay
-- The landlord is unreachable until 20 Oct
+- Dizziness in an 84-year-old with a heart condition, in a cold home
+- He is reluctant to ask for help, so he may not report it if he gets worse
+- There is no visible record of anyone checking on him, or of help with heating, since 6 October
+- The landlord hasn't approved yet; the work is going ahead without approval on emergency grounds
 
 ## Final result / next follow-up
 
-- Final status: Provider selection: on hold waiting on the agency team, high-priority queue item 21
-- Next follow-up: In 6 hours (evening of the day this was handled) - Check that Mr Finch was phoned and is OK, and that an emergency engineer has been sent and assigned on R/13
-- Confidence: 0.9
+- Final status: scheduling – emergency engineer requested, on hold waiting for Calder Heating's arrival time; escalated as high priority (queue item 16)
+- Next follow-up: Within 6 hours (hold 256) - Confirm Calder Heating's arrival time and tell Mr Finch. If Calder hasn't replied, use Harlow Heating. Check on the landlord call (approval 39).
+- Confidence: 0.85
 
 ## Run metadata
 
-- Case folder: `C:\Users\sahid\Documents\Projects\Hackathons\DwellyHack\dwelly-agent\data\hardcases\13`
-- Session id: wrun_01M4JYA0W0CNEM95FV6H6SSW4C
-- Started: 2026-10-10T12:58:48.007Z  Finished: 2026-10-10T12:59:53.047Z  Duration: 65.0s
-- Events recorded: 502
+- Case folder: `data/hardcases/13`
+- Session id: wrun_01M4K15ERNFE7V4HEDZK1H5VD1
+- Started: 2026-10-10T13:48:43.943Z  Finished: 2026-10-10T13:49:57.383Z  Duration: 73.4s
+- Events recorded: 503
 - Model(s): anthropic/claude-opus-5.5
-- Tokens: in 100820 / out 6744; cost: not reported
+- Tokens: in 160612 / out 6907; cost: not reported

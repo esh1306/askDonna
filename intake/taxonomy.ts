@@ -6,6 +6,7 @@ export const CATEGORIES = {
   cleaning_checkout_works: "Check-out cleaning, carpet replacement, repainting, and post-tenancy works quotes requested by the agency.",
   electrical_lighting: "Lighting, sockets, switches, fuse board, wiring, ceiling fittings.",
   heating_hot_water: "Boiler, radiators, heating controls, no hot water, no heating.",
+  compliance: "Statutory and licensing compliance: gas safety certificate (CP12), EICR, EPC, smoke and CO alarm checks, HMO or selective licences, legionella risk assessment, deposit protection notices, and remedial work arising from a compliance report.",
   inspection_admin: "Inspections, meter or solar readings, photos, paperwork and other non-repair admin tasks.",
   other: "Anything that fits none of the above.",
 } as const;

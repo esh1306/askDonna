@@ -2,7 +2,7 @@ import { copyFile, mkdir, readdir, readFile, rm, stat, writeFile } from "node:fs
 import { basename, dirname, join, resolve } from "node:path";
 import { importCaseDir } from "../crm/import.ts";
 import { setTicketSource } from "../crm/sources.ts";
-import { all, getTicketContext } from "../crm/repo.ts";
+import { all, getTicketContext, linkContact, one, run, upsertContact, type Role } from "../crm/repo.ts";
 import { stripIndex, type Prepared } from "./run-cases.ts";
 
 /** Everything the agent changed or created for a ticket, so REASONING.md can show a before/after diff. */
@@ -65,12 +65,80 @@ export async function normaliseCase(src: string, caseNumber: string): Promise<st
   return dst;
 }
 
+type Party = { role: "tenant" | "landlord" | "contractor"; name: string; company?: string };
+
+const GENERIC = /^(tenant|landlord|contractor|agency|system|agent|unknown|n\/a|none|office|the (tenant|landlord|contractor))$/i;
+const roleOf = (r: string): Party["role"] | null => {
+  const x = r.toLowerCase();
+  return x.includes("tenant") ? "tenant" : x.includes("landlord") ? "landlord" : /contractor|supplier|tradesperson/.test(x) ? "contractor" : null;
+};
+
+/** Pull named parties out of free case text (forwarded email headers, JSON threads, "Role: Name" lines, office notes, CSV columns). */
+export function parseParties(text: string): Party[] {
+  const found: Party[] = [];
+  const add = (role: string | null, rawName: string | undefined) => {
+    const name = rawName?.replace(/\s+/g, " ").replace(/^[\s"'*_]+|[\s"'*_.,;:]+$/g, "");
+    const r = role ? roleOf(role) : null;
+    if (!r || !name || name.length < 2 || name.length > 80 || GENERIC.test(name)) return;
+    if (!found.some((f) => f.role === r && f.name.toLowerCase() === name.toLowerCase())) found.push({ role: r, name });
+  };
+  // From: Tenant (Hannah Reid)
+  for (const m of text.matchAll(/^\s*(?:\*\*)?(?:From|Sender)(?:\*\*)?\s*:\s*(?:\*\*)?\s*(Tenant|Landlord|Contractor)\s*\(([^)\n]+)\)/gim)) add(m[1], m[2]);
+  // JSON threads: "from": "...", "role": "..."  (either order)
+  for (const m of text.matchAll(/"(?:from|sender|name)"\s*:\s*"([^"]+)"[^{}]*?"role"\s*:\s*"([^"]+)"/gi)) add(m[2], m[1]);
+  for (const m of text.matchAll(/"role"\s*:\s*"([^"]+)"[^{}]*?"(?:from|sender|name)"\s*:\s*"([^"]+)"/gi)) add(m[1], m[2]);
+  // Tenant: Name / Landlord: Name / Contractor: Name (also "**Tenant:** Name", "- Landlord - Name")
+  for (const m of text.matchAll(/^[\s>*-]*(?:\*\*)?(Tenant|Landlord|Contractor)(?:\s+name)?(?:\*\*)?\s*[:-]\s*(?:\*\*)?\s*([^\n(]+?)(?:\s*\(.*)?$/gim)) add(m[1], m[2]);
+  // Office notes: "Landlord Ms Ferrer approved", "Tenant Mr Finch reported"
+  for (const m of text.matchAll(/\b(Tenant|Landlord)\s+((?:Mr|Mrs|Ms|Miss|Mx|Dr)\.?\s+[A-Z][\w'-]+(?:\s+[A-Z][\w'-]+)?)/g)) add(m[1], m[2]);
+  // Contractor named in an approval note or a CSV contractor_of_record column
+  for (const m of text.matchAll(/approved\s+["“]([^"”]+?)\s+to\s+/gi)) add("contractor", m[1]);
+  const csv = /\n([^\n]*contractor_of_record[^\n]*)\n([^\n]+)/i.exec(text);
+  if (csv) {
+    const i = csv[1].split(",").findIndex((c) => /^contractor_of_record$/i.test(c.trim()));
+    if (i >= 0) add("contractor", csv[2].split(",")[i]);
+  }
+  return found;
+}
+
+/** Normalised .txt/.json cases carry their contacts only in the text; link them to the ticket where the import found none. */
+export function backfillContacts(ticketId: number, text: string): Party[] {
+  const t = one<{ tenant_id: number | null; landlord_id: number | null; contractor_id: number | null; property_id: number | null }>(
+    "SELECT tenant_id, landlord_id, contractor_id, property_id FROM tickets WHERE id=?",
+    ticketId,
+  );
+  if (!t) return [];
+  const parties = parseParties(text);
+  const done: Party[] = [];
+  for (const role of ["tenant", "landlord", "contractor"] as const) {
+    const col = `${role}_id` as const;
+    // The importer creates a placeholder contact named e.g. "Tenant (R/2)" when no name is known: treat it as unset.
+    const cur = t[col] != null ? one<{ id: number; name: string }>("SELECT id, name FROM contacts WHERE id=?", t[col]!) : undefined;
+    const placeholder = cur != null && /^(Tenant|Landlord|Contractor) \(.+\)$/.test(cur.name);
+    if (t[col] != null && !placeholder) continue;
+    const party = parties.find((p) => p.role === role);
+    if (!party) continue;
+    const r = upsertContact({ role: role as Role, name: party.name });
+    if (!r.ok) continue;
+    run(`UPDATE tickets SET ${col}=? WHERE id=? AND (${col} IS NULL OR ${col}=?)`, r.contact_id, ticketId, cur?.id ?? null);
+    if (placeholder && cur && !one("SELECT 1 AS x FROM tickets WHERE tenant_id=? OR landlord_id=? OR contractor_id=?", cur.id, cur.id, cur.id)) {
+      run("DELETE FROM property_contacts WHERE contact_id=?", cur.id);
+      run("DELETE FROM contacts WHERE id=?", cur.id);
+    }
+    if (t.property_id != null) linkContact(t.property_id, r.contact_id, role);
+    done.push(party);
+  }
+  return done;
+}
+
 export async function crmPrepare(rawCaseDir: string, caseNumber: string): Promise<Prepared> {
   const caseDir = await normaliseCase(rawCaseDir, caseNumber);
   const imported = importCaseDir(caseDir, { track: "Reality", id: caseNumber });
   if (!imported.ok) throw new Error(`CRM import failed: ${imported.error}`);
   const ticketId = imported.ticket_id;
   setTicketSource(ticketId, caseDir);
+  const rawText = [await readFile(join(caseDir, "index.md"), "utf8").catch(() => ""), await readFile(join(caseDir, "history.md"), "utf8").catch(() => "")].join("\n");
+  backfillContacts(ticketId, rawText);
 
   const read = async (f: string) => readFile(join(caseDir, f), "utf8").catch(() => "");
   const index = stripIndex(await read("index.md"));

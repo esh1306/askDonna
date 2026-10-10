@@ -5,7 +5,7 @@ import { addEvent, all, one, getTicketContext, resolveApproval, markMessage, run
 import type { ApprovalRow, HumanQueueRow } from "../../crm/repo.ts";
 import { runTurn, loadEnvFile } from "../../runner/eve-client.ts";
 import { resultJsonSchema } from "../../runner/output-schema.ts";
-import { processOutbox, pollCalls, placeCall, loadCalls, setDonnaTrigger, startWorker } from "./outbox-worker.ts";
+import { processOutbox, pollCalls, placeCall, loadCalls, setDonnaTrigger, startWorker, checkConsent } from "./outbox-worker.ts";
 
 loadEnvFile();
 const PORT = Number(process.env.CONSOLE_PORT ?? 5180);
@@ -230,21 +230,43 @@ async function handle(req: http.IncomingMessage, res: http.ServerResponse) {
     ]
       .filter(Boolean)
       .join(". ");
-    if (b.decision !== "need_more_info") {
-      const r = resolveApproval(approval.id, b.decision === "approve" ? "approved" : "rejected", words);
+    // Same gates as the phone path (outbox-worker finishCall): an approval only counts when it is unconditional,
+    // the landlord's cap covers the amount, and Jev confirms clear consent in the transcript. Otherwise it stays pending.
+    let recorded: string = "pending";
+    let heldReason = "";
+    const conditions = String(b.conditions ?? "").trim();
+    const noConditions = !conditions || /^(none|no|n\/a|-)\.?$/i.test(conditions);
+    const maxAmt = b.max_amount_gbp == null || b.max_amount_gbp === "" ? null : Number(b.max_amount_gbp);
+    const capOk = maxAmt == null || Number.isNaN(maxAmt) || approval.amount_gbp == null || maxAmt >= approval.amount_gbp;
+    if (b.decision === "reject") {
+      const r = resolveApproval(approval.id, "rejected", words);
       if (!r.ok) throw new HttpError(409, r.error);
+      recorded = "rejected";
+    } else if (b.decision === "approve") {
+      if (!noConditions) heldReason = `conditional approval ("${conditions}")`;
+      else if (!capOk) heldReason = `cap £${maxAmt} is below the amount £${approval.amount_gbp}`;
+      else {
+        const transcript = String(b.transcript ?? "").trim();
+        const consent = transcript ? await checkConsent(transcript).catch(() => null) : null;
+        if (consent && !consent.ok) heldReason = `consent check failed (p=${consent.p.toFixed(2)})`;
+        else {
+          const r = resolveApproval(approval.id, "approved", words + (consent ? ` (consent p=${consent.p.toFixed(2)})` : " (no transcript for consent check)"));
+          if (!r.ok) throw new HttpError(409, r.error);
+          recorded = "approved";
+        }
+      }
     }
     addEvent(approval.ticket_id, {
       kind: "call",
       direction: "in",
       party: "landlord",
-      body: `Voice call with landlord. ${words}${b.transcript ? `\n\nTranscript:\n${b.transcript}` : ""}`,
+      body: `Voice call with landlord. ${words}. Recorded: ${recorded}${heldReason ? ` (left pending: ${heldReason})` : ""}${b.transcript ? `\n\nTranscript:\n${b.transcript}` : ""}`,
     });
     const out = await runDonna(
       approval.ticket_id,
-      `A voice call with the landlord just finished on CRM ticket ${approval.ticket_id} (approval ${approval.id}): ${words}. Load the ticket context, continue the workflow, then return the structured result.`,
+      `A voice call with the landlord just finished on CRM ticket ${approval.ticket_id} (approval ${approval.id}): ${words}. Approval recorded as: ${recorded}${heldReason ? ` (left pending because ${heldReason}; clarify with the landlord)` : ""}. Load the ticket context, continue the workflow, then return the structured result.`,
     ).catch((e) => ({ error: (e as Error).message }));
-    return send(res, 200, { ok: true, recorded: b.decision, run: out });
+    return send(res, 200, { ok: true, recorded, held_reason: heldReason || undefined, run: out });
   }
 
   if (m === "POST" && p === "/api/outbox/process") {
@@ -356,6 +378,27 @@ async function handle(req: http.IncomingMessage, res: http.ServerResponse) {
     }
     const out = await learn({ ticketId: id, action: b.action, details: d, note: b.note || d.resolution || d.reason || d.text || "" });
     return send(res, 200, { ok: true, lesson: out.ok ? out.lesson : null, learn_error: out.ok ? undefined : out.error });
+  }
+
+  // Read-only ticket files (attachments) for the console's document preview.
+  if (m === "GET" && (g = /^\/api\/tickets\/(\d+)\/files(?:\/(.+))?$/.exec(p))) {
+    const fsm = await import("node:fs");
+    const pth = await import("node:path");
+    const { getTicketSource } = await import("../../crm/sources.ts");
+    const dir = getTicketSource(Number(g[1]));
+    const base = dir ? pth.join(dir, "attachments") : null;
+    if (!g[2]) {
+      const names = base && fsm.existsSync(base) ? fsm.readdirSync(base).sort() : [];
+      return send(res, 200, names.map((n) => ({ name: n, size: fsm.statSync(pth.join(base!, n)).size })));
+    }
+    let name = "";
+    try { name = decodeURIComponent(g[2]); } catch { throw new HttpError(400, "bad file name"); }
+    if (!base || name !== pth.basename(name) || name.startsWith(".")) throw new HttpError(404, "file not found");
+    const file = pth.join(base, name);
+    if (!file.startsWith(base + pth.sep) || !fsm.existsSync(file) || !fsm.statSync(file).isFile()) throw new HttpError(404, "file not found");
+    const types: Record<string, string> = { ".pdf": "application/pdf", ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".gif": "image/gif", ".webp": "image/webp", ".csv": "text/csv; charset=utf-8", ".txt": "text/plain; charset=utf-8", ".md": "text/plain; charset=utf-8" };
+    res.writeHead(200, { "content-type": types[pth.extname(name).toLowerCase()] ?? "application/octet-stream", "content-disposition": `inline; filename="${name.replace(/"/g, "")}"`, "x-content-type-options": "nosniff" });
+    return res.end(fsm.readFileSync(file));
   }
 
   throw new HttpError(404, "not found");

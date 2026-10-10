@@ -2,8 +2,8 @@
 // SAFETY: everything goes ONLY to DEMO_EMAIL_TO / DEMO_PHONE_TO.
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { addEvent, all, one, getTicketContext, markMessage, resolveApproval, run } from "../../crm/repo.ts";
-import type { ApprovalRow, OutboxRow } from "../../crm/repo.ts";
+import { addEvent, all, dueFollowUps, one, getTicketContext, markMessage, resolveApproval, run } from "../../crm/repo.ts";
+import type { ApprovalRow, HoldRow, OutboxRow } from "../../crm/repo.ts";
 import { checkConsent as jevConsent } from "../../intake/consent.ts";
 
 export type CallRec = {
@@ -118,6 +118,57 @@ export async function placeCall(row: OutboxRow | null, approval: ApprovalRow): P
   });
   saveCalls(calls);
   return { ok: true, note: `conversation ${j.conversation_id}`, conversation_id: j.conversation_id };
+}
+
+
+// ---------- hold chaser: Donna follows up holds whose follow-up date has passed ----------
+const CHASED_FILE = () => resolve(process.cwd(), "data/chased-holds.json");
+export function loadChased(): number[] {
+  try {
+    return existsSync(CHASED_FILE()) ? JSON.parse(readFileSync(CHASED_FILE(), "utf8")) : [];
+  } catch {
+    return [];
+  }
+}
+function saveChased(ids: number[]) {
+  mkdirSync(resolve(process.cwd(), "data"), { recursive: true });
+  writeFileSync(CHASED_FILE(), JSON.stringify(ids, null, 2));
+}
+
+export function holdChaseMessage(h: HoldRow & { case_ref?: string }): string {
+  return (
+    `Follow-up due on CRM ticket ${h.ticket_id}: hold '${h.reason ?? "no reason recorded"}' waiting on ${h.waiting_on ?? "unknown"} since ${h.created_at} ` +
+    `passed its follow-up date ${h.follow_up_at}. Chase or escalate as appropriate, then return the structured result.`
+  );
+}
+
+let chasing = false;
+/** Trigger Donna once for every due, unreleased hold not yet chased (tracked by hold id in data/chased-holds.json). */
+export async function chaseDueHolds(trigger: (ticketId: number, message: string) => Promise<unknown> = (id, m) => triggerDonna(id, m)): Promise<string[]> {
+  if (chasing) return [];
+  chasing = true;
+  const out: string[] = [];
+  try {
+    const chased = new Set(loadChased());
+    for (const h of dueFollowUps()) {
+      if (chased.has(h.id)) continue;
+      chased.add(h.id);
+      saveChased([...chased]); // mark first so a slow turn is never started twice
+      log(`chasing hold #${h.id} on ticket ${h.ticket_id} (${h.case_ref})`);
+      try {
+        await trigger(h.ticket_id, holdChaseMessage(h));
+        out.push(`hold #${h.id} ticket ${h.ticket_id}: chased`);
+      } catch (e) {
+        chased.delete(h.id);
+        saveChased([...chased]); // retry on the next tick
+        out.push(`hold #${h.id} ticket ${h.ticket_id}: failed (${(e as Error).message})`);
+        log(`chase failed for hold #${h.id}:`, (e as Error).message);
+      }
+    }
+  } finally {
+    chasing = false;
+  }
+  return out;
 }
 
 let processing = false;
@@ -241,7 +292,13 @@ export async function pollCalls(): Promise<CallRec[]> {
 export function startWorker(intervalMs = 10000) {
   if (process.env.OUTBOX_WORKER === "0") return log("worker disabled (OUTBOX_WORKER=0)");
   log(`worker on, every ${intervalMs / 1000}s`);
+  const chaseEveryMs = 60_000;
+  let lastChase = 0;
   setInterval(() => {
+    if (process.env.HOLD_CHASER !== "0" && Date.now() - lastChase >= chaseEveryMs) {
+      lastChase = Date.now();
+      chaseDueHolds().catch((e) => log("hold chaser error", e.message));
+    }
     processOutbox().catch((e) => log("process error", e.message));
     pollCalls().catch((e) => log("poll error", e.message));
   }, intervalMs);

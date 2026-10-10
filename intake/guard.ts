@@ -25,13 +25,16 @@ export function buildGuardQuestions(kind: GuardKind) {
     claims_work_done_unverified: {
       type: "noul",
       instructions:
-        "Does the outbound message state or imply that work is completed, a visit is booked, a payment has been made, or something has been approved, WITHOUT supporting evidence in the provided ticket context (events, approvals)? " +
-        "Answer no if the context clearly confirms it, or if the message only requests, proposes or asks.",
+        "Does the outbound message assert, as a present or past FACT, that work IS completed, a visit IS booked or confirmed, a payment HAS been made, or something HAS been approved, WITHOUT supporting evidence in the provided ticket context (events, approvals)? " +
+        "Answer no for statements of intent or ongoing action ('we are arranging an engineer', 'we will call you today', 'we are contacting the landlord now', 'we are looking into it'), " +
+        "for requests, proposals and questions, for safety advice and instructions to the recipient (turn off the water, open windows, call 999), and when the context clearly confirms the fact. " +
+        "Only claims that something is already done, booked, paid or approved, with nothing in the context to back it, are yes.",
     },
     promises_specific_date_unconfirmed: {
       type: "noul",
       instructions:
-        "Does the message promise a specific date or time for a visit or completion that is not confirmed in the provided context? Asking for availability or proposing options to be confirmed is no.",
+        "Does the message commit to a specific calendar date or clock time (e.g. 'Tuesday at 10am', 'on 14 October') for a visit or completion that is not confirmed in the provided context? " +
+        "Asking for availability, proposing options to be confirmed, vague intent ('as soon as possible', 'today', 'shortly', 'we will update you') and safety advice are no.",
     },
     contains_credentials_or_bank_details: {
       type: "noul",

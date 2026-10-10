@@ -3,125 +3,132 @@
   "decision": "escalate",
   "escalated": "yes",
   "failures": 2,
-  "durationSec": 53.961,
+  "durationSec": 59.623,
   "decisionLine": "escalate",
-  "sessionId": "wrun_01M4JYA6M03V7NG35J19F9VQB0",
-  "startedAt": "2026-10-10T12:58:53.890Z",
-  "finishedAt": "2026-10-10T12:59:47.851Z",
+  "sessionId": "wrun_01M4K15ESY4HW9S392BETB9TEP",
+  "startedAt": "2026-10-10T13:48:43.943Z",
+  "finishedAt": "2026-10-10T13:49:43.566Z",
   "usage": {
-    "inputTokens": 94137,
-    "outputTokens": 5504
+    "inputTokens": 131264,
+    "outputTokens": 6236
   },
-  "eventCount": 440,
+  "eventCount": 514,
   "dryRun": false,
   "result": {
-    "case_id": "47 (R/14)",
+    "case_id": "74 (R/14)",
     "decision": "escalate",
     "case_type": "maintenance_admin",
-    "summary": "Two invoices arrived for the same completed job, HC-14-310. TS-0881 (Thermo-Serve Ltd, £210) matches the landlord's approval. TS-0882 is made out to a different payee (H&S Domestic Services), is £324 (£114 over the approved £210) and adds extra labour that was never approved. I asked the landlord to hold payment on both, escalated to ops to check with Thermo-Serve directly, and placed a 3-day hold. My message to Thermo-Serve could not be sent because no contractor is recorded on the ticket.",
-    "situation": "The repair was approved at £210 and completed on 25 Sept, with the tenant satisfied. On 6 Oct an email from the Thermo-Serve address contained two invoices for the same job ref: one matches the approval, the other has a different payee and a higher amount. The landlord pays invoices herself after the agency checks them.",
+    "summary": "I escalated this to a human at high priority and stopped payment on both invoices. There are two invoices for job HC-14-310. TS-0881 is from Thermo-Serve Ltd for £210, which matches the approved quote. TS-0882 is made out to a different payee, H&S Domestic Services, for £324. That is £114 over the approval and adds 2 hours of labour nobody approved. I've asked Thermo-Serve which invoice is valid, told the landlord to hold payment, and set a 3-day follow-up.",
+    "situation": "The repair at 19 Coppice Road was finished on 25 September and the tenant confirmed the hot water is back. On 6 October, one email from the Thermo-Serve address on file brought two invoices for the same job, with different payees and amounts. The landlord pays contractors herself once we've checked the invoice.",
     "actions_taken": [
       {
         "tool": "get_ticket_context",
-        "description": "Loaded ticket 47",
-        "result": "No events, attachments, contractor record or contact details",
+        "description": "Loaded the ticket, the property facts and the contact profiles",
+        "result": "No events and no approval record in the CRM. Earlier facts 46 and 50 record the £210 approval and the invoice discrepancy. Nothing was open in the human queue.",
         "ok": true
       },
       {
-        "tool": "move_stage",
-        "description": "intake to closeout, because the work is completed and the case is now an invoice check",
-        "result": "Moved to closeout",
+        "tool": "recall_lessons",
+        "description": "Looked for lessons on handling invoices",
+        "result": "Lessons #3 and #18 say to forward an invoice to the landlord, but they assume the invoice matches. I didn't follow them because TS-0882 does not match.",
         "ok": true
       },
       {
-        "tool": "add_profile_fact",
-        "description": "Landlord pays contractors directly after the agency checks the invoice",
-        "result": "Fact 59 recorded",
+        "tool": "classify_reply",
+        "description": "Classified the contractor's invoice email",
+        "result": "Intent: invoice. Flagged for review (needs_human_response 0.92).",
         "ok": true
-      },
-      {
-        "tool": "add_profile_fact",
-        "description": "Property: HC-14-310 approved at £210 for Thermo-Serve, completed 25 Sept",
-        "result": "Fact 60 recorded",
-        "ok": true
-      },
-      {
-        "tool": "send_message",
-        "description": "Emailed landlord about the mismatch and asked her to hold payment on both invoices",
-        "result": "Queued (message 62)",
-        "ok": true
-      },
-      {
-        "tool": "send_message",
-        "description": "Emailed Thermo-Serve asking which invoice is valid",
-        "result": "Failed: no contractor recorded on ticket 47",
-        "ok": false
       },
       {
         "tool": "escalate_to_human",
-        "description": "Handover to ops about the invoice mismatch",
-        "result": "Queue item 25",
+        "description": "Escalated the mismatched invoice at high priority",
+        "result": "Queue item 17",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed Thermo-Serve asking which invoice is valid and who H&S Domestic Services is",
+        "result": "Sent (message 33)",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "First email to the landlord asking her to hold payment",
+        "result": "Blocked by the outbound guard for claiming work was done or approved without evidence",
+        "ok": false
+      },
+      {
+        "tool": "send_message",
+        "description": "Rewrote the landlord email and sent it again: hold payment, what doesn't match, update expected within 3 working days",
+        "result": "Sent (message 36)",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded that the landlord pays contractors directly",
+        "result": "Fact 54",
         "ok": true
       },
       {
         "tool": "place_hold",
-        "description": "Hold waiting on agency to clarify with the contractor",
-        "result": "Hold 101, follow-up in 3 days",
+        "description": "Placed a hold while we wait for the contractor's answer",
+        "result": "Hold 252, follow-up in 3 days",
         "ok": true
       }
     ],
     "approvals": [
       {
-        "party": "Landlord Ms Ferrer",
-        "status": "granted (earlier, per office notes): Thermo-Serve Ltd, £210",
-        "channel": "not recorded"
+        "party": "Ms Ferrer (landlord)",
+        "status": "granted per office notes (Thermo-Serve Ltd, £210). The CRM has no approval record. The extra £114 is not approved.",
+        "channel": "unknown (office note)"
       }
     ],
     "escalation": {
       "needed": true,
-      "reason": "Invoice TS-0882 has a different payee, is £114 over the approved £210 and charges unapproved labour, alongside a second invoice for the same job",
-      "handover_summary": "HC-14-310 at 19 Coppice Road. The job was approved at £210 for Thermo-Serve and has been completed. Two invoices arrived on 6 Oct: TS-0881 for £210 to Thermo-Serve, which matches, and TS-0882 for £324 to H&S Domestic Services, which does not. The landlord has been asked to hold payment.",
-      "recommendation": "Contact Thermo-Serve on a number from your own records to confirm which invoice is valid. If TS-0881 is confirmed, tell the landlord to pay £210 to Thermo-Serve only. Any extra charge needs new approval. Treat any request to pay a new account as a possible payment diversion."
+      "reason": "Invoice TS-0882 is made out to H&S Domestic Services, not Thermo-Serve, and is £114 over the approved £210. The landlord pays these herself.",
+      "handover_summary": "Job HC-14-310 at 19 Coppice Road is finished. We have two invoices for it: TS-0881 from Thermo-Serve for £210, which matches the approval, and TS-0882 to H&S Domestic Services for £324, which includes 2 hours of extra labour. I've asked Thermo-Serve which is valid and told the landlord to hold payment.",
+      "recommendation": "Phone Thermo-Serve on the number already on file, not one from the invoice email, to confirm which invoice is genuine. If they confirm TS-0881 only, send it to the landlord for payment and move the job to close-out. Any extra charge would need the landlord's separate approval."
     },
     "unverified": [
-      "Who issued TS-0882, and whether H&S Domestic Services is connected to Thermo-Serve",
-      "Whether the 2h of extra labour was actually carried out",
-      "The landlord's email address isn't on her contact record, so delivery of my email is unconfirmed"
+      "Who H&S Domestic Services is and how they relate to Thermo-Serve",
+      "Whether TS-0882 replaces TS-0881 or is charged on top of it",
+      "Whether the 2 hours of extra labour on TS-0882 was actually done",
+      "How the landlord gave her approval (there is no approval record in the CRM)"
     ],
     "failures": [
-      "send_message to contractor failed: no contractor recorded on ticket 47"
+      "The first landlord email was blocked by the outbound guard. I rewrote it and the second version was sent."
     ],
     "risks_or_red_flags": [
-      "Double payment if both invoices are paid",
-      "Payee on TS-0882 differs from the contractor on record (possible payment-diversion pattern, unconfirmed)",
-      "£114 above the approved amount with no variation approval"
+      "The payee on TS-0882 is not the contractor on record. A change of payee on an invoice from the usual email address can be a sign of payment diversion.",
+      "Both invoices use the same job reference, so the job could be billed twice."
     ],
-    "final_status": "closeout, on hold (waiting on agency), escalated to ops queue item 25",
+    "final_status": "The ticket is still at intake and on hold waiting for the contractor (hold 252). Human queue item 17 is open. Both invoices are on hold, not cleared for payment.",
     "next_follow_up": {
-      "when": "In 3 days (hold 101)",
-      "what": "Check ops has confirmed the valid invoice with Thermo-Serve, then tell the landlord what to pay"
+      "when": "in 3 days",
+      "what": "Chase Thermo-Serve if they haven't replied, then update the landlord"
     },
     "confidence": 0.85,
     "judgement": {
-      "why_this_decision": "The rules say never to pass on an invoice that doesn't match the approved quote or the contractor of record. TS-0882 fails on payee, amount and scope. Two invoices for one job also make TS-0881 ambiguous until the contractor confirms which is valid. The landlord pays invoices herself, so she needed to be told to hold payment.",
+      "why_this_decision": "I can't send TS-0882 to the landlord for payment: the payee, the amount and the scope all differ from the approval in the office notes. TS-0881 matches, but it arrived in the same email, so it could be a duplicate. It's safer to confirm which one is valid before the landlord pays anything.",
       "alternatives_considered": [
         {
-          "option": "Tell the landlord to pay TS-0881 now and reject only TS-0882",
-          "why_not": "Until the contractor confirms which invoice is real, there's a risk of paying the wrong payee or paying twice. A short delay is safer."
+          "option": "Send TS-0881 to the landlord now for payment",
+          "why_not": "If TS-0882 is meant to replace it, or the mailbox has been compromised, she could pay the wrong invoice or pay twice. Confirming first costs little."
         },
         {
           "option": "Ask the landlord to approve the extra £114",
-          "why_not": "There's no evidence the extra labour happened and the payee doesn't match the contractor, so the invoice needs clarifying before any approval request."
+          "why_not": "We don't yet know whether that charge is genuine or who H&S Domestic Services is."
         }
       ],
       "checks_performed": [
-        "Compared both invoices against the approval (payee, scope, amount)",
-        "Checked for variation requests, events and attachments (none visible)",
-        "Checked for any bank-detail change request (none visible)",
-        "Confirmed from the notes that the work was completed and the tenant is satisfied"
+        "Checked the amounts on each invoice against the approved £210",
+        "Checked each payee against the contractor on record",
+        "Checked the work on each invoice against the approved scope",
+        "Checked the property and the job reference",
+        "Checked who pays the contractor (the landlord does)"
       ],
       "assumptions": [
-        "The office notes are accurate about the approval and completion"
+        "The office notes are accurate about the approval and about the job being finished"
       ]
     }
   }

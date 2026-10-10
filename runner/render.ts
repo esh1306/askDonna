@@ -1,6 +1,14 @@
 // Pure renderers: ANSWER.md and REASONING.md are derived ONLY from the recorded event stream,
 // the structured result the agent produced, and the CRM diff passed in. Nothing is invented.
+import { isAbsolute, relative, basename } from "node:path";
 import type { EveEvent } from "./eve-client.ts";
+
+/** Print a case folder relative to the project root (or just its name if outside it), never an absolute path. */
+export function displayPath(p: string, root = process.cwd()): string {
+  if (!isAbsolute(p)) return p.split("\\").join("/");
+  const rel = relative(root, p);
+  return rel && !rel.startsWith("..") && !isAbsolute(rel) ? rel.split("\\").join("/") : basename(p);
+}
 
 export interface RenderCtx {
   caseNumber: string;
@@ -227,7 +235,7 @@ export function renderAnswer(ctx: RenderCtx): string {
   } else L.push("_Not available._", "");
 
   L.push("## Run metadata", "");
-  L.push(`- Case folder: \`${ctx.caseDir}\``);
+  L.push(`- Case folder: \`${displayPath(ctx.caseDir)}\``);
   L.push(`- Session id: ${ctx.sessionId ?? findSessionId(ctx.events) ?? "n/a"}`);
   L.push(`- Started: ${iso(ctx.startedAt)}  Finished: ${iso(ctx.finishedAt)}  Duration: ${durationSec(ctx).toFixed(1)}s`);
   L.push(`- Events recorded: ${ctx.events.length}`);

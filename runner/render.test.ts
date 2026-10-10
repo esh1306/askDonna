@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { renderAnswer, renderReasoning, diffObjects, type RenderCtx } from "./render.ts";
+import { renderAnswer, renderReasoning, diffObjects, displayPath, type RenderCtx } from "./render.ts";
 import { summarize, type EveEvent } from "./eve-client.ts";
 import { resultSchema } from "./output-schema.ts";
 
@@ -71,4 +71,13 @@ test("turn.failed in stream becomes error via summarize", () => {
 test("diffObjects", () => {
   assert.deepEqual(diffObjects({ a: 1 }, { a: 1 }), []);
   assert.equal(diffObjects({ a: 1 }, { a: 1, b: 2 }).length, 1);
+});
+
+test("case folder is printed relative to the project root, not absolute", () => {
+  const abs = process.cwd() + "/data/hardcases/13";
+  assert.equal(displayPath(abs), "data/hardcases/13");
+  assert.equal(displayPath("/elsewhere/case-9", "/root/proj"), "case-9");
+  const md = renderAnswer(base({ caseDir: abs }));
+  assert.ok(md.includes("Case folder: `data/hardcases/13`"));
+  assert.ok(!md.includes(process.cwd()));
 });

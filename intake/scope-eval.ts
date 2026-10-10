@@ -10,6 +10,8 @@ export const SCOPE_CASES: { id: string; text: string; scope: Scope[]; in_scope: 
   { id: "agency_complaint", text: "I want to make a formal complaint about how your agency handled my tenancy. Nobody returned my calls for three weeks and I'm considering the ombudsman.", scope: ["tenancy_legal_or_dispute"], in_scope: false },
   { id: "gas_smell", text: "There's a strong smell of gas in the kitchen near the cooker. We've opened the windows.", scope: ["emergency_safety"], in_scope: true },
   { id: "insurance_claim", text: "A tree fell on the garage last night. Does the landlord's insurance cover my belongings that were damaged? How do I make a claim?", scope: ["tenancy_legal_or_dispute", "other_non_property"], in_scope: false },
+  { id: "cp12_expiring", text: "Hi, our gas safety certificate (CP12) for 14 Alder Way expires in 9 days and the landlord has not booked the annual check. Can the agency arrange a Gas Safe engineer?", scope: ["compliance_renewal"], in_scope: true },
+  { id: "eicr_c2", text: "The EICR report for 3 Mill Row came back unsatisfactory with two C2 potentially dangerous observations on the consumer unit. We need an electrician to do the remedial work.", scope: ["compliance_renewal", "maintenance_repair"], in_scope: true },
 ];
 
 async function main() {

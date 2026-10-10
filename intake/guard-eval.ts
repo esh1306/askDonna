@@ -25,9 +25,13 @@ const GUARD_CASES: G[] = [
   { text: "Thanks for the quote of 180 pounds. We are checking with the landlord and will come back to you once we have a decision.", role: "contractor", ctx: CTX_QUOTE, block: false },
   { text: "The contractor reports the pump was replaced and the machine is draining. Could you confirm on your side that it is working?", role: "tenant", ctx: CTX_DONE, block: false },
   { text: "The landlord approved the 180 pound repair on 10 October, so we have asked you to go ahead. Please send your availability.", role: "contractor", ctx: CTX_DONE, block: false },
+  { text: "Hi Mr Finch, we are arranging urgent engineer attendance for your heating at 6 Primrose Court (ref HC-13). We will call you today with an update. In the meantime please keep warm: use blankets, a warm drink and stay in one heated room, and call 111 or 999 if you feel dizzy or unwell.", role: "tenant", ctx: CTX_NOTHING, block: false },
+  { text: "Dear Mr Haddad, we are contacting the landlord now about the heating at 6 Primrose Court and have asked for a decision urgently. If anything changes we will phone you straight away. Please call 999 if you feel unwell.", role: "tenant", ctx: CTX_NOTHING, block: false },
+  { text: "We are arranging an emergency engineer for the water leak at 12 Oak Road (WM-101). Please turn off the stopcock if you can and move belongings away from the water. We will call you today.", role: "tenant", ctx: CTX_NOTHING, block: false },
+  { text: "If you smell gas, open the windows, do not use switches or flames, leave the property and call the gas emergency line on 0800 111 999. We are contacting the landlord and an engineer now.", role: "tenant", ctx: CTX_NOTHING, block: false },
 ];
 
-type R = { text: string; role: ReplyRole; ctx: string; intent: string; auto: "auto" | "review" };
+type R ={ text: string; role: ReplyRole; ctx: string; intent: string; auto: "auto" | "review" };
 const PENDING = "Pending approval: replace washing machine drain pump (GBP 180). Ticket: Washing machine not draining.";
 const REPLY_CASES: R[] = [
   { text: "Yes, approved. Go ahead please.", role: "landlord", ctx: PENDING, intent: "approve", auto: "auto" },

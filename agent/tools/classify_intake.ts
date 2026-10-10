@@ -26,7 +26,10 @@ export default defineTool({
     const needs_landlord_approval = rule.decided ? (rule.needs ? 1 : 0) : r.needs_landlord_approval;
     const route = decideRoute({ ...r, needs_landlord_approval });
     if (!ctx.ticket.category) run("UPDATE tickets SET category=? WHERE id=?", r.category, ticket_id);
-    if (!ctx.ticket.severity) run("UPDATE tickets SET severity=? WHERE id=?", r.severity, ticket_id);
+    // "emergency" unlocks emergency handling, so only persist it when Jev is confident; otherwise store the next level down.
+    const confidentEmergency = (r.severity_probs?.emergency ?? 0) >= 0.6 || r.safety_risk >= 0.75;
+    const storedSeverity = r.severity === "emergency" && !confidentEmergency ? "urgent" : r.severity;
+    if (!ctx.ticket.severity) run("UPDATE tickets SET severity=? WHERE id=?", storedSeverity, ticket_id);
     const { raw: _raw, ...answers } = r;
     return {
       route,

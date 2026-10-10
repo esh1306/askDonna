@@ -18,6 +18,7 @@ export type IntakeState = {
 export const SCOPES = {
   maintenance_repair: "A fault or repair at the property that a contractor or the landlord would fix.",
   maintenance_admin: "Property-maintenance admin: inspections, meter or solar readings, photos, check-out works, access arrangements.",
+  compliance_renewal: "Landlord legal-compliance work: gas safety certificate (CP12), EICR, EPC, smoke/CO alarm checks, HMO or selective licence, legionella assessment, deposit protection notices, renewals or remedial work from such a report.",
   tenancy_finance: "Rent, arrears, deposit, fees, charges, refunds, payment queries.",
   tenancy_legal_or_dispute: "Eviction or notices, tenancy disputes, legal claims, complaints about the agency or its staff, insurance claims.",
   neighbour_or_antisocial: "Neighbour noise or nuisance, antisocial behaviour, parking and boundary issues with neighbours.",
@@ -26,7 +27,7 @@ export const SCOPES = {
 } as const;
 export type Scope = keyof typeof SCOPES;
 export const SCOPE_KEYS = Object.keys(SCOPES) as Scope[];
-export const IN_SCOPE: readonly Scope[] = ["maintenance_repair", "maintenance_admin", "emergency_safety"];
+export const IN_SCOPE: readonly Scope[] = ["maintenance_repair", "maintenance_admin", "emergency_safety", "compliance_renewal"];
 
 export type IntakeResult = {
   scope: Scope;
@@ -101,7 +102,7 @@ export function buildQuestions() {
         "Decide what kind of request this is for a UK residential lettings agency. Only faults/repairs and property-maintenance admin are the agency's maintenance desk work. " +
         "Rent, arrears, deposits and fees are tenancy_finance. Evictions, disputes, legal or insurance-claim questions and complaints about the agency are tenancy_legal_or_dispute. " +
         "Neighbour noise or behaviour is neighbour_or_antisocial. A gas smell, fire, active flooding, sparking or a break-in is emergency_safety even if short. " +
-        "A normal repair report, even if angry or in another language, is maintenance_repair.",
+        "Gas safety certificates, EICRs, EPCs, smoke/CO alarm checks, HMO or selective licences, legionella and deposit protection notices (renewals, expiries and remedial work) are compliance_renewal: they are the maintenance desk's work, not out of scope. A normal repair report, even if angry or in another language, is maintenance_repair.",
       criteria: SCOPE_CRITERIA,
     },
     non_english: {
@@ -117,7 +118,7 @@ export function buildQuestions() {
         "But a door or window of the dwelling itself that merely opens onto the garden or balcony (back door, garden door, patio door) stays doors_windows_locks. " +
         "Requests from the agency about check-out cleaning, carpets, repainting or post-tenancy works are cleaning_checkout_works, " +
         "unless the list is plainly a specific electrical, plumbing or appliance fault. " +
-        "Inspections, meter/solar readings and photo requests are inspection_admin. Use other only if nothing fits.",
+        "Gas safety (CP12), EICR, EPC, smoke/CO alarm, licence, legionella and deposit-protection certificate or renewal work is compliance (remedial work from an EICR is compliance too). Inspections, meter/solar readings and photo requests are inspection_admin. Use other only if nothing fits.",
       criteria: CATEGORY_CRITERIA,
     },
     severity: {
