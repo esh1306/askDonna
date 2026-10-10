@@ -1,0 +1,104 @@
+{
+  "case": "PM041-1",
+  "decision": "wait",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 35.708,
+  "decisionLine": "wait",
+  "sessionId": "wrun_01M4JSYQ11R1CAJ1K6F1QPRFY4",
+  "startedAt": "2026-10-10T11:42:43.099Z",
+  "finishedAt": "2026-10-10T11:43:18.807Z",
+  "usage": {
+    "inputTokens": 62733,
+    "outputTokens": 4081
+  },
+  "eventCount": 217,
+  "dryRun": false,
+  "result": {
+    "case_id": "R/PM041-1 (ticket 18)",
+    "decision": "wait",
+    "summary": "The landlord, Miles Kendall, is handling this repair himself. His operative, Amelia, will contact the tenant about the washing machine and towel rail (event 011). The tenant has been told and has acknowledged this, so they don't need another message. I emailed the landlord that the tenant's own fix had failed and suggested checking the sink spigot first, because it was blocked in 2023. I moved the ticket to scheduling and put it on hold for 3 days while we wait for the landlord to confirm the visit and outcome.",
+    "situation": "The washing machine at Flat 18, 108 Lantern Quay won't drain or spin. The agency asked the landlord on 21 Sep to approve an appliance engineer (minimum £65 + VAT); he never directly approved or declined it. On 24 Sep he emailed that the machine was fitted on 21 Jun 2021, that a blocked sink spigot caused a similar fault in May 2023, and that his operative Amelia will contact the tenant. The tenant tried the advised drain-pump fix twice without success (event 014) and acknowledged that Amelia will call (event 015).",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the ticket context",
+        "result": "15 events; no holds, approvals or attachments",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded that the landlord is arranging his own operative (Amelia)",
+        "result": "fact 29",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the washing machine fitting date, 21 Jun 2021",
+        "result": "fact 30",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the May 2023 fault (blocked sink spigot)",
+        "result": "fact 31",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the landlord's name (Miles Kendall) and the tenant's name (Turner)",
+        "result": "facts 32, 33",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the landlord that the tenant's fix failed, suggested checking the sink spigot, and asked for the visit date and outcome",
+        "result": "message 22 queued",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Put the ticket on hold awaiting the landlord's confirmation of Amelia's visit",
+        "result": "hold 43, follow-up in 3 days",
+        "ok": true
+      },
+      {
+        "tool": "move_stage",
+        "description": "Moved the ticket from provider_selection to scheduling, since the landlord has chosen the provider",
+        "result": "now scheduling, on hold",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (Miles Kendall)",
+        "status": "not_needed",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "The landlord is handling the repair himself, and there is no safety, cost or dispute issue.",
+      "handover_summary": "",
+      "recommendation": ""
+    },
+    "unverified": [
+      "Whether Amelia has contacted the tenant or booked a visit",
+      "The 'ERPC appointment 28 September 2024' in the call summary (event 006): unclear what it is or whether it relates to this job",
+      "Amelia's surname, company and contact details",
+      "Whether the landlord accepts the £65 + VAT engineer option (he arranged his own operative instead)"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "The tenant has no working washing machine and has had to drain it by hand several times",
+      "The towel rail issue is being handled with this job but has no ticket of its own",
+      "Event 004's hold note says 'awaiting contractor', but no contractor was instructed: the hold label was wrong"
+    ],
+    "final_status": "scheduling – on hold, waiting for the landlord's operative (Amelia) to visit",
+    "next_follow_up": {
+      "when": "2024-09-27",
+      "what": "Ask the landlord and tenant whether Amelia has made contact and visited. If not, or the fault remains, offer to send the agency's appliance engineer (needs landlord approval). Clarify the 28 Sep ERPC appointment."
+    },
+    "confidence": 0.82
+  }
+}

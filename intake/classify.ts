@@ -34,8 +34,8 @@ export type Route =
 /** Routing thresholds (probabilities from calibrated Jev answers). */
 export const THRESHOLDS = {
   /** safety_risk >= SAFETY_RISK OR P(severity=emergency) >= EMERGENCY_SEVERITY => emergency_dispatch */
-  SAFETY_RISK: 0.5,
-  EMERGENCY_SEVERITY: 0.5,
+  SAFETY_RISK: 0.75,
+  EMERGENCY_SEVERITY: 0.6,
   /** needs_more_info >= this (and not emergency) => ask_for_info */
   NEEDS_MORE_INFO: 0.6,
   /** likely_self_fixable >= SELF_FIXABLE and safety_risk < SELF_FIX_MAX_SAFETY => self_fix_first */
@@ -177,13 +177,13 @@ function parseScore<K extends string>(answer: unknown, keys: readonly K[], descs
       }
     }
   }
-  // Point estimate: integer score = level index; fractional 0..1 = position on the scale; string = label.
+  // Jev's numeric `score` is the expected level index (e.g. 0.95 on a 0..2 scale ≈ "urgent"), not a 0..1 fraction.
+  // When probabilities are present, the most likely level is the answer.
   let idx = -1;
   const sc = answer.score;
-  if (typeof sc === "number") {
-    if (Number.isInteger(sc) && sc >= 0 && sc < n) idx = sc;
-    else if (sc >= 0 && sc <= 1) idx = Math.round(sc * (n - 1));
-  } else if (typeof sc === "string") idx = levelIndex(sc, keys, descs);
+  if (mapped) idx = keys.indexOf(argmax(normalize(probs), keys));
+  else if (typeof sc === "number" && sc >= 0 && sc <= n - 1) idx = Math.round(sc);
+  else if (typeof sc === "string") idx = levelIndex(sc, keys, descs);
   if (idx < 0 && typeof answer.legend === "string") idx = levelIndex(answer.legend, keys, descs);
   if (!mapped) {
     if (idx < 0) throw new Error(`Jev answer "${name}" has no usable score: ${JSON.stringify(answer)}`);

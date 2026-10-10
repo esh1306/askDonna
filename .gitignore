@@ -12,3 +12,6 @@ data/*.db
 data/*.db-*
 data/answers-*/
 .output
+**/*.db
+**/*.db-*
+data/console-runs/

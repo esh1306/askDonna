@@ -1,0 +1,111 @@
+{
+  "case": "PM044-2",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 0,
+  "durationSec": 42.182,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4JSZ7YNA4QZC6PX1RK9ZHZR",
+  "startedAt": "2026-10-10T11:43:00.387Z",
+  "finishedAt": "2026-10-10T11:43:42.569Z",
+  "usage": {
+    "inputTokens": 66485,
+    "outputTokens": 4724
+  },
+  "eventCount": 376,
+  "dryRun": false,
+  "result": {
+    "case_id": "R/PM044-2 (ticket 19)",
+    "decision": "escalate",
+    "summary": "Cedar Homes says the window handle job is finished, so the alert about chasing the contractor is out of date. I moved the ticket to closeout and asked Cedar Homes to resend the invoice, because the attachment never arrived. I also asked the tenant to confirm the repair and set a 3-day hold. I passed it to a human at normal priority because the invoice can't be checked, the landlord's approval gave no amount, and the tenant's name and phone number don't match across the records.",
+    "situation": "The handle came off the window at the top of the stairs. The landlord said 'Please go ahead' (event 012) and Cedar Homes was assigned. Automated reminders went out on 10 and 11 Feb. Noah Ellis replied on 11 Feb saying 'This is complete, invoice attached', but the invoice is missing. The '3+ reminders' alert in event 020 was raised after that reply.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the case",
+        "result": "20 events, no holds, approvals or attachments",
+        "ok": true
+      },
+      {
+        "tool": "move_stage",
+        "description": "Moved from scheduling to closeout because the contractor says the work is complete",
+        "result": "Now in closeout",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the contractor asking them to resend the missing invoice with full details",
+        "result": "message_id 25",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant asking them to confirm the window now opens and closes",
+        "result": "message_id 26",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the landlord's go-ahead (no amount given)",
+        "result": "fact 35",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded that the tenant's name and phone numbers conflict",
+        "result": "fact 36",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the window repair history on the property",
+        "result": "fact 37",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold while waiting for the invoice and the tenant's confirmation",
+        "result": "hold 46, follow up in 3 days",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Handover for invoice checks and the tenant identity/phone conflict",
+        "result": "queue_id 7",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (Palmer)",
+        "status": "granted (email event 012, no amount)",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "The invoice is missing and the approved amount is unknown, and the tenant's name and phone number conflict in the records",
+      "handover_summary": "Cedar Homes says the window handle job is complete, but the invoice never arrived and I've asked them to resend it. I've asked the tenant to confirm the repair. Records show the tenant as both Nora Quinn and 'Harriet', with two phone numbers (07700 900307 and 07700 900251). The tenant also mentioned a broken latch.",
+      "recommendation": "Check the tenancy record for the tenant's name and phone number. Check the invoice against the contractor, the property and the scope of work, and get the landlord to confirm if the cost is more than a minor repair. Close the ticket once the tenant confirms."
+    },
+    "unverified": [
+      "The work being complete (contractor says so; tenant hasn't confirmed)",
+      "The invoice amount and contents",
+      "Whether the tenant is Nora Quinn or Harriet, and which phone number is correct",
+      "Whether the broken latch was also fixed"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "Invoice claimed but not received",
+      "Landlord's approval gave no amount and there was no quote",
+      "Tenant's name and phone number conflict in the records",
+      "The event 020 alert was raised after the contractor had already replied"
+    ],
+    "final_status": "closeout; on hold (hold 46) waiting for the contractor's invoice and the tenant's confirmation; with the human team (queue 7)",
+    "next_follow_up": {
+      "when": "In 3 days (about 2025-02-15)",
+      "what": "Chase Cedar Homes for the invoice and the tenant for confirmation, check the invoice, then close"
+    },
+    "confidence": 0.8
+  }
+}

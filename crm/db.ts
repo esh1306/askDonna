@@ -160,6 +160,9 @@ export function openDb(): DatabaseSync {
   if (db) return db;
   if (p !== ":memory:") fs.mkdirSync(path.dirname(p), { recursive: true });
   db = new DatabaseSync(p);
+  // The runner, the eve server and the console share this file: wait for locks instead of failing, and let readers run during writes.
+  db.exec("PRAGMA busy_timeout = 10000;");
+  if (p !== ":memory:") db.exec("PRAGMA journal_mode = WAL;");
   db.exec(SCHEMA);
   handles.set(p, db);
   return db;

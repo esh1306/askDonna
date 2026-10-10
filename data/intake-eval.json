@@ -1,0 +1,4797 @@
+{
+  "summary": {
+    "ran_at": "2026-10-10T11:38:20.442Z",
+    "n": 50,
+    "mean_latency_ms": 273,
+    "p95_latency_ms": 400,
+    "category": {
+      "accuracy": 0.94,
+      "correct": 47,
+      "confusion": {
+        "garden_external": {
+          "garden_external": 4,
+          "plumbing": 1,
+          "doors_windows_locks": 1
+        },
+        "plumbing": {
+          "plumbing": 11
+        },
+        "cleaning_checkout_works": {
+          "cleaning_checkout_works": 5
+        },
+        "electrical_lighting": {
+          "cleaning_checkout_works": 1
+        },
+        "inspection_admin": {
+          "inspection_admin": 2
+        },
+        "appliance": {
+          "appliance": 13
+        },
+        "doors_windows_locks": {
+          "doors_windows_locks": 12
+        }
+      }
+    },
+    "binary": [
+      {
+        "name": "needs_landlord_approval",
+        "n": 50,
+        "accuracy": 0.68,
+        "precision": 0.6666666666666666,
+        "recall": 1,
+        "brier": 0.22447200000000003,
+        "base_rate": 0.64,
+        "tp": 32,
+        "fp": 16,
+        "tn": 2,
+        "fn": 0,
+        "calibration": [
+          {
+            "bucket": "0.0-0.2",
+            "n": 2,
+            "mean_pred": 0.135,
+            "frac_true": 0
+          },
+          {
+            "bucket": "0.2-0.4",
+            "n": 0,
+            "mean_pred": 0,
+            "frac_true": 0
+          },
+          {
+            "bucket": "0.4-0.6",
+            "n": 1,
+            "mean_pred": 0.54,
+            "frac_true": 0
+          },
+          {
+            "bucket": "0.6-0.8",
+            "n": 23,
+            "mean_pred": 0.7691304347826086,
+            "frac_true": 0.6521739130434783
+          },
+          {
+            "bucket": "0.8-1.0",
+            "n": 24,
+            "mean_pred": 0.8391666666666667,
+            "frac_true": 0.7083333333333334
+          }
+        ]
+      },
+      {
+        "name": "likely_self_fixable (label: resolved_without_contractor)",
+        "n": 50,
+        "accuracy": 0.74,
+        "precision": 0.42857142857142855,
+        "recall": 0.25,
+        "brier": 0.16234400000000002,
+        "base_rate": 0.24,
+        "tp": 3,
+        "fp": 4,
+        "tn": 34,
+        "fn": 9,
+        "calibration": [
+          {
+            "bucket": "0.0-0.2",
+            "n": 20,
+            "mean_pred": 0.10149999999999999,
+            "frac_true": 0.15
+          },
+          {
+            "bucket": "0.2-0.4",
+            "n": 16,
+            "mean_pred": 0.2775,
+            "frac_true": 0.1875
+          },
+          {
+            "bucket": "0.4-0.6",
+            "n": 10,
+            "mean_pred": 0.45299999999999996,
+            "frac_true": 0.3
+          },
+          {
+            "bucket": "0.6-0.8",
+            "n": 4,
+            "mean_pred": 0.7000000000000001,
+            "frac_true": 0.75
+          },
+          {
+            "bucket": "0.8-1.0",
+            "n": 0,
+            "mean_pred": 0,
+            "frac_true": 0
+          }
+        ]
+      }
+    ],
+    "mean": {
+      "safety_risk": 0.30700000000000005,
+      "needs_more_info": 0.16260000000000002
+    },
+    "severity": {
+      "n": 12,
+      "agreement": 0.5833333333333334,
+      "predicted_distribution": {
+        "routine": 26,
+        "urgent": 18,
+        "emergency": 6
+      }
+    },
+    "routes": {
+      "request_landlord_approval": 42,
+      "standard": 2,
+      "emergency_dispatch": 5,
+      "ask_for_info": 1
+    },
+    "worst": [
+      {
+        "case": "030",
+        "question": "severity",
+        "label": "routine",
+        "predicted": "urgent",
+        "p_label": 0.08,
+        "title": "Plumbing request: slow-filling toilet and bathroom tap"
+      },
+      {
+        "case": "006",
+        "question": "needs_landlord_approval",
+        "label": "false",
+        "predicted": "p=0.91",
+        "p_label": 0.08999999999999997,
+        "title": "Check-Out Works: Carpet Replacement and Repainting"
+      },
+      {
+        "case": "014",
+        "question": "severity",
+        "label": "routine",
+        "predicted": "urgent",
+        "p_label": 0.13,
+        "title": "Front Door Repair Request"
+      },
+      {
+        "case": "026",
+        "question": "severity",
+        "label": "routine",
+        "predicted": "urgent",
+        "p_label": 0.13,
+        "title": "Oven Repair Request"
+      },
+      {
+        "case": "050",
+        "question": "severity",
+        "label": "routine",
+        "predicted": "emergency",
+        "p_label": 0.13,
+        "title": "Bedroom Window Repair"
+      },
+      {
+        "case": "038",
+        "question": "self_fixable",
+        "label": "true",
+        "predicted": "p=0.15",
+        "p_label": 0.15,
+        "title": "Washing Machine Replacement Request"
+      },
+      {
+        "case": "028",
+        "question": "self_fixable",
+        "label": "true",
+        "predicted": "p=0.17",
+        "p_label": 0.17,
+        "title": "Loose Water Pipe in the Back Garden"
+      },
+      {
+        "case": "045",
+        "question": "self_fixable",
+        "label": "true",
+        "predicted": "p=0.17",
+        "p_label": 0.17,
+        "title": "Kitchen Window and Patio Door Window Repair"
+      },
+      {
+        "case": "013",
+        "question": "needs_landlord_approval",
+        "label": "false",
+        "predicted": "p=0.83",
+        "p_label": 0.17000000000000004,
+        "title": "Integrated Dishwasher Repair Request"
+      },
+      {
+        "case": "015",
+        "question": "needs_landlord_approval",
+        "label": "false",
+        "predicted": "p=0.83",
+        "p_label": 0.17000000000000004,
+        "title": "Front Door Repair Request"
+      },
+      {
+        "case": "022",
+        "question": "needs_landlord_approval",
+        "label": "false",
+        "predicted": "p=0.83",
+        "p_label": 0.17000000000000004,
+        "title": "Front Door Lock Repair Request"
+      },
+      {
+        "case": "023",
+        "question": "needs_landlord_approval",
+        "label": "false",
+        "predicted": "p=0.83",
+        "p_label": 0.17000000000000004,
+        "title": "Balcony Door Lock Repair"
+      },
+      {
+        "case": "041",
+        "question": "needs_landlord_approval",
+        "label": "false",
+        "predicted": "p=0.82",
+        "p_label": 0.18000000000000005,
+        "title": "Washing Machine Repair Request"
+      },
+      {
+        "case": "043",
+        "question": "needs_landlord_approval",
+        "label": "false",
+        "predicted": "p=0.81",
+        "p_label": 0.18999999999999995,
+        "title": "Washing Machine Repair Request"
+      },
+      {
+        "case": "041",
+        "question": "self_fixable",
+        "label": "true",
+        "predicted": "p=0.20",
+        "p_label": 0.2,
+        "title": "Washing Machine Repair Request"
+      }
+    ],
+    "errors": []
+  },
+  "cases": [
+    {
+      "case": "001",
+      "labels": {
+        "category": "garden_external",
+        "needs_landlord_approval": true,
+        "resolved_without_contractor": false,
+        "dwelly_severity": "routine",
+        "dwelly_issue": "External & Communal"
+      },
+      "result": {
+        "category": "garden_external",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 0,
+          "doors_windows_locks": 0,
+          "garden_external": 1,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "routine",
+        "severity_probs": {
+          "routine": 1,
+          "urgent": 0,
+          "emergency": 0
+        },
+        "needs_landlord_approval": 0.78,
+        "likely_self_fixable": 0.4,
+        "safety_risk": 0.18,
+        "needs_more_info": 0.19,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "garden_external",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 0,
+                "doors_windows_locks": 0,
+                "garden_external": 1,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0,
+              "confidence": 1,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 1,
+                "1": 0,
+                "2": 0
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.78
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.4
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.18
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.19
+            }
+          },
+          "usage": {
+            "input_tokens": 1370,
+            "output_tokens": 198
+          }
+        },
+        "latencyMs": 417,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "002",
+      "labels": {
+        "category": "plumbing",
+        "needs_landlord_approval": true,
+        "resolved_without_contractor": false
+      },
+      "result": {
+        "category": "plumbing",
+        "category_probs": {
+          "plumbing": 1,
+          "appliance": 0,
+          "doors_windows_locks": 0,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "urgent",
+        "severity_probs": {
+          "routine": 0,
+          "urgent": 0.99,
+          "emergency": 0.01
+        },
+        "needs_landlord_approval": 0.7,
+        "likely_self_fixable": 0.1,
+        "safety_risk": 0.55,
+        "needs_more_info": 0.12,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "plumbing",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 1,
+                "appliance": 0,
+                "doors_windows_locks": 0,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 1.01,
+              "confidence": 0.98,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0,
+                "1": 0.99,
+                "2": 0.01
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.7
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.1
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.55
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.12
+            }
+          },
+          "usage": {
+            "input_tokens": 1347,
+            "output_tokens": 198
+          }
+        },
+        "latencyMs": 400,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "003",
+      "labels": {
+        "category": "cleaning_checkout_works",
+        "needs_landlord_approval": false,
+        "resolved_without_contractor": false
+      },
+      "result": {
+        "category": "cleaning_checkout_works",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 0,
+          "doors_windows_locks": 0,
+          "garden_external": 0,
+          "cleaning_checkout_works": 1,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "routine",
+        "severity_probs": {
+          "routine": 1,
+          "urgent": 0,
+          "emergency": 0
+        },
+        "needs_landlord_approval": 0.77,
+        "likely_self_fixable": 0.06,
+        "safety_risk": 0.22,
+        "needs_more_info": 0.19,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "cleaning_checkout_works",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 0,
+                "doors_windows_locks": 0,
+                "garden_external": 0,
+                "cleaning_checkout_works": 1,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0.01,
+              "confidence": 1,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 1,
+                "1": 0,
+                "2": 0
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.77
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.06
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.22
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.19
+            }
+          },
+          "usage": {
+            "input_tokens": 1357,
+            "output_tokens": 201
+          }
+        },
+        "latencyMs": 391,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "004",
+      "labels": {
+        "category": "cleaning_checkout_works",
+        "needs_landlord_approval": true,
+        "resolved_without_contractor": false
+      },
+      "result": {
+        "category": "cleaning_checkout_works",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 0,
+          "doors_windows_locks": 0,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0.98,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0.02
+        },
+        "severity": "routine",
+        "severity_probs": {
+          "routine": 1,
+          "urgent": 0,
+          "emergency": 0
+        },
+        "needs_landlord_approval": 0.78,
+        "likely_self_fixable": 0.47,
+        "safety_risk": 0.07,
+        "needs_more_info": 0.26,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "cleaning_checkout_works",
+              "confidence": 0.98,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 0,
+                "doors_windows_locks": 0,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0.98,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0.02
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0,
+              "confidence": 1,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 1,
+                "1": 0,
+                "2": 0
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.78
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.47
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.07
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.26
+            }
+          },
+          "usage": {
+            "input_tokens": 1354,
+            "output_tokens": 201
+          }
+        },
+        "latencyMs": 395,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "005",
+      "labels": {
+        "category": "cleaning_checkout_works",
+        "needs_landlord_approval": false,
+        "resolved_without_contractor": false
+      },
+      "result": {
+        "category": "cleaning_checkout_works",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 0,
+          "doors_windows_locks": 0,
+          "garden_external": 0,
+          "cleaning_checkout_works": 1,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "routine",
+        "severity_probs": {
+          "routine": 1,
+          "urgent": 0,
+          "emergency": 0
+        },
+        "needs_landlord_approval": 0.79,
+        "likely_self_fixable": 0.07,
+        "safety_risk": 0.08,
+        "needs_more_info": 0.1,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "cleaning_checkout_works",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 0,
+                "doors_windows_locks": 0,
+                "garden_external": 0,
+                "cleaning_checkout_works": 1,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0,
+              "confidence": 1,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 1,
+                "1": 0,
+                "2": 0
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.79
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.07
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.08
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.1
+            }
+          },
+          "usage": {
+            "input_tokens": 1370,
+            "output_tokens": 201
+          }
+        },
+        "latencyMs": 396,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "006",
+      "labels": {
+        "category": "cleaning_checkout_works",
+        "needs_landlord_approval": false,
+        "resolved_without_contractor": false
+      },
+      "result": {
+        "category": "cleaning_checkout_works",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 0,
+          "doors_windows_locks": 0,
+          "garden_external": 0,
+          "cleaning_checkout_works": 1,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "routine",
+        "severity_probs": {
+          "routine": 1,
+          "urgent": 0,
+          "emergency": 0
+        },
+        "needs_landlord_approval": 0.91,
+        "likely_self_fixable": 0.04,
+        "safety_risk": 0.11,
+        "needs_more_info": 0.24,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "cleaning_checkout_works",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 0,
+                "doors_windows_locks": 0,
+                "garden_external": 0,
+                "cleaning_checkout_works": 1,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0,
+              "confidence": 1,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 1,
+                "1": 0,
+                "2": 0
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.91
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.04
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.11
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.24
+            }
+          },
+          "usage": {
+            "input_tokens": 1356,
+            "output_tokens": 201
+          }
+        },
+        "latencyMs": 225,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "007",
+      "labels": {
+        "category": "electrical_lighting",
+        "needs_landlord_approval": true,
+        "resolved_without_contractor": false
+      },
+      "result": {
+        "category": "cleaning_checkout_works",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 0,
+          "doors_windows_locks": 0,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0.59,
+          "electrical_lighting": 0.39,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0.02
+        },
+        "severity": "routine",
+        "severity_probs": {
+          "routine": 0.9,
+          "urgent": 0.09,
+          "emergency": 0.01
+        },
+        "needs_landlord_approval": 0.91,
+        "likely_self_fixable": 0.06,
+        "safety_risk": 0.64,
+        "needs_more_info": 0.15,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "cleaning_checkout_works",
+              "confidence": 0.54,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 0,
+                "doors_windows_locks": 0,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0.59,
+                "electrical_lighting": 0.39,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0.02
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0.12,
+              "confidence": 0.83,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.9,
+                "1": 0.09,
+                "2": 0.01
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.91
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.06
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.64
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.15
+            }
+          },
+          "usage": {
+            "input_tokens": 1360,
+            "output_tokens": 201
+          }
+        },
+        "latencyMs": 231,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "008",
+      "labels": {
+        "category": "cleaning_checkout_works",
+        "needs_landlord_approval": true,
+        "resolved_without_contractor": false
+      },
+      "result": {
+        "category": "cleaning_checkout_works",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 0,
+          "doors_windows_locks": 0,
+          "garden_external": 0,
+          "cleaning_checkout_works": 1,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "routine",
+        "severity_probs": {
+          "routine": 0.79,
+          "urgent": 0.19,
+          "emergency": 0.02
+        },
+        "needs_landlord_approval": 0.92,
+        "likely_self_fixable": 0.05,
+        "safety_risk": 0.58,
+        "needs_more_info": 0.13,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "cleaning_checkout_works",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 0,
+                "doors_windows_locks": 0,
+                "garden_external": 0,
+                "cleaning_checkout_works": 1,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0.24,
+              "confidence": 0.66,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.79,
+                "1": 0.19,
+                "2": 0.02
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.92
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.05
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.58
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.13
+            }
+          },
+          "usage": {
+            "input_tokens": 1374,
+            "output_tokens": 201
+          }
+        },
+        "latencyMs": 272,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "009",
+      "labels": {
+        "category": "garden_external",
+        "needs_landlord_approval": false,
+        "resolved_without_contractor": false
+      },
+      "result": {
+        "category": "garden_external",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 0,
+          "doors_windows_locks": 0,
+          "garden_external": 0.61,
+          "cleaning_checkout_works": 0.33,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0.06,
+          "other": 0
+        },
+        "severity": "routine",
+        "severity_probs": {
+          "routine": 1,
+          "urgent": 0,
+          "emergency": 0
+        },
+        "needs_landlord_approval": 0.69,
+        "likely_self_fixable": 0.2,
+        "safety_risk": 0.08,
+        "needs_more_info": 0.54,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "garden_external",
+              "confidence": 0.56,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 0,
+                "doors_windows_locks": 0,
+                "garden_external": 0.61,
+                "cleaning_checkout_works": 0.33,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0.06,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0,
+              "confidence": 1,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 1,
+                "1": 0,
+                "2": 0
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.69
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.2
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.08
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.54
+            }
+          },
+          "usage": {
+            "input_tokens": 1365,
+            "output_tokens": 198
+          }
+        },
+        "latencyMs": 274,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "010",
+      "labels": {
+        "category": "inspection_admin",
+        "needs_landlord_approval": false,
+        "resolved_without_contractor": false
+      },
+      "result": {
+        "category": "inspection_admin",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 0,
+          "doors_windows_locks": 0,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 1,
+          "other": 0
+        },
+        "severity": "routine",
+        "severity_probs": {
+          "routine": 1,
+          "urgent": 0,
+          "emergency": 0
+        },
+        "needs_landlord_approval": 0.17,
+        "likely_self_fixable": 0.23,
+        "safety_risk": 0.1,
+        "needs_more_info": 0.21,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "inspection_admin",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 0,
+                "doors_windows_locks": 0,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 1,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0,
+              "confidence": 1,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 1,
+                "1": 0,
+                "2": 0
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.17
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.23
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.1
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.21
+            }
+          },
+          "usage": {
+            "input_tokens": 1375,
+            "output_tokens": 197
+          }
+        },
+        "latencyMs": 271,
+        "route": "standard"
+      }
+    },
+    {
+      "case": "011",
+      "labels": {
+        "category": "appliance",
+        "needs_landlord_approval": true,
+        "resolved_without_contractor": false,
+        "dwelly_severity": "routine",
+        "dwelly_issue": "Appliances · Dishwasher not completing cycle"
+      },
+      "result": {
+        "category": "appliance",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 1,
+          "doors_windows_locks": 0,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "routine",
+        "severity_probs": {
+          "routine": 0.75,
+          "urgent": 0.23,
+          "emergency": 0.02
+        },
+        "needs_landlord_approval": 0.83,
+        "likely_self_fixable": 0.33,
+        "safety_risk": 0.52,
+        "needs_more_info": 0.09,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "appliance",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 1,
+                "doors_windows_locks": 0,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0.28,
+              "confidence": 0.59,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.75,
+                "1": 0.23,
+                "2": 0.02
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.83
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.33
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.52
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.09
+            }
+          },
+          "usage": {
+            "input_tokens": 1417,
+            "output_tokens": 198
+          }
+        },
+        "latencyMs": 269,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "012",
+      "labels": {
+        "category": "appliance",
+        "needs_landlord_approval": false,
+        "resolved_without_contractor": false
+      },
+      "result": {
+        "category": "appliance",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 1,
+          "doors_windows_locks": 0,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "routine",
+        "severity_probs": {
+          "routine": 0.79,
+          "urgent": 0.21,
+          "emergency": 0
+        },
+        "needs_landlord_approval": 0.78,
+        "likely_self_fixable": 0.52,
+        "safety_risk": 0.21,
+        "needs_more_info": 0.14,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "appliance",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 1,
+                "doors_windows_locks": 0,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0.21,
+              "confidence": 0.69,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.79,
+                "1": 0.21,
+                "2": 0
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.78
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.52
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.21
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.14
+            }
+          },
+          "usage": {
+            "input_tokens": 1374,
+            "output_tokens": 198
+          }
+        },
+        "latencyMs": 263,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "013",
+      "labels": {
+        "category": "appliance",
+        "needs_landlord_approval": false,
+        "resolved_without_contractor": false
+      },
+      "result": {
+        "category": "appliance",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 1,
+          "doors_windows_locks": 0,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "routine",
+        "severity_probs": {
+          "routine": 0.72,
+          "urgent": 0.28,
+          "emergency": 0
+        },
+        "needs_landlord_approval": 0.83,
+        "likely_self_fixable": 0.42,
+        "safety_risk": 0.15,
+        "needs_more_info": 0.14,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "appliance",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 1,
+                "doors_windows_locks": 0,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0.29,
+              "confidence": 0.58,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.72,
+                "1": 0.28,
+                "2": 0
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.83
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.42
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.15
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.14
+            }
+          },
+          "usage": {
+            "input_tokens": 1349,
+            "output_tokens": 198
+          }
+        },
+        "latencyMs": 219,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "014",
+      "labels": {
+        "category": "doors_windows_locks",
+        "needs_landlord_approval": true,
+        "resolved_without_contractor": true,
+        "dwelly_severity": "routine",
+        "dwelly_issue": "Appliances"
+      },
+      "result": {
+        "category": "doors_windows_locks",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 0,
+          "doors_windows_locks": 1,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "urgent",
+        "severity_probs": {
+          "routine": 0.13,
+          "urgent": 0.67,
+          "emergency": 0.2
+        },
+        "needs_landlord_approval": 0.8,
+        "likely_self_fixable": 0.41,
+        "safety_risk": 0.55,
+        "needs_more_info": 0.14,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "doors_windows_locks",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 0,
+                "doors_windows_locks": 1,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 1.07,
+              "confidence": 0.5,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.13,
+                "1": 0.67,
+                "2": 0.2
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.8
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.41
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.55
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.14
+            }
+          },
+          "usage": {
+            "input_tokens": 1367,
+            "output_tokens": 199
+          }
+        },
+        "latencyMs": 279,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "015",
+      "labels": {
+        "category": "doors_windows_locks",
+        "needs_landlord_approval": false,
+        "resolved_without_contractor": false
+      },
+      "result": {
+        "category": "doors_windows_locks",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 0,
+          "doors_windows_locks": 1,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "urgent",
+        "severity_probs": {
+          "routine": 0.06,
+          "urgent": 0.92,
+          "emergency": 0.02
+        },
+        "needs_landlord_approval": 0.83,
+        "likely_self_fixable": 0.63,
+        "safety_risk": 0.34,
+        "needs_more_info": 0.11,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "doors_windows_locks",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 0,
+                "doors_windows_locks": 1,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0.96,
+              "confidence": 0.88,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.06,
+                "1": 0.92,
+                "2": 0.02
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.83
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.63
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.34
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.11
+            }
+          },
+          "usage": {
+            "input_tokens": 1363,
+            "output_tokens": 199
+          }
+        },
+        "latencyMs": 215,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "016",
+      "labels": {
+        "category": "doors_windows_locks",
+        "needs_landlord_approval": true,
+        "resolved_without_contractor": true
+      },
+      "result": {
+        "category": "doors_windows_locks",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 0,
+          "doors_windows_locks": 1,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "routine",
+        "severity_probs": {
+          "routine": 0.76,
+          "urgent": 0.23,
+          "emergency": 0.01
+        },
+        "needs_landlord_approval": 0.87,
+        "likely_self_fixable": 0.65,
+        "safety_risk": 0.26,
+        "needs_more_info": 0.11,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "doors_windows_locks",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 0,
+                "doors_windows_locks": 1,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0.25,
+              "confidence": 0.62,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.76,
+                "1": 0.23,
+                "2": 0.01
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.87
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.65
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.26
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.11
+            }
+          },
+          "usage": {
+            "input_tokens": 1395,
+            "output_tokens": 199
+          }
+        },
+        "latencyMs": 200,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "017",
+      "labels": {
+        "category": "appliance",
+        "needs_landlord_approval": true,
+        "resolved_without_contractor": true
+      },
+      "result": {
+        "category": "appliance",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 1,
+          "doors_windows_locks": 0,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "routine",
+        "severity_probs": {
+          "routine": 0.95,
+          "urgent": 0.05,
+          "emergency": 0
+        },
+        "needs_landlord_approval": 0.78,
+        "likely_self_fixable": 0.36,
+        "safety_risk": 0.07,
+        "needs_more_info": 0.16,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "appliance",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 1,
+                "doors_windows_locks": 0,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0.05,
+              "confidence": 0.93,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.95,
+                "1": 0.05,
+                "2": 0
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.78
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.36
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.07
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.16
+            }
+          },
+          "usage": {
+            "input_tokens": 1358,
+            "output_tokens": 198
+          }
+        },
+        "latencyMs": 197,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "018",
+      "labels": {
+        "category": "garden_external",
+        "needs_landlord_approval": true,
+        "resolved_without_contractor": false,
+        "dwelly_severity": "routine",
+        "dwelly_issue": "External & Communal · Overgrown tree and weeds"
+      },
+      "result": {
+        "category": "garden_external",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 0,
+          "doors_windows_locks": 0,
+          "garden_external": 1,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "routine",
+        "severity_probs": {
+          "routine": 1,
+          "urgent": 0,
+          "emergency": 0
+        },
+        "needs_landlord_approval": 0.8,
+        "likely_self_fixable": 0.09,
+        "safety_risk": 0.19,
+        "needs_more_info": 0.12,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "garden_external",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 0,
+                "doors_windows_locks": 0,
+                "garden_external": 1,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0,
+              "confidence": 1,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 1,
+                "1": 0,
+                "2": 0
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.8
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.09
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.19
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.12
+            }
+          },
+          "usage": {
+            "input_tokens": 1391,
+            "output_tokens": 198
+          }
+        },
+        "latencyMs": 204,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "019",
+      "labels": {
+        "category": "garden_external",
+        "needs_landlord_approval": true,
+        "resolved_without_contractor": false
+      },
+      "result": {
+        "category": "garden_external",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 0,
+          "doors_windows_locks": 0,
+          "garden_external": 1,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "routine",
+        "severity_probs": {
+          "routine": 0.99,
+          "urgent": 0.01,
+          "emergency": 0
+        },
+        "needs_landlord_approval": 0.83,
+        "likely_self_fixable": 0.08,
+        "safety_risk": 0.22,
+        "needs_more_info": 0.08,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "garden_external",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 0,
+                "doors_windows_locks": 0,
+                "garden_external": 1,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0.02,
+              "confidence": 0.98,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.99,
+                "1": 0.01,
+                "2": 0
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.83
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.08
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.22
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.08
+            }
+          },
+          "usage": {
+            "input_tokens": 1453,
+            "output_tokens": 198
+          }
+        },
+        "latencyMs": 197,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "020",
+      "labels": {
+        "category": "inspection_admin",
+        "needs_landlord_approval": false,
+        "resolved_without_contractor": false
+      },
+      "result": {
+        "category": "inspection_admin",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 0,
+          "doors_windows_locks": 0,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 1,
+          "other": 0
+        },
+        "severity": "routine",
+        "severity_probs": {
+          "routine": 1,
+          "urgent": 0,
+          "emergency": 0
+        },
+        "needs_landlord_approval": 0.1,
+        "likely_self_fixable": 0.26,
+        "safety_risk": 0.04,
+        "needs_more_info": 0.21,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "inspection_admin",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 0,
+                "doors_windows_locks": 0,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 1,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0,
+              "confidence": 1,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 1,
+                "1": 0,
+                "2": 0
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.1
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.26
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.04
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.21
+            }
+          },
+          "usage": {
+            "input_tokens": 1363,
+            "output_tokens": 197
+          }
+        },
+        "latencyMs": 212,
+        "route": "standard"
+      }
+    },
+    {
+      "case": "021",
+      "labels": {
+        "category": "doors_windows_locks",
+        "needs_landlord_approval": true,
+        "resolved_without_contractor": false
+      },
+      "result": {
+        "category": "doors_windows_locks",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 0,
+          "doors_windows_locks": 1,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "emergency",
+        "severity_probs": {
+          "routine": 0.05,
+          "urgent": 0.36,
+          "emergency": 0.59
+        },
+        "needs_landlord_approval": 0.73,
+        "likely_self_fixable": 0.04,
+        "safety_risk": 0.82,
+        "needs_more_info": 0.08,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "doors_windows_locks",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 0,
+                "doors_windows_locks": 1,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 1.54,
+              "confidence": 0.31,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.05,
+                "1": 0.36,
+                "2": 0.59
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.73
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.04
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.82
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.08
+            }
+          },
+          "usage": {
+            "input_tokens": 1406,
+            "output_tokens": 199
+          }
+        },
+        "latencyMs": 234,
+        "route": "emergency_dispatch"
+      }
+    },
+    {
+      "case": "022",
+      "labels": {
+        "category": "doors_windows_locks",
+        "needs_landlord_approval": false,
+        "resolved_without_contractor": false
+      },
+      "result": {
+        "category": "doors_windows_locks",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 0,
+          "doors_windows_locks": 1,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "urgent",
+        "severity_probs": {
+          "routine": 0.08,
+          "urgent": 0.9,
+          "emergency": 0.02
+        },
+        "needs_landlord_approval": 0.83,
+        "likely_self_fixable": 0.31,
+        "safety_risk": 0.39,
+        "needs_more_info": 0.11,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "doors_windows_locks",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 0,
+                "doors_windows_locks": 1,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0.94,
+              "confidence": 0.85,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.08,
+                "1": 0.9,
+                "2": 0.02
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.83
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.31
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.39
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.11
+            }
+          },
+          "usage": {
+            "input_tokens": 1371,
+            "output_tokens": 199
+          }
+        },
+        "latencyMs": 230,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "023",
+      "labels": {
+        "category": "doors_windows_locks",
+        "needs_landlord_approval": false,
+        "resolved_without_contractor": false
+      },
+      "result": {
+        "category": "doors_windows_locks",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 0,
+          "doors_windows_locks": 1,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "emergency",
+        "severity_probs": {
+          "routine": 0.03,
+          "urgent": 0.21,
+          "emergency": 0.76
+        },
+        "needs_landlord_approval": 0.83,
+        "likely_self_fixable": 0.16,
+        "safety_risk": 0.79,
+        "needs_more_info": 0.1,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "doors_windows_locks",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 0,
+                "doors_windows_locks": 1,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 1.72,
+              "confidence": 0.59,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.03,
+                "1": 0.21,
+                "2": 0.76
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.83
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.16
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.79
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.1
+            }
+          },
+          "usage": {
+            "input_tokens": 1383,
+            "output_tokens": 199
+          }
+        },
+        "latencyMs": 231,
+        "route": "emergency_dispatch"
+      }
+    },
+    {
+      "case": "024",
+      "labels": {
+        "category": "appliance",
+        "needs_landlord_approval": false,
+        "resolved_without_contractor": false
+      },
+      "result": {
+        "category": "appliance",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 1,
+          "doors_windows_locks": 0,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "urgent",
+        "severity_probs": {
+          "routine": 0.02,
+          "urgent": 0.98,
+          "emergency": 0
+        },
+        "needs_landlord_approval": 0.77,
+        "likely_self_fixable": 0.15,
+        "safety_risk": 0.11,
+        "needs_more_info": 0.1,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "appliance",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 1,
+                "doors_windows_locks": 0,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0.98,
+              "confidence": 0.97,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.02,
+                "1": 0.98,
+                "2": 0
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.77
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.15
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.11
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.1
+            }
+          },
+          "usage": {
+            "input_tokens": 1407,
+            "output_tokens": 198
+          }
+        },
+        "latencyMs": 227,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "025",
+      "labels": {
+        "category": "appliance",
+        "needs_landlord_approval": true,
+        "resolved_without_contractor": false
+      },
+      "result": {
+        "category": "appliance",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 1,
+          "doors_windows_locks": 0,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "urgent",
+        "severity_probs": {
+          "routine": 0.04,
+          "urgent": 0.95,
+          "emergency": 0.01
+        },
+        "needs_landlord_approval": 0.84,
+        "likely_self_fixable": 0.1,
+        "safety_risk": 0.14,
+        "needs_more_info": 0.1,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "appliance",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 1,
+                "doors_windows_locks": 0,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0.96,
+              "confidence": 0.93,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.04,
+                "1": 0.95,
+                "2": 0.01
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.84
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.1
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.14
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.1
+            }
+          },
+          "usage": {
+            "input_tokens": 1378,
+            "output_tokens": 198
+          }
+        },
+        "latencyMs": 282,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "026",
+      "labels": {
+        "category": "appliance",
+        "needs_landlord_approval": true,
+        "resolved_without_contractor": false,
+        "dwelly_severity": "routine",
+        "dwelly_issue": "Appliances"
+      },
+      "result": {
+        "category": "appliance",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 1,
+          "doors_windows_locks": 0,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "urgent",
+        "severity_probs": {
+          "routine": 0.13,
+          "urgent": 0.87,
+          "emergency": 0
+        },
+        "needs_landlord_approval": 0.88,
+        "likely_self_fixable": 0.1,
+        "safety_risk": 0.08,
+        "needs_more_info": 0.07,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "appliance",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 1,
+                "doors_windows_locks": 0,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0.87,
+              "confidence": 0.8,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.13,
+                "1": 0.87,
+                "2": 0
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.88
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.1
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.08
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.07
+            }
+          },
+          "usage": {
+            "input_tokens": 1553,
+            "output_tokens": 198
+          }
+        },
+        "latencyMs": 285,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "027",
+      "labels": {
+        "category": "plumbing",
+        "needs_landlord_approval": false,
+        "resolved_without_contractor": true
+      },
+      "result": {
+        "category": "plumbing",
+        "category_probs": {
+          "plumbing": 1,
+          "appliance": 0,
+          "doors_windows_locks": 0,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "routine",
+        "severity_probs": {
+          "routine": 0.52,
+          "urgent": 0.48,
+          "emergency": 0
+        },
+        "needs_landlord_approval": 0.54,
+        "likely_self_fixable": 0.79,
+        "safety_risk": 0.29,
+        "needs_more_info": 0.11,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "plumbing",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 1,
+                "appliance": 0,
+                "doors_windows_locks": 0,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0.48,
+              "confidence": 0.28,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.52,
+                "1": 0.48,
+                "2": 0
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.54
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.79
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.29
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.11
+            }
+          },
+          "usage": {
+            "input_tokens": 1417,
+            "output_tokens": 198
+          }
+        },
+        "latencyMs": 285,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "028",
+      "labels": {
+        "category": "garden_external",
+        "needs_landlord_approval": true,
+        "resolved_without_contractor": true
+      },
+      "result": {
+        "category": "plumbing",
+        "category_probs": {
+          "plumbing": 0.71,
+          "appliance": 0,
+          "doors_windows_locks": 0,
+          "garden_external": 0.29,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "routine",
+        "severity_probs": {
+          "routine": 0.78,
+          "urgent": 0.14,
+          "emergency": 0.08
+        },
+        "needs_landlord_approval": 0.76,
+        "likely_self_fixable": 0.17,
+        "safety_risk": 0.58,
+        "needs_more_info": 0.27,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "plumbing",
+              "confidence": 0.67,
+              "probabilities": {
+                "plumbing": 0.71,
+                "appliance": 0,
+                "doors_windows_locks": 0,
+                "garden_external": 0.29,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0.3,
+              "confidence": 0.55,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.78,
+                "1": 0.14,
+                "2": 0.08
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.76
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.17
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.58
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.27
+            }
+          },
+          "usage": {
+            "input_tokens": 1343,
+            "output_tokens": 198
+          }
+        },
+        "latencyMs": 282,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "029",
+      "labels": {
+        "category": "plumbing",
+        "needs_landlord_approval": false,
+        "resolved_without_contractor": false
+      },
+      "result": {
+        "category": "plumbing",
+        "category_probs": {
+          "plumbing": 1,
+          "appliance": 0,
+          "doors_windows_locks": 0,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "urgent",
+        "severity_probs": {
+          "routine": 0.31,
+          "urgent": 0.69,
+          "emergency": 0
+        },
+        "needs_landlord_approval": 0.77,
+        "likely_self_fixable": 0.29,
+        "safety_risk": 0.36,
+        "needs_more_info": 0.54,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "plumbing",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 1,
+                "appliance": 0,
+                "doors_windows_locks": 0,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0.7,
+              "confidence": 0.53,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.31,
+                "1": 0.69,
+                "2": 0
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.77
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.29
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.36
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.54
+            }
+          },
+          "usage": {
+            "input_tokens": 1344,
+            "output_tokens": 198
+          }
+        },
+        "latencyMs": 283,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "030",
+      "labels": {
+        "category": "plumbing",
+        "needs_landlord_approval": true,
+        "resolved_without_contractor": false,
+        "dwelly_severity": "routine",
+        "dwelly_issue": "Plumbing"
+      },
+      "result": {
+        "category": "plumbing",
+        "category_probs": {
+          "plumbing": 1,
+          "appliance": 0,
+          "doors_windows_locks": 0,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "urgent",
+        "severity_probs": {
+          "routine": 0.08,
+          "urgent": 0.91,
+          "emergency": 0.01
+        },
+        "needs_landlord_approval": 0.79,
+        "likely_self_fixable": 0.28,
+        "safety_risk": 0.24,
+        "needs_more_info": 0.1,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "plumbing",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 1,
+                "appliance": 0,
+                "doors_windows_locks": 0,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0.92,
+              "confidence": 0.86,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.08,
+                "1": 0.91,
+                "2": 0.01
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.79
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.28
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.24
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.1
+            }
+          },
+          "usage": {
+            "input_tokens": 1481,
+            "output_tokens": 198
+          }
+        },
+        "latencyMs": 222,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "031",
+      "labels": {
+        "category": "plumbing",
+        "needs_landlord_approval": true,
+        "resolved_without_contractor": false
+      },
+      "result": {
+        "category": "plumbing",
+        "category_probs": {
+          "plumbing": 1,
+          "appliance": 0,
+          "doors_windows_locks": 0,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "emergency",
+        "severity_probs": {
+          "routine": 0.04,
+          "urgent": 0.15,
+          "emergency": 0.8099999999999999
+        },
+        "needs_landlord_approval": 0.76,
+        "likely_self_fixable": 0.27,
+        "safety_risk": 0.62,
+        "needs_more_info": 0.12,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "plumbing",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 1,
+                "appliance": 0,
+                "doors_windows_locks": 0,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 1.78,
+              "confidence": 0.66,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.04,
+                "1": 0.15,
+                "2": 0.8099999999999999
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.76
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.27
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.62
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.12
+            }
+          },
+          "usage": {
+            "input_tokens": 1362,
+            "output_tokens": 198
+          }
+        },
+        "latencyMs": 314,
+        "route": "emergency_dispatch"
+      }
+    },
+    {
+      "case": "032",
+      "labels": {
+        "category": "plumbing",
+        "needs_landlord_approval": true,
+        "resolved_without_contractor": false
+      },
+      "result": {
+        "category": "plumbing",
+        "category_probs": {
+          "plumbing": 1,
+          "appliance": 0,
+          "doors_windows_locks": 0,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "urgent",
+        "severity_probs": {
+          "routine": 0.37,
+          "urgent": 0.63,
+          "emergency": 0
+        },
+        "needs_landlord_approval": 0.77,
+        "likely_self_fixable": 0.39,
+        "safety_risk": 0.22,
+        "needs_more_info": 0.28,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "plumbing",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 1,
+                "appliance": 0,
+                "doors_windows_locks": 0,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0.63,
+              "confidence": 0.44,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.37,
+                "1": 0.63,
+                "2": 0
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.77
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.39
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.22
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.28
+            }
+          },
+          "usage": {
+            "input_tokens": 1359,
+            "output_tokens": 198
+          }
+        },
+        "latencyMs": 315,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "033",
+      "labels": {
+        "category": "plumbing",
+        "needs_landlord_approval": true,
+        "resolved_without_contractor": false
+      },
+      "result": {
+        "category": "plumbing",
+        "category_probs": {
+          "plumbing": 1,
+          "appliance": 0,
+          "doors_windows_locks": 0,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "emergency",
+        "severity_probs": {
+          "routine": 0.12,
+          "urgent": 0.25,
+          "emergency": 0.63
+        },
+        "needs_landlord_approval": 0.76,
+        "likely_self_fixable": 0.11,
+        "safety_risk": 0.55,
+        "needs_more_info": 0.13,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "plumbing",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 1,
+                "appliance": 0,
+                "doors_windows_locks": 0,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 1.51,
+              "confidence": 0.27,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.12,
+                "1": 0.25,
+                "2": 0.63
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.76
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.11
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.55
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.13
+            }
+          },
+          "usage": {
+            "input_tokens": 1346,
+            "output_tokens": 198
+          }
+        },
+        "latencyMs": 313,
+        "route": "emergency_dispatch"
+      }
+    },
+    {
+      "case": "034",
+      "labels": {
+        "category": "plumbing",
+        "needs_landlord_approval": true,
+        "resolved_without_contractor": false
+      },
+      "result": {
+        "category": "plumbing",
+        "category_probs": {
+          "plumbing": 0.99,
+          "appliance": 0,
+          "doors_windows_locks": 0,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0.01,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "urgent",
+        "severity_probs": {
+          "routine": 0.17,
+          "urgent": 0.82,
+          "emergency": 0.01
+        },
+        "needs_landlord_approval": 0.79,
+        "likely_self_fixable": 0.14,
+        "safety_risk": 0.14,
+        "needs_more_info": 0.1,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "plumbing",
+              "confidence": 0.99,
+              "probabilities": {
+                "plumbing": 0.99,
+                "appliance": 0,
+                "doors_windows_locks": 0,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0.01,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0.84,
+              "confidence": 0.73,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.17,
+                "1": 0.82,
+                "2": 0.01
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.79
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.14
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.14
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.1
+            }
+          },
+          "usage": {
+            "input_tokens": 1376,
+            "output_tokens": 198
+          }
+        },
+        "latencyMs": 313,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "035",
+      "labels": {
+        "category": "plumbing",
+        "needs_landlord_approval": true,
+        "resolved_without_contractor": true,
+        "dwelly_severity": "routine",
+        "dwelly_issue": "Plumbing"
+      },
+      "result": {
+        "category": "plumbing",
+        "category_probs": {
+          "plumbing": 1,
+          "appliance": 0,
+          "doors_windows_locks": 0,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "urgent",
+        "severity_probs": {
+          "routine": 0.23,
+          "urgent": 0.77,
+          "emergency": 0
+        },
+        "needs_landlord_approval": 0.79,
+        "likely_self_fixable": 0.3,
+        "safety_risk": 0.27,
+        "needs_more_info": 0.07,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "plumbing",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 1,
+                "appliance": 0,
+                "doors_windows_locks": 0,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0.77,
+              "confidence": 0.66,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.23,
+                "1": 0.77,
+                "2": 0
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.79
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.3
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.27
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.07
+            }
+          },
+          "usage": {
+            "input_tokens": 1445,
+            "output_tokens": 198
+          }
+        },
+        "latencyMs": 287,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "036",
+      "labels": {
+        "category": "plumbing",
+        "needs_landlord_approval": true,
+        "resolved_without_contractor": false
+      },
+      "result": {
+        "category": "plumbing",
+        "category_probs": {
+          "plumbing": 1,
+          "appliance": 0,
+          "doors_windows_locks": 0,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "urgent",
+        "severity_probs": {
+          "routine": 0.11,
+          "urgent": 0.88,
+          "emergency": 0.01
+        },
+        "needs_landlord_approval": 0.79,
+        "likely_self_fixable": 0.27,
+        "safety_risk": 0.19,
+        "needs_more_info": 0.15,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "plumbing",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 1,
+                "appliance": 0,
+                "doors_windows_locks": 0,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0.9,
+              "confidence": 0.82,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.11,
+                "1": 0.88,
+                "2": 0.01
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.79
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.27
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.19
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.15
+            }
+          },
+          "usage": {
+            "input_tokens": 1364,
+            "output_tokens": 198
+          }
+        },
+        "latencyMs": 300,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "037",
+      "labels": {
+        "category": "plumbing",
+        "needs_landlord_approval": false,
+        "resolved_without_contractor": false
+      },
+      "result": {
+        "category": "plumbing",
+        "category_probs": {
+          "plumbing": 1,
+          "appliance": 0,
+          "doors_windows_locks": 0,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "emergency",
+        "severity_probs": {
+          "routine": 0,
+          "urgent": 0.05,
+          "emergency": 0.95
+        },
+        "needs_landlord_approval": 0.79,
+        "likely_self_fixable": 0.07,
+        "safety_risk": 0.71,
+        "needs_more_info": 0.13,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "plumbing",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 1,
+                "appliance": 0,
+                "doors_windows_locks": 0,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 1.94,
+              "confidence": 0.93,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0,
+                "1": 0.05,
+                "2": 0.95
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.79
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.07
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.71
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.13
+            }
+          },
+          "usage": {
+            "input_tokens": 1344,
+            "output_tokens": 198
+          }
+        },
+        "latencyMs": 461,
+        "route": "emergency_dispatch"
+      }
+    },
+    {
+      "case": "038",
+      "labels": {
+        "category": "appliance",
+        "needs_landlord_approval": true,
+        "resolved_without_contractor": true,
+        "dwelly_severity": "routine",
+        "dwelly_issue": "Appliances · Power failure"
+      },
+      "result": {
+        "category": "appliance",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 1,
+          "doors_windows_locks": 0,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "routine",
+        "severity_probs": {
+          "routine": 0.59,
+          "urgent": 0.41,
+          "emergency": 0
+        },
+        "needs_landlord_approval": 0.86,
+        "likely_self_fixable": 0.15,
+        "safety_risk": 0.08,
+        "needs_more_info": 0.12,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "appliance",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 1,
+                "doors_windows_locks": 0,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0.41,
+              "confidence": 0.39,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.59,
+                "1": 0.41,
+                "2": 0
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.86
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.15
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.08
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.12
+            }
+          },
+          "usage": {
+            "input_tokens": 1422,
+            "output_tokens": 198
+          }
+        },
+        "latencyMs": 297,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "039",
+      "labels": {
+        "category": "appliance",
+        "needs_landlord_approval": true,
+        "resolved_without_contractor": false
+      },
+      "result": {
+        "category": "appliance",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 1,
+          "doors_windows_locks": 0,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "routine",
+        "severity_probs": {
+          "routine": 0.95,
+          "urgent": 0.05,
+          "emergency": 0
+        },
+        "needs_landlord_approval": 0.85,
+        "likely_self_fixable": 0.23,
+        "safety_risk": 0.19,
+        "needs_more_info": 0.15,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "appliance",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 1,
+                "doors_windows_locks": 0,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0.05,
+              "confidence": 0.93,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.95,
+                "1": 0.05,
+                "2": 0
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.85
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.23
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.19
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.15
+            }
+          },
+          "usage": {
+            "input_tokens": 1379,
+            "output_tokens": 198
+          }
+        },
+        "latencyMs": 297,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "040",
+      "labels": {
+        "category": "appliance",
+        "needs_landlord_approval": true,
+        "resolved_without_contractor": true,
+        "dwelly_severity": "routine",
+        "dwelly_issue": "Appliances · Washing machine not starting cycle"
+      },
+      "result": {
+        "category": "appliance",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 1,
+          "doors_windows_locks": 0,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "routine",
+        "severity_probs": {
+          "routine": 0.75,
+          "urgent": 0.25,
+          "emergency": 0
+        },
+        "needs_landlord_approval": 0.8,
+        "likely_self_fixable": 0.4,
+        "safety_risk": 0.07,
+        "needs_more_info": 0.1,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "appliance",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 1,
+                "doors_windows_locks": 0,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0.25,
+              "confidence": 0.62,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.75,
+                "1": 0.25,
+                "2": 0
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.8
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.4
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.07
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.1
+            }
+          },
+          "usage": {
+            "input_tokens": 1527,
+            "output_tokens": 198
+          }
+        },
+        "latencyMs": 262,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "041",
+      "labels": {
+        "category": "appliance",
+        "needs_landlord_approval": false,
+        "resolved_without_contractor": true
+      },
+      "result": {
+        "category": "appliance",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 1,
+          "doors_windows_locks": 0,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "urgent",
+        "severity_probs": {
+          "routine": 0.28,
+          "urgent": 0.69,
+          "emergency": 0.03
+        },
+        "needs_landlord_approval": 0.82,
+        "likely_self_fixable": 0.2,
+        "safety_risk": 0.43,
+        "needs_more_info": 0.09,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "appliance",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 1,
+                "doors_windows_locks": 0,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0.75,
+              "confidence": 0.53,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.28,
+                "1": 0.69,
+                "2": 0.03
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.82
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.2
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.43
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.09
+            }
+          },
+          "usage": {
+            "input_tokens": 1487,
+            "output_tokens": 198
+          }
+        },
+        "latencyMs": 219,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "042",
+      "labels": {
+        "category": "appliance",
+        "needs_landlord_approval": true,
+        "resolved_without_contractor": false,
+        "dwelly_severity": "routine",
+        "dwelly_issue": "Heating & Hot Water"
+      },
+      "result": {
+        "category": "appliance",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 1,
+          "doors_windows_locks": 0,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "routine",
+        "severity_probs": {
+          "routine": 0.8,
+          "urgent": 0.2,
+          "emergency": 0
+        },
+        "needs_landlord_approval": 0.79,
+        "likely_self_fixable": 0.12,
+        "safety_risk": 0.07,
+        "needs_more_info": 0.09,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "appliance",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 1,
+                "doors_windows_locks": 0,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0.2,
+              "confidence": 0.7,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.8,
+                "1": 0.2,
+                "2": 0
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.79
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.12
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.07
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.09
+            }
+          },
+          "usage": {
+            "input_tokens": 1391,
+            "output_tokens": 198
+          }
+        },
+        "latencyMs": 220,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "043",
+      "labels": {
+        "category": "appliance",
+        "needs_landlord_approval": false,
+        "resolved_without_contractor": false
+      },
+      "result": {
+        "category": "appliance",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 1,
+          "doors_windows_locks": 0,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "urgent",
+        "severity_probs": {
+          "routine": 0.46,
+          "urgent": 0.54,
+          "emergency": 0
+        },
+        "needs_landlord_approval": 0.81,
+        "likely_self_fixable": 0.3,
+        "safety_risk": 0.37,
+        "needs_more_info": 0.11,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "appliance",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 1,
+                "doors_windows_locks": 0,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0.54,
+              "confidence": 0.31,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.46,
+                "1": 0.54,
+                "2": 0
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.81
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.3
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.37
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.11
+            }
+          },
+          "usage": {
+            "input_tokens": 1355,
+            "output_tokens": 198
+          }
+        },
+        "latencyMs": 218,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "044",
+      "labels": {
+        "category": "doors_windows_locks",
+        "needs_landlord_approval": false,
+        "resolved_without_contractor": false
+      },
+      "result": {
+        "category": "doors_windows_locks",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 0,
+          "doors_windows_locks": 1,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "urgent",
+        "severity_probs": {
+          "routine": 0.2,
+          "urgent": 0.5,
+          "emergency": 0.3
+        },
+        "needs_landlord_approval": 0.78,
+        "likely_self_fixable": 0.22,
+        "safety_risk": 0.31,
+        "needs_more_info": 0.1,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "doors_windows_locks",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 0,
+                "doors_windows_locks": 1,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 1.1,
+              "confidence": 0.25,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.2,
+                "1": 0.5,
+                "2": 0.3
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.78
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.22
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.31
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.1
+            }
+          },
+          "usage": {
+            "input_tokens": 1386,
+            "output_tokens": 199
+          }
+        },
+        "latencyMs": 238,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "045",
+      "labels": {
+        "category": "doors_windows_locks",
+        "needs_landlord_approval": true,
+        "resolved_without_contractor": true
+      },
+      "result": {
+        "category": "doors_windows_locks",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 0,
+          "doors_windows_locks": 0.96,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0.01,
+          "other": 0.03
+        },
+        "severity": "routine",
+        "severity_probs": {
+          "routine": 0.96,
+          "urgent": 0.02,
+          "emergency": 0.02
+        },
+        "needs_landlord_approval": 0.81,
+        "likely_self_fixable": 0.17,
+        "safety_risk": 0.23,
+        "needs_more_info": 0.77,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "doors_windows_locks",
+              "confidence": 0.95,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 0,
+                "doors_windows_locks": 0.96,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0.01,
+                "other": 0.03
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0.05,
+              "confidence": 0.91,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.96,
+                "1": 0.02,
+                "2": 0.02
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.81
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.17
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.23
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.77
+            }
+          },
+          "usage": {
+            "input_tokens": 1353,
+            "output_tokens": 199
+          }
+        },
+        "latencyMs": 224,
+        "route": "ask_for_info"
+      }
+    },
+    {
+      "case": "046",
+      "labels": {
+        "category": "doors_windows_locks",
+        "needs_landlord_approval": true,
+        "resolved_without_contractor": false
+      },
+      "result": {
+        "category": "doors_windows_locks",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 0,
+          "doors_windows_locks": 1,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "urgent",
+        "severity_probs": {
+          "routine": 0.4,
+          "urgent": 0.44,
+          "emergency": 0.16
+        },
+        "needs_landlord_approval": 0.85,
+        "likely_self_fixable": 0.44,
+        "safety_risk": 0.49,
+        "needs_more_info": 0.11,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "doors_windows_locks",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 0,
+                "doors_windows_locks": 1,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0.75,
+              "confidence": 0.16,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.4,
+                "1": 0.44,
+                "2": 0.16
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.85
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.44
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.49
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.11
+            }
+          },
+          "usage": {
+            "input_tokens": 1346,
+            "output_tokens": 199
+          }
+        },
+        "latencyMs": 205,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "047",
+      "labels": {
+        "category": "doors_windows_locks",
+        "needs_landlord_approval": true,
+        "resolved_without_contractor": true
+      },
+      "result": {
+        "category": "doors_windows_locks",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 0,
+          "doors_windows_locks": 1,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "urgent",
+        "severity_probs": {
+          "routine": 0.42,
+          "urgent": 0.45,
+          "emergency": 0.13
+        },
+        "needs_landlord_approval": 0.8,
+        "likely_self_fixable": 0.4,
+        "safety_risk": 0.38,
+        "needs_more_info": 0.13,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "doors_windows_locks",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 0,
+                "doors_windows_locks": 1,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0.71,
+              "confidence": 0.17,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.42,
+                "1": 0.45,
+                "2": 0.13
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.8
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.4
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.38
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.13
+            }
+          },
+          "usage": {
+            "input_tokens": 1376,
+            "output_tokens": 199
+          }
+        },
+        "latencyMs": 204,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "048",
+      "labels": {
+        "category": "doors_windows_locks",
+        "needs_landlord_approval": true,
+        "resolved_without_contractor": false
+      },
+      "result": {
+        "category": "doors_windows_locks",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 0,
+          "doors_windows_locks": 1,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "routine",
+        "severity_probs": {
+          "routine": 0.75,
+          "urgent": 0.23,
+          "emergency": 0.02
+        },
+        "needs_landlord_approval": 0.78,
+        "likely_self_fixable": 0.55,
+        "safety_risk": 0.23,
+        "needs_more_info": 0.16,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "doors_windows_locks",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 0,
+                "doors_windows_locks": 1,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0.27,
+              "confidence": 0.59,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.75,
+                "1": 0.23,
+                "2": 0.02
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.78
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.55
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.23
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.16
+            }
+          },
+          "usage": {
+            "input_tokens": 1343,
+            "output_tokens": 199
+          }
+        },
+        "latencyMs": 205,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "049",
+      "labels": {
+        "category": "garden_external",
+        "needs_landlord_approval": true,
+        "resolved_without_contractor": true,
+        "dwelly_severity": "routine",
+        "dwelly_issue": "Structural"
+      },
+      "result": {
+        "category": "doors_windows_locks",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 0,
+          "doors_windows_locks": 0.67,
+          "garden_external": 0.33,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "routine",
+        "severity_probs": {
+          "routine": 0.93,
+          "urgent": 0.07,
+          "emergency": 0
+        },
+        "needs_landlord_approval": 0.82,
+        "likely_self_fixable": 0.73,
+        "safety_risk": 0.21,
+        "needs_more_info": 0.09,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "doors_windows_locks",
+              "confidence": 0.63,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 0,
+                "doors_windows_locks": 0.67,
+                "garden_external": 0.33,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0.08,
+              "confidence": 0.9,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.93,
+                "1": 0.07,
+                "2": 0
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.82
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.73
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.21
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.09
+            }
+          },
+          "usage": {
+            "input_tokens": 1371,
+            "output_tokens": 199
+          }
+        },
+        "latencyMs": 396,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "050",
+      "labels": {
+        "category": "doors_windows_locks",
+        "needs_landlord_approval": true,
+        "resolved_without_contractor": false,
+        "dwelly_severity": "routine",
+        "dwelly_issue": "Windows & Glazing"
+      },
+      "result": {
+        "category": "doors_windows_locks",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 0,
+          "doors_windows_locks": 1,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "emergency",
+        "severity_probs": {
+          "routine": 0.13,
+          "urgent": 0.39,
+          "emergency": 0.48
+        },
+        "needs_landlord_approval": 0.81,
+        "likely_self_fixable": 0.52,
+        "safety_risk": 0.63,
+        "needs_more_info": 0.12,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "category": {
+              "type": "choice",
+              "choice": "doors_windows_locks",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 0,
+                "doors_windows_locks": 1,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 1.35,
+              "confidence": 0.02,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.13,
+                "1": 0.39,
+                "2": 0.48
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.81
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.52
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.63
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.12
+            }
+          },
+          "usage": {
+            "input_tokens": 1340,
+            "output_tokens": 199
+          }
+        },
+        "latencyMs": 249,
+        "route": "request_landlord_approval"
+      }
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "case": "PM014-1",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 0,
+  "durationSec": 38.505,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4JT2BSTYH5B4KR4A6E8Q2Q1",
+  "startedAt": "2026-10-10T11:44:42.617Z",
+  "finishedAt": "2026-10-10T11:45:21.122Z",
+  "usage": {
+    "inputTokens": 55744,
+    "outputTokens": 3859
+  },
+  "eventCount": 293,
+  "dryRun": false,
+  "result": {
+    "case_id": "22 (R/PM014-1)",
+    "decision": "escalate",
+    "summary": "The landlord replied that the contractor could look at the front door next month, citing a tenant workaround that doesn't appear anywhere in the records. That isn't a clear approval. The fridge contractor warned the glass could shatter and the door frame wobbles, so whether to wait a month is a decision for the agency. I left approval #11 pending, sent the tenant safety advice and asked whether the door still locks securely, set a 1-day follow-up, and escalated at normal priority recommending a reply to the landlord.",
+    "situation": "Stage landlord_approval. The tenant reports the front door has to be slammed to shut, and says the back door is the same. The fridge contractor (Oliver) reported that the door and frame wobble and that slamming could shatter the glass. The landlord's reply (event 009) suggests waiting until next month. Event 008 asks whether the landlord needs a response: yes, in my view.",
+    "actions_taken": [
+      {
+        "tool": "classify_intake",
+        "description": "Re-classified the report, because the original intake wrongly filed it under Appliances",
+        "result": "doors_windows_locks, urgent (0.73), safety_risk 0.59",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant safety advice (avoid slamming, keep away from the glass) and asked whether the door locks securely",
+        "result": "message 31 queued",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the landlord's position (deferral to next month, workaround claim not on record)",
+        "result": "fact 42",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold waiting for the tenant to confirm the door locks",
+        "result": "hold 51, follow-up in 1 day",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Handed the landlord's deferral decision on a safety issue to a property manager",
+        "result": "queue item 8",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord",
+        "status": "pending (reply ambiguous, defers to next month; not recorded as approved or rejected)",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "The landlord wants to put off a door repair that carries a reported glass-shatter and frame safety risk, and the reply is not a clear approval.",
+      "handover_summary": "The front door at Flat 12, 52 Meadow Row has to be slammed shut, and the door and frame wobble. The contractor warned the glass could shatter. The landlord suggested next month, citing a tenant workaround that isn't recorded. Approval #11 is still pending. The tenant has been asked whether the door locks securely (1-day follow-up).",
+      "recommendation": "A property manager should reply to the landlord recommending an inspection now and asking for a clear APPROVE/DECLINE and a cost limit. If the door won't lock or the glass cracks, treat it as an emergency and send a locksmith or glazier."
+    },
+    "unverified": [
+      "The tenant workaround the landlord mentions: not found in any event",
+      "Whether the front door locks securely",
+      "Whether the landlord's reply means a visit is approved for next month or declined for now",
+      "What's wrong with the back door"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "Contractor warned the door glass could shatter: risk of injury",
+      "Door frame movement could affect security",
+      "The original intake classification was wrong (Appliances)"
+    ],
+    "final_status": "landlord_approval, on hold waiting for the tenant; escalated to the human queue (item 8)",
+    "next_follow_up": {
+      "when": "2024-06-08",
+      "what": "Chase the tenant about whether the door locks if there's no reply. Check the agency's response to the landlord."
+    },
+    "confidence": 0.75
+  }
+}

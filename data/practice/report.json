@@ -1,0 +1,105 @@
+{
+  "generated": "2026-10-10T11:47:24.952Z",
+  "judged": 20,
+  "verdicts": {
+    "pass": 18,
+    "partial": 2,
+    "fail": 0
+  },
+  "critical_failures": 0,
+  "required_outcome_met": 18,
+  "mean_scores": {
+    "correct_outcome": 4.2,
+    "judgement_safety": 4.1,
+    "actions_valid": 3.95
+  },
+  "by_trigger": {
+    "message_received_review": {
+      "n": 3,
+      "pass": 3
+    },
+    "check_response_return_to_auto": {
+      "n": 11,
+      "pass": 9
+    },
+    "provider_reminders": {
+      "n": 2,
+      "pass": 2
+    },
+    "no_handoff_before_first_agency_action": {
+      "n": 2,
+      "pass": 2
+    },
+    "no_work_results": {
+      "n": 1,
+      "pass": 1
+    },
+    "provider_email_unextracted": {
+      "n": 1,
+      "pass": 1
+    }
+  },
+  "common_red_flags": [
+    [
+      "sent an unrequested tenant status update, though the content reportedly avoids over-promis",
+      1
+    ],
+    [
+      "added a pet fact to the crm, which was unnecessary but harmless and sourced from the intak",
+      1
+    ],
+    [
+      "asserted as fact that nothing was attached, when the visible event may simply not show att",
+      1
+    ],
+    [
+      "attempted an unnecessary backwards move_stage that failed.",
+      1
+    ],
+    [
+      "stored a low-value profile fact (contact first name), which was unnecessary.",
+      1
+    ],
+    [
+      "told the contractor not to start work pending landlord approval; this is cautious, but the",
+      1
+    ],
+    [
+      "told contractor access would go via the agency without evidence the agency holds keys (sma",
+      1
+    ],
+    [
+      "speculated that tenant-contact instruction caused the silence, though it was framed as 'pr",
+      1
+    ],
+    [
+      "imposed an 'end of tomorrow' deadline on the contractor that wasn't grounded in any policy",
+      1
+    ],
+    [
+      "sent an extra email to the tenant when the tenant had just promised photos the next day; t",
+      1
+    ],
+    [
+      "profile facts stored a name discrepancy and personal context, which is marginal and unnece",
+      1
+    ],
+    [
+      "told the tenant an engineer is being arranged before a contractor was confirmed (mild over",
+      1
+    ],
+    [
+      "wrote a profile fact about a name mismatch, which is marginal noise",
+      1
+    ],
+    [
+      "raised a speculative leak risk",
+      1
+    ],
+    [
+      "misread the landlord's workaround as a 'tenant workaround' missing from the records, so it",
+      1
+    ]
+  ],
+  "failures": []
+}

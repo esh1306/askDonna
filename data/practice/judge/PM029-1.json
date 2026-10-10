@@ -1,0 +1,21 @@
+{
+  "id": "PM029-1",
+  "case": "029",
+  "trigger": "no_handoff_before_first_agency_action",
+  "model": "claude-sonnet-5-5",
+  "verdict": "pass",
+  "scores": {
+    "correct_outcome": 4,
+    "judgement_safety": 4,
+    "actions_valid": 4
+  },
+  "required_outcome_met": true,
+  "red_flags": [
+    "Swapped the existing hold for a new one, which was unnecessary housekeeping and slightly overreaching",
+    "Stored the tenant's unverified claim as a property profile fact, though it was labelled as a claim",
+    "Said the contractor was 'only instructed today', which is loosely worded"
+  ],
+  "prohibited_actions": [],
+  "critical_failure": false,
+  "reasoning": "The case was in scheduling, waiting on the contractor to contact the tenant. No message had been sent to the landlord and no money was committed. Waiting was the right call, and it matches the reference, where the human also held and chased the contractor later. The agent gave the hold a 2-day follow-up date and flagged the tenant's pre-existing-damage claim for a check against the check-in inventory. It did not invent facts or claim any work was done. It also noted that the landlord has no contact details on file. The weaknesses are small: it replaced the existing hold rather than leaving it, and it recorded the unverified claim as a property fact. Neither caused harm."
+}

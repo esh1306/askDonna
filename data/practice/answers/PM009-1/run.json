@@ -1,0 +1,92 @@
+{
+  "case": "PM009-1",
+  "decision": "wait",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 31.635,
+  "decisionLine": "wait",
+  "sessionId": "wrun_01M4JSTY2HEQ9NKAF3MBXSTQH8",
+  "startedAt": "2026-10-10T11:40:39.189Z",
+  "finishedAt": "2026-10-10T11:41:10.824Z",
+  "usage": {
+    "inputTokens": 41207,
+    "outputTokens": 3230
+  },
+  "eventCount": 157,
+  "dryRun": false,
+  "result": {
+    "case_id": "R/PM009-1 (ticket 6)",
+    "decision": "wait",
+    "summary": "This item was raised at inspection and the tenant is responsible for it: the front garden needs tidying. The tenant replied on 26 Feb (event 013) saying it would be finished that evening and photos would follow the next morning. The right step is to wait for the photos. I replaced the open hold, which had no follow-up date, with one that chases in 2 days. I also sent the tenant a short correction because the 26 Feb email (event 011) gave the wrong property address. No landlord money or approval is involved.",
+    "situation": "An inspection found the front garden at Flat 4, 174 Beacon Close needed attention, and the tenant was asked to deal with it and send photos. The agency chased by email on 1, 8 (sent twice), 20 and 26 Feb, and by phone on 13 Feb. The tenant had been delayed by a family member's hospital stay. On 26 Feb they promised to finish that evening and send photos the next morning. The 26 Feb chaser (event 011) wrongly named \"Flat 2, 72 Lantern Quay, Eastmere\" as the address.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the ticket, profiles, events and holds",
+        "result": "15 events; open hold 10 with no follow-up date; no approvals, contractor or attachments",
+        "ok": true
+      },
+      {
+        "tool": "release_hold",
+        "description": "Released hold 10 because it had no follow-up date, so the case could go silent",
+        "result": "Released",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "New hold waiting on the tenant's promised photos, with a follow-up date",
+        "result": "Hold 12 created, follow-up in 2 days",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant to thank them, correct the wrong address in event 011 and ask for photos once the garden is done",
+        "result": "Message 5 queued",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the tenant's surname, noting that the first name and pronouns don't match",
+        "result": "Fact 11 recorded",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded how the tenant tends to respond",
+        "result": "Fact 12 recorded",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord",
+        "status": "not_needed",
+        "channel": "n/a: the tenant is doing the work, so there is no landlord cost"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "Not needed now: the tenant has replied and committed to a date. Escalate if the photos haven't arrived after the next chase.",
+      "handover_summary": "",
+      "recommendation": "If no photos arrive by the follow-up date: phone the tenant (calls have worked better than emails), then send to a human to decide whether to re-inspect or take action under the tenancy."
+    },
+    "unverified": [
+      "Whether the garden has actually been finished: no photos received yet",
+      "Tenant's full name: the note says 'Nora Bennett' but uses he/his",
+      "The current condition of the garden: the image mentioned in event 007 can't be opened"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "Event 011 was sent to this tenant with another property's address (Flat 2, 72 Lantern Quay). This is a minor data/process slip, and the other property's own case may need a check.",
+      "Duplicate chasers were sent on 8 Feb (events 003 and 004)",
+      "Long chase history: over 4 weeks and 5 emails before a reply",
+      "Earlier holds had no follow-up dates"
+    ],
+    "final_status": "On hold (hold 12): waiting for the tenant's completion photos. Stage left at intake; no contractor or landlord stage applies.",
+    "next_follow_up": {
+      "when": "2024-02-28 (2 days after 26 Feb)",
+      "what": "Check for the tenant's garden photos. If they're fine, close the ticket. If none, phone the tenant once, then escalate to a human."
+    },
+    "confidence": 0.85
+  }
+}
