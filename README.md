@@ -61,11 +61,17 @@ flowchart LR
 
 ### See it
 
-| Donna's handover in the human queue | Profiles Donna built while working |
-|---|---|
-| ![Human queue](docs/img/console-human-queue.png) | ![Ticket with profiles](docs/img/console-heating.png) |
-| **What she actually sent** (no false promises: "no engineer is booked yet") | |
-| ![Outbox and timeline](docs/img/console-outbox-timeline.png) | |
+**Donna's handover in the human queue.** An emergency with a conditional landlord approval: what she checked (including Jev's probabilities), what is uncertain, and what a person should do next.
+
+![Human queue](docs/img/console-human-queue.png)
+
+**The profiles Donna built while working.** The tenant is a vulnerable household that prefers calls; the landlord wants a call before any spend over £300 and prefers Brightwell Gas. Every fact cites the event it came from, so the next call starts with this context.
+
+![Ticket with profiles](docs/img/console-heating.png)
+
+**What she actually sent.** Safety advice and an honest status ("no engineer is booked yet"), never a false promise. The failed contractor SMS is visible in the timeline.
+
+![Outbox and timeline](docs/img/console-outbox-timeline.png)
 
 **One request, end to end**
 
