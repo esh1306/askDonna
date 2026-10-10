@@ -27,8 +27,14 @@ export function buildTempCase(dp: DecisionPoint): string {
   const head = parts[0]!.replace(/Total events: \d+/, `Total events: ${dp.cutoff}`);
   const visible = head + parts.slice(1, 1 + dp.cutoff).join("");
   fs.writeFileSync(path.join(dst, "history.md"), visible);
-  // Only attachments already referenced by a visible event existed at the decision point.
+  // Attachments that existed at the decision point: those linked by a visible event, plus those the dataset only links
+  // when the agency forwards them shortly afterwards (within 3 events) while a visible message already mentions an
+  // attachment, photo, quote or invoice. The public data records a file where it is forwarded, not where it arrived.
   const referenced = new Set([...visible.matchAll(/\(attachments\/([^)]+)\)/g)].map((m) => m[1]!));
+  const recent = parts.slice(Math.max(1, dp.cutoff - 2), 1 + dp.cutoff).join("");
+  if (/attach|photo|picture|image|quote|quotation|estimate|invoice/i.test(recent)) {
+    for (const p of parts.slice(1 + dp.cutoff, 4 + dp.cutoff)) for (const m of p.matchAll(/\(attachments\/([^)]+)\)/g)) referenced.add(m[1]!);
+  }
   if (referenced.size) {
     fs.mkdirSync(path.join(dst, "attachments"), { recursive: true });
     for (const name of referenced) {

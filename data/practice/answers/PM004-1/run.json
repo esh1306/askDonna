@@ -1,126 +1,114 @@
 {
   "case": "PM004-1",
-  "decision": "request_info",
+  "decision": "act",
   "escalated": "no",
   "failures": 0,
-  "durationSec": 51.775,
-  "decisionLine": "request_info",
-  "sessionId": "wrun_01M4JY5GRJDXWF36R59X98S41T",
-  "startedAt": "2026-10-10T12:56:20.109Z",
-  "finishedAt": "2026-10-10T12:57:11.884Z",
+  "durationSec": 57.225,
+  "decisionLine": "act",
+  "sessionId": "wrun_01M4JYXPRNB7J508NTBH9M5BPP",
+  "startedAt": "2026-10-10T13:09:32.861Z",
+  "finishedAt": "2026-10-10T13:10:30.086Z",
   "usage": {
-    "inputTokens": 85129,
-    "outputTokens": 3719
+    "inputTokens": 89083,
+    "outputTokens": 4503
   },
-  "eventCount": 169,
+  "eventCount": 244,
   "dryRun": false,
   "result": {
-    "case_id": "R/PM004-1 (ticket 10)",
-    "decision": "request_info",
-    "summary": "The cleaning contractor says they sent their quote for the checkout clean (event 009), but no quote, attachment or price appears on the ticket. So yes, the provider did need a reply. I emailed the contractor asking them to resend the quote quoting ref R/PM004-1, and told them not to start until it is approved. I set a 2-day follow-up. The landlord's earlier approval had no amount, so the quote should be checked against it when it arrives. The ticket stays paused, which is expected because a checkout clean takes place while the property is empty.",
+    "case_id": "93 (R/PM004-1)",
+    "decision": "act",
+    "summary": "The contractor's message in event 009 only confirmed that the quote had been sent, so it didn't need a reply. The quote is in attachment-02: £90 for the requested scope. The earlier landlord approval (event 002) had no amount attached, so I emailed the landlord asking them to approve the £90 cost. I took the ticket out of the vacancy pause and moved it to landlord_approval, then placed a hold with a 2-day follow-up.",
     "case_type": "maintenance",
     "judgement": {
-      "why_this_decision": "Event 008 asked whether the provider needs a response. Event 009 says the quote has been sent, but there is no quote document or amount on the ticket (search for 'quote' found only events 001, 006 and 009). Without the quote we can't check the price or move the job on, and the contractor is the person who can provide it. So I asked them for it and set a follow-up date rather than escalating.",
+      "why_this_decision": "Event 008 asked whether the provider needed a response. Event 009 is a plain confirmation (classify_reply: auto, needs_human_response 0.13), so it did not. The quote (attachment-02) covers exactly the scope in event 001 and the checkout report, for a total of £90. The approval in event 002 was given before any cost was known (approval 50 has no amount), and the landlord has no recorded pre-approved spend limit. A specific £90 cost sign-off is therefore needed before the clean is booked. The 'not tenanted' pause (event 004) is expected for a checkout clean and doesn't block the job.",
       "alternatives_considered": [
         {
-          "option": "Return to auto mode / no action",
-          "why_not": "Without a visible quote the job would stall with nobody asked to fix it."
+          "option": "Instruct the contractor to proceed at £90 on the strength of the event 002 approval",
+          "why_not": "That approval had no amount and there is no recorded spend limit, so going ahead would commit the landlord's money to a cost they haven't seen."
+        },
+        {
+          "option": "Leave paused / no action",
+          "why_not": "The pause is only because the property is vacant, which is normal for a checkout clean. Leaving it paused would stall the job."
         },
         {
           "option": "Escalate to human",
-          "why_not": "The contractor can resolve this. There is no conflict, safety issue or dispute."
-        },
-        {
-          "option": "Move the ticket to scheduling",
-          "why_not": "There is no quote amount yet. The landlord's approval (event 002) had no amount, so the cost hasn't been checked."
+          "why_not": "There is no conflict, safety issue or dispute. Getting a routine cost sign-off from the landlord is the normal next step."
         }
       ],
       "checks_performed": [
-        "Loaded the ticket context: stage paused, property not tenanted, approval 6 marked approved with no amount",
-        "Searched the case for 'quote': no quote document or amount found",
-        "Read the checkout inspection report: it backs up the cleaning scope",
-        "classify_reply on event 009: auto, needs_human_response 0.13, mentions_amount 0.02",
-        "No open holds or human-queue items before acting"
+        "Read quote attachment-02: £90 total, scope matches event 001, address matches",
+        "Read checkout report attachment-01: supports the cleaning scope",
+        "Checked approval 50: approved, amount null",
+        "Landlord profile: no pre-approved limit and no preferred channel recorded",
+        "classify_reply on event 009: routine, no response needed",
+        "No open holds or human-queue items existed before this action"
       ],
       "assumptions": [
-        "The contractor's 'the customer confirms that the quote has been sent' is a system-generated confirmation and did not include the quote itself",
-        "The paused stage only reflects the vacant property and does not block a checkout clean"
+        "Defaulted to email because the landlord has no recorded preferred channel",
+        "Northbridge Lettings in the quote header is the agency's template or branding, and Stonebridge Solutions is the contractor"
       ]
     },
-    "situation": "This is a checkout clean at a vacant flat (Flat 2, 172 Alder Lane). Landlord approval with no amount is recorded (event 002), a provider is assigned, and the contractor was asked for a quote (event 006). The contractor says the quote was sent (event 009), but it isn't on the ticket.",
+    "situation": "This is a checkout clean at vacant Flat 2, 172 Alder Lane. The system paused it automatically because the property isn't tenanted. The contractor was asked to quote and has confirmed the quote was sent. The quote in attachment-02 comes to £90.",
     "actions_taken": [
       {
-        "tool": "get_ticket_context",
-        "description": "Loaded the case",
-        "result": "Stage paused, property untenanted, approval approved with no amount, no quote attachment",
+        "tool": "request_landlord_approval",
+        "description": "Emailed the landlord asking them to approve the £90 checkout clean quote (reply APPROVE or DECLINE)",
+        "result": "Approval 51 created, message 122 queued, outbound guard did not block",
         "ok": true
       },
       {
-        "tool": "classify_reply",
-        "description": "Classified the contractor email (event 009)",
-        "result": "autonomy auto, intent other/quote",
-        "ok": true
-      },
-      {
-        "tool": "search_case",
-        "description": "Searched for 'quote'",
-        "result": "No quote document or amount in the records",
-        "ok": true
-      },
-      {
-        "tool": "read_attachment",
-        "description": "Read the checkout inspection report",
-        "result": "Backs up the cleaning scope. Appointment date reads 23 June 2026, while the signature is dated 24 Oct 2025",
-        "ok": true
-      },
-      {
-        "tool": "send_message",
-        "description": "Emailed the contractor asking them to resend the quote with ref R/PM004-1 and not to start until it is approved",
-        "result": "Queued (message 14). The outbound check did not block it",
+        "tool": "move_stage",
+        "description": "Moved from paused to landlord_approval: the vacancy pause is expected for a checkout clean and the quote needs cost sign-off",
+        "result": "paused -> landlord_approval, status open",
         "ok": true
       },
       {
         "tool": "place_hold",
-        "description": "Hold waiting on the contractor's quote, 2-day follow-up",
-        "result": "hold_id 22",
+        "description": "Hold waiting on the landlord's decision on approval 51",
+        "result": "Hold 235, follow-up in 2 days",
         "ok": true
       },
       {
         "tool": "add_profile_fact",
-        "description": "Recorded the checkout clean scope on the property",
-        "result": "fact 14",
+        "description": "Recorded the contractor's trading name and its £90 quote",
+        "result": "Fact 134 saved, no conflict",
         "ok": true
       }
     ],
     "approvals": [
       {
         "party": "Landlord (R/PM004-1)",
-        "status": "granted (recorded in event 002, no amount stated)",
+        "status": "requested (approval 51, £90)",
+        "channel": "email"
+      },
+      {
+        "party": "Landlord (R/PM004-1)",
+        "status": "granted earlier (approval 50) for the job in principle, no amount",
         "channel": "email"
       }
     ],
     "escalation": {
       "needed": false,
-      "reason": "The contractor can supply the missing quote",
+      "reason": "The case is a routine cost approval for the landlord, with no conflict or risk.",
       "handover_summary": "",
-      "recommendation": "When the quote arrives, check the scope and amount. If the landlord's approval did not cover a specific cost, confirm the amount with the landlord before booking."
+      "recommendation": "If the landlord replies APPROVE, confirm the £90 job with Stonebridge Solutions and arrange access to the vacant property. Chase the landlord if there's no reply within 2 days."
     },
     "unverified": [
-      "Quote amount and contents: not visible on the ticket",
-      "What or how much the landlord approved in event 002: no amount recorded",
-      "Who the contractor is: name and contact details are placeholders",
-      "Attachment 'attachment-86-document' in event 006 is marked unavailable"
+      "Whether the £90 includes VAT (the quote doesn't say)",
+      "The contractor's contact details (none on file)",
+      "How the cleaner will get access to the vacant property",
+      "The checkout report gives an appointment date of 23 June 2026, which doesn't fit with its signature date of 24 Oct 2025"
     ],
     "failures": [],
     "risks_or_red_flags": [
-      "The checkout report's appointment date (23 June 2026) doesn't match its signature date (24 Oct 2025). This may be a data-entry error",
-      "If the cleaning cost is to be taken from the outgoing tenant's deposit, that is a deposit matter for a human. The records don't say who pays"
+      "The landlord has no email or phone recorded, so the approval email may not be delivered. Check this at the follow-up if there is no reply.",
+      "The quote has a 'Northbridge Lettings' header but is from Stonebridge Solutions. Probably just a template, but worth confirming when the invoice arrives."
     ],
-    "final_status": "Paused (property vacant), with hold 22 waiting on the contractor's quote",
+    "final_status": "landlord_approval, on hold waiting on the landlord (hold 235)",
     "next_follow_up": {
-      "when": "In 2 days (hold 22)",
-      "what": "Chase the contractor for the quote. Once it arrives, check the amount and confirm it with the landlord if needed, then schedule the clean"
+      "when": "In 2 days (hold 235)",
+      "what": "Chase the landlord for APPROVE or DECLINE on the £90 checkout clean quote (approval 51)"
     },
-    "confidence": 0.8
+    "confidence": 0.75
   }
 }

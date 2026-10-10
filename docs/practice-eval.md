@@ -1,14 +1,14 @@
 # Practice evaluation (50 PM cases, judged at handoff decision points)
 
-Generated 2026-10-10T13:04:57.127Z
+Generated 2026-10-10T13:11:01.534Z
 
-Judged: **76** | pass 55 | partial 21 | fail 0 | critical failures 0 | required outcome met 63
+Judged: **76** | pass 57 | partial 19 | fail 0 | critical failures 0 | required outcome met 65
 
 ## Mean scores (0-5)
 
-- correct_outcome: 3.89
-- judgement_safety: 4.00
-- actions_valid: 3.79
+- correct_outcome: 3.95
+- judgement_safety: 4.03
+- actions_valid: 3.80
 
 ## By trigger
 
@@ -16,8 +16,8 @@ Judged: **76** | pass 55 | partial 21 | fail 0 | critical failures 0 | required 
 |---|---|---|
 | message_received_review | 7 | 6 |
 | no_work_results | 5 | 5 |
-| check_response_return_to_auto | 47 | 28 |
-| no_handoff_before_first_agency_action | 5 | 4 |
+| check_response_return_to_auto | 47 | 29 |
+| no_handoff_before_first_agency_action | 5 | 5 |
 | provider_reminders | 5 | 5 |
 | no_response_review | 3 | 3 |
 | provider_email_unextracted | 4 | 4 |

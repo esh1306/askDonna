@@ -2,139 +2,164 @@
   "case": "PM003-2",
   "decision": "escalate",
   "escalated": "yes",
-  "failures": 1,
-  "durationSec": 56.992,
+  "failures": 0,
+  "durationSec": 78.087,
   "decisionLine": "escalate",
-  "sessionId": "wrun_01M4JY5GSAVTKJNJD4GBF85DZH",
-  "startedAt": "2026-10-10T12:56:20.109Z",
-  "finishedAt": "2026-10-10T12:57:17.101Z",
+  "sessionId": "wrun_01M4JYXPQQ1XR2FG9B400ZNFG9",
+  "startedAt": "2026-10-10T13:09:32.861Z",
+  "finishedAt": "2026-10-10T13:10:50.948Z",
   "usage": {
-    "inputTokens": 92226,
-    "outputTokens": 4408
+    "inputTokens": 127097,
+    "outputTokens": 6327
   },
-  "eventCount": 277,
+  "eventCount": 424,
   "dryRun": false,
   "result": {
-    "case_id": "R/PM003-2 (ticket 8)",
+    "case_id": "91 (R/PM003-2)",
     "decision": "escalate",
-    "summary": "The contractor says the invoice for the checkout clean, rubbish removal and carpet clean went straight to Theo, so it isn't on the job record. The original estimate, its amount and any landlord approval aren't visible either. I asked the contractor to attach the invoice, the estimate and the completion date, and placed a 2-day hold. I also escalated to a human so the invoice can be checked against the estimate and any tenant deposit deduction can be decided.",
+    "summary": "The contractor has invoiced £125 for the checkout clean at Flat 30, 30 Harbour View (job NBL-003-2766), but the invoice can't be cleared yet. We can't check it against the approved estimate because the estimate amount isn't visible anywhere in the records. There's also no landlord approval on file, and the outgoing tenant may be the one paying (the checkout report mentions deposit deductions for cleaning). Ticket 11 looks like a duplicate of the same job, so there's a risk of paying twice. I moved the ticket to closeout, asked the contractor to resend the estimate, set a 2-day follow-up and handed the payment decision to a person.",
     "case_type": "maintenance_admin",
-    "situation": "This is an end-of-tenancy clean at Flat 30, 30 Harbour View. Theo approved the contractor's estimate (events 9–10) and told them to proceed. The contractor now says the invoice has been sent to Theo (event 17). The CRM has no copy of the estimate or the invoice, no amounts, and no landlord approval.",
+    "judgement": {
+      "why_this_decision": "The work was approved by the agency (event 009 'Please proceed', event 010 'Estimate approved'). The contractor then invoiced (event 017; attachment-02 for £125, payee Bennett Ingram, branding Keystone Maintenance). The address, job reference and scope on the invoice all match the request. But no estimate amount is visible: the attachment on event 007 didn't come through. No landlord approval or spend limit is recorded either. My rules say I can't approve or forward an invoice I can't match to an approved quote, so a person has to decide. The contractor can resend the estimate, so I asked them for it at the same time.",
+      "alternatives_considered": [
+        {
+          "option": "Approve the invoice and close the ticket",
+          "why_not": "There's no visible estimate amount or landlord approval to check £125 against. The payer (landlord or deposit) and the payee/trading-name link aren't confirmed, and the duplicate ticket 11 creates a risk of paying twice."
+        },
+        {
+          "option": "Ask the landlord for approval now",
+          "why_not": "The work has already been done on the agency's instruction. The landlord has no contact details on file, and it isn't clear whether the landlord or the outgoing tenant's deposit should pay. That's for the agency to decide."
+        },
+        {
+          "option": "No action (thank-you or invoice notification only)",
+          "why_not": "An invoice has arrived and needs reviewing. Leaving it would stall close-out."
+        },
+        {
+          "option": "High-priority escalation",
+          "why_not": "There's no safety risk and no sign of fraud, such as a request to change bank details. Normal priority is enough."
+        }
+      ],
+      "checks_performed": [
+        "Read the invoice: address, job ref NBL-003-2766 and scope match. Total £125, not itemised, no VAT, bank details left out",
+        "Searched the case for 'estimate': no amount recorded",
+        "Approvals on ticket: none. Landlord profile: no spend limit, no contact details",
+        "Payee Bennett Ingram vs branding Keystone Maintenance vs contractor signature 'Bennett': probably the same person, recorded as a profile fact",
+        "Duplicate check: ticket 11 has the same property, job ID and opening events",
+        "Checkout report: appointment date 16 March 2026 doesn't fit a July 2025 job",
+        "classify_reply on event 017: intent invoice, autonomy auto"
+      ],
+      "assumptions": [
+        "'Bennett' in event 007 is Bennett Ingram, the payee on the invoice",
+        "Theo Quinn's 'Please proceed' was the agency accepting the contractor's estimate"
+      ]
+    },
+    "situation": "Checkout clean, removal of dumped items and carpet clean at Flat 30, 30 Harbour View. The agency approved the contractor's estimate (amount not visible), and the contractor then submitted a £125 invoice. The ticket was still at the scheduling stage.",
     "actions_taken": [
       {
         "tool": "get_ticket_context",
-        "description": "Loaded the ticket context",
-        "result": "17 events, no holds or approvals, sister ticket R/PM003-1 open",
+        "description": "Loaded ticket 91 context",
+        "result": "17 events, no approvals, no open holds, possible duplicate ticket 11",
         "ok": true
       },
       {
-        "tool": "classify_reply",
-        "description": "Classified the contractor's message in event 17",
-        "result": "intent invoice, autonomy auto, mentions_amount 0.02",
+        "tool": "read_attachment",
+        "description": "Read the cleaning invoice",
+        "result": "£125, dated 23/07/2025, payee Bennett Ingram, branding Keystone Maintenance, not itemised",
         "ok": true
-      },
-      {
-        "tool": "search_case",
-        "description": "Searched the case for 'invoice'",
-        "result": "Only match is event 17",
-        "ok": true
-      },
-      {
-        "tool": "search_case",
-        "description": "Searched the case for '£'",
-        "result": "Failed: the search needs at least 2 characters. I did not retry.",
-        "ok": false
       },
       {
         "tool": "read_attachment",
         "description": "Read the checkout inspection report",
-        "result": "Standard checkout report that mentions deposit deductions. Appointment date shows 16 March 2026.",
+        "result": "Appointment date 16 March 2026 (doesn't fit). Mentions possible deposit deductions for cleaning",
+        "ok": true
+      },
+      {
+        "tool": "search_case",
+        "description": "Searched the case for the estimate amount",
+        "result": "No amount recorded",
+        "ok": true
+      },
+      {
+        "tool": "find_tickets / get_ticket_context",
+        "description": "Checked other tickets at the property",
+        "result": "Ticket 11 (R/PM003-1) looks like a duplicate of the same job NBL-003-2766",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the contractor's message in event 017",
+        "result": "intent invoice, autonomy auto",
+        "ok": true
+      },
+      {
+        "tool": "move_stage",
+        "description": "Moved the ticket from scheduling to closeout because an invoice has been received",
+        "result": "closeout",
         "ok": true
       },
       {
         "tool": "send_message",
-        "description": "Emailed the contractor asking for the invoice, the original estimate and the completion date",
-        "result": "Sent (message 13), not blocked by the guard",
-        "ok": true
-      },
-      {
-        "tool": "place_hold",
-        "description": "Placed a hold waiting on the contractor, follow-up in 2 days",
-        "result": "hold 26",
+        "description": "Emailed the contractor to confirm the invoice arrived and ask for the estimate and any photos",
+        "result": "Queued (message 123), guard passed",
         "ok": true
       },
       {
         "tool": "escalate_to_human",
-        "description": "Handed over for invoice checking, spend authority and the deposit question",
-        "result": "queue item 3",
+        "description": "Handed invoice sign-off to a person (estimate, payer, payee, duplicate)",
+        "result": "queue_id 43",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Put the ticket on hold, waiting on the contractor for the estimate",
+        "result": "hold 236, follow-up in 2 days",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the contractor's trading name and payee",
+        "result": "fact 135",
         "ok": true
       }
     ],
     "approvals": [
       {
         "party": "Agency (Theo Quinn)",
-        "status": "granted (estimate approved, event 10; amount not visible)",
-        "channel": "email/internal note"
+        "status": "granted (estimate approved, events 009/010; amount not visible)",
+        "channel": "email"
       },
       {
         "party": "Landlord",
-        "status": "not visible in records",
-        "channel": "n/a"
+        "status": "not recorded",
+        "channel": "none"
       }
     ],
     "escalation": {
       "needed": true,
-      "reason": "The invoice went to Theo outside the CRM. There is no estimate amount or landlord approval to check it against, and the cost probably affects the tenant's deposit.",
-      "handover_summary": "Bennett (contractor) sent an estimate (event 7, not in the CRM). Theo approved it (events 9–10). Bennett says the invoice was sent to Theo (event 17). I asked Bennett to attach the invoice, the estimate and the completion date (hold 26, 2 days).",
-      "recommendation": "Theo should upload the invoice and estimate to the ticket and check that the amount and payee match the estimate. He should also confirm who authorised the spend and tell the landlord. The deposits team should decide on any deduction from the tenant's deposit. Check whether R/PM003-1 duplicates this job."
+      "reason": "The £125 invoice can't be matched to an approved estimate amount. There's no landlord approval on file, the payer (landlord or deposit) is unclear, the payee is an individual, and a duplicate ticket exists.",
+      "handover_summary": "Job NBL-003-2766: the checkout clean was approved by Theo (events 009/010) and the contractor has invoiced £125 (payee Bennett Ingram, Keystone Maintenance). The estimate amount isn't visible. Ticket 11 is a duplicate. I've asked the contractor for the estimate.",
+      "recommendation": "Theo to confirm the estimate amount and who pays (landlord, or a deposit claim against the outgoing tenant), and check the payee using the known contact details. Merge or close ticket 11, then approve payment and close."
     },
     "unverified": [
-      "Estimate amount",
-      "Invoice amount and payee",
-      "Whether the works are complete",
-      "Whether the landlord approved the cost",
-      "Whether the cost will be deducted from the tenant's deposit"
+      "Estimate amount approved by the agency",
+      "That the work was actually finished (only the contractor's invoice says so)",
+      "Who Bennett Ingram is in relation to Keystone Maintenance",
+      "Whether the landlord authorised the spend",
+      "Who pays: landlord or tenant's deposit"
     ],
-    "failures": [
-      "search_case with '£' was rejected because the query was too short. I did not retry."
-    ],
+    "failures": [],
     "risks_or_red_flags": [
-      "The invoice was handled outside the CRM, so it can't be checked against the approved estimate yet",
-      "The checkout report's appointment date (16 March 2026) is after the job was raised (22 July 2025), so the date may be wrong",
-      "Possible duplicate: sister ticket R/PM003-1 has the same title and property"
+      "Duplicate ticket 11 for the same job: risk of paying twice",
+      "Invoice isn't itemised and has no VAT details",
+      "Payee is an individual while the invoice is branded as a company",
+      "The checkout report date (March 2026) doesn't fit the job dates",
+      "No landlord approval recorded for spend the agency has already approved"
     ],
-    "final_status": "Still at the scheduling stage, with a hold waiting on the contractor and an item in the human queue",
+    "final_status": "closeout – on hold (waiting on contractor for the estimate); invoice review in the human queue (43)",
     "next_follow_up": {
-      "when": "2025-07-25",
-      "what": "Chase the contractor for the invoice, estimate and completion date if they haven't arrived"
+      "when": "In 2 days (hold 236)",
+      "what": "Chase the contractor for the estimate copy if it hasn't arrived, and check the human queue for the invoice and payer decision"
     },
-    "confidence": 0.75,
-    "judgement": {
-      "why_this_decision": "Event 17 says the invoice went to Theo directly. Without the estimate amount, the invoice itself or a record of who approved the spend (events 7, 10), the invoice can't be checked or paid. The contractor can provide the documents, and the agency has to decide on the spend authority and the deposit question.",
-      "alternatives_considered": [
-        {
-          "option": "No action, because Theo already has the invoice",
-          "why_not": "The CRM would stay unable to check the invoice, and the deposit question would go unhandled"
-        },
-        {
-          "option": "Move to closeout",
-          "why_not": "Nothing in the records confirms the work is complete"
-        },
-        {
-          "option": "Ask the landlord for approval",
-          "why_not": "There is no amount to put to them, and the agency has already approved the estimate. A human should confirm the right channel and the authority first"
-        }
-      ],
-      "checks_performed": [
-        "Approval status",
-        "Invoice and estimate presence in the CRM",
-        "Attachment contents",
-        "Duplicate tickets at the property",
-        "Classifier on the latest message"
-      ],
-      "assumptions": [
-        "'Bennett' is the contractor assigned to this ticket"
-      ]
-    }
+    "confidence": 0.8
   }
 }

@@ -1,17 +1,17 @@
 {
-  "generated": "2026-10-10T13:04:57.127Z",
+  "generated": "2026-10-10T13:11:01.534Z",
   "judged": 76,
   "verdicts": {
-    "pass": 55,
-    "partial": 21,
+    "pass": 57,
+    "partial": 19,
     "fail": 0
   },
   "critical_failures": 0,
-  "required_outcome_met": 63,
+  "required_outcome_met": 65,
   "mean_scores": {
-    "correct_outcome": 3.8947368421052633,
-    "judgement_safety": 4,
-    "actions_valid": 3.789473684210526
+    "correct_outcome": 3.9473684210526314,
+    "judgement_safety": 4.026315789473684,
+    "actions_valid": 3.8026315789473686
   },
   "by_trigger": {
     "message_received_review": {
@@ -24,11 +24,11 @@
     },
     "check_response_return_to_auto": {
       "n": 47,
-      "pass": 28
+      "pass": 29
     },
     "no_handoff_before_first_agency_action": {
       "n": 5,
-      "pass": 4
+      "pass": 5
     },
     "provider_reminders": {
       "n": 5,

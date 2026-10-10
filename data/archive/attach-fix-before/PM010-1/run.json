@@ -1,0 +1,117 @@
+{
+  "case": "PM010-1",
+  "decision": "request_info",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 32.169,
+  "decisionLine": "request_info",
+  "sessionId": "wrun_01M4JY72KD9Z3GP2VSGSY8BW1M",
+  "startedAt": "2026-10-10T12:57:11.473Z",
+  "finishedAt": "2026-10-10T12:57:43.642Z",
+  "usage": {
+    "inputTokens": 62608,
+    "outputTokens": 3388
+  },
+  "eventCount": 165,
+  "dryRun": false,
+  "result": {
+    "case_id": "R/PM010-1 (ticket 19)",
+    "decision": "request_info",
+    "summary": "This is a routine admin task: every 3 months the tenant has to send a photo of the solar panel readings for the landlord. The tenant's latest email (17 Jan, event 012) only had their signature in it and no photo is visible. I emailed the tenant to say no photo came through and asked them to send it again. I put the ticket on hold for 7 days so it gets chased. No escalation or landlord approval is needed.",
+    "case_type": "maintenance_admin",
+    "judgement": {
+      "why_this_decision": "The tenant agreed by phone on 13 Jan (event 008) to send the photo. The agency chased by email on 17 Jan (event 010). Three minutes later the tenant replied (event 012), but the reply only contains a signature and the ticket has no attachments. The photo most likely failed to attach. The tenant is the only person who can fix this, so the right step is to ask them to resend it and hold the ticket.",
+      "alternatives_considered": [
+        {
+          "option": "no_action (treat the reply as noise)",
+          "why_not": "The tenant probably thinks the photo was sent. If we stay silent, the task would stall with nobody chasing it."
+        },
+        {
+          "option": "escalate_to_human",
+          "why_not": "There is no conflict, safety issue or cost decision, and the tenant can sort this out. The classifier's 'review' flag is covered by a direct reply to the tenant."
+        },
+        {
+          "option": "Move the stage forward",
+          "why_not": "This is a recurring admin task with no repair or contractor, so moving it through repair stages wouldn't make sense."
+        }
+      ],
+      "checks_performed": [
+        "Loaded the ticket context: no attachments, no open holds before this action, no approvals, no profile facts",
+        "Ran classify_reply on event 012: intent 'other' 0.98, autonomy 'review', safety concern 0.01",
+        "Checked the ticket for any attachment from the tenant: none visible",
+        "Checked for duplicates and for any cost or approval involved: none"
+      ],
+      "assumptions": [
+        "Miles Fletcher, who signed event 012, is the tenant",
+        "The empty reply was meant to include the photo"
+      ]
+    },
+    "situation": "This is a recurring request for the tenant to send solar panel readings with a photo for the landlord every 3 months. The agency asked for the photo on 11 Jan and 17 Jan 2025, and the tenant agreed by phone on 13 Jan. The tenant's reply on 17 Jan contained only a signature and no visible photo.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the full case context",
+        "result": "12 events, no attachments, no holds, no approvals",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the tenant's reply in event 012",
+        "result": "intent other (0.98), autonomy review, no safety concern",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant to say no photo is visible and asked them to resend a clear photo of the meter reading. The email says we will follow up on 24 Jan.",
+        "result": "Message 23 placed in the outbox. Guard did not block it.",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold waiting on the tenant for the photo, with a 7-day follow-up",
+        "result": "hold_id 49",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded on the property that solar readings with a photo are needed every 3 months",
+        "result": "fact 23",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the tenant's phone number from their email signature",
+        "result": "fact 24",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord",
+        "status": "not_needed",
+        "channel": "n/a"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "Routine admin task the tenant can resolve",
+      "handover_summary": "",
+      "recommendation": ""
+    },
+    "unverified": [
+      "Whether the tenant actually tried to attach a photo: none is visible in the records",
+      "Event 008 describes the person on the call as 'the caller from Oakfield Compliance' even though the call was logged as going to the tenant. This is likely a logging mistake and doesn't affect the next step.",
+      "The tenant's name and phone number come only from an email signature"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "The original note said the next reading was due mid-June, but the agency started asking in January. Someone should confirm the actual reading schedule before the next cycle."
+    ],
+    "final_status": "Open, on hold waiting for the tenant to resend the solar readings photo (hold 49)",
+    "next_follow_up": {
+      "when": "2025-01-24",
+      "what": "If no photo has arrived, chase the tenant, by phone if email still doesn't work. Once it arrives, forward the reading to the landlord."
+    },
+    "confidence": 0.85
+  }
+}

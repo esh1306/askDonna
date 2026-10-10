@@ -1,0 +1,140 @@
+{
+  "case": "PM003-2",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 1,
+  "durationSec": 56.992,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4JY5GSAVTKJNJD4GBF85DZH",
+  "startedAt": "2026-10-10T12:56:20.109Z",
+  "finishedAt": "2026-10-10T12:57:17.101Z",
+  "usage": {
+    "inputTokens": 92226,
+    "outputTokens": 4408
+  },
+  "eventCount": 277,
+  "dryRun": false,
+  "result": {
+    "case_id": "R/PM003-2 (ticket 8)",
+    "decision": "escalate",
+    "summary": "The contractor says the invoice for the checkout clean, rubbish removal and carpet clean went straight to Theo, so it isn't on the job record. The original estimate, its amount and any landlord approval aren't visible either. I asked the contractor to attach the invoice, the estimate and the completion date, and placed a 2-day hold. I also escalated to a human so the invoice can be checked against the estimate and any tenant deposit deduction can be decided.",
+    "case_type": "maintenance_admin",
+    "situation": "This is an end-of-tenancy clean at Flat 30, 30 Harbour View. Theo approved the contractor's estimate (events 9–10) and told them to proceed. The contractor now says the invoice has been sent to Theo (event 17). The CRM has no copy of the estimate or the invoice, no amounts, and no landlord approval.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the ticket context",
+        "result": "17 events, no holds or approvals, sister ticket R/PM003-1 open",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the contractor's message in event 17",
+        "result": "intent invoice, autonomy auto, mentions_amount 0.02",
+        "ok": true
+      },
+      {
+        "tool": "search_case",
+        "description": "Searched the case for 'invoice'",
+        "result": "Only match is event 17",
+        "ok": true
+      },
+      {
+        "tool": "search_case",
+        "description": "Searched the case for '£'",
+        "result": "Failed: the search needs at least 2 characters. I did not retry.",
+        "ok": false
+      },
+      {
+        "tool": "read_attachment",
+        "description": "Read the checkout inspection report",
+        "result": "Standard checkout report that mentions deposit deductions. Appointment date shows 16 March 2026.",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the contractor asking for the invoice, the original estimate and the completion date",
+        "result": "Sent (message 13), not blocked by the guard",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Placed a hold waiting on the contractor, follow-up in 2 days",
+        "result": "hold 26",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Handed over for invoice checking, spend authority and the deposit question",
+        "result": "queue item 3",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Agency (Theo Quinn)",
+        "status": "granted (estimate approved, event 10; amount not visible)",
+        "channel": "email/internal note"
+      },
+      {
+        "party": "Landlord",
+        "status": "not visible in records",
+        "channel": "n/a"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "The invoice went to Theo outside the CRM. There is no estimate amount or landlord approval to check it against, and the cost probably affects the tenant's deposit.",
+      "handover_summary": "Bennett (contractor) sent an estimate (event 7, not in the CRM). Theo approved it (events 9–10). Bennett says the invoice was sent to Theo (event 17). I asked Bennett to attach the invoice, the estimate and the completion date (hold 26, 2 days).",
+      "recommendation": "Theo should upload the invoice and estimate to the ticket and check that the amount and payee match the estimate. He should also confirm who authorised the spend and tell the landlord. The deposits team should decide on any deduction from the tenant's deposit. Check whether R/PM003-1 duplicates this job."
+    },
+    "unverified": [
+      "Estimate amount",
+      "Invoice amount and payee",
+      "Whether the works are complete",
+      "Whether the landlord approved the cost",
+      "Whether the cost will be deducted from the tenant's deposit"
+    ],
+    "failures": [
+      "search_case with '£' was rejected because the query was too short. I did not retry."
+    ],
+    "risks_or_red_flags": [
+      "The invoice was handled outside the CRM, so it can't be checked against the approved estimate yet",
+      "The checkout report's appointment date (16 March 2026) is after the job was raised (22 July 2025), so the date may be wrong",
+      "Possible duplicate: sister ticket R/PM003-1 has the same title and property"
+    ],
+    "final_status": "Still at the scheduling stage, with a hold waiting on the contractor and an item in the human queue",
+    "next_follow_up": {
+      "when": "2025-07-25",
+      "what": "Chase the contractor for the invoice, estimate and completion date if they haven't arrived"
+    },
+    "confidence": 0.75,
+    "judgement": {
+      "why_this_decision": "Event 17 says the invoice went to Theo directly. Without the estimate amount, the invoice itself or a record of who approved the spend (events 7, 10), the invoice can't be checked or paid. The contractor can provide the documents, and the agency has to decide on the spend authority and the deposit question.",
+      "alternatives_considered": [
+        {
+          "option": "No action, because Theo already has the invoice",
+          "why_not": "The CRM would stay unable to check the invoice, and the deposit question would go unhandled"
+        },
+        {
+          "option": "Move to closeout",
+          "why_not": "Nothing in the records confirms the work is complete"
+        },
+        {
+          "option": "Ask the landlord for approval",
+          "why_not": "There is no amount to put to them, and the agency has already approved the estimate. A human should confirm the right channel and the authority first"
+        }
+      ],
+      "checks_performed": [
+        "Approval status",
+        "Invoice and estimate presence in the CRM",
+        "Attachment contents",
+        "Duplicate tickets at the property",
+        "Classifier on the latest message"
+      ],
+      "assumptions": [
+        "'Bennett' is the contractor assigned to this ticket"
+      ]
+    }
+  }
+}

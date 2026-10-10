@@ -10,7 +10,7 @@ Donna runs residential maintenance requests end to end. She reads everything kno
 | **Memory** | SQLite CRM with per-person and per-property profiles, every fact sourced |
 | **Calibrated judgement** | Jev (TypeSafe AI) at intake, on every inbound reply, on every outbound action, and on call consent |
 | **Voice** | ElevenLabs Agents: browser calls, and real phone calls over Twilio |
-| **Results** | All 76 handoff points in the 50 public cases: 0 fail, 0 critical (72% pass); 14 unseen hard cases: 13 pass, 0 fail; Jev category 98%. Full report: [docs/accuracy-report.md](docs/accuracy-report.md) |
+| **Results** | All 76 handoff points in the 50 public cases: 0 fail, 0 critical (75% pass); 14 unseen hard cases: 13 pass, 0 fail; Jev category 98%. Full report: [docs/accuracy-report.md](docs/accuracy-report.md) |
 
 ---
 
@@ -190,7 +190,7 @@ Put a TLS reverse proxy (Caddy or nginx) in front and forward **both** `/eve/` a
 
 | Evaluation | Result | Evidence |
 |---|---|---|
-| Practice eval: Donna at **all 76 of Dwelly's real handoff points across all 50 public cases** (final version), judged by Claude against what the operator actually did next | **55 pass, 21 partial, 0 fail, 0 critical failures**; required outcome met 63/76; mean correct outcome 3.89/5, judgement & safety 4.00/5 | [docs/accuracy-report.md](docs/accuracy-report.md), `docs/practice-eval.md`; every run in `data/practice/answers/` |
+| Practice eval: Donna at **all 76 of Dwelly's real handoff points across all 50 public cases** (final version), judged by Claude against what the operator actually did next | **57 pass, 19 partial, 0 fail, 0 critical failures**; required outcome met 65/76; mean correct outcome 3.95/5, judgement & safety 4.03/5 | [docs/accuracy-report.md](docs/accuracy-report.md), `docs/practice-eval.md`; every run in `data/practice/answers/` |
 | Held-out check: batches run on decision points never used for tuning | first held-out batch 13/20 pass → after fixes, a new held-out batch **12/16 pass**; both 0 fail | `data/practice/batch2-ids.txt`, `batch3-ids.txt`; pre-fix answers kept in `data/practice/before-fix/` |
 | **Hard-case rehearsal**: 14 synthetic cases built from the Reality Test brief, not the public data (conflicting info, failed action, missing context, noise, 34-event case, gas/CO emergency, do-nothing duplicate, prompt injection, rent arrears and neighbour ASB out of scope, Polish message, conditional approval over cap, vulnerable tenant with silent landlord, invoice amount/payee mismatch), three of them in non-standard formats (`.txt`, `thread.json`, `notes.md` + CSV), each judged against an organiser-style rubric (required outcomes, red flags, prohibited actions, critical failures) | **13 pass, 1 partial, 0 fail, 0 critical failures, 0 prohibited actions**; mean correct outcome 4.50/5 | `docs/hardcases-eval.md`, cases and rubrics in `data/hardcases/`, answers in `data/hardcases-answers/` |
 | Jev scope check on off-topic and non-English requests | **8/8** routed correctly (arrears, deposit, neighbour, agency complaint, insurance → human handover; Polish/Spanish leaks and gas smell → maintenance emergency) | `docs/intake-eval.md` |

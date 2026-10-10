@@ -6,7 +6,7 @@ Final version, run on 10 October 2026 before the code freeze. Every number below
 
 | Evaluation | Scope | Result |
 |---|---|---|
-| **Donna on the public dataset** | All **76** decision points across all **50** Property Management cases, stopped where Dwelly's own system handed the case to a human | **55 pass · 21 partial · 0 fail · 0 critical failures** (72% pass, 100% pass-or-partial); required outcome met 63/76 (83%) |
+| **Donna on the public dataset** | All **76** decision points across all **50** Property Management cases, stopped where Dwelly's own system handed the case to a human | **57 pass · 19 partial · 0 fail · 0 critical failures** (75% pass, 100% pass-or-partial); required outcome met 65/76 (86%) |
 | **Donna on unseen hard cases** | **14** synthetic cases built from the Reality Test brief (not from the public data), 3 in non-standard formats | **13 pass · 1 partial · 0 fail · 0 critical · 0 prohibited actions** (93% pass) |
 | Jev intake category | 50 public cases (held-out 036–050) | **98%** (held-out **100%**) |
 | Jev self-fixable | 50 public cases | **86%** (held-out 86.7%) |
@@ -21,10 +21,10 @@ Method: for each case, the history is cut at Dwelly's real handoff points ("Plea
 | Metric | Result |
 |---|---|
 | Decision points run / judged | 76 / 76 (0 crashes, 0 timeouts) |
-| Pass / partial / fail | **55 / 21 / 0** |
+| Pass / partial / fail | **57 / 19 / 0** |
 | Critical failures | **0** |
-| Required outcome met | 63/76 (83%) |
-| Mean scores (0–5) | correct outcome 3.89 · judgement & safety 4.00 · valid actions 3.79 |
+| Required outcome met | 65/76 (86%) |
+| Mean scores (0–5) | correct outcome 3.95 · judgement & safety 4.03 · valid actions 3.80 |
 | Decision mix | act 21 · wait 18 · request info 18 · escalate 18 · no action 1 |
 | Escalated to the human queue | 30/76 (39%) |
 | Average per decision point | 45 s, ~98k input / 4.2k output tokens, ~$0.48 |
@@ -34,7 +34,7 @@ Method: for each case, the history is cut at Dwelly's real handoff points ("Plea
 
 | Dwelly handoff | N | Pass |
 |---|---|---|
-| "Check if we need to respond, else return to auto mode" | 47 | 28 (60%) |
+| "Check if we need to respond, else return to auto mode" | 47 | 29 (62%) |
 | "Message received from landlord/tenant, review manually" | 7 | 6 |
 | No work results | 5 | 5 |
 | Provider reminders sent | 5 | 5 |
@@ -42,9 +42,9 @@ Method: for each case, the history is cut at Dwelly's real handoff points ("Plea
 | No landlord/tenant response | 3 | 3 |
 | No handoff (first agency action) | 5 | 4 |
 
-**What the 21 partials have in common** (from the judge's reasoning)
+**What the 19 partials have in common** (from the judge's reasoning)
 
-1. **Attachments the data doesn't show (most common).** A contractor writes "quote attached" or a tenant sends a photo, but the case data has no file at that point. The human operator had it and moved on; Donna, seeing nothing, asked for it to be resent. This is the safe reading of the data but costs a step.
+1. **Attachments the data doesn't contain (most common).** The public data links a file where the agency later forwards it, not where it arrived. Our replay now includes a file linked within 3 events of the decision point when a visible message already mentions it; this fixed 2 of 4 affected points (PM004-1, PM010-1 now pass). In the remaining cases no file exists in the data at all. A contractor writes "quote attached" or a tenant sends a photo, but the case data has no file at that point. The human operator had it and moved on; Donna, seeing nothing, asked for it to be resent. This is the safe reading of the data but costs a step.
 2. **Approval recorded, contractor not yet assigned.** Donna correctly reads an unconditional approval and moves the ticket to provider selection, but stops there instead of also assigning and briefing the contractor in the same turn.
 3. **Caution over a casual approval.** For example a landlord's "👍" taken as needing an explicit APPROVE. Donna never commits landlord money on an ambiguous signal, which the judge counts as safe but slower.
 4. **Extra messages.** An update to a tenant the human didn't send.
@@ -88,6 +88,8 @@ Mean scores: correct outcome 4.50 · judgement & safety 4.29 · communication 3.
 | Scope check: off-topic and non-English | hand-labelled | 8/8 routed correctly |
 
 ## 4. Caveats
+
+- **Attachment timing in the replay.** An earlier version of the replay withheld attachments that the data only links after the decision point; 4 of 76 points were affected and re-run after the fix (`data/archive/attach-fix-before/` keeps the earlier answers). The Reality Test runner is not affected: it gives Donna every file in the case folder.
 
 - **The judge is an LLM**, and the operator's recorded action is one acceptable answer. Partial verdicts often reflect a slower-but-safe path rather than a wrong one.
 - **Some instructions were tuned on earlier practice runs.** The held-out checks during development (13/20 → 12/16 pass on never-seen decision points) and the hard-case set, which is not drawn from the public data, are the less biased signals.
