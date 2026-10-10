@@ -6,9 +6,9 @@
 | Track | Property Management |
 | Team | _names_ |
 | Repository | https://github.com/esh1306/askDonna |
-| Commit at 16:30 code freeze | _hash_ |
+| Commit at 16:30 code freeze | `1a96411fab1d655a393f2cc3f9cf0277d7607317` |
 | Reality Test results | `ANSWERS/` (one folder per case: `ANSWER.md`, `REASONING.md`, `events.ndjson`, `run.json`; summary in `ANSWERS/INDEX.md`) |
-| Demo video | _path in repo, e.g. `demo/donna-demo.mp4`_ |
+| Demo video | `demo/donna-demo.mp4` |
 | LinkedIn post | _url_ |
 | X post | _url_ |
 
