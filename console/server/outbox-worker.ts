@@ -1,5 +1,6 @@
 // Real delivery: emails via Resend, phone calls via ElevenLabs Agents over Twilio.
 // SAFETY: everything goes ONLY to DEMO_EMAIL_TO / DEMO_PHONE_TO.
+import { alertOnCall, primeOnCall } from "./oncall.ts";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { addEvent, all, dueFollowUps, one, getTicketContext, markMessage, resolveApproval, run } from "../../crm/repo.ts";
@@ -294,7 +295,9 @@ export function startWorker(intervalMs = 10000) {
   log(`worker on, every ${intervalMs / 1000}s`);
   const chaseEveryMs = 60_000;
   let lastChase = 0;
+  primeOnCall();
   setInterval(() => {
+    alertOnCall().catch((e) => log("on-call alert error", e.message));
     if (process.env.HOLD_CHASER !== "0" && Date.now() - lastChase >= chaseEveryMs) {
       lastChase = Date.now();
       chaseDueHolds().catch((e) => log("hold chaser error", e.message));

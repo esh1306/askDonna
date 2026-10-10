@@ -61,6 +61,10 @@ flowchart LR
 
 ### See it
 
+**Donna does the work; people make the judgement calls.** Every page opens with what Donna handled, what she is waiting on (and will chase), and the few cases that need a person. Each ticket reads as Donna's own account of what she did and will do next; manual controls sit behind "Take over". Ask Donna anything from the floating assistant ("call the landlord for approval") and she does it herself.
+
+![Donna at work](docs/img/v5-collapsed-donna.png)
+
 **The human queue: decisions, not paperwork.** Each item Donna couldn't close says what is wrong and what you need to do, with documents, people and amounts as clickable chips. Resolving it teaches Donna how you handled it.
 
 ![Human queue](docs/img/v4-queue.png)

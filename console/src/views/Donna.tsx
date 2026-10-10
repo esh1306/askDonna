@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { api, label, when } from "../api.ts";
 import type { Detail } from "../api.ts";
 import { Card, Chev, DonnaMark, Pill, Reveal, Button } from "../components/index.ts";
@@ -32,57 +32,92 @@ function ResultView({ r }: { r: any }) {
   );
 }
 
-/** Right rail: just Donna. Status, Run, and her latest decision in one line. */
-export default function DonnaPanel({ d, onChange, toast }: { d: Detail | null; onChange: () => void; toast: Notify }) {
+const SUGGEST = ["Call the landlord for approval", "Chase the contractor", "Summarise this case"];
+
+/** Floating Donna: launcher bottom-right, compact panel with latest decision and an "Ask Donna" box. */
+export default function DonnaHub({ d, onChange, toast, onRan }: { d: Detail | null; onChange: () => void; toast: Notify; onRan: (ticketId: number) => void }) {
+  const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
   const [fresh, setFresh] = useState<any>(null);
   const [why, setWhy] = useState(false);
-  useEffect(() => { setFresh(null); setErr(""); setWhy(false); }, [d?.ticket.id]);
-  if (!d) return <aside className="rail"><div className="rail-head"><DonnaMark size={26} /><div><b>Donna</b><div className="muted small">Select a ticket to work with her.</div></div></div></aside>;
+  const [text, setText] = useState("");
+  const [, force] = useState(0);
+  const seen = useRef(new Map<number, string>());
+  const id = d?.ticket.id ?? null;
+  useEffect(() => { setFresh(null); setErr(""); setWhy(false); setText(""); }, [id]);
 
-  const latest = fresh ?? (d.runs.length ? d.runs[d.runs.length - 1] : null);
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") return setOpen(false);
+      const tag = (e.target as HTMLElement).tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.key === "." && id != null) { e.preventDefault(); setOpen(true); setTimeout(() => document.getElementById("ask-donna")?.focus(), 60); }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [id]);
+
+  const latest = fresh ?? (d && d.runs.length ? d.runs[d.runs.length - 1] : null);
   const result = latest?.result;
+  if (id != null && !seen.current.has(id)) seen.current.set(id, latest?.ts ?? "");
+  const unseen = id != null && !!latest?.ts && seen.current.get(id) !== latest.ts;
+  useEffect(() => { if (open && id != null && latest?.ts) { seen.current.set(id, latest.ts); force((n) => n + 1); } }, [open, id, latest?.ts]);
 
-  async function run() {
-    setBusy(true);
-    setErr("");
+  if (!d || id == null) return null;
+
+  async function go(path: string, body: any) {
+    setBusy(true); setErr("");
     try {
-      const out = await api(`/api/tickets/${d!.ticket.id}/run`, { method: "POST", body: {} });
+      const out = await api(path, { method: "POST", body });
       setFresh(out);
       toast("Donna finished: " + (out?.result?.decision ? label(out.result.decision) : "run complete"));
-    } catch (e) {
-      setErr((e as Error).message);
-    } finally {
-      setBusy(false);
-      onChange();
-    }
+      onRan(id!);
+    } catch (e) { setErr((e as Error).message); }
+    setBusy(false);
+    onChange();
   }
+  const ask = (t: string) => { const v = t.trim(); if (!v || busy) return; setText(""); go(`/api/tickets/${id}/ask`, { text: v }); };
 
   return (
-    <aside className="rail">
-      <div className={`rail-head ${busy ? "working" : ""}`}>
-        <DonnaMark size={30} className={busy ? "pulse" : ""} />
-        <div className="grow"><b>Donna</b><div className="muted small">{busy ? "Working on it…" : "Ready"}</div></div>
-        <Button variant="primary" disabled={busy} onClick={run}>Run Donna</Button>
-      </div>
-      {busy && <div className="shimmer" role="status" aria-label="Donna is working"><i /><span className="small muted">This can take up to a minute. You can keep browsing.</span></div>}
-      {err && <div className="err small">{err}</div>}
-      <Card className="rpanel">
-        <div className="small muted" style={{ marginBottom: 6 }}>Latest decision {latest?.ts && <span className="when">{when(latest.ts)}</span>}</div>
-        {!latest && <div className="muted small">No runs yet.</div>}
-        {latest?.error && <div className="err small">{latest.error}</div>}
-        {result ? (
-          <>
-            <div className="decision">
-              <Pill tone={result.decision === "escalate" ? "bad" : "good"}>{label(result.decision)}</Pill>
-              <span className="run-line small">{result.summary}</span>
-            </div>
-            <button className="link" style={{ marginTop: 8 }} onClick={() => setWhy(!why)}><Chev open={why} /> Why?</button>
-            <Reveal open={why}><ResultView r={result} /></Reveal>
-          </>
-        ) : latest && !latest.error && <div className="pre small clamp2">{latest.finalText}</div>}
-      </Card>
-    </aside>
+    <div className="hub">
+      {open && (
+        <div className="hub-panel" role="dialog" aria-label="Donna">
+          <div className={`hub-head ${busy ? "working" : ""}`}>
+            <DonnaMark size={30} className={busy ? "pulse" : ""} />
+            <div className="grow"><b>Donna</b><div className="muted small">{busy ? "Working…" : "Ready"} <span className="faint">· {d.ticket.case_ref}</span></div></div>
+            <button className="icon-btn" onClick={() => setOpen(false)} title="Close (Esc)" aria-label="Close">×</button>
+          </div>
+          {busy && <div className="shimmer" role="status" aria-label="Donna is working"><i /><span className="small muted">This can take up to a minute. You can keep browsing.</span></div>}
+          {err && <div className="err small">{err}</div>}
+          <div className="hub-body">
+            <div className="small muted" style={{ marginBottom: 6 }}>Latest decision {latest?.ts && <span className="when">{when(latest.ts)}</span>}</div>
+            {!latest && <div className="muted small">No runs yet. Ask Donna below, or <button className="link" disabled={busy} onClick={() => go(`/api/tickets/${id}/run`, {})}>let her review the ticket</button>.</div>}
+            {latest?.error && <div className="err small">{latest.error}</div>}
+            {result ? (
+              <>
+                <div className="decision">
+                  <Pill tone={result.decision === "escalate" ? "bad" : "good"}>{label(result.decision)}</Pill>
+                  <span className="run-line small">{result.summary}</span>
+                </div>
+                <button className="link" style={{ marginTop: 6 }} onClick={() => setWhy(!why)}><Chev open={why} /> Why?</button>
+                <Reveal open={why}><div className="hub-why"><ResultView r={result} /></div></Reveal>
+              </>
+            ) : latest && !latest.error && <div className="pre small clamp2">{latest.finalText}</div>}
+          </div>
+          <div className="hub-ask">
+            <div className="chips-row">{SUGGEST.map((s) => <button key={s} className="sug" disabled={busy} onClick={() => ask(s)}>{s}</button>)}</div>
+            <form onSubmit={(e) => { e.preventDefault(); ask(text); }}>
+              <input id="ask-donna" className="input" placeholder="Ask Donna…" value={text} disabled={busy} onChange={(e) => setText(e.target.value)} autoComplete="off" />
+              <Button variant="accent" type="submit" disabled={busy || !text.trim()}>Send</Button>
+            </form>
+          </div>
+        </div>
+      )}
+      <button className={`hub-fab ${open ? "open" : ""}`} onClick={() => { setOpen(!open); setTimeout(() => document.getElementById("ask-donna")?.focus(), 60); }} title="Donna  ( . )" aria-label="Open Donna">
+        <DonnaMark size={34} className={busy ? "pulse" : ""} />
+        {(busy || unseen) && !open && <span className="hub-dot" />}
+      </button>
+    </div>
   );
 }

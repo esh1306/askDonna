@@ -1,16 +1,25 @@
 import { useEffect, useMemo, useState } from "react";
-import { api, label, STAGES, when } from "../api.ts";
+import { api, label, nm, STAGES, when } from "../api.ts";
 import type { Detail, Fact, Lesson } from "../api.ts";
 import { ActionButton, Avatar, Button, Card, Check, Chev, DonnaMark, DonnaVoice, Pill, Popover, Reveal, RichText, Section, Stepper } from "../components/index.ts";
 import type { Notify } from "../components/index.ts";
 import { reduced } from "../components/Toast.tsx";
-import CallPanel from "../CallPanel.tsx";
-import PhoneCall from "../PhoneCall.tsx";
 
 function Header({ d, onChange, toast }: { d: Detail; onChange: () => void; toast: Notify }) {
   const t = d.ticket;
   const [orig, setOrig] = useState(false);
-  const pend = d.approvals.some((a) => a.status === "pending");
+  const pend = d.approvals.filter((a) => a.status === "pending");
+  const [take, setTake] = useState(false);
+  const esc: any[] = (d as any).open_human_queue ?? [];
+  const hold = d.open_holds[0];
+  const who = (n: string | null | undefined) => (n && n !== "null" ? n : "the other side");
+  const auto: [string, string] = esc.length
+    ? ["bad", `Needs your judgement: ${(esc[0].reason ?? "").split(/(?<=[.!?])\s/)[0]}`]
+    : pend.length
+      ? ["warn", `Donna is waiting on ${nm(d.landlord?.name)}${hold?.follow_up_at ? ` · chases ${when(hold.follow_up_at)}` : ""}`]
+      : hold
+        ? ["warn", `Donna is waiting on ${who(hold.waiting_on)}${hold.follow_up_at ? ` · chases ${when(hold.follow_up_at)}` : ""}`]
+        : ["good", "Autonomous"];
   return (
     <Card className="phead">
       <div className="ph-top">
@@ -20,18 +29,19 @@ function Header({ d, onChange, toast }: { d: Detail; onChange: () => void; toast
         </div>
         <div className="ph-flags">
           <Pill tone={t.status === "open" ? "good" : "warn"}>{label(t.status)}</Pill>
-          {pend && <Pill tone="warn">Approval pending</Pill>}
-          {d.open_holds.length > 0 && t.status !== "on_hold" && <Pill tone="warn">On hold</Pill>}
         </div>
       </div>
+      <div className="autonomy"><Pill tone={auto[0] as any}>{auto[1]}</Pill></div>
       <Stepper steps={STAGES} current={t.stage} extra={t.stage === "paused" ? "paused" : undefined} />
-      <div className="actionbar" data-learn-src>
+      <div className="takeover"><button className="link" onClick={() => setTake(!take)}><Chev open={take} /> Take over</button>{take && <span className="muted small">Routine steps are Donna's job. Use these only if you want to step in.</span>}</div>
+      {take && <div className="actionbar" data-learn-src>
         <ActionButton kind="note" ticketId={t.id} toast={toast} onDone={onChange} />
         <ActionButton kind="assign" ticketId={t.id} toast={toast} onDone={onChange} />
         <ActionButton kind="message" ticketId={t.id} toast={toast} onDone={onChange} />
         <ActionButton kind="stage" ticketId={t.id} stage={t.stage} toast={toast} onDone={onChange} />
         {t.description && <><span className="grow" /><button className="link" onClick={() => setOrig(!orig)}><Chev open={orig} /> Original request</button></>}
-      </div>
+      </div>}
+      {!take && t.description && <div className="actionbar"><button className="link" onClick={() => setOrig(!orig)}><Chev open={orig} /> Original request</button></div>}
       {t.description && <Reveal open={orig}><pre className="orig">{t.description}</pre></Reveal>}
     </Card>
   );
@@ -55,7 +65,7 @@ function Suggestion({ d, onChange, toast }: { d: Detail; onChange: () => void; t
     return (
       <section className="suggest none">
         <DonnaVoice><span className="muted"> suggests</span></DonnaVoice>
-        <div className="muted" style={{ marginTop: 6 }}>Nothing yet. Press Run Donna and she will work out the next step.</div>
+        <div className="muted" style={{ marginTop: 6 }}>Nothing yet. Open Donna (press .) and ask her to take the next step.</div>
       </section>
     );
 
@@ -114,31 +124,6 @@ function Suggestion({ d, onChange, toast }: { d: Detail; onChange: () => void; t
   );
 }
 
-/** Single "Call landlord" button; the phone/voice machinery lives in its popover. */
-function CallLandlord({ d, approval, onChange }: { d: Detail; approval: Detail["approvals"][number]; onChange: () => void }) {
-  return (
-    <Popover width={360} align="end" trigger={({ toggle, open }) => <Button size="sm" variant={open ? "primary" : "secondary"} icon="phone" onClick={toggle}>Call landlord</Button>}>
-      {() => (
-        <div className="stack">
-          <PhoneCall approvalId={approval.id} ticketId={d.ticket.id} onChange={onChange} />
-          <CallPanel
-            info={{
-              approval_id: approval.id,
-              landlord_name: d.landlord?.name ?? "the landlord",
-              property_address: d.property?.address ?? "the property",
-              job_summary: approval.summary ?? d.ticket.title,
-              estimated_cost: approval.amount_gbp != null ? `${approval.amount_gbp} pounds` : "not confirmed",
-              job_ref: d.ticket.case_ref,
-              tenant_name: d.tenant?.name ?? "the tenant",
-            }}
-            onDone={onChange}
-          />
-        </div>
-      )}
-    </Popover>
-  );
-}
-
 function NeedsYou({ d, onChange, toast }: { d: Detail; onChange: () => void; toast: Notify }) {
   const id = d.ticket.id;
   const esc: any[] = (d as any).open_human_queue ?? [];
@@ -146,9 +131,9 @@ function NeedsYou({ d, onChange, toast }: { d: Detail; onChange: () => void; toa
   const queued = d.outbox.filter((o) => o.status === "queued");
   const n = pend.length + d.open_holds.length + esc.length + queued.length;
   if (!n)
-    return <Section title="Needs you"><div className="allclear"><Check size={18} /> Nothing is waiting on you.</div></Section>;
+    return <Section title="Needs your judgement"><div className="allclear"><Check size={18} /> Donna has this covered. Nothing needs a person.</div></Section>;
   return (
-    <Section title="Needs you" count={n}>
+    <Section title={esc.length ? "Needs your judgement" : "Donna is on it"} count={n}>
       <Card className="list-card">
         {esc.map((h) => (
           <div key={`e${h.id}`} className="need">
@@ -161,24 +146,57 @@ function NeedsYou({ d, onChange, toast }: { d: Detail; onChange: () => void; toa
           <div key={`a${a.id}`} className="need">
             <Pill tone="warn">Approval</Pill>
             <div className="need-t"><RichText text={a.summary ?? "Landlord approval needed"} ticketId={id} />{a.amount_gbp != null && <> <span className="ent money">£{a.amount_gbp}</span></>}</div>
-            <CallLandlord d={d} approval={a} onChange={onChange} />
+            <span className={`dstatus ${a.channel === "call" || d.outbox.some((o) => o.channel === "call" && o.status === "queued") ? "calling" : ""}`}>
+              {a.channel === "call" || d.outbox.some((o) => o.channel === "call" && o.status === "queued") ? <><i className="ldot" />Donna is calling {nm(d.landlord?.name)}…</> : <>Donna asked {nm(d.landlord?.name)} and is waiting</>}
+            </span>
           </div>
         ))}
         {d.open_holds.map((h) => (
           <div key={`h${h.id}`} className="need">
             <Pill tone="warn">On hold</Pill>
-            <div className="need-t"><RichText text={h.reason ?? "Waiting"} ticketId={id} /><span className="muted small">{h.waiting_on ? ` · waiting on ${h.waiting_on}` : ""}{h.follow_up_at ? `, follow up ${when(h.follow_up_at)}` : ""}</span></div>
+            <div className="need-t"><RichText text={h.reason ?? "Waiting"} ticketId={id} /><span className="muted small">{h.waiting_on ? ` · waiting on ${h.waiting_on}` : ""}{h.follow_up_at ? `, Donna will chase on ${when(h.follow_up_at)}` : ""}</span></div>
           </div>
         ))}
         {queued.map((o) => (
           <div key={`o${o.id}`} className="need">
-            <Pill tone="accent">{o.error ? "Not delivered" : "To send"}</Pill>
-            <div className="need-t" title={o.body}>{o.channel === "sms" ? "Text" : "Email"} to {o.to_label}{o.subject ? `: ${o.subject}` : ""}</div>
+            <Pill tone="accent">{o.error ? "Not delivered" : "Donna is sending"}</Pill>
+            <div className="need-t" title={o.body}>{o.channel === "sms" ? "Text" : o.channel === "call" ? "Call" : "Email"} to {o.to_label}{o.subject ? `: ${o.subject}` : ""}</div>
             <Button size="sm" onClick={async () => { await api(`/api/outbox/${o.id}/sent`, { method: "POST", body: {} }); onChange(); }}>Mark sent</Button>
           </div>
         ))}
       </Card>
     </Section>
+  );
+}
+
+const first = (b: string) => b.replace(/^Donna[:,]?\s+/, "I ");
+function DonnaWork({ d }: { d: Detail }) {
+  const did = d.events.filter((e) => e.kind === "agent_action" || e.direction === "out").slice(-6).reverse();
+  const next: string[] = [
+    ...d.approvals.filter((a) => a.status === "pending").map((a) => `I'm waiting on ${nm(d.landlord?.name)} to approve${a.amount_gbp != null ? ` £${a.amount_gbp}` : ""}.`),
+    ...d.open_holds.map((h) => `I'll chase ${h.waiting_on ?? "them"}${h.follow_up_at ? ` on ${when(h.follow_up_at)}` : ""}${h.reason ? `: ${h.reason}` : ""}`),
+    ...d.outbox.filter((o) => o.status === "queued").map((o) => `I'm ${o.channel === "call" ? "calling" : "sending a message to"} ${o.to_label ?? "them"}.`),
+  ];
+  return (
+    <>
+      <Section title="What I'm doing next">
+        {next.length ? <ul className="dnext">{next.map((n, i) => <li key={i}><DonnaMark size={16} /><span>{n}</span></li>)}</ul> : <div className="muted small">Nothing queued. I'll pick this up again when something changes.</div>}
+      </Section>
+      <Section title="What I did" count={did.length}>
+        <ol className="tline">
+          {did.map((e) => (
+            <li key={e.id} className="tl-ev donna">
+              <span className="dotm"><DonnaMark size={18} /></span>
+              <div className="tl-body">
+                <div className="tl-h"><b>{e.direction === "out" ? `I messaged ${e.party ?? "them"}` : "I acted"}</b><span className="when">{when(e.ts)}</span></div>
+                <div className="tl-t pre clamp2"><RichText text={first(e.body ?? "")} ticketId={d.ticket.id} /></div>
+              </div>
+            </li>
+          ))}
+        </ol>
+        {!did.length && <div className="muted small">I haven't acted on this one yet.</div>}
+      </Section>
+    </>
   );
 }
 
@@ -199,7 +217,7 @@ function Timeline({ d }: { d: Detail }) {
   }, [d.events]);
   const vis = all ? items : items.slice(0, 5);
   return (
-    <Section title="What happened" count={d.events.length}>
+    <Section title="Full history" count={d.events.length}>
       <ol className="tline">
         {vis.map((it) => {
           if (it.kind === "sys") {
@@ -283,8 +301,10 @@ export default function Ticket({ d, onChange, toast }: { d: Detail; onChange: ()
       <Header d={d} onChange={onChange} toast={toast} />
       <Suggestion d={d} onChange={onChange} toast={toast} />
       <NeedsYou d={d} onChange={onChange} toast={toast} />
+      <DonnaWork d={d} />
       <Timeline d={d} />
       <People d={d} />
     </div>
   );
 }
+

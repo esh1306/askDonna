@@ -401,6 +401,22 @@ async function handle(req: http.IncomingMessage, res: http.ServerResponse) {
     return res.end(fsm.readFileSync(file));
   }
 
+  if (m === "POST" && (g = /^\/api\/tickets\/(\d+)\/ask$/.exec(p))) {
+    const id = Number(g[1]);
+    needTicket(id);
+    const b = await readBody(req);
+    const text = String(b.text ?? "").trim();
+    if (!text) throw new HttpError(400, "text is required");
+    return send(
+      res,
+      200,
+      await runDonna(
+        id,
+        `Instruction from agency staff on CRM ticket ${id}: "${text}". Load the ticket context and carry it out yourself with your tools (e.g. request_landlord_approval with channel 'call' to phone the landlord). Only escalate if it genuinely needs a person. Then return the structured result.`,
+      ),
+    );
+  }
+
   throw new HttpError(404, "not found");
 }
 

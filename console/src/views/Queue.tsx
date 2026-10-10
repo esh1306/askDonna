@@ -57,7 +57,7 @@ function QueueCard({ h, phase, onOpen, onResolved, toast }: { h: any; phase?: "d
         </div>
         {todo.length > 0 && (
           <div className="dc-block">
-            <div className="s-k">What you need to do</div>
+            <div className="s-k">What needs your judgement</div>
             <ol className="dc-steps">{todo.map((s, i) => <li key={i}><RichText text={s} ticketId={h.ticket_id} notes={all} /></li>)}</ol>
           </div>
         )}
@@ -96,7 +96,7 @@ export default function Queue({ queue, onOpen, onResolved, toast }: { queue: any
   return (
     <div className="page">
       <div className="page-inner" style={{ maxWidth: 820 }}>
-        <div className="page-head"><div className="grow"><h1>Human queue</h1><p>Things Donna could not close on her own. Decide, and she will remember how you did it.</p></div>{left > 0 && <Pill tone="accent">{left} waiting</Pill>}</div>
+        <div className="page-head"><div className="grow"><h1>Needs your judgement</h1><p>Things Donna could not close on her own. Decide, and she will remember how you did it.</p></div>{left > 0 && <Pill tone="accent">{left} waiting</Pill>}</div>
         {left === 0 && <EmptyState card title="Nothing needs you right now." hint="Donna will flag anything she cannot close." />}
         {queue.map((h) => <QueueCard key={h.id} h={h} phase={phase[h.id]} onOpen={onOpen} onResolved={resolved} toast={toast} />)}
       </div>

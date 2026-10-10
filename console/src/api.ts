@@ -57,3 +57,9 @@ export const ago = (ts: string) => {
   const h = Math.round(m / 60);
   return h < 48 ? `${h} h` : `${Math.round(h / 24)} days`;
 };
+
+/** Display name for a party: drops "(PM/014)" tags and falls back to "the landlord" for bare role labels. */
+export const nm = (n: string | null | undefined, role = "the landlord") => {
+  const c = (n ?? "").replace(/\s*\(.*?\)/g, "").trim();
+  return !c || /^(landlord|tenant|contractor)$/i.test(c) ? role : c;
+};

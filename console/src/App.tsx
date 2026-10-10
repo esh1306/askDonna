@@ -6,6 +6,8 @@ import Lessons from "./views/Lessons.tsx";
 import Queue from "./views/Queue.tsx";
 import Tickets from "./views/Tickets.tsx";
 import Demo from "./views/Demo.tsx";
+import DonnaHub from "./views/Donna.tsx";
+import AutoCall from "./AutoCall.tsx";
 
 export default function App() {
   const [tab, setTab] = useState<"tickets" | "queue" | "lessons">("tickets");
@@ -16,7 +18,9 @@ export default function App() {
   const [sel, setSel] = useState<number | null>(null);
   const [detail, setDetail] = useState<Detail | null>(null);
   const [error, setError] = useState("");
-  const [railOpen, setRailOpen] = useState(() => window.innerWidth >= 1280);
+  const [collapsed, setCollapsed] = useState(() => { try { return localStorage.getItem("donna.sidebar") === "1"; } catch { return false; } });
+  const [armed, setArmed] = useState<number | null>(null);
+  const toggleSide = useCallback(() => setCollapsed((c) => { try { localStorage.setItem("donna.sidebar", c ? "0" : "1"); } catch {} return !c; }), []);
   const [demo, setDemo] = useState(() => new URLSearchParams(location.search).get("demo") === "1");
   const lessonsTab = useRef<HTMLButtonElement>(null);
 
@@ -44,11 +48,12 @@ export default function App() {
     const onKey = (e: KeyboardEvent) => {
       const tag = (e.target as HTMLElement).tagName;
       if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
+      if (e.key === "[" && !e.metaKey && !e.ctrlKey) { e.preventDefault(); toggleSide(); }
       if (e.shiftKey && e.key === "I") { e.preventDefault(); setDemo(true); }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  }, [toggleSide]);
 
   const openTicket = useCallback((id: number) => { setSel(id); setTab("tickets"); }, []);
   const count = (n: number | null | undefined, k?: number) => (n ? <span key={k} className={`n ${k ? "bump" : ""}`}>{n}</span> : null);
@@ -57,13 +62,15 @@ export default function App() {
     <EntityHost tickets={tickets} openTicket={openTicket}>
       <div className="shell">
         <div className="top">
+          <button className={`icon-btn side-toggle ${collapsed ? "" : "on"}`} onClick={toggleSide} title="Toggle ticket list  ( [ )" aria-label="Toggle ticket list" aria-pressed={!collapsed}>
+            <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="4" width="14" height="12" rx="2.5" fill="none" stroke="currentColor" strokeWidth="1.6" /><path d="M8 4.5v11" stroke="currentColor" strokeWidth="1.6" /><rect x="3.8" y="5" width="3.6" height="10" rx="1.5" fill="currentColor" opacity={collapsed ? 0 : 0.28} /></svg>
+          </button>
           <div className="brand"><DonnaMark size={24} />Donna <span>operations</span></div>
           <div className="tracks">
-            <button className={`track ${tab === "tickets" ? "on" : ""}`} onClick={() => setTab("tickets")}>Tickets{count(tickets.length)}</button>
-            <button className={`track ${tab === "queue" ? "on" : ""}`} onClick={() => setTab("queue")}>Human queue{queue.length > 0 && <span className="n alert">{queue.length}</span>}</button>
-            <button ref={lessonsTab} className={`track ${tab === "lessons" ? "on" : ""}`} onClick={() => setTab("lessons")}>Lessons{count(lessonCount, bump)}</button>
+            <button className={`track ${tab === "tickets" ? "on" : ""}`} onClick={() => setTab("tickets")}>Donna's work{count(tickets.length)}</button>
+            <button className={`track ${tab === "queue" ? "on" : ""}`} onClick={() => setTab("queue")}>Needs you{queue.length > 0 && <span className="n alert">{queue.length}</span>}</button>
+            <button ref={lessonsTab} className={`track ${tab === "lessons" ? "on" : ""}`} onClick={() => setTab("lessons")}>What Donna learned{count(lessonCount, bump)}</button>
           </div>
-          {tab === "tickets" && <Button size="sm" variant="ghost" onClick={() => setRailOpen(!railOpen)} title="Toggle Donna panel">{railOpen ? "Hide Donna" : "Show Donna"}</Button>}
           <Button size="sm" onClick={refresh}>Refresh</Button>
         </div>
         {error && <div className="banner" onClick={() => setError("")}>{error}</div>}
@@ -72,10 +79,12 @@ export default function App() {
         ) : tab === "queue" ? (
           <Queue queue={queue} onOpen={openTicket} onResolved={refresh} toast={notify} />
         ) : (
-          <Tickets tickets={tickets} sel={sel} setSel={setSel} detail={detail} railOpen={railOpen} onChange={refresh} toast={notify} />
+          <Tickets tickets={tickets} sel={sel} setSel={setSel} detail={detail} collapsed={collapsed} onChange={refresh} toast={notify} />
         )}
         {toastNode}
-        <Demo open={demo} onClose={() => setDemo(false)} tickets={tickets} current={sel} onDone={refresh} toast={notify} />
+        <Demo open={demo} onClose={() => setDemo(false)} tickets={tickets} current={sel} onDone={() => { setArmed(sel); refresh(); }} toast={notify} />
+        <DonnaHub d={tab === "tickets" || sel != null ? detail : null} onChange={refresh} toast={notify} onRan={(id) => setArmed(id)} />
+        <AutoCall d={detail} armed={armed} disarm={() => setArmed(null)} onChange={refresh} />
       </div>
     </EntityHost>
   );
