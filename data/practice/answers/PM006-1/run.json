@@ -3,97 +3,122 @@
   "decision": "escalate",
   "escalated": "yes",
   "failures": 0,
-  "durationSec": 40.463,
+  "durationSec": 45.958,
   "decisionLine": "escalate",
-  "sessionId": "wrun_01M4JSTY28AZSBEQV9WXPA7BPF",
-  "startedAt": "2026-10-10T11:40:39.106Z",
-  "finishedAt": "2026-10-10T11:41:19.569Z",
+  "sessionId": "wrun_01M4JY6G29PA1R94WGDWE9788S",
+  "startedAt": "2026-10-10T12:56:52.493Z",
+  "finishedAt": "2026-10-10T12:57:38.451Z",
   "usage": {
-    "inputTokens": 69018,
-    "outputTokens": 3960
+    "inputTokens": 69172,
+    "outputTokens": 3875
   },
-  "eventCount": 322,
+  "eventCount": 242,
   "dryRun": false,
   "result": {
-    "case_id": "R/PM006-1 (ticket 5)",
+    "case_id": "13 (R/PM006-1)",
     "decision": "escalate",
-    "summary": "Cedar Utilities hasn't replied to the instruction or either of the 2 reminders. All three emails told them to book access with a tenant who has moved out, which is probably why nothing happened. I emailed the contractor to correct that: access will go through the agency, and I asked them to confirm the job by end of tomorrow. I've passed the case to the ops team to phone the contractor or reassign the job. Landlord approval isn't needed yet because there's no quote.",
-    "situation": "This is a check-out job: a quote to replace a burnt carpet and repaint a vacated flat. It's at the scheduling stage. The contractor has been silent since 20 Sep, and the system flagged 3+ reminders on 25 Sep. There are no contact details on record for the contractor or the landlord.",
+    "summary": "Cedar Utilities hasn't answered the original instruction or two reminders over 5 days, and the system has flagged the job. A fourth automated email is unlikely to work, so I've handed it to ops to phone Cedar or reassign. I also flagged that the flat is empty but the contractor was told to arrange access through the former tenant, and that a deposit claim may depend on this job.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "Events 005-007 are three outbound emails to Cedar Utilities with no reply visible anywhere in the case (search_case 'Cedar' returns only outbound). Event 008 flags 3+ reminders. Repeated non-response after follow-ups is an escalation trigger. No contractor contact details are recorded, so I can't try another channel myself.",
+      "alternatives_considered": [
+        {
+          "option": "Send another reminder email to Cedar",
+          "why_not": "Three emails have already gone unanswered; a fourth adds noise. A phone call or reassignment needs a person."
+        },
+        {
+          "option": "Reassign to a different contractor myself",
+          "why_not": "No other contractor is on record for this property, and replacing the agency's chosen provider is a judgement for ops."
+        },
+        {
+          "option": "Message the tenant",
+          "why_not": "The tenant has moved out, so she isn't the right person to arrange access or chase. Messaging her doesn't move the job on."
+        },
+        {
+          "option": "Request landlord approval",
+          "why_not": "There's no quote yet, so nothing to approve."
+        }
+      ],
+      "checks_performed": [
+        "Loaded full ticket context: no holds, approvals, attachments or property history",
+        "Searched the case for 'Cedar': only outbound messages, no reply",
+        "Checked the contractor profile: no email, phone or channel recorded",
+        "Checked access: the property is vacated, but instructions point the contractor to the former tenant"
+      ],
+      "assumptions": [
+        "The tenant has fully moved out, as 'following the tenant vacating' in event 001 says",
+        "The 07700 900203 number in the contractor emails belongs to the outgoing tenant"
+      ]
+    },
+    "situation": "Check-out works estimate (replace burnt carpet, repaint throughout) at vacant Flat 21, 11 Juniper Mews. The ticket is in scheduling, but Cedar Utilities has not responded since being instructed on 20/09/2024.",
     "actions_taken": [
       {
         "tool": "get_ticket_context",
-        "description": "Loaded the ticket context",
-        "result": "8 events; no holds, approvals, attachments or profile facts",
+        "description": "Loaded the case",
+        "result": "8 events, no inbound contractor messages, no approvals or holds",
         "ok": true
       },
       {
-        "tool": "find_tickets",
-        "description": "Checked for other Cedar Utilities tickets",
-        "result": "Only this ticket",
-        "ok": true
-      },
-      {
-        "tool": "send_message",
-        "description": "Emailed the contractor: property vacated, access via the agency, quote only, confirm by end of tomorrow or say if they can't take it",
-        "result": "Queued in the outbox, msg 4",
-        "ok": true
-      },
-      {
-        "tool": "add_profile_fact",
-        "description": "Recorded on the property that the tenant has moved out (event 001)",
-        "result": "Fact 9",
-        "ok": true
-      },
-      {
-        "tool": "add_profile_fact",
-        "description": "Recorded on the contractor profile that they haven't responded",
-        "result": "Fact 10",
+        "tool": "search_case",
+        "description": "Searched for any reply from Cedar",
+        "result": "4 matches, all outbound",
         "ok": true
       },
       {
         "tool": "escalate_to_human",
-        "description": "Passed to the ops team to phone the contractor, arrange access, add landlord details and check the deposit question",
-        "result": "Queue item 1",
+        "description": "Handed over the unresponsive contractor, the access problem at the empty flat and the possible deposit question",
+        "result": "queue_id 7",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded Cedar Utilities' non-response on their contact profile",
+        "result": "fact 20",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the property as vacant after check-out",
+        "result": "fact 21",
         "ok": true
       },
       {
         "tool": "place_hold",
-        "description": "Hold while waiting for the contractor's reply",
-        "result": "Hold 13, follow-up in 1 day",
+        "description": "Hold so the job doesn't go quiet while ops chases or reassigns",
+        "result": "hold 45, follow-up in 2 days",
         "ok": true
       }
     ],
     "approvals": [
       {
         "party": "Landlord",
-        "status": "not_needed",
-        "channel": "n/a: no quote yet"
+        "status": "not_yet_requested (no quote)",
+        "channel": "n/a"
       }
     ],
     "escalation": {
       "needed": true,
-      "reason": "Contractor hasn't replied after the instruction and 2 reminders, and the access instructions sent them to a tenant who has moved out",
-      "handover_summary": "Cedar Utilities hasn't replied to the instruction (20 Sep) or the reminders (21 and 24 Sep). Every email told them to book with former tenant Harriet Ellis, but the property is empty. I've sent a correction (access via the agency) asking them to confirm by end of tomorrow. There are no contact details on record for the contractor or the landlord. The burnt carpet may be a deposit-deduction issue.",
-      "recommendation": "Phone Cedar Utilities today and arrange keys or access. If they haven't confirmed by the follow-up date, reassign the job and consider getting 2 quotes. Add the landlord's contact details and preferred channel for approving the quote. Pass the burnt carpet to the deposit or check-out team."
+      "reason": "The contractor hasn't responded to the instruction or 2 reminders, and the system has flagged it",
+      "handover_summary": "Cedar Utilities has not acknowledged or quoted for the carpet replacement and repaint at the vacant Flat 21, 11 Juniper Mews since 20/09. No contractor contact details are in the CRM. Instructions sent the contractor to the former tenant for access.",
+      "recommendation": "Phone Cedar today. If they can't be reached, reassign. Give the contractor agency key access. When a quote arrives, ask the landlord to approve it. Lettings team to confirm whether this is evidence for a deposit claim, and if so take dated photos before work starts."
     },
     "unverified": [
-      "Whether the contractor received any of the emails (no contact details on record)",
-      "Tenant's move-out date and who holds the keys",
-      "Landlord's identity, channel and spending limit",
-      "Whether the carpet damage is the tenant's responsibility and will be claimed from the deposit"
+      "Whether Cedar received the emails (no contact details visible)",
+      "Who now holds access/keys for the empty flat",
+      "Whether the costs will be claimed from the deposit",
+      "The landlord's identity and preferred channel"
     ],
     "failures": [],
     "risks_or_red_flags": [
-      "Contractor hasn't replied to the instruction or 2 reminders",
-      "Automated emails gave the former tenant's phone number for access to an empty property",
-      "The burnt carpet may be a deposit dispute, which needs a human to handle",
-      "Long void period if the job stalls"
+      "The flat is empty while the job stalls, so the landlord may be losing rent",
+      "Access instructions point to the former tenant",
+      "Possible deposit claim: the damage needs evidencing before any work"
     ],
-    "final_status": "Scheduling. On hold waiting for the contractor (hold 13) and with the ops team (queue item 1).",
+    "final_status": "scheduling, on hold (waiting on agency), escalated to ops (queue 7)",
     "next_follow_up": {
-      "when": "1 day from now",
-      "what": "Check whether Cedar Utilities has confirmed and suggested a visit date. If not, the ops team reassigns the job."
+      "when": "2024-09-27",
+      "what": "Check whether ops has reached Cedar or reassigned the job, and whether a quote has arrived to put to the landlord"
     },
-    "confidence": 0.82
+    "confidence": 0.85
   }
 }

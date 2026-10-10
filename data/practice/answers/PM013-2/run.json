@@ -1,0 +1,132 @@
+{
+  "case": "PM013-2",
+  "decision": "request_info",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 49.641,
+  "decisionLine": "request_info",
+  "sessionId": "wrun_01M4JY7YB24JEDPTQG6GXM7N0A",
+  "startedAt": "2026-10-10T12:57:39.853Z",
+  "finishedAt": "2026-10-10T12:58:29.494Z",
+  "usage": {
+    "inputTokens": 113935,
+    "outputTokens": 4315
+  },
+  "eventCount": 220,
+  "dryRun": false,
+  "result": {
+    "case_id": "28 (R/PM013-2)",
+    "decision": "request_info",
+    "summary": "The quote visit with Harbour Surveying was booked for the morning of 08/10/2024. As of 10/10 nothing has come back about it: no report, no quote, no word on whether anyone turned up (event 025). I emailed the contractor asking whether the visit happened, what they found and what the quote is, and texted the tenant asking whether the engineer came. A hold is set to chase in 2 days. Nothing here needs agency judgement yet, so I haven't escalated.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "The visit was confirmed for 08/10/2024 at 08:30 (events 020-024). The system flagged 'No work results' on 10/10 (event 025). There are no attachments and both contractor emails (events 011, 017) have no text, so we can't tell whether the visit happened. Both the contractor and the tenant can answer this, so I asked them before escalating. No cost or approval decision is due until a quote arrives. The landlord was told on 01/10 that an engineer would be sent to diagnose the fault (event 002).",
+      "alternatives_considered": [
+        {
+          "option": "Escalate to a human now",
+          "why_not": "Asking the contractor and tenant can probably settle what happened. This is the first chase after the visit, so it isn't a case of no response after two follow-up deadlines."
+        },
+        {
+          "option": "Move to works/closeout",
+          "why_not": "Nothing shows the visit happened or that any repair was done. It was a quote visit, not approved works."
+        },
+        {
+          "option": "Assign a different contractor",
+          "why_not": "Too early. Harbour Surveying did book and confirm the visit. If they don't respond again, raise it with a human."
+        },
+        {
+          "option": "Message the landlord",
+          "why_not": "There's no quote or decision to put to her yet. I'll update her once there is a diagnosis or quote."
+        }
+      ],
+      "checks_performed": [
+        "Loaded ticket 28 context: no holds, approvals, attachments or profile facts",
+        "Confirmed the visit date and time across events 020, 021, 023 and 024",
+        "Checked that the contractor emails (events 011, 017) have no text",
+        "Checked related ticket 27 (R/PM013-1): same property, tenant, contractor and description, events mirror this ticket up to event 017. It looks like a duplicate",
+        "Checked the phone numbers: 07700 900752 is the tenant's (given to the contractor) and 07700 900769 is the contractor's (given to the tenant). They are consistent",
+        "No safety risk: a dishwasher fault with no leak reported"
+      ],
+      "assumptions": [
+        "'Meadow Solutions' in event 010 is how the contractor's call described whoever assigned the job (possibly the agency under another name), not a different job",
+        "The 08/10 visit was to diagnose and quote, as the contractor was instructed in event 006"
+      ]
+    },
+    "situation": "Integrated dishwasher fault at Flat 2, 42 Beacon Close (it starts, beeps, the power light flashes, then it stops). Harbour Surveying were assigned on 01/10 and needed 3+ reminders before booking a quote visit for 08/10/2024 at 08:30. By 10/10 there was no visit outcome or quote on file. Stage: scheduling.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded ticket 28",
+        "result": "Stage scheduling, 25 events, no holds, approvals or attachments",
+        "ok": true
+      },
+      {
+        "tool": "get_ticket_context",
+        "description": "Checked related ticket 27 on the same property",
+        "result": "Apparent duplicate (R/PM013-1), events identical up to event 017, still open in scheduling",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed Harbour Surveying asking whether the 08/10 visit happened, their findings and a quote with photos and timescale; told them not to do chargeable work before approval",
+        "result": "Queued, message 35, guard passed",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Texted the tenant asking whether the engineer attended on 08/10 and saying we'll update her by 14/10",
+        "result": "Queued, message 36, guard passed",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold waiting on the contractor, chase in 2 days",
+        "result": "Hold 65",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the contractor's slow responses",
+        "result": "Fact 37",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the tenant's likely preference for SMS (event 010)",
+        "result": "Fact 38",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (Clara)",
+        "status": "not_needed yet: she was told an engineer would diagnose the fault (event 002). Her approval will be needed once the quote arrives",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "Not needed yet: the contractor and tenant can probably settle what happened at the visit",
+      "handover_summary": "",
+      "recommendation": "If the contractor hasn't replied by the follow-up, chase once more, then escalate to consider a different appliance engineer. Separately, an admin should merge or close duplicate ticket 27."
+    },
+    "unverified": [
+      "Whether the engineer attended on 08/10/2024",
+      "What the contractor emails (events 011, 017) said: their text isn't visible",
+      "Dishwasher make and model",
+      "Who 'Meadow Solutions' (event 010) is"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "Contractor slow to respond: 3+ booking reminders, then nothing after the visit",
+      "Possible duplicate ticket 27 (R/PM013-1) open for the same job, which could lead to double instructions or double invoicing",
+      "'Meadow Solutions' in event 010 is unexplained"
+    ],
+    "final_status": "Scheduling, on hold waiting for the contractor's visit outcome and quote (hold 65)",
+    "next_follow_up": {
+      "when": "2024-10-12 (2 days)",
+      "what": "Check for replies from the contractor and tenant. If there's a quote, ask the landlord to approve it. If the engineer didn't attend, re-book. If the contractor still hasn't replied, chase again, then escalate."
+    },
+    "confidence": 0.8
+  }
+}

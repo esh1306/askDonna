@@ -1,0 +1,121 @@
+{
+  "case": "PM045-1",
+  "decision": "request_info",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 38.915,
+  "decisionLine": "request_info",
+  "sessionId": "wrun_01M4JYG0TYTXVEFX9F6CY7ZDYX",
+  "startedAt": "2026-10-10T13:02:04.580Z",
+  "finishedAt": "2026-10-10T13:02:43.495Z",
+  "usage": {
+    "inputTokens": 76239,
+    "outputTokens": 3644
+  },
+  "eventCount": 168,
+  "dryRun": false,
+  "result": {
+    "case_id": "81 (R/PM045-1)",
+    "decision": "request_info",
+    "summary": "The tenant confirmed the window repair is their own report, not something the landlord asked for. The report only says \"Kitchen window + patio door windows\", so we don't know the fault or whether the windows lock. I emailed the tenant asking for the fault, whether the windows and patio door lock securely, and photos. The email also corrected the wrong address and job number in the agency's earlier email. The ticket is on hold for 2 days; landlord approval 41 stays pending until we know what the repair is.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "Event 006 answers the agency's question in event 003: the repair was not requested by the landlord. Event 005 asks whether the tenant needs a reply, and they do. The request in event 001 has no detail, and the classifier rated needs_more_info at 0.83. We can't give the landlord a proper approval request without knowing the fault. Security of a patio door or window could be a safety issue (safety_risk 0.38), so I asked about it directly.",
+      "alternatives_considered": [
+        {
+          "option": "Return to auto mode without replying",
+          "why_not": "The tenant is waiting, the description is too thin to act on, and the earlier email gave the wrong address."
+        },
+        {
+          "option": "Send the landlord approval request now",
+          "why_not": "There is no scope or cost yet, the landlord has no contact details on record, and approval 41 is already pending."
+        },
+        {
+          "option": "Escalate to a human",
+          "why_not": "The tenant can answer the open question, so asking them is proportionate. Nothing points to an emergency yet."
+        }
+      ],
+      "checks_performed": [
+        "Loaded the ticket context: no property history, no profile facts, no contractor, approval 41 pending with no amount",
+        "Ran classify_reply on event 006: auto, low safety and complaint scores",
+        "Ran classify_intake: doors_windows_locks, routine, needs_more_info 0.83",
+        "Compared the address in event 003 (Flat 12, 182 Meadow Row; Job NBL-045-9445) with the ticket property (Flat 26, 116 Copperfield Walk): they don't match"
+      ],
+      "assumptions": [
+        "The tenant's email address on file is valid; the CRM contact record has no email or phone listed",
+        "The correct property is the one on the ticket record (Flat 26, 116 Copperfield Walk)"
+      ]
+    },
+    "situation": "Tenant reported a problem with the kitchen window and patio door windows, with no further detail. On 15 Jan the agency asked whether the landlord had requested the work, and that email showed another property's address and job ID. The tenant replied that the landlord did not request it. Landlord approval 41 has been pending since 14 Jan.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the case",
+        "result": "Stage landlord_approval, approval 41 pending, no open holds, no contact details",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified tenant reply event 006",
+        "result": "auto; intent other; safety 0.02",
+        "ok": true
+      },
+      {
+        "tool": "classify_intake",
+        "description": "Classified the request",
+        "result": "doors_windows_locks, routine, ask_for_info",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant: thanked them, corrected the address and job number, asked for the fault, whether the windows lock, and photos, gave safety advice about broken glass, and said we'll follow up in 2 working days",
+        "result": "message 106 queued, guard passed",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Placed a hold waiting on the tenant's details",
+        "result": "hold 198, follow-up in 2 days",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded that the repair was tenant-reported, not requested by the landlord",
+        "result": "fact 120 saved",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (R/PM045-1)",
+        "status": "pending (approval 41, still pending until we know the scope; no amount)",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "The tenant can supply the missing information. No emergency or dispute so far.",
+      "handover_summary": "",
+      "recommendation": "If the tenant reports broken glass or a window or patio door that won't lock, treat it as an insecure-property emergency. Otherwise send the details to the landlord to complete approval 41."
+    },
+    "unverified": [
+      "What the actual fault is with the kitchen window and patio door windows",
+      "Whether the windows and patio door lock securely",
+      "The tenant's reference to 'the phone call': no call is recorded",
+      "The landlord's contact details and preferred channel: none on record",
+      "Whether the tenant received the earlier email that showed the wrong address"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "The agency's email in event 003 showed a different property's address and job ID (Flat 12, 182 Meadow Row; NBL-045-9445). This may mean records have been mixed up, or another property's details were shared with this tenant.",
+      "A faulty patio door or window could leave the property insecure; we don't know yet.",
+      "The landlord and tenant contact records have no email or phone listed."
+    ],
+    "final_status": "landlord_approval stage, on hold (hold 198) waiting for the tenant's details; approval 41 pending",
+    "next_follow_up": {
+      "when": "2025-01-17",
+      "what": "Chase the tenant for the fault details, whether the windows lock, and photos. Then send the scope to the landlord for approval 41, or treat it as urgent if the property isn't secure."
+    },
+    "confidence": 0.8
+  }
+}

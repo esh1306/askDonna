@@ -6,23 +6,48 @@
 
 ## Summary
 
-The tenant asked to move the routine inspection from 13/02/2024 to "Friday 15th February" because their dog gets overexcited. 15/02/2024 is actually a Thursday. I texted the tenant to ask whether they want Thu 15 or Fri 16 Feb, and told them the 13/02 booking stands until a new date is confirmed. The ticket is on hold until the tenant replies. No escalation is needed: this is a routine scheduling question the tenant can answer.
+The tenant asked to move the routine inspection from Tuesday 13/02 to "Friday, 15th February" because of their dog. But 15 February 2024 is a Thursday. A reply was needed, so I emailed the tenant to ask which date they mean and told them the current booking stands until we confirm. I also passed the inspector rebooking to the inspections team, recorded the dog on the property, and set a 1-day follow-up.
+
+## Judgement
+
+- **Case type:** maintenance_admin
+- **Why this decision:** Event 006 is a tenant request to reschedule. Event 005 asks whether the tenant needs a reply, and they do. The requested date is unclear (Friday is 16 Feb; 15 Feb is a Thursday), and I have no tool to rebook the inspector. So I asked the tenant to clarify and handed the diary change to the inspections team.
+
+| Alternative considered | Why not |
+|---|---|
+| No action / return to auto | The tenant is waiting for an answer to a reschedule request, and the classifier flagged it for review. |
+| Confirm 15 Feb straight away | The date is unclear and the inspector's availability isn't confirmed, so promising it would be an unverified booking. |
+| Move through repair stages | This is an inspection, not a repair job. |
+
+**Checks performed before acting**
+
+- Loaded the full context: 6 events, no holds, approvals or history
+- Checked the day of the week for 15/02/2024 (it is a Thursday)
+- classify_reply: access_or_availability 0.89, autonomy review
+- Outbound guard passed
+
+**Assumptions**
+
+- The agency's inspections team manages the inspector's diary
 
 ## Actions taken
 
 | # | Tool | Input (gist) | Result | Output (gist) |
 |---|---|---|---|---|
-| 1 | `get_ticket_context` | {"ticket_id":23} | ok | {"ok":true,"ticket":{"id":23,"case_ref":"R/PM020-1","property_id":9,"tenant_id":52,"landlord_id":53,"contractor_id":nul… |
-| 2 | `read_attachment` | {"ticket_id":23,"name":"attachment-01-property-inspection-report.pdf"} | ok | {"ok":true,"name":"attachment-01-property-inspection-report.pdf","text":"# Transcription: Northbridge Lettings, Propert… |
-| 3 | `send_message` | {"ticket_id":23,"to":"tenant","channel":"sms","body":"Hi, thanks for letting us know about your dog. Re your property inspection at Flat 12… | ok | {"ok":true,"message_id":30} |
-| 4 | `place_hold` | {"ticket_id":23,"reason":"Tenant asked to move inspection to \"Friday 15th February\" (event 006); 15/02/2024 is a Thursday. Asked tenant t… | ok | {"ok":true,"hold_id":50} |
+| 1 | `get_ticket_context` | {"ticket_id":41} | ok | {"ok":true,"ticket":{"id":41,"case_ref":"R/PM020-1","property_id":32,"tenant_id":103,"landlord_id":104,"contractor_id":… |
+| 2 | `classify_reply` | {"ticket_id":41,"text":"The customer requests to change the inspection date to Friday, 15th February due to a concern about their dog being… | ok | {"autonomy":"review","intent":"access_or_availability","intent_probs":{"confirms_fixed":0,"still_broken":0,"access_or_a… |
+| 3 | `send_message` | {"ticket_id":41,"to":"tenant","channel":"email","subject":"Property inspection – Flat 12, 162 Beacon Close (ref R/PM020-1)","body":"Hello,\… | ok | {"ok":true,"message_id":50,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.36,"promises_… |
+| 4 | `add_profile_fact` | {"entity_type":"property","entity_id":32,"key":"has_pets","value":"yes - dog (tenant reports it gets overly excited during visits)","source… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":55,"entity_type":"property","entity_id":32,"key":"has_pets",… |
+| 5 | `escalate_to_human` | {"ticket_id":41,"reason":"Tenant asked to reschedule inspection; inspector diary must be rebooked by agency (no tool for this) and the date… | ok | {"ok":true,"queue_id":19} |
+| 6 | `place_hold` | {"ticket_id":41,"reason":"Waiting on tenant to confirm Thu 15 vs Fri 16 Feb for rescheduled inspection; agency to rebook inspector.","waiti… | ok | {"ok":true,"hold_id":87} |
 
 Agent's own account of its actions (from the structured result):
 
-- `get_ticket_context` - Loaded the ticket, profiles and events -> 6 events, no holds or approvals. The pet fact is already on the property record from event 006
-- `read_attachment` - Read the inspection report attachment -> Generic Northbridge Lettings report template with the appointment date 16 February 2024. No findings or defects are recorded
-- `send_message` - Texted the tenant to ask whether they want Thu 15/02 or Fri 16/02 (morning), and said the 13/02 booking stands until a new date is confirmed -> message_id 30
-- `place_hold` - Hold while waiting for the tenant to confirm the date -> hold_id 50, follow-up in 2 days
+- `classify_reply` - Classified the tenant's reschedule email -> access_or_availability, review
+- `send_message` - Emailed the tenant: request received, which date (Thu 15 or Fri 16), current booking stands until confirmed, update by 9 Feb -> message 50 queued, guard passed
+- `add_profile_fact` - Recorded has_pets=dog on the property -> fact 55
+- `escalate_to_human` - Asked the inspections team to rebook the inspector's diary -> queue item 19
+- `place_hold` - Waiting for the tenant to confirm the date -> hold 87, follow-up in 1 day
 
 ## Approvals
 
@@ -32,14 +57,15 @@ Agent's own account of its actions (from the structured result):
 
 ## Escalation & handover
 
-- Escalation needed: **no**
-- Reason: Routine rescheduling. The only unclear point is the date, and the tenant can answer that.
+- Escalation needed: **yes**
+- Reason: The inspector's diary has to be rebooked by the agency, and the requested date is unclear
+- Handover summary: The tenant wants to move the 13/02 inspection because of their dog. They asked for 'Friday 15th Feb', which doesn't match (15th is a Thursday). I've asked them which date they mean.
+- Recommendation: Inspections team: check the inspector's availability on Thu 15 / Fri 16 Feb AM. Once the tenant confirms, move the slot and send written confirmation by 9 Feb.
 
 ## What could not be verified
 
-- Which date the tenant wants: Thursday 15/02 or Friday 16/02/2024
-- Whether the inspector is free on the new date
-- The 16 Feb date in the report attachment probably comes from a later rebooking or is a template placeholder; it is not confirmed by any event
+- Which date the tenant actually wants
+- The inspector's availability
 
 ## What failed
 
@@ -47,21 +73,19 @@ _No failures recorded._
 
 ## Risks & red flags
 
-- The 13/02 booking is still active; it needs moving or keeping before then
-- The dog needs managing at the visit; the inspector should be told
-- The SMS was sent as Oakfield Services, but the report says Northbridge Lettings. This is probably a trading-name difference, not a real conflict
+- If the 13/02 slot isn't changed or confirmed in time, the inspector could turn up with the management key while the dog is loose
 
 ## Final result / next follow-up
 
-- Final status: intake – on hold waiting for the tenant (hold 50)
-- Next follow-up: 2024-02-10 - If the tenant hasn't replied, chase them and decide whether the 13/02 visit goes ahead. Once they confirm, rebook and notify the tenant and inspector.
-- Confidence: 0.85
+- Final status: intake, on hold waiting for the tenant (hold 87); human queue item 19 open
+- Next follow-up: 2024-02-09 - Chase the tenant's date confirmation and make sure the inspection is rebooked and confirmed in writing
+- Confidence: 0.8
 
 ## Run metadata
 
 - Case folder: `C:\Users\sahid\Documents\Projects\Hackathons\DwellyHack\dwelly-agent\data\practice\cases\PM020-1`
-- Session id: wrun_01M4JT2BT8GRGMBM2SPKXS6ZA4
-- Started: 2026-10-10T11:44:42.644Z  Finished: 2026-10-10T11:45:18.487Z  Duration: 35.8s
-- Events recorded: 113
+- Session id: wrun_01M4JY9G5FQ8EKF96WGJXZCJYF
+- Started: 2026-10-10T12:58:30.896Z  Finished: 2026-10-10T12:59:03.840Z  Duration: 32.9s
+- Events recorded: 220
 - Model(s): anthropic/claude-opus-5.5
-- Tokens: in 48725 / out 2192; cost: not reported
+- Tokens: in 74787 / out 3486; cost: not reported

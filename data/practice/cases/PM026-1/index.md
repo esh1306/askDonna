@@ -40,6 +40,3 @@ The oven’s heating element was replaced. The tenant confirmed by phone that th
 
 [Read the complete event history](history.md).
 
-## Attachments
-
-No attachments are required or available for this case.

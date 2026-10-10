@@ -1,9 +1,9 @@
 {
   "summary": {
-    "ran_at": "2026-10-10T12:42:39.384Z",
+    "ran_at": "2026-10-10T12:56:22.671Z",
     "n": 50,
-    "mean_latency_ms": 291,
-    "p95_latency_ms": 467,
+    "mean_latency_ms": 261,
+    "p95_latency_ms": 526,
     "category": {
       "accuracy": 0.98,
       "correct": 49,
@@ -39,7 +39,7 @@
         "accuracy": 0.68,
         "precision": 0.6666666666666666,
         "recall": 1,
-        "brier": 0.21189017999999998,
+        "brier": 0.21181467999999998,
         "base_rate": 0.64,
         "tp": 32,
         "fp": 16,
@@ -49,7 +49,7 @@
           {
             "bucket": "0.0-0.2",
             "n": 2,
-            "mean_pred": 0.1,
+            "mean_pred": 0.095,
             "frac_true": 0
           },
           {
@@ -67,7 +67,7 @@
           {
             "bucket": "0.6-0.8",
             "n": 48,
-            "mean_pred": 0.6568125000000005,
+            "mean_pred": 0.6565000000000004,
             "frac_true": 0.6666666666666666
           },
           {
@@ -81,44 +81,44 @@
       {
         "name": "likely_self_fixable (label: resolved_without_contractor)",
         "n": 50,
-        "accuracy": 0.84,
-        "precision": 0.75,
-        "recall": 0.5,
-        "brier": 0.123194,
+        "accuracy": 0.86,
+        "precision": 0.7777777777777778,
+        "recall": 0.5833333333333334,
+        "brier": 0.12254000000000004,
         "base_rate": 0.24,
-        "tp": 6,
+        "tp": 7,
         "fp": 2,
         "tn": 36,
-        "fn": 6,
+        "fn": 5,
         "calibration": [
           {
             "bucket": "0.0-0.2",
             "n": 30,
-            "mean_pred": 0.10833333333333332,
+            "mean_pred": 0.10866666666666666,
             "frac_true": 0.13333333333333333
           },
           {
             "bucket": "0.2-0.4",
             "n": 10,
-            "mean_pred": 0.26399999999999996,
+            "mean_pred": 0.26,
             "frac_true": 0.1
           },
           {
             "bucket": "0.4-0.6",
-            "n": 4,
-            "mean_pred": 0.5175000000000001,
-            "frac_true": 0.25
+            "n": 5,
+            "mean_pred": 0.532,
+            "frac_true": 0.4
           },
           {
             "bucket": "0.6-0.8",
-            "n": 3,
-            "mean_pred": 0.6133333333333333,
+            "n": 2,
+            "mean_pred": 0.61,
             "frac_true": 1
           },
           {
             "bucket": "0.8-1.0",
             "n": 3,
-            "mean_pred": 0.8766666666666666,
+            "mean_pred": 0.88,
             "frac_true": 1
           }
         ]
@@ -164,28 +164,28 @@
         "q": "likely_self_fixable",
         "metric": "accuracy@0.5",
         "tune": "85.7%",
-        "heldout": "80.0%",
-        "all": "84.0%"
+        "heldout": "86.7%",
+        "all": "86.0%"
       },
       {
         "q": "likely_self_fixable",
         "metric": "precision@0.5",
         "tune": "60.0%",
         "heldout": "100.0%",
-        "all": "75.0%"
+        "all": "77.8%"
       },
       {
         "q": "likely_self_fixable",
         "metric": "recall@0.5",
         "tune": "50.0%",
-        "heldout": "50.0%",
-        "all": "50.0%"
+        "heldout": "66.7%",
+        "all": "58.3%"
       },
       {
         "q": "likely_self_fixable",
         "metric": "Brier (base-rate baseline)",
         "tune": "0.115 (0.142)",
-        "heldout": "0.143 (0.240)",
+        "heldout": "0.141 (0.240)",
         "all": "0.123 (0.182)"
       }
     ],
@@ -207,41 +207,41 @@
         "cells": [
           "77.1% / 86.7% / 80.0%",
           "82.9% / 86.7% / 84.0%",
-          "85.7% / 80.0% / 84.0%",
-          "91.4% / 80.0% / 88.0%",
+          "85.7% / 86.7% / 86.0%",
+          "91.4% / 73.3% / 86.0%",
           "85.7% / 73.3% / 82.0%",
           "85.7% / 73.3% / 82.0%",
-          "85.7% / 66.7% / 80.0%"
+          "85.7% / 60.0% / 78.0%"
         ]
       }
     ],
     "mean": {
-      "safety_risk": 0.31060000000000004,
-      "needs_more_info": 0.16339999999999993
+      "safety_risk": 0.31240000000000007,
+      "needs_more_info": 0.16179999999999997
     },
     "severity": {
       "n": 12,
       "agreement": 1,
       "predicted_distribution": {
-        "routine": 44,
-        "urgent": 2,
+        "routine": 42,
+        "urgent": 4,
         "emergency": 4
       }
     },
     "routes": {
-      "request_landlord_approval": 39,
-      "ask_for_info": 2,
+      "request_landlord_approval": 41,
       "standard": 2,
-      "self_fix_first": 3,
-      "emergency_dispatch": 4
+      "self_fix_first": 2,
+      "emergency_dispatch": 4,
+      "ask_for_info": 1
     },
     "worst": [
       {
         "case": "028",
         "question": "self_fixable",
         "label": "true",
-        "predicted": "p=0.11",
-        "p_label": 0.11,
+        "predicted": "p=0.10",
+        "p_label": 0.1,
         "title": "Loose Water Pipe in the Back Garden"
       },
       {
@@ -256,16 +256,16 @@
         "case": "041",
         "question": "self_fixable",
         "label": "true",
-        "predicted": "p=0.13",
-        "p_label": 0.13,
+        "predicted": "p=0.12",
+        "p_label": 0.12,
         "title": "Washing Machine Repair Request"
       },
       {
         "case": "014",
         "question": "self_fixable",
         "label": "true",
-        "predicted": "p=0.15",
-        "p_label": 0.15,
+        "predicted": "p=0.14",
+        "p_label": 0.14,
         "title": "Front Door Repair Request"
       },
       {
@@ -273,7 +273,7 @@
         "question": "category",
         "label": "garden_external",
         "predicted": "cleaning_checkout_works",
-        "p_label": 0.22,
+        "p_label": 0.29,
         "title": "Front garden maintenance follow-up"
       },
       {
@@ -289,16 +289,8 @@
         "question": "needs_landlord_approval",
         "label": "false",
         "predicted": "p=0.67",
-        "p_label": 0.32699999999999996,
+        "p_label": 0.32999999999999996,
         "title": "Check-Out Works: Carpet Replacement and Repainting"
-      },
-      {
-        "case": "015",
-        "question": "needs_landlord_approval",
-        "label": "false",
-        "predicted": "p=0.66",
-        "p_label": 0.33899999999999997,
-        "title": "Front Door Repair Request"
       },
       {
         "case": "022",
@@ -317,20 +309,44 @@
         "title": "Cracked basin repair request"
       },
       {
-        "case": "044",
+        "case": "015",
         "question": "needs_landlord_approval",
         "label": "false",
         "predicted": "p=0.66",
         "p_label": 0.34199999999999997,
-        "title": "Window Handle Repair Request"
+        "title": "Front Door Repair Request"
       },
       {
-        "case": "012",
+        "case": "037",
+        "question": "needs_landlord_approval",
+        "label": "false",
+        "predicted": "p=0.66",
+        "p_label": 0.34199999999999997,
+        "title": "Shower Repair Request"
+      },
+      {
+        "case": "041",
+        "question": "needs_landlord_approval",
+        "label": "false",
+        "predicted": "p=0.66",
+        "p_label": 0.34199999999999997,
+        "title": "Washing Machine Repair Request"
+      },
+      {
+        "case": "003",
         "question": "needs_landlord_approval",
         "label": "false",
         "predicted": "p=0.66",
         "p_label": 0.345,
-        "title": "Dishwasher Door Repair"
+        "title": "Checkout Cleaning Estimate and Invoice"
+      },
+      {
+        "case": "005",
+        "question": "needs_landlord_approval",
+        "label": "false",
+        "predicted": "p=0.66",
+        "p_label": 0.345,
+        "title": "Check-Out Cleaning"
       },
       {
         "case": "013",
@@ -339,22 +355,6 @@
         "predicted": "p=0.66",
         "p_label": 0.345,
         "title": "Integrated Dishwasher Repair Request"
-      },
-      {
-        "case": "023",
-        "question": "needs_landlord_approval",
-        "label": "false",
-        "predicted": "p=0.66",
-        "p_label": 0.345,
-        "title": "Balcony Door Lock Repair"
-      },
-      {
-        "case": "024",
-        "question": "needs_landlord_approval",
-        "label": "false",
-        "predicted": "p=0.66",
-        "p_label": 0.345,
-        "title": "Oven repair request"
       }
     ],
     "errors": []
@@ -373,10 +373,10 @@
         "scope": "maintenance_repair",
         "scope_probs": {
           "maintenance_repair": 0.96,
-          "maintenance_admin": 0.02,
+          "maintenance_admin": 0.01,
           "tenancy_finance": 0,
           "tenancy_legal_or_dispute": 0,
-          "neighbour_or_antisocial": 0.02,
+          "neighbour_or_antisocial": 0.03,
           "emergency_safety": 0,
           "other_non_property": 0
         },
@@ -399,10 +399,10 @@
           "urgent": 0,
           "emergency": 0
         },
-        "needs_landlord_approval": 0.664,
-        "needs_landlord_approval_raw": 0.88,
+        "needs_landlord_approval": 0.667,
+        "needs_landlord_approval_raw": 0.89,
         "likely_self_fixable": 0.13,
-        "safety_risk": 0.18,
+        "safety_risk": 0.19,
         "needs_more_info": 0.19,
         "raw": {
           "model": "jev-1.13.0",
@@ -413,10 +413,10 @@
               "confidence": 0.95,
               "probabilities": {
                 "maintenance_repair": 0.96,
-                "maintenance_admin": 0.02,
+                "maintenance_admin": 0.01,
                 "tenancy_finance": 0,
                 "tenancy_legal_or_dispute": 0,
-                "neighbour_or_antisocial": 0.02,
+                "neighbour_or_antisocial": 0.03,
                 "emergency_safety": 0,
                 "other_non_property": 0
               }
@@ -458,7 +458,7 @@
             },
             "needs_landlord_approval": {
               "type": "noul",
-              "noul": 0.88
+              "noul": 0.89
             },
             "likely_self_fixable": {
               "type": "noul",
@@ -466,7 +466,7 @@
             },
             "safety_risk": {
               "type": "noul",
-              "noul": 0.18
+              "noul": 0.19
             },
             "needs_more_info": {
               "type": "noul",
@@ -478,7 +478,7 @@
             "output_tokens": 308
           }
         },
-        "latencyMs": 762,
+        "latencyMs": 527,
         "route": "request_landlord_approval"
       }
     },
@@ -515,14 +515,14 @@
         },
         "severity": "urgent",
         "severity_probs": {
-          "routine": 0.06,
-          "urgent": 0.93,
+          "routine": 0.05,
+          "urgent": 0.94,
           "emergency": 0.01
         },
         "needs_landlord_approval": 0.652,
         "needs_landlord_approval_raw": 0.84,
-        "likely_self_fixable": 0.09,
-        "safety_risk": 0.55,
+        "likely_self_fixable": 0.08,
+        "safety_risk": 0.58,
         "needs_more_info": 0.13,
         "raw": {
           "model": "jev-1.13.0",
@@ -564,15 +564,15 @@
             "severity": {
               "type": "score",
               "score": 0.96,
-              "confidence": 0.9,
+              "confidence": 0.91,
               "legend": {
                 "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
                 "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
                 "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
               },
               "probabilities": {
-                "0": 0.06,
-                "1": 0.93,
+                "0": 0.05,
+                "1": 0.94,
                 "2": 0.01
               }
             },
@@ -582,11 +582,11 @@
             },
             "likely_self_fixable": {
               "type": "noul",
-              "noul": 0.09
+              "noul": 0.08
             },
             "safety_risk": {
               "type": "noul",
-              "noul": 0.55
+              "noul": 0.58
             },
             "needs_more_info": {
               "type": "noul",
@@ -598,7 +598,7 @@
             "output_tokens": 308
           }
         },
-        "latencyMs": 444,
+        "latencyMs": 526,
         "route": "request_landlord_approval"
       }
     },
@@ -639,8 +639,8 @@
           "urgent": 0,
           "emergency": 0
         },
-        "needs_landlord_approval": 0.652,
-        "needs_landlord_approval_raw": 0.84,
+        "needs_landlord_approval": 0.655,
+        "needs_landlord_approval_raw": 0.85,
         "likely_self_fixable": 0.08,
         "safety_risk": 0.26,
         "needs_more_info": 0.18,
@@ -698,7 +698,7 @@
             },
             "needs_landlord_approval": {
               "type": "noul",
-              "noul": 0.84
+              "noul": 0.85
             },
             "likely_self_fixable": {
               "type": "noul",
@@ -718,7 +718,7 @@
             "output_tokens": 310
           }
         },
-        "latencyMs": 411,
+        "latencyMs": 485,
         "route": "request_landlord_approval"
       }
     },
@@ -730,10 +730,10 @@
         "resolved_without_contractor": false
       },
       "result": {
-        "scope": "maintenance_admin",
+        "scope": "maintenance_repair",
         "scope_probs": {
-          "maintenance_repair": 0.43,
-          "maintenance_admin": 0.55,
+          "maintenance_repair": 0.53,
+          "maintenance_admin": 0.45,
           "tenancy_finance": 0,
           "tenancy_legal_or_dispute": 0,
           "neighbour_or_antisocial": 0,
@@ -747,11 +747,11 @@
           "appliance": 0,
           "doors_windows_locks": 0,
           "garden_external": 0,
-          "cleaning_checkout_works": 0.97,
+          "cleaning_checkout_works": 0.96,
           "electrical_lighting": 0,
           "heating_hot_water": 0,
           "inspection_admin": 0,
-          "other": 0.02
+          "other": 0.03
         },
         "severity": "routine",
         "severity_probs": {
@@ -759,21 +759,21 @@
           "urgent": 0,
           "emergency": 0
         },
-        "needs_landlord_approval": 0.64,
-        "needs_landlord_approval_raw": 0.8,
+        "needs_landlord_approval": 0.643,
+        "needs_landlord_approval_raw": 0.81,
         "likely_self_fixable": 0.17,
-        "safety_risk": 0.07,
-        "needs_more_info": 0.25,
+        "safety_risk": 0.06,
+        "needs_more_info": 0.24,
         "raw": {
           "model": "jev-1.13.0",
           "answers": {
             "scope": {
               "type": "choice",
-              "choice": "maintenance_admin",
-              "confidence": 0.48,
+              "choice": "maintenance_repair",
+              "confidence": 0.45,
               "probabilities": {
-                "maintenance_repair": 0.43,
-                "maintenance_admin": 0.55,
+                "maintenance_repair": 0.53,
+                "maintenance_admin": 0.45,
                 "tenancy_finance": 0,
                 "tenancy_legal_or_dispute": 0,
                 "neighbour_or_antisocial": 0,
@@ -788,17 +788,17 @@
             "category": {
               "type": "choice",
               "choice": "cleaning_checkout_works",
-              "confidence": 0.97,
+              "confidence": 0.95,
               "probabilities": {
                 "plumbing": 0.01,
                 "appliance": 0,
                 "doors_windows_locks": 0,
                 "garden_external": 0,
-                "cleaning_checkout_works": 0.97,
+                "cleaning_checkout_works": 0.96,
                 "electrical_lighting": 0,
                 "heating_hot_water": 0,
                 "inspection_admin": 0,
-                "other": 0.02
+                "other": 0.03
               }
             },
             "severity": {
@@ -818,7 +818,7 @@
             },
             "needs_landlord_approval": {
               "type": "noul",
-              "noul": 0.8
+              "noul": 0.81
             },
             "likely_self_fixable": {
               "type": "noul",
@@ -826,19 +826,19 @@
             },
             "safety_risk": {
               "type": "noul",
-              "noul": 0.07
+              "noul": 0.06
             },
             "needs_more_info": {
               "type": "noul",
-              "noul": 0.25
+              "noul": 0.24
             }
           },
           "usage": {
             "input_tokens": 2362,
-            "output_tokens": 310
+            "output_tokens": 311
           }
         },
-        "latencyMs": 443,
+        "latencyMs": 778,
         "route": "request_landlord_approval"
       }
     },
@@ -879,8 +879,8 @@
           "urgent": 0,
           "emergency": 0
         },
-        "needs_landlord_approval": 0.649,
-        "needs_landlord_approval_raw": 0.83,
+        "needs_landlord_approval": 0.655,
+        "needs_landlord_approval_raw": 0.85,
         "likely_self_fixable": 0.08,
         "safety_risk": 0.09,
         "needs_more_info": 0.1,
@@ -938,7 +938,7 @@
             },
             "needs_landlord_approval": {
               "type": "noul",
-              "noul": 0.83
+              "noul": 0.85
             },
             "likely_self_fixable": {
               "type": "noul",
@@ -958,7 +958,7 @@
             "output_tokens": 310
           }
         },
-        "latencyMs": 467,
+        "latencyMs": 487,
         "route": "request_landlord_approval"
       }
     },
@@ -972,8 +972,8 @@
       "result": {
         "scope": "maintenance_repair",
         "scope_probs": {
-          "maintenance_repair": 0.8,
-          "maintenance_admin": 0.2,
+          "maintenance_repair": 0.76,
+          "maintenance_admin": 0.24,
           "tenancy_finance": 0,
           "tenancy_legal_or_dispute": 0,
           "neighbour_or_antisocial": 0,
@@ -999,21 +999,21 @@
           "urgent": 0,
           "emergency": 0
         },
-        "needs_landlord_approval": 0.673,
-        "needs_landlord_approval_raw": 0.91,
-        "likely_self_fixable": 0.06,
+        "needs_landlord_approval": 0.67,
+        "needs_landlord_approval_raw": 0.9,
+        "likely_self_fixable": 0.07,
         "safety_risk": 0.1,
-        "needs_more_info": 0.23,
+        "needs_more_info": 0.22,
         "raw": {
           "model": "jev-1.13.0",
           "answers": {
             "scope": {
               "type": "choice",
               "choice": "maintenance_repair",
-              "confidence": 0.77,
+              "confidence": 0.72,
               "probabilities": {
-                "maintenance_repair": 0.8,
-                "maintenance_admin": 0.2,
+                "maintenance_repair": 0.76,
+                "maintenance_admin": 0.24,
                 "tenancy_finance": 0,
                 "tenancy_legal_or_dispute": 0,
                 "neighbour_or_antisocial": 0,
@@ -1058,11 +1058,11 @@
             },
             "needs_landlord_approval": {
               "type": "noul",
-              "noul": 0.91
+              "noul": 0.9
             },
             "likely_self_fixable": {
               "type": "noul",
-              "noul": 0.06
+              "noul": 0.07
             },
             "safety_risk": {
               "type": "noul",
@@ -1070,7 +1070,7 @@
             },
             "needs_more_info": {
               "type": "noul",
-              "noul": 0.23
+              "noul": 0.22
             }
           },
           "usage": {
@@ -1078,7 +1078,7 @@
             "output_tokens": 311
           }
         },
-        "latencyMs": 300,
+        "latencyMs": 298,
         "route": "request_landlord_approval"
       }
     },
@@ -1092,8 +1092,8 @@
       "result": {
         "scope": "maintenance_repair",
         "scope_probs": {
-          "maintenance_repair": 0.81,
-          "maintenance_admin": 0.19,
+          "maintenance_repair": 0.82,
+          "maintenance_admin": 0.18,
           "tenancy_finance": 0,
           "tenancy_legal_or_dispute": 0,
           "neighbour_or_antisocial": 0,
@@ -1103,12 +1103,12 @@
         "non_english": 0.02,
         "category": "electrical_lighting",
         "category_probs": {
-          "plumbing": 0.01,
+          "plumbing": 0,
           "appliance": 0,
           "doors_windows_locks": 0,
           "garden_external": 0,
           "cleaning_checkout_works": 0.21,
-          "electrical_lighting": 0.77,
+          "electrical_lighting": 0.78,
           "heating_hot_water": 0,
           "inspection_admin": 0,
           "other": 0.01
@@ -1122,7 +1122,7 @@
         "needs_landlord_approval": 0.667,
         "needs_landlord_approval_raw": 0.89,
         "likely_self_fixable": 0.06,
-        "safety_risk": 0.62,
+        "safety_risk": 0.61,
         "needs_more_info": 0.16,
         "raw": {
           "model": "jev-1.13.0",
@@ -1130,10 +1130,10 @@
             "scope": {
               "type": "choice",
               "choice": "maintenance_repair",
-              "confidence": 0.78,
+              "confidence": 0.79,
               "probabilities": {
-                "maintenance_repair": 0.81,
-                "maintenance_admin": 0.19,
+                "maintenance_repair": 0.82,
+                "maintenance_admin": 0.18,
                 "tenancy_finance": 0,
                 "tenancy_legal_or_dispute": 0,
                 "neighbour_or_antisocial": 0,
@@ -1148,14 +1148,14 @@
             "category": {
               "type": "choice",
               "choice": "electrical_lighting",
-              "confidence": 0.74,
+              "confidence": 0.75,
               "probabilities": {
-                "plumbing": 0.01,
+                "plumbing": 0,
                 "appliance": 0,
                 "doors_windows_locks": 0,
                 "garden_external": 0,
                 "cleaning_checkout_works": 0.21,
-                "electrical_lighting": 0.77,
+                "electrical_lighting": 0.78,
                 "heating_hot_water": 0,
                 "inspection_admin": 0,
                 "other": 0.01
@@ -1163,7 +1163,7 @@
             },
             "severity": {
               "type": "score",
-              "score": 0,
+              "score": 0.01,
               "confidence": 1,
               "legend": {
                 "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
@@ -1186,7 +1186,7 @@
             },
             "safety_risk": {
               "type": "noul",
-              "noul": 0.62
+              "noul": 0.61
             },
             "needs_more_info": {
               "type": "noul",
@@ -1198,7 +1198,7 @@
             "output_tokens": 310
           }
         },
-        "latencyMs": 231,
+        "latencyMs": 293,
         "route": "request_landlord_approval"
       }
     },
@@ -1212,8 +1212,8 @@
       "result": {
         "scope": "maintenance_repair",
         "scope_probs": {
-          "maintenance_repair": 0.95,
-          "maintenance_admin": 0.05,
+          "maintenance_repair": 0.94,
+          "maintenance_admin": 0.06,
           "tenancy_finance": 0,
           "tenancy_legal_or_dispute": 0,
           "neighbour_or_antisocial": 0,
@@ -1235,14 +1235,14 @@
         },
         "severity": "routine",
         "severity_probs": {
-          "routine": 0.99,
-          "urgent": 0.01,
+          "routine": 0.98,
+          "urgent": 0.02,
           "emergency": 0
         },
         "needs_landlord_approval": 0.67,
         "needs_landlord_approval_raw": 0.9,
         "likely_self_fixable": 0.05,
-        "safety_risk": 0.54,
+        "safety_risk": 0.57,
         "needs_more_info": 0.13,
         "raw": {
           "model": "jev-1.13.0",
@@ -1250,10 +1250,10 @@
             "scope": {
               "type": "choice",
               "choice": "maintenance_repair",
-              "confidence": 0.94,
+              "confidence": 0.93,
               "probabilities": {
-                "maintenance_repair": 0.95,
-                "maintenance_admin": 0.05,
+                "maintenance_repair": 0.94,
+                "maintenance_admin": 0.06,
                 "tenancy_finance": 0,
                 "tenancy_legal_or_dispute": 0,
                 "neighbour_or_antisocial": 0,
@@ -1284,15 +1284,15 @@
             "severity": {
               "type": "score",
               "score": 0.02,
-              "confidence": 0.98,
+              "confidence": 0.97,
               "legend": {
                 "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
                 "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
                 "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
               },
               "probabilities": {
-                "0": 0.99,
-                "1": 0.01,
+                "0": 0.98,
+                "1": 0.02,
                 "2": 0
               }
             },
@@ -1306,7 +1306,7 @@
             },
             "safety_risk": {
               "type": "noul",
-              "noul": 0.54
+              "noul": 0.57
             },
             "needs_more_info": {
               "type": "noul",
@@ -1318,7 +1318,7 @@
             "output_tokens": 311
           }
         },
-        "latencyMs": 237,
+        "latencyMs": 295,
         "route": "request_landlord_approval"
       }
     },
@@ -1332,8 +1332,8 @@
       "result": {
         "scope": "maintenance_admin",
         "scope_probs": {
-          "maintenance_repair": 0.05,
-          "maintenance_admin": 0.95,
+          "maintenance_repair": 0.06,
+          "maintenance_admin": 0.94,
           "tenancy_finance": 0,
           "tenancy_legal_or_dispute": 0,
           "neighbour_or_antisocial": 0,
@@ -1346,11 +1346,11 @@
           "plumbing": 0,
           "appliance": 0,
           "doors_windows_locks": 0,
-          "garden_external": 0.22,
-          "cleaning_checkout_works": 0.51,
+          "garden_external": 0.29,
+          "cleaning_checkout_works": 0.4,
           "electrical_lighting": 0,
           "heating_hot_water": 0,
-          "inspection_admin": 0.26,
+          "inspection_admin": 0.3,
           "other": 0.01
         },
         "severity": "routine",
@@ -1361,19 +1361,19 @@
         },
         "needs_landlord_approval": 0.622,
         "needs_landlord_approval_raw": 0.74,
-        "likely_self_fixable": 0.44,
-        "safety_risk": 0.09,
-        "needs_more_info": 0.62,
+        "likely_self_fixable": 0.48,
+        "safety_risk": 0.1,
+        "needs_more_info": 0.53,
         "raw": {
           "model": "jev-1.13.0",
           "answers": {
             "scope": {
               "type": "choice",
               "choice": "maintenance_admin",
-              "confidence": 0.94,
+              "confidence": 0.93,
               "probabilities": {
-                "maintenance_repair": 0.05,
-                "maintenance_admin": 0.95,
+                "maintenance_repair": 0.06,
+                "maintenance_admin": 0.94,
                 "tenancy_finance": 0,
                 "tenancy_legal_or_dispute": 0,
                 "neighbour_or_antisocial": 0,
@@ -1388,16 +1388,16 @@
             "category": {
               "type": "choice",
               "choice": "cleaning_checkout_works",
-              "confidence": 0.45,
+              "confidence": 0.33,
               "probabilities": {
                 "plumbing": 0,
                 "appliance": 0,
                 "doors_windows_locks": 0,
-                "garden_external": 0.22,
-                "cleaning_checkout_works": 0.51,
+                "garden_external": 0.29,
+                "cleaning_checkout_works": 0.4,
                 "electrical_lighting": 0,
                 "heating_hot_water": 0,
-                "inspection_admin": 0.26,
+                "inspection_admin": 0.3,
                 "other": 0.01
               }
             },
@@ -1422,15 +1422,15 @@
             },
             "likely_self_fixable": {
               "type": "noul",
-              "noul": 0.44
+              "noul": 0.48
             },
             "safety_risk": {
               "type": "noul",
-              "noul": 0.09
+              "noul": 0.1
             },
             "needs_more_info": {
               "type": "noul",
-              "noul": 0.62
+              "noul": 0.53
             }
           },
           "usage": {
@@ -1438,8 +1438,8 @@
             "output_tokens": 310
           }
         },
-        "latencyMs": 211,
-        "route": "ask_for_info"
+        "latencyMs": 276,
+        "route": "request_landlord_approval"
       }
     },
     {
@@ -1460,7 +1460,7 @@
           "emergency_safety": 0,
           "other_non_property": 0
         },
-        "non_english": 0.03,
+        "non_english": 0.04,
         "category": "inspection_admin",
         "category_probs": {
           "plumbing": 0,
@@ -1479,11 +1479,11 @@
           "urgent": 0,
           "emergency": 0
         },
-        "needs_landlord_approval": 0.1,
-        "needs_landlord_approval_raw": 0.2,
-        "likely_self_fixable": 0.37,
-        "safety_risk": 0.1,
-        "needs_more_info": 0.21,
+        "needs_landlord_approval": 0.09,
+        "needs_landlord_approval_raw": 0.18,
+        "likely_self_fixable": 0.34,
+        "safety_risk": 0.11,
+        "needs_more_info": 0.23,
         "raw": {
           "model": "jev-1.13.0",
           "answers": {
@@ -1503,7 +1503,7 @@
             },
             "non_english": {
               "type": "noul",
-              "noul": 0.03
+              "noul": 0.04
             },
             "category": {
               "type": "choice",
@@ -1538,19 +1538,19 @@
             },
             "needs_landlord_approval": {
               "type": "noul",
-              "noul": 0.2
+              "noul": 0.18
             },
             "likely_self_fixable": {
               "type": "noul",
-              "noul": 0.37
+              "noul": 0.34
             },
             "safety_risk": {
               "type": "noul",
-              "noul": 0.1
+              "noul": 0.11
             },
             "needs_more_info": {
               "type": "noul",
-              "noul": 0.21
+              "noul": 0.23
             }
           },
           "usage": {
@@ -1558,7 +1558,7 @@
             "output_tokens": 306
           }
         },
-        "latencyMs": 229,
+        "latencyMs": 244,
         "route": "standard"
       }
     },
@@ -1601,10 +1601,10 @@
           "urgent": 0.02,
           "emergency": 0
         },
-        "needs_landlord_approval": 0.661,
-        "needs_landlord_approval_raw": 0.87,
-        "likely_self_fixable": 0.18,
-        "safety_risk": 0.54,
+        "needs_landlord_approval": 0.658,
+        "needs_landlord_approval_raw": 0.86,
+        "likely_self_fixable": 0.19,
+        "safety_risk": 0.53,
         "needs_more_info": 0.1,
         "raw": {
           "model": "jev-1.13.0",
@@ -1660,15 +1660,15 @@
             },
             "needs_landlord_approval": {
               "type": "noul",
-              "noul": 0.87
+              "noul": 0.86
             },
             "likely_self_fixable": {
               "type": "noul",
-              "noul": 0.18
+              "noul": 0.19
             },
             "safety_risk": {
               "type": "noul",
-              "noul": 0.54
+              "noul": 0.53
             },
             "needs_more_info": {
               "type": "noul",
@@ -1680,132 +1680,12 @@
             "output_tokens": 308
           }
         },
-        "latencyMs": 215,
+        "latencyMs": 232,
         "route": "request_landlord_approval"
       }
     },
     {
       "case": "012",
-      "labels": {
-        "category": "appliance",
-        "needs_landlord_approval": false,
-        "resolved_without_contractor": false
-      },
-      "result": {
-        "scope": "maintenance_repair",
-        "scope_probs": {
-          "maintenance_repair": 1,
-          "maintenance_admin": 0,
-          "tenancy_finance": 0,
-          "tenancy_legal_or_dispute": 0,
-          "neighbour_or_antisocial": 0,
-          "emergency_safety": 0,
-          "other_non_property": 0
-        },
-        "non_english": 0.03,
-        "category": "appliance",
-        "category_probs": {
-          "plumbing": 0,
-          "appliance": 1,
-          "doors_windows_locks": 0,
-          "garden_external": 0,
-          "cleaning_checkout_works": 0,
-          "electrical_lighting": 0,
-          "heating_hot_water": 0,
-          "inspection_admin": 0,
-          "other": 0
-        },
-        "severity": "routine",
-        "severity_probs": {
-          "routine": 0.92,
-          "urgent": 0.08,
-          "emergency": 0
-        },
-        "needs_landlord_approval": 0.655,
-        "needs_landlord_approval_raw": 0.85,
-        "likely_self_fixable": 0.19,
-        "safety_risk": 0.21,
-        "needs_more_info": 0.15,
-        "raw": {
-          "model": "jev-1.13.0",
-          "answers": {
-            "scope": {
-              "type": "choice",
-              "choice": "maintenance_repair",
-              "confidence": 1,
-              "probabilities": {
-                "maintenance_repair": 1,
-                "maintenance_admin": 0,
-                "tenancy_finance": 0,
-                "tenancy_legal_or_dispute": 0,
-                "neighbour_or_antisocial": 0,
-                "emergency_safety": 0,
-                "other_non_property": 0
-              }
-            },
-            "non_english": {
-              "type": "noul",
-              "noul": 0.03
-            },
-            "category": {
-              "type": "choice",
-              "choice": "appliance",
-              "confidence": 1,
-              "probabilities": {
-                "plumbing": 0,
-                "appliance": 1,
-                "doors_windows_locks": 0,
-                "garden_external": 0,
-                "cleaning_checkout_works": 0,
-                "electrical_lighting": 0,
-                "heating_hot_water": 0,
-                "inspection_admin": 0,
-                "other": 0
-              }
-            },
-            "severity": {
-              "type": "score",
-              "score": 0.09,
-              "confidence": 0.88,
-              "legend": {
-                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
-                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
-                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
-              },
-              "probabilities": {
-                "0": 0.92,
-                "1": 0.08,
-                "2": 0
-              }
-            },
-            "needs_landlord_approval": {
-              "type": "noul",
-              "noul": 0.85
-            },
-            "likely_self_fixable": {
-              "type": "noul",
-              "noul": 0.19
-            },
-            "safety_risk": {
-              "type": "noul",
-              "noul": 0.21
-            },
-            "needs_more_info": {
-              "type": "noul",
-              "noul": 0.15
-            }
-          },
-          "usage": {
-            "input_tokens": 2382,
-            "output_tokens": 308
-          }
-        },
-        "latencyMs": 221,
-        "route": "request_landlord_approval"
-      }
-    },
-    {
-      "case": "013",
       "labels": {
         "category": "appliance",
         "needs_landlord_approval": false,
@@ -1837,14 +1717,14 @@
         },
         "severity": "routine",
         "severity_probs": {
-          "routine": 0.95,
-          "urgent": 0.05,
+          "routine": 0.92,
+          "urgent": 0.08,
           "emergency": 0
         },
-        "needs_landlord_approval": 0.655,
-        "needs_landlord_approval_raw": 0.85,
-        "likely_self_fixable": 0.32,
-        "safety_risk": 0.16,
+        "needs_landlord_approval": 0.652,
+        "needs_landlord_approval_raw": 0.84,
+        "likely_self_fixable": 0.19,
+        "safety_risk": 0.22,
         "needs_more_info": 0.14,
         "raw": {
           "model": "jev-1.13.0",
@@ -1885,16 +1765,136 @@
             },
             "severity": {
               "type": "score",
-              "score": 0.05,
-              "confidence": 0.93,
+              "score": 0.08,
+              "confidence": 0.88,
               "legend": {
                 "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
                 "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
                 "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
               },
               "probabilities": {
-                "0": 0.95,
-                "1": 0.05,
+                "0": 0.92,
+                "1": 0.08,
+                "2": 0
+              }
+            },
+            "needs_landlord_approval": {
+              "type": "noul",
+              "noul": 0.84
+            },
+            "likely_self_fixable": {
+              "type": "noul",
+              "noul": 0.19
+            },
+            "safety_risk": {
+              "type": "noul",
+              "noul": 0.22
+            },
+            "needs_more_info": {
+              "type": "noul",
+              "noul": 0.14
+            }
+          },
+          "usage": {
+            "input_tokens": 2382,
+            "output_tokens": 308
+          }
+        },
+        "latencyMs": 214,
+        "route": "request_landlord_approval"
+      }
+    },
+    {
+      "case": "013",
+      "labels": {
+        "category": "appliance",
+        "needs_landlord_approval": false,
+        "resolved_without_contractor": false
+      },
+      "result": {
+        "scope": "maintenance_repair",
+        "scope_probs": {
+          "maintenance_repair": 1,
+          "maintenance_admin": 0,
+          "tenancy_finance": 0,
+          "tenancy_legal_or_dispute": 0,
+          "neighbour_or_antisocial": 0,
+          "emergency_safety": 0,
+          "other_non_property": 0
+        },
+        "non_english": 0.02,
+        "category": "appliance",
+        "category_probs": {
+          "plumbing": 0,
+          "appliance": 1,
+          "doors_windows_locks": 0,
+          "garden_external": 0,
+          "cleaning_checkout_works": 0,
+          "electrical_lighting": 0,
+          "heating_hot_water": 0,
+          "inspection_admin": 0,
+          "other": 0
+        },
+        "severity": "routine",
+        "severity_probs": {
+          "routine": 0.96,
+          "urgent": 0.04,
+          "emergency": 0
+        },
+        "needs_landlord_approval": 0.655,
+        "needs_landlord_approval_raw": 0.85,
+        "likely_self_fixable": 0.32,
+        "safety_risk": 0.15,
+        "needs_more_info": 0.15,
+        "raw": {
+          "model": "jev-1.13.0",
+          "answers": {
+            "scope": {
+              "type": "choice",
+              "choice": "maintenance_repair",
+              "confidence": 1,
+              "probabilities": {
+                "maintenance_repair": 1,
+                "maintenance_admin": 0,
+                "tenancy_finance": 0,
+                "tenancy_legal_or_dispute": 0,
+                "neighbour_or_antisocial": 0,
+                "emergency_safety": 0,
+                "other_non_property": 0
+              }
+            },
+            "non_english": {
+              "type": "noul",
+              "noul": 0.02
+            },
+            "category": {
+              "type": "choice",
+              "choice": "appliance",
+              "confidence": 1,
+              "probabilities": {
+                "plumbing": 0,
+                "appliance": 1,
+                "doors_windows_locks": 0,
+                "garden_external": 0,
+                "cleaning_checkout_works": 0,
+                "electrical_lighting": 0,
+                "heating_hot_water": 0,
+                "inspection_admin": 0,
+                "other": 0
+              }
+            },
+            "severity": {
+              "type": "score",
+              "score": 0.04,
+              "confidence": 0.94,
+              "legend": {
+                "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
+                "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
+                "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
+              },
+              "probabilities": {
+                "0": 0.96,
+                "1": 0.04,
                 "2": 0
               }
             },
@@ -1908,11 +1908,11 @@
             },
             "safety_risk": {
               "type": "noul",
-              "noul": 0.16
+              "noul": 0.15
             },
             "needs_more_info": {
               "type": "noul",
-              "noul": 0.14
+              "noul": 0.15
             }
           },
           "usage": {
@@ -1920,7 +1920,7 @@
             "output_tokens": 308
           }
         },
-        "latencyMs": 248,
+        "latencyMs": 234,
         "route": "request_landlord_approval"
       }
     },
@@ -1959,15 +1959,15 @@
         },
         "severity": "routine",
         "severity_probs": {
-          "routine": 0.66,
-          "urgent": 0.2,
-          "emergency": 0.14
+          "routine": 0.67,
+          "urgent": 0.21,
+          "emergency": 0.12
         },
-        "needs_landlord_approval": 0.661,
-        "needs_landlord_approval_raw": 0.87,
-        "likely_self_fixable": 0.15,
+        "needs_landlord_approval": 0.658,
+        "needs_landlord_approval_raw": 0.86,
+        "likely_self_fixable": 0.14,
         "safety_risk": 0.54,
-        "needs_more_info": 0.14,
+        "needs_more_info": 0.13,
         "raw": {
           "model": "jev-1.13.0",
           "answers": {
@@ -2007,26 +2007,26 @@
             },
             "severity": {
               "type": "score",
-              "score": 0.48,
-              "confidence": 0.28,
+              "score": 0.45,
+              "confidence": 0.33,
               "legend": {
                 "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
                 "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
                 "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
               },
               "probabilities": {
-                "0": 0.66,
-                "1": 0.2,
-                "2": 0.14
+                "0": 0.67,
+                "1": 0.21,
+                "2": 0.12
               }
             },
             "needs_landlord_approval": {
               "type": "noul",
-              "noul": 0.87
+              "noul": 0.86
             },
             "likely_self_fixable": {
               "type": "noul",
-              "noul": 0.15
+              "noul": 0.14
             },
             "safety_risk": {
               "type": "noul",
@@ -2034,7 +2034,7 @@
             },
             "needs_more_info": {
               "type": "noul",
-              "noul": 0.14
+              "noul": 0.13
             }
           },
           "usage": {
@@ -2042,7 +2042,7 @@
             "output_tokens": 309
           }
         },
-        "latencyMs": 251,
+        "latencyMs": 213,
         "route": "request_landlord_approval"
       }
     },
@@ -2079,15 +2079,15 @@
         },
         "severity": "routine",
         "severity_probs": {
-          "routine": 0.96,
-          "urgent": 0.04,
+          "routine": 0.95,
+          "urgent": 0.05,
           "emergency": 0
         },
-        "needs_landlord_approval": 0.661,
-        "needs_landlord_approval_raw": 0.87,
-        "likely_self_fixable": 0.56,
-        "safety_risk": 0.34,
-        "needs_more_info": 0.12,
+        "needs_landlord_approval": 0.658,
+        "needs_landlord_approval_raw": 0.86,
+        "likely_self_fixable": 0.55,
+        "safety_risk": 0.35,
+        "needs_more_info": 0.11,
         "raw": {
           "model": "jev-1.13.0",
           "answers": {
@@ -2127,34 +2127,34 @@
             },
             "severity": {
               "type": "score",
-              "score": 0.04,
-              "confidence": 0.94,
+              "score": 0.05,
+              "confidence": 0.93,
               "legend": {
                 "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
                 "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
                 "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
               },
               "probabilities": {
-                "0": 0.96,
-                "1": 0.04,
+                "0": 0.95,
+                "1": 0.05,
                 "2": 0
               }
             },
             "needs_landlord_approval": {
               "type": "noul",
-              "noul": 0.87
+              "noul": 0.86
             },
             "likely_self_fixable": {
               "type": "noul",
-              "noul": 0.56
+              "noul": 0.55
             },
             "safety_risk": {
               "type": "noul",
-              "noul": 0.34
+              "noul": 0.35
             },
             "needs_more_info": {
               "type": "noul",
-              "noul": 0.12
+              "noul": 0.11
             }
           },
           "usage": {
@@ -2162,7 +2162,7 @@
             "output_tokens": 309
           }
         },
-        "latencyMs": 219,
+        "latencyMs": 232,
         "route": "request_landlord_approval"
       }
     },
@@ -2203,11 +2203,11 @@
           "urgent": 0.02,
           "emergency": 0
         },
-        "needs_landlord_approval": 0.661,
-        "needs_landlord_approval_raw": 0.87,
-        "likely_self_fixable": 0.61,
-        "safety_risk": 0.25,
-        "needs_more_info": 0.11,
+        "needs_landlord_approval": 0.664,
+        "needs_landlord_approval_raw": 0.88,
+        "likely_self_fixable": 0.6,
+        "safety_risk": 0.27,
+        "needs_more_info": 0.12,
         "raw": {
           "model": "jev-1.13.0",
           "answers": {
@@ -2262,19 +2262,19 @@
             },
             "needs_landlord_approval": {
               "type": "noul",
-              "noul": 0.87
+              "noul": 0.88
             },
             "likely_self_fixable": {
               "type": "noul",
-              "noul": 0.61
+              "noul": 0.6
             },
             "safety_risk": {
               "type": "noul",
-              "noul": 0.25
+              "noul": 0.27
             },
             "needs_more_info": {
               "type": "noul",
-              "noul": 0.11
+              "noul": 0.12
             }
           },
           "usage": {
@@ -2282,7 +2282,7 @@
             "output_tokens": 309
           }
         },
-        "latencyMs": 237,
+        "latencyMs": 204,
         "route": "request_landlord_approval"
       }
     },
@@ -2323,11 +2323,11 @@
           "urgent": 0.02,
           "emergency": 0
         },
-        "needs_landlord_approval": 0.655,
-        "needs_landlord_approval_raw": 0.85,
-        "likely_self_fixable": 0.63,
-        "safety_risk": 0.07,
-        "needs_more_info": 0.17,
+        "needs_landlord_approval": 0.658,
+        "needs_landlord_approval_raw": 0.86,
+        "likely_self_fixable": 0.62,
+        "safety_risk": 0.08,
+        "needs_more_info": 0.16,
         "raw": {
           "model": "jev-1.13.0",
           "answers": {
@@ -2382,19 +2382,19 @@
             },
             "needs_landlord_approval": {
               "type": "noul",
-              "noul": 0.85
+              "noul": 0.86
             },
             "likely_self_fixable": {
               "type": "noul",
-              "noul": 0.63
+              "noul": 0.62
             },
             "safety_risk": {
               "type": "noul",
-              "noul": 0.07
+              "noul": 0.08
             },
             "needs_more_info": {
               "type": "noul",
-              "noul": 0.17
+              "noul": 0.16
             }
           },
           "usage": {
@@ -2402,7 +2402,7 @@
             "output_tokens": 308
           }
         },
-        "latencyMs": 237,
+        "latencyMs": 193,
         "route": "self_fix_first"
       }
     },
@@ -2445,11 +2445,11 @@
           "urgent": 0,
           "emergency": 0
         },
-        "needs_landlord_approval": 0.67,
-        "needs_landlord_approval_raw": 0.9,
+        "needs_landlord_approval": 0.667,
+        "needs_landlord_approval_raw": 0.89,
         "likely_self_fixable": 0.11,
-        "safety_risk": 0.2,
-        "needs_more_info": 0.13,
+        "safety_risk": 0.19,
+        "needs_more_info": 0.12,
         "raw": {
           "model": "jev-1.13.0",
           "answers": {
@@ -2504,7 +2504,7 @@
             },
             "needs_landlord_approval": {
               "type": "noul",
-              "noul": 0.9
+              "noul": 0.89
             },
             "likely_self_fixable": {
               "type": "noul",
@@ -2512,11 +2512,11 @@
             },
             "safety_risk": {
               "type": "noul",
-              "noul": 0.2
+              "noul": 0.19
             },
             "needs_more_info": {
               "type": "noul",
-              "noul": 0.13
+              "noul": 0.12
             }
           },
           "usage": {
@@ -2524,7 +2524,7 @@
             "output_tokens": 308
           }
         },
-        "latencyMs": 264,
+        "latencyMs": 253,
         "route": "request_landlord_approval"
       }
     },
@@ -2561,15 +2561,15 @@
         },
         "severity": "routine",
         "severity_probs": {
-          "routine": 0.99,
-          "urgent": 0.01,
+          "routine": 1,
+          "urgent": 0,
           "emergency": 0
         },
         "needs_landlord_approval": 0.664,
         "needs_landlord_approval_raw": 0.88,
-        "likely_self_fixable": 0.09,
-        "safety_risk": 0.22,
-        "needs_more_info": 0.09,
+        "likely_self_fixable": 0.1,
+        "safety_risk": 0.21,
+        "needs_more_info": 0.08,
         "raw": {
           "model": "jev-1.13.0",
           "answers": {
@@ -2610,15 +2610,15 @@
             "severity": {
               "type": "score",
               "score": 0.01,
-              "confidence": 0.98,
+              "confidence": 1,
               "legend": {
                 "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
                 "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
                 "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
               },
               "probabilities": {
-                "0": 0.99,
-                "1": 0.01,
+                "0": 1,
+                "1": 0,
                 "2": 0
               }
             },
@@ -2628,15 +2628,15 @@
             },
             "likely_self_fixable": {
               "type": "noul",
-              "noul": 0.09
+              "noul": 0.1
             },
             "safety_risk": {
               "type": "noul",
-              "noul": 0.22
+              "noul": 0.21
             },
             "needs_more_info": {
               "type": "noul",
-              "noul": 0.09
+              "noul": 0.08
             }
           },
           "usage": {
@@ -2644,7 +2644,7 @@
             "output_tokens": 308
           }
         },
-        "latencyMs": 277,
+        "latencyMs": 266,
         "route": "request_landlord_approval"
       }
     },
@@ -2687,7 +2687,7 @@
         },
         "needs_landlord_approval": 0.1,
         "needs_landlord_approval_raw": 0.2,
-        "likely_self_fixable": 0.58,
+        "likely_self_fixable": 0.51,
         "safety_risk": 0.04,
         "needs_more_info": 0.21,
         "raw": {
@@ -2748,7 +2748,7 @@
             },
             "likely_self_fixable": {
               "type": "noul",
-              "noul": 0.58
+              "noul": 0.51
             },
             "safety_risk": {
               "type": "noul",
@@ -2764,7 +2764,7 @@
             "output_tokens": 306
           }
         },
-        "latencyMs": 238,
+        "latencyMs": 221,
         "route": "standard"
       }
     },
@@ -2801,14 +2801,14 @@
         },
         "severity": "emergency",
         "severity_probs": {
-          "routine": 0.26,
-          "urgent": 0.33,
+          "routine": 0.25,
+          "urgent": 0.34,
           "emergency": 0.41
         },
         "needs_landlord_approval": 0.655,
         "needs_landlord_approval_raw": 0.85,
         "likely_self_fixable": 0.04,
-        "safety_risk": 0.8,
+        "safety_risk": 0.82,
         "needs_more_info": 0.07,
         "raw": {
           "model": "jev-1.13.0",
@@ -2857,8 +2857,8 @@
                 "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
               },
               "probabilities": {
-                "0": 0.26,
-                "1": 0.33,
+                "0": 0.25,
+                "1": 0.34,
                 "2": 0.41
               }
             },
@@ -2872,7 +2872,7 @@
             },
             "safety_risk": {
               "type": "noul",
-              "noul": 0.8
+              "noul": 0.82
             },
             "needs_more_info": {
               "type": "noul",
@@ -2884,7 +2884,7 @@
             "output_tokens": 309
           }
         },
-        "latencyMs": 214,
+        "latencyMs": 203,
         "route": "emergency_dispatch"
       }
     },
@@ -2927,9 +2927,9 @@
         },
         "needs_landlord_approval": 0.661,
         "needs_landlord_approval_raw": 0.87,
-        "likely_self_fixable": 0.11,
-        "safety_risk": 0.41,
-        "needs_more_info": 0.1,
+        "likely_self_fixable": 0.12,
+        "safety_risk": 0.43,
+        "needs_more_info": 0.11,
         "raw": {
           "model": "jev-1.13.0",
           "answers": {
@@ -2988,15 +2988,15 @@
             },
             "likely_self_fixable": {
               "type": "noul",
-              "noul": 0.11
+              "noul": 0.12
             },
             "safety_risk": {
               "type": "noul",
-              "noul": 0.41
+              "noul": 0.43
             },
             "needs_more_info": {
               "type": "noul",
-              "noul": 0.1
+              "noul": 0.11
             }
           },
           "usage": {
@@ -3004,7 +3004,7 @@
             "output_tokens": 309
           }
         },
-        "latencyMs": 219,
+        "latencyMs": 245,
         "route": "request_landlord_approval"
       }
     },
@@ -3018,15 +3018,15 @@
       "result": {
         "scope": "maintenance_repair",
         "scope_probs": {
-          "maintenance_repair": 0.99,
-          "maintenance_admin": 0.01,
+          "maintenance_repair": 0.98,
+          "maintenance_admin": 0.02,
           "tenancy_finance": 0,
           "tenancy_legal_or_dispute": 0,
           "neighbour_or_antisocial": 0,
           "emergency_safety": 0,
           "other_non_property": 0
         },
-        "non_english": 0.02,
+        "non_english": 0.01,
         "category": "doors_windows_locks",
         "category_probs": {
           "plumbing": 0,
@@ -3041,14 +3041,14 @@
         },
         "severity": "routine",
         "severity_probs": {
-          "routine": 0.44,
-          "urgent": 0.35,
+          "routine": 0.4,
+          "urgent": 0.39,
           "emergency": 0.21
         },
-        "needs_landlord_approval": 0.655,
-        "needs_landlord_approval_raw": 0.85,
+        "needs_landlord_approval": 0.652,
+        "needs_landlord_approval_raw": 0.84,
         "likely_self_fixable": 0.06,
-        "safety_risk": 0.8,
+        "safety_risk": 0.81,
         "needs_more_info": 0.09,
         "raw": {
           "model": "jev-1.13.0",
@@ -3056,10 +3056,10 @@
             "scope": {
               "type": "choice",
               "choice": "maintenance_repair",
-              "confidence": 0.99,
+              "confidence": 0.98,
               "probabilities": {
-                "maintenance_repair": 0.99,
-                "maintenance_admin": 0.01,
+                "maintenance_repair": 0.98,
+                "maintenance_admin": 0.02,
                 "tenancy_finance": 0,
                 "tenancy_legal_or_dispute": 0,
                 "neighbour_or_antisocial": 0,
@@ -3069,7 +3069,7 @@
             },
             "non_english": {
               "type": "noul",
-              "noul": 0.02
+              "noul": 0.01
             },
             "category": {
               "type": "choice",
@@ -3089,7 +3089,7 @@
             },
             "severity": {
               "type": "score",
-              "score": 0.77,
+              "score": 0.82,
               "confidence": 0,
               "legend": {
                 "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
@@ -3097,14 +3097,14 @@
                 "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
               },
               "probabilities": {
-                "0": 0.44,
-                "1": 0.35,
+                "0": 0.4,
+                "1": 0.39,
                 "2": 0.21
               }
             },
             "needs_landlord_approval": {
               "type": "noul",
-              "noul": 0.85
+              "noul": 0.84
             },
             "likely_self_fixable": {
               "type": "noul",
@@ -3112,7 +3112,7 @@
             },
             "safety_risk": {
               "type": "noul",
-              "noul": 0.8
+              "noul": 0.81
             },
             "needs_more_info": {
               "type": "noul",
@@ -3124,7 +3124,7 @@
             "output_tokens": 309
           }
         },
-        "latencyMs": 283,
+        "latencyMs": 260,
         "route": "emergency_dispatch"
       }
     },
@@ -3161,15 +3161,15 @@
         },
         "severity": "urgent",
         "severity_probs": {
-          "routine": 0.44,
-          "urgent": 0.56,
+          "routine": 0.49,
+          "urgent": 0.51,
           "emergency": 0
         },
         "needs_landlord_approval": 0.655,
         "needs_landlord_approval_raw": 0.85,
         "likely_self_fixable": 0.13,
-        "safety_risk": 0.13,
-        "needs_more_info": 0.09,
+        "safety_risk": 0.11,
+        "needs_more_info": 0.1,
         "raw": {
           "model": "jev-1.13.0",
           "answers": {
@@ -3209,16 +3209,16 @@
             },
             "severity": {
               "type": "score",
-              "score": 0.57,
-              "confidence": 0.34,
+              "score": 0.51,
+              "confidence": 0.27,
               "legend": {
                 "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
                 "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
                 "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
               },
               "probabilities": {
-                "0": 0.44,
-                "1": 0.56,
+                "0": 0.49,
+                "1": 0.51,
                 "2": 0
               }
             },
@@ -3232,11 +3232,11 @@
             },
             "safety_risk": {
               "type": "noul",
-              "noul": 0.13
+              "noul": 0.11
             },
             "needs_more_info": {
               "type": "noul",
-              "noul": 0.09
+              "noul": 0.1
             }
           },
           "usage": {
@@ -3244,7 +3244,7 @@
             "output_tokens": 308
           }
         },
-        "latencyMs": 265,
+        "latencyMs": 207,
         "route": "request_landlord_approval"
       }
     },
@@ -3279,17 +3279,17 @@
           "inspection_admin": 0,
           "other": 0
         },
-        "severity": "routine",
+        "severity": "urgent",
         "severity_probs": {
-          "routine": 0.54,
-          "urgent": 0.46,
+          "routine": 0.47,
+          "urgent": 0.53,
           "emergency": 0
         },
-        "needs_landlord_approval": 0.655,
-        "needs_landlord_approval_raw": 0.85,
-        "likely_self_fixable": 0.1,
-        "safety_risk": 0.14,
-        "needs_more_info": 0.09,
+        "needs_landlord_approval": 0.652,
+        "needs_landlord_approval_raw": 0.84,
+        "likely_self_fixable": 0.09,
+        "safety_risk": 0.15,
+        "needs_more_info": 0.1,
         "raw": {
           "model": "jev-1.13.0",
           "answers": {
@@ -3329,34 +3329,34 @@
             },
             "severity": {
               "type": "score",
-              "score": 0.47,
-              "confidence": 0.31,
+              "score": 0.53,
+              "confidence": 0.3,
               "legend": {
                 "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
                 "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
                 "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
               },
               "probabilities": {
-                "0": 0.54,
-                "1": 0.46,
+                "0": 0.47,
+                "1": 0.53,
                 "2": 0
               }
             },
             "needs_landlord_approval": {
               "type": "noul",
-              "noul": 0.85
+              "noul": 0.84
             },
             "likely_self_fixable": {
               "type": "noul",
-              "noul": 0.1
+              "noul": 0.09
             },
             "safety_risk": {
               "type": "noul",
-              "noul": 0.14
+              "noul": 0.15
             },
             "needs_more_info": {
               "type": "noul",
-              "noul": 0.09
+              "noul": 0.1
             }
           },
           "usage": {
@@ -3364,7 +3364,7 @@
             "output_tokens": 308
           }
         },
-        "latencyMs": 229,
+        "latencyMs": 206,
         "route": "request_landlord_approval"
       }
     },
@@ -3403,13 +3403,13 @@
         },
         "severity": "routine",
         "severity_probs": {
-          "routine": 0.76,
-          "urgent": 0.24,
+          "routine": 0.73,
+          "urgent": 0.27,
           "emergency": 0
         },
-        "needs_landlord_approval": 0.658,
-        "needs_landlord_approval_raw": 0.86,
-        "likely_self_fixable": 0.13,
+        "needs_landlord_approval": 0.664,
+        "needs_landlord_approval_raw": 0.88,
+        "likely_self_fixable": 0.14,
         "safety_risk": 0.08,
         "needs_more_info": 0.07,
         "raw": {
@@ -3451,26 +3451,26 @@
             },
             "severity": {
               "type": "score",
-              "score": 0.25,
-              "confidence": 0.64,
+              "score": 0.28,
+              "confidence": 0.59,
               "legend": {
                 "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
                 "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
                 "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
               },
               "probabilities": {
-                "0": 0.76,
-                "1": 0.24,
+                "0": 0.73,
+                "1": 0.27,
                 "2": 0
               }
             },
             "needs_landlord_approval": {
               "type": "noul",
-              "noul": 0.86
+              "noul": 0.88
             },
             "likely_self_fixable": {
               "type": "noul",
-              "noul": 0.13
+              "noul": 0.14
             },
             "safety_risk": {
               "type": "noul",
@@ -3486,7 +3486,7 @@
             "output_tokens": 308
           }
         },
-        "latencyMs": 226,
+        "latencyMs": 214,
         "route": "request_landlord_approval"
       }
     },
@@ -3511,7 +3511,7 @@
         "non_english": 0.03,
         "category": "plumbing",
         "category_probs": {
-          "plumbing": 0.98,
+          "plumbing": 0.97,
           "appliance": 0,
           "doors_windows_locks": 0,
           "garden_external": 0,
@@ -3519,7 +3519,7 @@
           "electrical_lighting": 0,
           "heating_hot_water": 0,
           "inspection_admin": 0,
-          "other": 0.02
+          "other": 0.03
         },
         "severity": "routine",
         "severity_probs": {
@@ -3529,8 +3529,8 @@
         },
         "needs_landlord_approval": 0.637,
         "needs_landlord_approval_raw": 0.79,
-        "likely_self_fixable": 0.93,
-        "safety_risk": 0.3,
+        "likely_self_fixable": 0.94,
+        "safety_risk": 0.29,
         "needs_more_info": 0.1,
         "raw": {
           "model": "jev-1.13.0",
@@ -3556,9 +3556,9 @@
             "category": {
               "type": "choice",
               "choice": "plumbing",
-              "confidence": 0.98,
+              "confidence": 0.97,
               "probabilities": {
-                "plumbing": 0.98,
+                "plumbing": 0.97,
                 "appliance": 0,
                 "doors_windows_locks": 0,
                 "garden_external": 0,
@@ -3566,7 +3566,7 @@
                 "electrical_lighting": 0,
                 "heating_hot_water": 0,
                 "inspection_admin": 0,
-                "other": 0.02
+                "other": 0.03
               }
             },
             "severity": {
@@ -3590,11 +3590,11 @@
             },
             "likely_self_fixable": {
               "type": "noul",
-              "noul": 0.93
+              "noul": 0.94
             },
             "safety_risk": {
               "type": "noul",
-              "noul": 0.3
+              "noul": 0.29
             },
             "needs_more_info": {
               "type": "noul",
@@ -3606,7 +3606,7 @@
             "output_tokens": 308
           }
         },
-        "latencyMs": 222,
+        "latencyMs": 235,
         "route": "request_landlord_approval"
       }
     },
@@ -3631,10 +3631,10 @@
         "non_english": 0.02,
         "category": "garden_external",
         "category_probs": {
-          "plumbing": 0.01,
+          "plumbing": 0,
           "appliance": 0,
           "doors_windows_locks": 0,
-          "garden_external": 0.99,
+          "garden_external": 1,
           "cleaning_checkout_works": 0,
           "electrical_lighting": 0,
           "heating_hot_water": 0,
@@ -3643,15 +3643,15 @@
         },
         "severity": "routine",
         "severity_probs": {
-          "routine": 0.87,
-          "urgent": 0.08,
-          "emergency": 0.05
+          "routine": 0.89,
+          "urgent": 0.07,
+          "emergency": 0.04
         },
-        "needs_landlord_approval": 0.658,
-        "needs_landlord_approval_raw": 0.86,
-        "likely_self_fixable": 0.11,
-        "safety_risk": 0.6,
-        "needs_more_info": 0.26,
+        "needs_landlord_approval": 0.655,
+        "needs_landlord_approval_raw": 0.85,
+        "likely_self_fixable": 0.1,
+        "safety_risk": 0.56,
+        "needs_more_info": 0.27,
         "raw": {
           "model": "jev-1.13.0",
           "answers": {
@@ -3676,12 +3676,12 @@
             "category": {
               "type": "choice",
               "choice": "garden_external",
-              "confidence": 0.99,
+              "confidence": 1,
               "probabilities": {
-                "plumbing": 0.01,
+                "plumbing": 0,
                 "appliance": 0,
                 "doors_windows_locks": 0,
-                "garden_external": 0.99,
+                "garden_external": 1,
                 "cleaning_checkout_works": 0,
                 "electrical_lighting": 0,
                 "heating_hot_water": 0,
@@ -3691,34 +3691,34 @@
             },
             "severity": {
               "type": "score",
-              "score": 0.18,
-              "confidence": 0.73,
+              "score": 0.15,
+              "confidence": 0.77,
               "legend": {
                 "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
                 "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
                 "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
               },
               "probabilities": {
-                "0": 0.87,
-                "1": 0.08,
-                "2": 0.05
+                "0": 0.89,
+                "1": 0.07,
+                "2": 0.04
               }
             },
             "needs_landlord_approval": {
               "type": "noul",
-              "noul": 0.86
+              "noul": 0.85
             },
             "likely_self_fixable": {
               "type": "noul",
-              "noul": 0.11
+              "noul": 0.1
             },
             "safety_risk": {
               "type": "noul",
-              "noul": 0.6
+              "noul": 0.56
             },
             "needs_more_info": {
               "type": "noul",
-              "noul": 0.26
+              "noul": 0.27
             }
           },
           "usage": {
@@ -3726,7 +3726,7 @@
             "output_tokens": 308
           }
         },
-        "latencyMs": 389,
+        "latencyMs": 243,
         "route": "request_landlord_approval"
       }
     },
@@ -3763,15 +3763,15 @@
         },
         "severity": "routine",
         "severity_probs": {
-          "routine": 0.82,
-          "urgent": 0.18,
+          "routine": 0.81,
+          "urgent": 0.19,
           "emergency": 0
         },
         "needs_landlord_approval": 0.661,
         "needs_landlord_approval_raw": 0.87,
         "likely_self_fixable": 0.21,
-        "safety_risk": 0.36,
-        "needs_more_info": 0.51,
+        "safety_risk": 0.34,
+        "needs_more_info": 0.54,
         "raw": {
           "model": "jev-1.13.0",
           "answers": {
@@ -3811,16 +3811,16 @@
             },
             "severity": {
               "type": "score",
-              "score": 0.18,
-              "confidence": 0.73,
+              "score": 0.19,
+              "confidence": 0.71,
               "legend": {
                 "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
                 "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
                 "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
               },
               "probabilities": {
-                "0": 0.82,
-                "1": 0.18,
+                "0": 0.81,
+                "1": 0.19,
                 "2": 0
               }
             },
@@ -3834,11 +3834,11 @@
             },
             "safety_risk": {
               "type": "noul",
-              "noul": 0.36
+              "noul": 0.34
             },
             "needs_more_info": {
               "type": "noul",
-              "noul": 0.51
+              "noul": 0.54
             }
           },
           "usage": {
@@ -3846,7 +3846,7 @@
             "output_tokens": 308
           }
         },
-        "latencyMs": 381,
+        "latencyMs": 222,
         "route": "request_landlord_approval"
       }
     },
@@ -3885,15 +3885,15 @@
         },
         "severity": "routine",
         "severity_probs": {
-          "routine": 0.8,
-          "urgent": 0.2,
+          "routine": 0.84,
+          "urgent": 0.16,
           "emergency": 0
         },
         "needs_landlord_approval": 0.655,
         "needs_landlord_approval_raw": 0.85,
         "likely_self_fixable": 0.15,
-        "safety_risk": 0.23,
-        "needs_more_info": 0.1,
+        "safety_risk": 0.24,
+        "needs_more_info": 0.09,
         "raw": {
           "model": "jev-1.13.0",
           "answers": {
@@ -3933,16 +3933,16 @@
             },
             "severity": {
               "type": "score",
-              "score": 0.2,
-              "confidence": 0.7,
+              "score": 0.17,
+              "confidence": 0.76,
               "legend": {
                 "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
                 "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
                 "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
               },
               "probabilities": {
-                "0": 0.8,
-                "1": 0.2,
+                "0": 0.84,
+                "1": 0.16,
                 "2": 0
               }
             },
@@ -3956,11 +3956,11 @@
             },
             "safety_risk": {
               "type": "noul",
-              "noul": 0.23
+              "noul": 0.24
             },
             "needs_more_info": {
               "type": "noul",
-              "noul": 0.1
+              "noul": 0.09
             }
           },
           "usage": {
@@ -3968,7 +3968,7 @@
             "output_tokens": 308
           }
         },
-        "latencyMs": 324,
+        "latencyMs": 203,
         "route": "request_landlord_approval"
       }
     },
@@ -3990,7 +3990,7 @@
           "emergency_safety": 0,
           "other_non_property": 0
         },
-        "non_english": 0.02,
+        "non_english": 0.01,
         "category": "plumbing",
         "category_probs": {
           "plumbing": 1,
@@ -4005,14 +4005,14 @@
         },
         "severity": "emergency",
         "severity_probs": {
-          "routine": 0.39,
+          "routine": 0.27,
           "urgent": 0.03,
-          "emergency": 0.58
+          "emergency": 0.7
         },
         "needs_landlord_approval": 0.655,
         "needs_landlord_approval_raw": 0.85,
         "likely_self_fixable": 0.07,
-        "safety_risk": 0.65,
+        "safety_risk": 0.66,
         "needs_more_info": 0.12,
         "raw": {
           "model": "jev-1.13.0",
@@ -4033,7 +4033,7 @@
             },
             "non_english": {
               "type": "noul",
-              "noul": 0.02
+              "noul": 0.01
             },
             "category": {
               "type": "choice",
@@ -4053,17 +4053,17 @@
             },
             "severity": {
               "type": "score",
-              "score": 1.2,
-              "confidence": 0,
+              "score": 1.43,
+              "confidence": 0.14,
               "legend": {
                 "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
                 "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
                 "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
               },
               "probabilities": {
-                "0": 0.39,
+                "0": 0.27,
                 "1": 0.03,
-                "2": 0.58
+                "2": 0.7
               }
             },
             "needs_landlord_approval": {
@@ -4076,7 +4076,7 @@
             },
             "safety_risk": {
               "type": "noul",
-              "noul": 0.65
+              "noul": 0.66
             },
             "needs_more_info": {
               "type": "noul",
@@ -4088,8 +4088,8 @@
             "output_tokens": 308
           }
         },
-        "latencyMs": 325,
-        "route": "request_landlord_approval"
+        "latencyMs": 202,
+        "route": "emergency_dispatch"
       }
     },
     {
@@ -4125,15 +4125,15 @@
         },
         "severity": "routine",
         "severity_probs": {
-          "routine": 0.9,
-          "urgent": 0.1,
+          "routine": 0.89,
+          "urgent": 0.11,
           "emergency": 0
         },
         "needs_landlord_approval": 0.652,
         "needs_landlord_approval_raw": 0.84,
-        "likely_self_fixable": 0.17,
-        "safety_risk": 0.23,
-        "needs_more_info": 0.29,
+        "likely_self_fixable": 0.18,
+        "safety_risk": 0.25,
+        "needs_more_info": 0.26,
         "raw": {
           "model": "jev-1.13.0",
           "answers": {
@@ -4173,16 +4173,16 @@
             },
             "severity": {
               "type": "score",
-              "score": 0.1,
-              "confidence": 0.85,
+              "score": 0.12,
+              "confidence": 0.83,
               "legend": {
                 "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
                 "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
                 "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
               },
               "probabilities": {
-                "0": 0.9,
-                "1": 0.1,
+                "0": 0.89,
+                "1": 0.11,
                 "2": 0
               }
             },
@@ -4192,15 +4192,15 @@
             },
             "likely_self_fixable": {
               "type": "noul",
-              "noul": 0.17
+              "noul": 0.18
             },
             "safety_risk": {
               "type": "noul",
-              "noul": 0.23
+              "noul": 0.25
             },
             "needs_more_info": {
               "type": "noul",
-              "noul": 0.29
+              "noul": 0.26
             }
           },
           "usage": {
@@ -4208,7 +4208,7 @@
             "output_tokens": 308
           }
         },
-        "latencyMs": 496,
+        "latencyMs": 219,
         "route": "request_landlord_approval"
       }
     },
@@ -4222,12 +4222,12 @@
       "result": {
         "scope": "maintenance_repair",
         "scope_probs": {
-          "maintenance_repair": 0.99,
+          "maintenance_repair": 1,
           "maintenance_admin": 0,
           "tenancy_finance": 0,
           "tenancy_legal_or_dispute": 0,
           "neighbour_or_antisocial": 0,
-          "emergency_safety": 0.01,
+          "emergency_safety": 0,
           "other_non_property": 0
         },
         "non_english": 0.02,
@@ -4245,29 +4245,29 @@
         },
         "severity": "emergency",
         "severity_probs": {
-          "routine": 0.32,
+          "routine": 0.35,
           "urgent": 0.08,
-          "emergency": 0.6
+          "emergency": 0.57
         },
         "needs_landlord_approval": 0.652,
         "needs_landlord_approval_raw": 0.84,
         "likely_self_fixable": 0.07,
-        "safety_risk": 0.56,
-        "needs_more_info": 0.14,
+        "safety_risk": 0.54,
+        "needs_more_info": 0.13,
         "raw": {
           "model": "jev-1.13.0",
           "answers": {
             "scope": {
               "type": "choice",
               "choice": "maintenance_repair",
-              "confidence": 0.99,
+              "confidence": 1,
               "probabilities": {
-                "maintenance_repair": 0.99,
+                "maintenance_repair": 1,
                 "maintenance_admin": 0,
                 "tenancy_finance": 0,
                 "tenancy_legal_or_dispute": 0,
                 "neighbour_or_antisocial": 0,
-                "emergency_safety": 0.01,
+                "emergency_safety": 0,
                 "other_non_property": 0
               }
             },
@@ -4293,7 +4293,7 @@
             },
             "severity": {
               "type": "score",
-              "score": 1.28,
+              "score": 1.22,
               "confidence": 0,
               "legend": {
                 "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
@@ -4301,9 +4301,9 @@
                 "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
               },
               "probabilities": {
-                "0": 0.32,
+                "0": 0.35,
                 "1": 0.08,
-                "2": 0.6
+                "2": 0.57
               }
             },
             "needs_landlord_approval": {
@@ -4316,11 +4316,11 @@
             },
             "safety_risk": {
               "type": "noul",
-              "noul": 0.56
+              "noul": 0.54
             },
             "needs_more_info": {
               "type": "noul",
-              "noul": 0.14
+              "noul": 0.13
             }
           },
           "usage": {
@@ -4328,8 +4328,8 @@
             "output_tokens": 308
           }
         },
-        "latencyMs": 227,
-        "route": "emergency_dispatch"
+        "latencyMs": 210,
+        "route": "request_landlord_approval"
       }
     },
     {
@@ -4365,8 +4365,8 @@
         },
         "severity": "routine",
         "severity_probs": {
-          "routine": 0.76,
-          "urgent": 0.24,
+          "routine": 0.74,
+          "urgent": 0.26,
           "emergency": 0
         },
         "needs_landlord_approval": 0.658,
@@ -4413,16 +4413,16 @@
             },
             "severity": {
               "type": "score",
-              "score": 0.25,
-              "confidence": 0.64,
+              "score": 0.27,
+              "confidence": 0.61,
               "legend": {
                 "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
                 "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
                 "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
               },
               "probabilities": {
-                "0": 0.76,
-                "1": 0.24,
+                "0": 0.74,
+                "1": 0.26,
                 "2": 0
               }
             },
@@ -4448,7 +4448,7 @@
             "output_tokens": 308
           }
         },
-        "latencyMs": 213,
+        "latencyMs": 256,
         "route": "request_landlord_approval"
       }
     },
@@ -4472,7 +4472,7 @@
           "emergency_safety": 0,
           "other_non_property": 0
         },
-        "non_english": 0.02,
+        "non_english": 0.01,
         "category": "plumbing",
         "category_probs": {
           "plumbing": 1,
@@ -4487,15 +4487,15 @@
         },
         "severity": "routine",
         "severity_probs": {
-          "routine": 0.79,
-          "urgent": 0.21,
+          "routine": 0.78,
+          "urgent": 0.22,
           "emergency": 0
         },
         "needs_landlord_approval": 0.658,
         "needs_landlord_approval_raw": 0.86,
         "likely_self_fixable": 0.11,
-        "safety_risk": 0.25,
-        "needs_more_info": 0.08,
+        "safety_risk": 0.29,
+        "needs_more_info": 0.07,
         "raw": {
           "model": "jev-1.13.0",
           "answers": {
@@ -4515,7 +4515,7 @@
             },
             "non_english": {
               "type": "noul",
-              "noul": 0.02
+              "noul": 0.01
             },
             "category": {
               "type": "choice",
@@ -4535,16 +4535,16 @@
             },
             "severity": {
               "type": "score",
-              "score": 0.21,
-              "confidence": 0.69,
+              "score": 0.22,
+              "confidence": 0.67,
               "legend": {
                 "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
                 "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
                 "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
               },
               "probabilities": {
-                "0": 0.79,
-                "1": 0.21,
+                "0": 0.78,
+                "1": 0.22,
                 "2": 0
               }
             },
@@ -4558,11 +4558,11 @@
             },
             "safety_risk": {
               "type": "noul",
-              "noul": 0.25
+              "noul": 0.29
             },
             "needs_more_info": {
               "type": "noul",
-              "noul": 0.08
+              "noul": 0.07
             }
           },
           "usage": {
@@ -4570,7 +4570,7 @@
             "output_tokens": 308
           }
         },
-        "latencyMs": 229,
+        "latencyMs": 218,
         "route": "request_landlord_approval"
       }
     },
@@ -4605,17 +4605,17 @@
           "inspection_admin": 0,
           "other": 0
         },
-        "severity": "routine",
+        "severity": "urgent",
         "severity_probs": {
-          "routine": 0.5,
-          "urgent": 0.5,
+          "routine": 0.48,
+          "urgent": 0.52,
           "emergency": 0
         },
         "needs_landlord_approval": 0.655,
         "needs_landlord_approval_raw": 0.85,
-        "likely_self_fixable": 0.16,
+        "likely_self_fixable": 0.15,
         "safety_risk": 0.21,
-        "needs_more_info": 0.14,
+        "needs_more_info": 0.13,
         "raw": {
           "model": "jev-1.13.0",
           "answers": {
@@ -4655,16 +4655,16 @@
             },
             "severity": {
               "type": "score",
-              "score": 0.5,
-              "confidence": 0.25,
+              "score": 0.53,
+              "confidence": 0.28,
               "legend": {
                 "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
                 "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
                 "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
               },
               "probabilities": {
-                "0": 0.5,
-                "1": 0.5,
+                "0": 0.48,
+                "1": 0.52,
                 "2": 0
               }
             },
@@ -4674,7 +4674,7 @@
             },
             "likely_self_fixable": {
               "type": "noul",
-              "noul": 0.16
+              "noul": 0.15
             },
             "safety_risk": {
               "type": "noul",
@@ -4682,7 +4682,7 @@
             },
             "needs_more_info": {
               "type": "noul",
-              "noul": 0.14
+              "noul": 0.13
             }
           },
           "usage": {
@@ -4690,7 +4690,7 @@
             "output_tokens": 308
           }
         },
-        "latencyMs": 247,
+        "latencyMs": 204,
         "route": "request_landlord_approval"
       }
     },
@@ -4728,13 +4728,13 @@
         "severity": "emergency",
         "severity_probs": {
           "routine": 0.03,
-          "urgent": 0.03,
-          "emergency": 0.94
+          "urgent": 0.04,
+          "emergency": 0.93
         },
-        "needs_landlord_approval": 0.655,
-        "needs_landlord_approval_raw": 0.85,
-        "likely_self_fixable": 0.04,
-        "safety_risk": 0.72,
+        "needs_landlord_approval": 0.658,
+        "needs_landlord_approval_raw": 0.86,
+        "likely_self_fixable": 0.05,
+        "safety_risk": 0.7,
         "needs_more_info": 0.12,
         "raw": {
           "model": "jev-1.13.0",
@@ -4776,7 +4776,7 @@
             "severity": {
               "type": "score",
               "score": 1.9,
-              "confidence": 0.86,
+              "confidence": 0.85,
               "legend": {
                 "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
                 "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
@@ -4784,21 +4784,21 @@
               },
               "probabilities": {
                 "0": 0.03,
-                "1": 0.03,
-                "2": 0.94
+                "1": 0.04,
+                "2": 0.93
               }
             },
             "needs_landlord_approval": {
               "type": "noul",
-              "noul": 0.85
+              "noul": 0.86
             },
             "likely_self_fixable": {
               "type": "noul",
-              "noul": 0.04
+              "noul": 0.05
             },
             "safety_risk": {
               "type": "noul",
-              "noul": 0.72
+              "noul": 0.7
             },
             "needs_more_info": {
               "type": "noul",
@@ -4810,7 +4810,7 @@
             "output_tokens": 308
           }
         },
-        "latencyMs": 262,
+        "latencyMs": 213,
         "route": "emergency_dispatch"
       }
     },
@@ -4849,15 +4849,15 @@
         },
         "severity": "routine",
         "severity_probs": {
-          "routine": 0.93,
-          "urgent": 0.07,
+          "routine": 0.92,
+          "urgent": 0.08,
           "emergency": 0
         },
         "needs_landlord_approval": 0.667,
         "needs_landlord_approval_raw": 0.89,
-        "likely_self_fixable": 0.6,
-        "safety_risk": 0.09,
-        "needs_more_info": 0.11,
+        "likely_self_fixable": 0.59,
+        "safety_risk": 0.08,
+        "needs_more_info": 0.12,
         "raw": {
           "model": "jev-1.13.0",
           "answers": {
@@ -4897,16 +4897,16 @@
             },
             "severity": {
               "type": "score",
-              "score": 0.07,
-              "confidence": 0.9,
+              "score": 0.08,
+              "confidence": 0.88,
               "legend": {
                 "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
                 "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
                 "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
               },
               "probabilities": {
-                "0": 0.93,
-                "1": 0.07,
+                "0": 0.92,
+                "1": 0.08,
                 "2": 0
               }
             },
@@ -4916,15 +4916,15 @@
             },
             "likely_self_fixable": {
               "type": "noul",
-              "noul": 0.6
+              "noul": 0.59
             },
             "safety_risk": {
               "type": "noul",
-              "noul": 0.09
+              "noul": 0.08
             },
             "needs_more_info": {
               "type": "noul",
-              "noul": 0.11
+              "noul": 0.12
             }
           },
           "usage": {
@@ -4932,8 +4932,8 @@
             "output_tokens": 308
           }
         },
-        "latencyMs": 265,
-        "route": "self_fix_first"
+        "latencyMs": 236,
+        "route": "request_landlord_approval"
       }
     },
     {
@@ -4975,9 +4975,9 @@
         },
         "needs_landlord_approval": 0.661,
         "needs_landlord_approval_raw": 0.87,
-        "likely_self_fixable": 0.28,
-        "safety_risk": 0.18,
-        "needs_more_info": 0.14,
+        "likely_self_fixable": 0.27,
+        "safety_risk": 0.19,
+        "needs_more_info": 0.15,
         "raw": {
           "model": "jev-1.13.0",
           "answers": {
@@ -5036,15 +5036,15 @@
             },
             "likely_self_fixable": {
               "type": "noul",
-              "noul": 0.28
+              "noul": 0.27
             },
             "safety_risk": {
               "type": "noul",
-              "noul": 0.18
+              "noul": 0.19
             },
             "needs_more_info": {
               "type": "noul",
-              "noul": 0.14
+              "noul": 0.15
             }
           },
           "usage": {
@@ -5052,7 +5052,7 @@
             "output_tokens": 308
           }
         },
-        "latencyMs": 255,
+        "latencyMs": 203,
         "route": "request_landlord_approval"
       }
     },
@@ -5068,8 +5068,8 @@
       "result": {
         "scope": "maintenance_repair",
         "scope_probs": {
-          "maintenance_repair": 0.97,
-          "maintenance_admin": 0.03,
+          "maintenance_repair": 0.98,
+          "maintenance_admin": 0.02,
           "tenancy_finance": 0,
           "tenancy_legal_or_dispute": 0,
           "neighbour_or_antisocial": 0,
@@ -5080,36 +5080,36 @@
         "category": "appliance",
         "category_probs": {
           "plumbing": 0,
-          "appliance": 0.99,
+          "appliance": 0.98,
           "doors_windows_locks": 0,
           "garden_external": 0,
           "cleaning_checkout_works": 0,
           "electrical_lighting": 0,
           "heating_hot_water": 0,
           "inspection_admin": 0,
-          "other": 0.01
+          "other": 0.02
         },
         "severity": "routine",
         "severity_probs": {
-          "routine": 0.96,
-          "urgent": 0.04,
+          "routine": 0.95,
+          "urgent": 0.05,
           "emergency": 0
         },
         "needs_landlord_approval": 0.658,
         "needs_landlord_approval_raw": 0.86,
-        "likely_self_fixable": 0.9,
+        "likely_self_fixable": 0.89,
         "safety_risk": 0.07,
-        "needs_more_info": 0.1,
+        "needs_more_info": 0.09,
         "raw": {
           "model": "jev-1.13.0",
           "answers": {
             "scope": {
               "type": "choice",
               "choice": "maintenance_repair",
-              "confidence": 0.96,
+              "confidence": 0.98,
               "probabilities": {
-                "maintenance_repair": 0.97,
-                "maintenance_admin": 0.03,
+                "maintenance_repair": 0.98,
+                "maintenance_admin": 0.02,
                 "tenancy_finance": 0,
                 "tenancy_legal_or_dispute": 0,
                 "neighbour_or_antisocial": 0,
@@ -5124,31 +5124,31 @@
             "category": {
               "type": "choice",
               "choice": "appliance",
-              "confidence": 0.99,
+              "confidence": 0.98,
               "probabilities": {
                 "plumbing": 0,
-                "appliance": 0.99,
+                "appliance": 0.98,
                 "doors_windows_locks": 0,
                 "garden_external": 0,
                 "cleaning_checkout_works": 0,
                 "electrical_lighting": 0,
                 "heating_hot_water": 0,
                 "inspection_admin": 0,
-                "other": 0.01
+                "other": 0.02
               }
             },
             "severity": {
               "type": "score",
-              "score": 0.04,
-              "confidence": 0.94,
+              "score": 0.05,
+              "confidence": 0.93,
               "legend": {
                 "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
                 "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
                 "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
               },
               "probabilities": {
-                "0": 0.96,
-                "1": 0.04,
+                "0": 0.95,
+                "1": 0.05,
                 "2": 0
               }
             },
@@ -5158,7 +5158,7 @@
             },
             "likely_self_fixable": {
               "type": "noul",
-              "noul": 0.9
+              "noul": 0.89
             },
             "safety_risk": {
               "type": "noul",
@@ -5166,7 +5166,7 @@
             },
             "needs_more_info": {
               "type": "noul",
-              "noul": 0.1
+              "noul": 0.09
             }
           },
           "usage": {
@@ -5174,7 +5174,7 @@
             "output_tokens": 308
           }
         },
-        "latencyMs": 235,
+        "latencyMs": 204,
         "route": "self_fix_first"
       }
     },
@@ -5211,15 +5211,15 @@
         },
         "severity": "routine",
         "severity_probs": {
-          "routine": 0.61,
-          "urgent": 0.37,
-          "emergency": 0.02
+          "routine": 0.59,
+          "urgent": 0.4,
+          "emergency": 0.01
         },
-        "needs_landlord_approval": 0.655,
-        "needs_landlord_approval_raw": 0.85,
-        "likely_self_fixable": 0.13,
-        "safety_risk": 0.44,
-        "needs_more_info": 0.09,
+        "needs_landlord_approval": 0.658,
+        "needs_landlord_approval_raw": 0.86,
+        "likely_self_fixable": 0.12,
+        "safety_risk": 0.41,
+        "needs_more_info": 0.1,
         "raw": {
           "model": "jev-1.13.0",
           "answers": {
@@ -5259,34 +5259,34 @@
             },
             "severity": {
               "type": "score",
-              "score": 0.41,
-              "confidence": 0.39,
+              "score": 0.43,
+              "confidence": 0.37,
               "legend": {
                 "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
                 "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
                 "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
               },
               "probabilities": {
-                "0": 0.61,
-                "1": 0.37,
-                "2": 0.02
+                "0": 0.59,
+                "1": 0.4,
+                "2": 0.01
               }
             },
             "needs_landlord_approval": {
               "type": "noul",
-              "noul": 0.85
+              "noul": 0.86
             },
             "likely_self_fixable": {
               "type": "noul",
-              "noul": 0.13
+              "noul": 0.12
             },
             "safety_risk": {
               "type": "noul",
-              "noul": 0.44
+              "noul": 0.41
             },
             "needs_more_info": {
               "type": "noul",
-              "noul": 0.09
+              "noul": 0.1
             }
           },
           "usage": {
@@ -5294,7 +5294,7 @@
             "output_tokens": 308
           }
         },
-        "latencyMs": 302,
+        "latencyMs": 208,
         "route": "request_landlord_approval"
       }
     },
@@ -5333,13 +5333,13 @@
         },
         "severity": "routine",
         "severity_probs": {
-          "routine": 0.97,
-          "urgent": 0.03,
+          "routine": 0.96,
+          "urgent": 0.04,
           "emergency": 0
         },
-        "needs_landlord_approval": 0.658,
-        "needs_landlord_approval_raw": 0.86,
-        "likely_self_fixable": 0.21,
+        "needs_landlord_approval": 0.655,
+        "needs_landlord_approval_raw": 0.85,
+        "likely_self_fixable": 0.2,
         "safety_risk": 0.07,
         "needs_more_info": 0.08,
         "raw": {
@@ -5382,25 +5382,25 @@
             "severity": {
               "type": "score",
               "score": 0.04,
-              "confidence": 0.95,
+              "confidence": 0.94,
               "legend": {
                 "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
                 "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
                 "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
               },
               "probabilities": {
-                "0": 0.97,
-                "1": 0.03,
+                "0": 0.96,
+                "1": 0.04,
                 "2": 0
               }
             },
             "needs_landlord_approval": {
               "type": "noul",
-              "noul": 0.86
+              "noul": 0.85
             },
             "likely_self_fixable": {
               "type": "noul",
-              "noul": 0.21
+              "noul": 0.2
             },
             "safety_risk": {
               "type": "noul",
@@ -5416,7 +5416,7 @@
             "output_tokens": 308
           }
         },
-        "latencyMs": 295,
+        "latencyMs": 203,
         "route": "request_landlord_approval"
       }
     },
@@ -5453,15 +5453,15 @@
         },
         "severity": "routine",
         "severity_probs": {
-          "routine": 0.73,
-          "urgent": 0.27,
+          "routine": 0.6900000000000001,
+          "urgent": 0.31,
           "emergency": 0
         },
-        "needs_landlord_approval": 0.655,
-        "needs_landlord_approval_raw": 0.85,
+        "needs_landlord_approval": 0.652,
+        "needs_landlord_approval_raw": 0.84,
         "likely_self_fixable": 0.2,
-        "safety_risk": 0.36,
-        "needs_more_info": 0.12,
+        "safety_risk": 0.42,
+        "needs_more_info": 0.14,
         "raw": {
           "model": "jev-1.13.0",
           "answers": {
@@ -5501,22 +5501,22 @@
             },
             "severity": {
               "type": "score",
-              "score": 0.28,
-              "confidence": 0.59,
+              "score": 0.32,
+              "confidence": 0.53,
               "legend": {
                 "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
                 "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
                 "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
               },
               "probabilities": {
-                "0": 0.73,
-                "1": 0.27,
+                "0": 0.6900000000000001,
+                "1": 0.31,
                 "2": 0
               }
             },
             "needs_landlord_approval": {
               "type": "noul",
-              "noul": 0.85
+              "noul": 0.84
             },
             "likely_self_fixable": {
               "type": "noul",
@@ -5524,11 +5524,11 @@
             },
             "safety_risk": {
               "type": "noul",
-              "noul": 0.36
+              "noul": 0.42
             },
             "needs_more_info": {
               "type": "noul",
-              "noul": 0.12
+              "noul": 0.14
             }
           },
           "usage": {
@@ -5536,7 +5536,7 @@
             "output_tokens": 308
           }
         },
-        "latencyMs": 246,
+        "latencyMs": 251,
         "route": "request_landlord_approval"
       }
     },
@@ -5573,15 +5573,15 @@
         },
         "severity": "routine",
         "severity_probs": {
-          "routine": 0.8,
-          "urgent": 0.14,
-          "emergency": 0.06
+          "routine": 0.76,
+          "urgent": 0.17,
+          "emergency": 0.07
         },
-        "needs_landlord_approval": 0.658,
-        "needs_landlord_approval_raw": 0.86,
+        "needs_landlord_approval": 0.652,
+        "needs_landlord_approval_raw": 0.84,
         "likely_self_fixable": 0.16,
-        "safety_risk": 0.32,
-        "needs_more_info": 0.1,
+        "safety_risk": 0.33,
+        "needs_more_info": 0.12,
         "raw": {
           "model": "jev-1.13.0",
           "answers": {
@@ -5621,22 +5621,22 @@
             },
             "severity": {
               "type": "score",
-              "score": 0.27,
-              "confidence": 0.61,
+              "score": 0.32,
+              "confidence": 0.53,
               "legend": {
                 "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
                 "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
                 "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
               },
               "probabilities": {
-                "0": 0.8,
-                "1": 0.14,
-                "2": 0.06
+                "0": 0.76,
+                "1": 0.17,
+                "2": 0.07
               }
             },
             "needs_landlord_approval": {
               "type": "noul",
-              "noul": 0.86
+              "noul": 0.84
             },
             "likely_self_fixable": {
               "type": "noul",
@@ -5644,11 +5644,11 @@
             },
             "safety_risk": {
               "type": "noul",
-              "noul": 0.32
+              "noul": 0.33
             },
             "needs_more_info": {
               "type": "noul",
-              "noul": 0.1
+              "noul": 0.12
             }
           },
           "usage": {
@@ -5656,7 +5656,7 @@
             "output_tokens": 309
           }
         },
-        "latencyMs": 255,
+        "latencyMs": 253,
         "route": "request_landlord_approval"
       }
     },
@@ -5670,8 +5670,8 @@
       "result": {
         "scope": "maintenance_repair",
         "scope_probs": {
-          "maintenance_repair": 0.84,
-          "maintenance_admin": 0.13,
+          "maintenance_repair": 0.86,
+          "maintenance_admin": 0.11,
           "tenancy_finance": 0,
           "tenancy_legal_or_dispute": 0.01,
           "neighbour_or_antisocial": 0,
@@ -5683,13 +5683,13 @@
         "category_probs": {
           "plumbing": 0,
           "appliance": 0,
-          "doors_windows_locks": 0.97,
+          "doors_windows_locks": 0.95,
           "garden_external": 0,
           "cleaning_checkout_works": 0,
           "electrical_lighting": 0,
           "heating_hot_water": 0,
           "inspection_admin": 0,
-          "other": 0.03
+          "other": 0.05
         },
         "severity": "routine",
         "severity_probs": {
@@ -5697,10 +5697,10 @@
           "urgent": 0,
           "emergency": 0
         },
-        "needs_landlord_approval": 0.661,
-        "needs_landlord_approval_raw": 0.87,
-        "likely_self_fixable": 0.49,
-        "safety_risk": 0.24,
+        "needs_landlord_approval": 0.658,
+        "needs_landlord_approval_raw": 0.86,
+        "likely_self_fixable": 0.53,
+        "safety_risk": 0.22,
         "needs_more_info": 0.77,
         "raw": {
           "model": "jev-1.13.0",
@@ -5708,10 +5708,10 @@
             "scope": {
               "type": "choice",
               "choice": "maintenance_repair",
-              "confidence": 0.81,
+              "confidence": 0.84,
               "probabilities": {
-                "maintenance_repair": 0.84,
-                "maintenance_admin": 0.13,
+                "maintenance_repair": 0.86,
+                "maintenance_admin": 0.11,
                 "tenancy_finance": 0,
                 "tenancy_legal_or_dispute": 0.01,
                 "neighbour_or_antisocial": 0,
@@ -5726,17 +5726,17 @@
             "category": {
               "type": "choice",
               "choice": "doors_windows_locks",
-              "confidence": 0.97,
+              "confidence": 0.94,
               "probabilities": {
                 "plumbing": 0,
                 "appliance": 0,
-                "doors_windows_locks": 0.97,
+                "doors_windows_locks": 0.95,
                 "garden_external": 0,
                 "cleaning_checkout_works": 0,
                 "electrical_lighting": 0,
                 "heating_hot_water": 0,
                 "inspection_admin": 0,
-                "other": 0.03
+                "other": 0.05
               }
             },
             "severity": {
@@ -5756,15 +5756,15 @@
             },
             "needs_landlord_approval": {
               "type": "noul",
-              "noul": 0.87
+              "noul": 0.86
             },
             "likely_self_fixable": {
               "type": "noul",
-              "noul": 0.49
+              "noul": 0.53
             },
             "safety_risk": {
               "type": "noul",
-              "noul": 0.24
+              "noul": 0.22
             },
             "needs_more_info": {
               "type": "noul",
@@ -5776,7 +5776,7 @@
             "output_tokens": 309
           }
         },
-        "latencyMs": 255,
+        "latencyMs": 198,
         "route": "ask_for_info"
       }
     },
@@ -5813,14 +5813,14 @@
         },
         "severity": "routine",
         "severity_probs": {
-          "routine": 0.93,
+          "routine": 0.92,
           "urgent": 0.06,
-          "emergency": 0.01
+          "emergency": 0.02
         },
-        "needs_landlord_approval": 0.658,
-        "needs_landlord_approval_raw": 0.86,
+        "needs_landlord_approval": 0.655,
+        "needs_landlord_approval_raw": 0.85,
         "likely_self_fixable": 0.26,
-        "safety_risk": 0.49,
+        "safety_risk": 0.47,
         "needs_more_info": 0.1,
         "raw": {
           "model": "jev-1.13.0",
@@ -5862,21 +5862,21 @@
             "severity": {
               "type": "score",
               "score": 0.09,
-              "confidence": 0.88,
+              "confidence": 0.85,
               "legend": {
                 "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
                 "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
                 "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
               },
               "probabilities": {
-                "0": 0.93,
+                "0": 0.92,
                 "1": 0.06,
-                "2": 0.01
+                "2": 0.02
               }
             },
             "needs_landlord_approval": {
               "type": "noul",
-              "noul": 0.86
+              "noul": 0.85
             },
             "likely_self_fixable": {
               "type": "noul",
@@ -5884,7 +5884,7 @@
             },
             "safety_risk": {
               "type": "noul",
-              "noul": 0.49
+              "noul": 0.47
             },
             "needs_more_info": {
               "type": "noul",
@@ -5896,7 +5896,7 @@
             "output_tokens": 309
           }
         },
-        "latencyMs": 296,
+        "latencyMs": 191,
         "route": "request_landlord_approval"
       }
     },
@@ -5937,11 +5937,11 @@
           "urgent": 0.03,
           "emergency": 0.01
         },
-        "needs_landlord_approval": 0.661,
-        "needs_landlord_approval_raw": 0.87,
+        "needs_landlord_approval": 0.658,
+        "needs_landlord_approval_raw": 0.86,
         "likely_self_fixable": 0.29,
         "safety_risk": 0.38,
-        "needs_more_info": 0.15,
+        "needs_more_info": 0.14,
         "raw": {
           "model": "jev-1.13.0",
           "answers": {
@@ -5996,7 +5996,7 @@
             },
             "needs_landlord_approval": {
               "type": "noul",
-              "noul": 0.87
+              "noul": 0.86
             },
             "likely_self_fixable": {
               "type": "noul",
@@ -6008,7 +6008,7 @@
             },
             "needs_more_info": {
               "type": "noul",
-              "noul": 0.15
+              "noul": 0.14
             }
           },
           "usage": {
@@ -6016,7 +6016,7 @@
             "output_tokens": 309
           }
         },
-        "latencyMs": 258,
+        "latencyMs": 231,
         "route": "request_landlord_approval"
       }
     },
@@ -6053,15 +6053,15 @@
         },
         "severity": "routine",
         "severity_probs": {
-          "routine": 0.96,
-          "urgent": 0.03,
-          "emergency": 0.01
+          "routine": 0.94,
+          "urgent": 0.04,
+          "emergency": 0.02
         },
         "needs_landlord_approval": 0.655,
         "needs_landlord_approval_raw": 0.85,
-        "likely_self_fixable": 0.27,
+        "likely_self_fixable": 0.28,
         "safety_risk": 0.23,
-        "needs_more_info": 0.18,
+        "needs_more_info": 0.17,
         "raw": {
           "model": "jev-1.13.0",
           "answers": {
@@ -6101,17 +6101,17 @@
             },
             "severity": {
               "type": "score",
-              "score": 0.06,
-              "confidence": 0.93,
+              "score": 0.07,
+              "confidence": 0.88,
               "legend": {
                 "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
                 "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
                 "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
               },
               "probabilities": {
-                "0": 0.96,
-                "1": 0.03,
-                "2": 0.01
+                "0": 0.94,
+                "1": 0.04,
+                "2": 0.02
               }
             },
             "needs_landlord_approval": {
@@ -6120,7 +6120,7 @@
             },
             "likely_self_fixable": {
               "type": "noul",
-              "noul": 0.27
+              "noul": 0.28
             },
             "safety_risk": {
               "type": "noul",
@@ -6128,7 +6128,7 @@
             },
             "needs_more_info": {
               "type": "noul",
-              "noul": 0.18
+              "noul": 0.17
             }
           },
           "usage": {
@@ -6136,7 +6136,7 @@
             "output_tokens": 309
           }
         },
-        "latencyMs": 321,
+        "latencyMs": 215,
         "route": "request_landlord_approval"
       }
     },
@@ -6160,7 +6160,7 @@
           "emergency_safety": 0,
           "other_non_property": 0
         },
-        "non_english": 0.01,
+        "non_english": 0.02,
         "category": "garden_external",
         "category_probs": {
           "plumbing": 0,
@@ -6181,7 +6181,7 @@
         },
         "needs_landlord_approval": 0.658,
         "needs_landlord_approval_raw": 0.86,
-        "likely_self_fixable": 0.8,
+        "likely_self_fixable": 0.81,
         "safety_risk": 0.2,
         "needs_more_info": 0.09,
         "raw": {
@@ -6203,7 +6203,7 @@
             },
             "non_english": {
               "type": "noul",
-              "noul": 0.01
+              "noul": 0.02
             },
             "category": {
               "type": "choice",
@@ -6242,7 +6242,7 @@
             },
             "likely_self_fixable": {
               "type": "noul",
-              "noul": 0.8
+              "noul": 0.81
             },
             "safety_risk": {
               "type": "noul",
@@ -6258,7 +6258,7 @@
             "output_tokens": 308
           }
         },
-        "latencyMs": 351,
+        "latencyMs": 204,
         "route": "request_landlord_approval"
       }
     },
@@ -6297,15 +6297,15 @@
         },
         "severity": "routine",
         "severity_probs": {
-          "routine": 0.59,
+          "routine": 0.56,
           "urgent": 0.23,
-          "emergency": 0.18
+          "emergency": 0.21
         },
         "needs_landlord_approval": 0.655,
         "needs_landlord_approval_raw": 0.85,
         "likely_self_fixable": 0.23,
         "safety_risk": 0.67,
-        "needs_more_info": 0.11,
+        "needs_more_info": 0.12,
         "raw": {
           "model": "jev-1.13.0",
           "answers": {
@@ -6345,17 +6345,17 @@
             },
             "severity": {
               "type": "score",
-              "score": 0.59,
-              "confidence": 0.11,
+              "score": 0.65,
+              "confidence": 0.02,
               "legend": {
                 "0": "routine: Not urgent: inconvenience, cosmetic or wear-and-tear issue; can be scheduled in the normal course (weeks).",
                 "1": "urgent: Needs attention within days: affects normal use of the home (e.g. no cooking, no washing, door will not lock properly) but no immediate danger.",
                 "2": "emergency: Safety risk or damage in progress: active leak or flooding, gas smell, electrical danger, no heating in winter, no hot water for vulnerable people, insecure property (cannot lock external door, broken entry window)."
               },
               "probabilities": {
-                "0": 0.59,
+                "0": 0.56,
                 "1": 0.23,
-                "2": 0.18
+                "2": 0.21
               }
             },
             "needs_landlord_approval": {
@@ -6372,7 +6372,7 @@
             },
             "needs_more_info": {
               "type": "noul",
-              "noul": 0.11
+              "noul": 0.12
             }
           },
           "usage": {
@@ -6380,7 +6380,7 @@
             "output_tokens": 309
           }
         },
-        "latencyMs": 303,
+        "latencyMs": 221,
         "route": "request_landlord_approval"
       }
     }

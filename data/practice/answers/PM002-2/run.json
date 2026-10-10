@@ -1,0 +1,127 @@
+{
+  "case": "PM002-2",
+  "decision": "act",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 44.711,
+  "decisionLine": "act",
+  "sessionId": "wrun_01M4JY5GRTNWDS2KD5YV8QR16M",
+  "startedAt": "2026-10-10T12:56:20.109Z",
+  "finishedAt": "2026-10-10T12:57:04.820Z",
+  "usage": {
+    "inputTokens": 120508,
+    "outputTokens": 4233
+  },
+  "eventCount": 202,
+  "dryRun": false,
+  "result": {
+    "case_id": "R/PM002-2 (ticket 6)",
+    "decision": "act",
+    "summary": "Riverside Works says the approved toilet and cistern replacement is finished. It says it attached an invoice and a photo, but neither is in the CRM. I moved the ticket to closeout and asked the contractor to send the invoice and photo again. I asked the tenant to confirm the toilet works. The ticket is on hold with a follow-up in 2 days. Nothing can be paid until a human checks the invoice against the approved quote. The quote amount isn't in the CRM either.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "Event 034 is a completion report (classifier: completion_report 0.97, autonomy auto). The landlord approved the quote in events 019 and 021, and works were booked for 15/08 (event 027). The next step is closeout: check the invoice and get the tenant to confirm. The invoice isn't visible, so the contractor is the right person to ask. That is better than escalating straight away.",
+      "alternatives_considered": [
+        {
+          "option": "Escalate to a human now for the invoice check",
+          "why_not": "There is no invoice to check yet. The contractor can fix that by sending it again. Escalating now would only stall the job."
+        },
+        {
+          "option": "Close the ticket",
+          "why_not": "Neither the tenant nor any visible evidence confirms the work is done, and the invoice hasn't been checked."
+        },
+        {
+          "option": "No action / return to auto mode",
+          "why_not": "The invoice isn't visible, so someone has to ask for it. Otherwise closeout would stall."
+        }
+      ],
+      "checks_performed": [
+        "Approval status: landlord approved attendance (approval 3) and the quote (approval 4, event 019). Neither approval has an amount.",
+        "Quote attachment-65 and the invoice aren't visible, so the amount can't be checked.",
+        "Contractor identity: the event 026 caller was named 'Willow Utilities', but every booking email went to Riverside Works. Treated this as a probable naming difference and flagged it for the invoice payee check.",
+        "Duplicate check: ticket 9 (R/PM002-1) is open in works at the same property with the same title.",
+        "Open holds: none before this action."
+      ],
+      "assumptions": [
+        "The 'Willow Utilities' in event 026 and Ava Fletcher in event 034 are acting for Riverside Works, the assigned contractor."
+      ]
+    },
+    "situation": "Blocked toilet at Flat 3, 15 Willowmere Road. Riverside Works attended and quoted for a new toilet and cistern. The landlord (Quinn) approved the quote by email. Works were booked for Sunday 15/08/2026. On 19/08 the contractor reported completion and said an invoice and photo were attached, but neither is in the CRM.",
+    "actions_taken": [
+      {
+        "tool": "find_tickets",
+        "description": "Checked for other tickets at this property",
+        "result": "Found ticket 9 (R/PM002-1), open in works, same title",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the contractor's email (event 034)",
+        "result": "completion_report 0.97, autonomy auto",
+        "ok": true
+      },
+      {
+        "tool": "move_stage",
+        "description": "Moved works → closeout because the contractor reported completion",
+        "result": "Stage is now closeout",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed Riverside Works to send the invoice and completion photo again, with the job reference",
+        "result": "Queued (message 5)",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Texted the tenant to confirm the new toilet flushes and drains with no leaks",
+        "result": "Queued (message 6)",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold while waiting for the contractor's invoice and the tenant's confirmation",
+        "result": "Hold 18, follow-up in 2 days",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the reported toilet and cistern replacement on the property",
+        "result": "Fact 6 saved",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (Quinn)",
+        "status": "granted (quote, event 019; amount not visible)",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "Not needed yet. The contractor can resolve the missing invoice by sending it again.",
+      "handover_summary": "",
+      "recommendation": "When the invoice arrives, a human should check the amount against approved quote attachment-65 and check that the payee is Riverside Works before paying. If either doesn't match, escalate."
+    },
+    "unverified": [
+      "Work completion (reported only by the contractor)",
+      "Invoice amount and payee",
+      "Approved quote amount",
+      "Whether 'Willow Utilities' and Ava Fletcher are acting for Riverside Works"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "Possible duplicate ticket: R/PM002-1 (ticket 9) is still open at the same property. Risk of paying for the same job twice.",
+      "The event 026 caller was named Willow Utilities, not Riverside Works. Check the invoice payee.",
+      "Tenant's call (event 031) mentions 'communication from another party' with no detail.",
+      "The tenant contact number differs between messages (07700 900422 and 07700 900946)."
+    ],
+    "final_status": "closeout – on hold (waiting on contractor's invoice and tenant's confirmation)",
+    "next_follow_up": {
+      "when": "In 2 days (hold 18)",
+      "what": "Chase Riverside Works for the invoice and photo, and the tenant for confirmation. Once the invoice arrives, check it against the approved quote and payee, then close. Review duplicate ticket 9."
+    },
+    "confidence": 0.78
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "case": "PM024-2",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 0,
+  "durationSec": 49.764,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4JYB4VX2QSZJWZQ2EAZJAVS",
+  "startedAt": "2026-10-10T12:59:24.855Z",
+  "finishedAt": "2026-10-10T13:00:14.619Z",
+  "usage": {
+    "inputTokens": 110096,
+    "outputTokens": 4828
+  },
+  "eventCount": 374,
+  "dryRun": false,
+  "result": {
+    "case_id": "R/PM024-2 (ticket 52)",
+    "decision": "escalate",
+    "summary": "The ticket is in closeout, but nothing on record backs up the oven completion. The tenant was told on 26 Aug that it was fixed. Since then the landlord's confirmation hasn't come back, the invoice can't be seen on the ticket, and there's no contractor report and no confirmation from the tenant. The tenant's latest message is about a separate leaking conservatory roof, which isn't logged for this property. I emailed the tenant for details with safety advice, set a 2-day hold, and passed the closeout checks and the untracked issues to ops.",
+    "case_type": "mixed",
+    "judgement": {
+      "why_this_decision": "Event 32 is a new issue (conservatory roof leak) with no matching ticket. The tenant can answer what's needed to log it, so I asked them. Closing the oven job safely needs agency checks I can't do from the records: the invoice is only visible in an external portal (events 20, 29), the landlord confirmation asked for in event 21 is missing, and nothing confirms the oven works apart from the agency's own message (event 16). So a human needs to check before the ticket closes.",
+      "alternatives_considered": [
+        {
+          "option": "Close the ticket",
+          "why_not": "Completion, the invoice match and the landlord confirmation can't be verified."
+        },
+        {
+          "option": "No action (the tenant's message is off-topic)",
+          "why_not": "A leak could become a safety or damage issue, and the tenant is waiting for an update."
+        },
+        {
+          "option": "Open a roof repair or ask the landlord for approval now",
+          "why_not": "Too little detail yet. The tenant is better placed to describe the leak first."
+        }
+      ],
+      "checks_performed": [
+        "Loaded the full context and all 32 events",
+        "Checked approvals: only the landlord's 'yes please' to attendance (event 10). No quote or cost cap.",
+        "Searched tickets for the address, 'conservatory' and 'fence'. Neither issue has a ticket for this flat.",
+        "Found a duplicate open oven ticket, 51",
+        "Ran classify_reply on event 32: review, question 0.92, safety 0.22",
+        "Confirmed there are no attachments or invoice on the ticket"
+      ],
+      "assumptions": [
+        "Event 32 is the same tenant asking about this property"
+      ]
+    },
+    "situation": "Oven repair ticket in closeout. The agency marked it complete without payment, the landlord's confirmation is still outstanding, and the invoice is only in an external portal. The tenant now asks about a leaking conservatory roof that isn't logged.",
+    "actions_taken": [
+      {
+        "tool": "classify_reply",
+        "description": "Classified the tenant's message in event 32",
+        "result": "review; question 0.92; safety 0.22",
+        "ok": true
+      },
+      {
+        "tool": "find_tickets",
+        "description": "Searched for related tickets at this property and for the conservatory and fence issues",
+        "result": "Only ticket 51 (duplicate oven request) and 52 exist for this address",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant asking for details and photos of the roof leak, with containment and electrical safety advice",
+        "result": "message 70 queued, guard passed",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold while waiting for the tenant's leak details",
+        "result": "hold 126, follow-up in 2 days",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Handed the closeout checks, the duplicate ticket and the untracked fence and roof issues to ops",
+        "result": "queue item 27",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord",
+        "status": "granted (attendance only, event 10); closeout confirmation still outstanding (event 21)",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "Oven closeout can't be verified, and there are untracked fence and roof issues",
+      "handover_summary": "The tenant was told the oven and fence were fixed (event 16). No contractor report or invoice is visible, and the landlord's confirmation is pending (event 21). Ticket 51 is a duplicate. The tenant is now asking about a conservatory roof leak (event 32) with no ticket. The tenant has been emailed for details and a 2-day hold is set.",
+      "recommendation": "Check the portal invoice against Lantern Works, the property and the approval. Get the landlord's confirmation and confirmation that the oven works, then close. Merge or close ticket 51. Trace the fence request and log the roof leak as a new ticket."
+    },
+    "unverified": [
+      "That the oven was actually repaired",
+      "The invoice amount and payee, and whether 'Keystone Solutions' is the portal or a different contractor",
+      "That a fence or conservatory roof issue was ever reported for this property"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "The tenant was told the work was complete before anyone had verified it",
+      "The invoice can't be seen in the CRM and the payee is unclear",
+      "A roof leak could cause damage or an electrical hazard",
+      "Ticket 51 is a duplicate oven request that is still open",
+      "The fence query (event 15) was never answered directly"
+    ],
+    "final_status": "closeout, on hold (waiting for the tenant), escalated to ops (queue 27)",
+    "next_follow_up": {
+      "when": "2026-08-28",
+      "what": "Chase the tenant for roof leak details if there's no reply, and check that ops has resolved the oven closeout"
+    },
+    "confidence": 0.78
+  }
+}

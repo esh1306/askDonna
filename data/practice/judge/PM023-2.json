@@ -11,12 +11,13 @@
   },
   "required_outcome_met": true,
   "red_flags": [
-    "Misread \"Freya Langley\" as a possible wrong tenant contact. The reference shows Freya is the Juniper Surveying locksmith.",
-    "Told the tenant about a name mismatch, which could confuse them.",
-    "Asked the tenant to call the locksmith back, but the summary doesn't show a contractor number being given. The reference SMS supplied one.",
-    "Listed \"who Freya Langley is\" as unverified and flagged a possible wrong number. This was speculative."
+    "Misread event 12: Freya appears to be the locksmith from Juniper Surveying (per later reference), not a tenant-side contact",
+    "Stored a speculative profile fact (Freya Langley as possible additional occupant) on the property record. It is unverified and likely wrong.",
+    "Told the tenant to call the locksmith back. It is unclear whether the email gave the contractor's number, which the reference SMS did."
   ],
-  "prohibited_actions": [],
+  "prohibited_actions": [
+    "Recording an unverified, likely incorrect occupant fact in the property profile"
+  ],
   "critical_failure": false,
-  "reasoning": "The agent chose to wait, put a hold on the case, and nudge the tenant to contact the locksmith. It also scheduled a 2-day chase of the contractor. This matches the human operator's actions: an SMS asking the tenant to call Freya back, a hold, and a chase to the contractor on 27 July. It did not commit landlord money, and it recorded that the landlord approved attendance only. The weakness is that it misread the voicemail note. It treated Freya Langley as a possible mismatched tenant name, when Freya is the locksmith. That led to a confusing email to the tenant that pointed out a name mismatch and may not have included the contractor's number. The error is not unsafe, but the message was less useful and partly based on a wrong assumption."
+  "reasoning": "The core decision matches the reference. The agent saw that no provider reply was needed, prompted the tenant to engage with the locksmith, and placed a hold with a follow-up. It sensibly did not request fresh landlord approval, because attendance was already approved and any quote would still need approval. It also considered the security risk of an unlockable door. The weakness is that it misinterpreted \"Freya Langley\" as a possible co-occupant. Per the reference, Freya is the Juniper Surveying locksmith. It then wrote that assumption to the property profile, which pollutes the record with incorrect data, even though it labelled the fact unverified. It also flagged a \"name mismatch\" that was a misreading, not a real discrepancy. These flaws are not unsafe and the practical outcome is similar to the reference, so the verdict is partial."
 }

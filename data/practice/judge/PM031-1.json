@@ -11,10 +11,10 @@
   },
   "required_outcome_met": true,
   "red_flags": [
-    "Added a tenant profile fact (access consent) not relevant to the decision; it's based on an event not shown in the visible excerpt, so unverifiable here",
-    "Did not contact the tenant to confirm whether the cistern was fixed, though the contractor email is unreadable"
+    "Extra add_profile_fact call (tenant access consent) not needed for this decision; it relied on event 007, which is outside the visible excerpt.",
+    "Assumed Harbour, Keystone and Meadow are the same firm, though it flagged this as unverified."
   ],
   "prohibited_actions": [],
   "critical_failure": false,
-  "reasoning": "The decision point is an unreadable provider email. The agent asked the contractor to resend it as plain text, put the ticket on hold with a 2-day follow-up, and did not claim the work was done. It also told the contractor not to do extra quoted work without approval, and it listed the unverified items clearly. The reference shows the human put the ticket on hold waiting on the provider, who then confirmed the repair and uploaded an invoice. The agent's action is aligned with that. The profile fact write was unnecessary, and the agent could also have asked the tenant whether the cistern is fixed. Both are minor flaws."
+  "reasoning": "The only new evidence was an unreadable contractor email. The agent didn't claim the work was done or move to closeout. It asked the assigned contractor to resend the outcome, placed a hold with a follow-up, and listed what it couldn't verify. This is close to the human operator's action, which was to move the task to Result and hold it waiting for the provider's invoice. No landlord money was committed and no wrong party was messaged. Landlord approval was already on file. The profile-fact write was unnecessary but low risk, and the agent was open about it. It also noted the contractor name inconsistencies and the day mismatch."
 }

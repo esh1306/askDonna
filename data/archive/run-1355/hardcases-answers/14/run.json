@@ -1,0 +1,112 @@
+{
+  "case": "14",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 0,
+  "durationSec": 38.563,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4JXMH0476XQKSQN14HNKVPG",
+  "startedAt": "2026-10-10T12:47:03.522Z",
+  "finishedAt": "2026-10-10T12:47:42.085Z",
+  "usage": {
+    "inputTokens": 73983,
+    "outputTokens": 3894
+  },
+  "eventCount": 279,
+  "dryRun": false,
+  "result": {
+    "case_id": "68 (R/14)",
+    "decision": "escalate",
+    "case_type": "maintenance_admin",
+    "summary": "The job is finished and one invoice matches the approval: TS-0881, Thermo-Serve Ltd, £210. The second invoice, TS-0882 for £324, doesn't match. It's payable to H&S Domestic Services, a third party not on record, and adds 2 hours of extra labour that nobody approved. It's for the same job and comes from the same invoice series and email, so it could be a duplicate or an attempted fraud. I escalated it so a person can check it with the contractor before anything is paid, and I moved the ticket to close-out. I haven't contacted the landlord or contractor; the handover leaves that to the human reviewer.",
+    "situation": "19 Coppice Road, job HC-14-310: the immersion thermostat/element was replaced on 25/09. The landlord had approved Thermo-Serve Ltd at a quoted £210. On 06/10 one email from the Thermo-Serve address contained two invoices, and they conflict. The landlord pays invoices herself once the agency has checked them.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded ticket 68",
+        "result": "No events, no attachments; property fact 46 records the £210 approval to Thermo-Serve Ltd",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded on the landlord's profile that she pays contractors directly after the agency checks the invoice",
+        "result": "fact 49",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the invoice mismatch on the property",
+        "result": "fact 50",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Handed over the TS-0882 mismatch (payee, amount, scope)",
+        "result": "queue_id 13",
+        "ok": true
+      },
+      {
+        "tool": "move_stage",
+        "description": "Moved the ticket from intake to close-out because the work is complete and only the invoice check remains",
+        "result": "intake -> closeout",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord Ms Ferrer",
+        "status": "granted (prior, 2026-09-22, £210 to Thermo-Serve Ltd only)",
+        "channel": "recorded in office notes"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "Invoice TS-0882 has a different payee, a higher amount and extra work nobody approved compared with the approved quote; it may be a duplicate or fraud.",
+      "handover_summary": "TS-0881 (Thermo-Serve, £210) matches the approval. TS-0882 (payee H&S Domestic Services, £324 including 2 hours of extra labour) doesn't, but has the same job reference, number series, date and sending email.",
+      "recommendation": "Tell the landlord TS-0881 can be paid and ask her not to pay TS-0882. Check TS-0882 with Thermo-Serve by phone on a number already held on file, not one from the email. Any extra labour needs evidence and retrospective approval from the landlord before payment."
+    },
+    "unverified": [
+      "Whether Thermo-Serve issued TS-0882",
+      "Who H&S Domestic Services is and how they relate to Thermo-Serve",
+      "Whether the 2 hours of extra labour happened",
+      "Whether the Thermo-Serve email account has been compromised"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "Payee on TS-0882 differs from the contractor of record, a possible invoice-redirection fraud",
+      "Possible double billing of the same job (£210 + £324)",
+      "Extra labour was charged without any approval"
+    ],
+    "final_status": "closeout, open; escalated to the human queue (item 13); no invoice cleared to pay except that TS-0881 is noted as matching",
+    "next_follow_up": {
+      "when": "When the human reviewer completes the check with Thermo-Serve",
+      "what": "Confirm the landlord has been told which invoice is valid, then close the ticket"
+    },
+    "confidence": 0.9,
+    "judgement": {
+      "why_this_decision": "Per the rules, an invoice that doesn't match the approved quote or the contractor of record is never forwarded or approved for payment. TS-0882 differs on payee, amount and scope. TS-0881 matches fully. No contact details are recorded, and checking the payee needs a human using a trusted phone number.",
+      "alternatives_considered": [
+        {
+          "option": "Approve both invoices to the landlord",
+          "why_not": "That would double-bill the job and could pay a fraudster."
+        },
+        {
+          "option": "Email the landlord directly myself",
+          "why_not": "No landlord contact details are on record, and how to word a possible-fraud warning is best left to a human."
+        },
+        {
+          "option": "Email the contractor asking about TS-0882",
+          "why_not": "The email account may be compromised, so checking needs a separate trusted channel."
+        }
+      ],
+      "checks_performed": [
+        "Compared both invoices with the approval: amount, payee, scope, job reference",
+        "Checked the stage against the evidence that the work is complete",
+        "Checked for events, attachments and existing approvals (none visible)"
+      ],
+      "assumptions": [
+        "Office notes on the approval and completion are accurate"
+      ]
+    }
+  }
+}

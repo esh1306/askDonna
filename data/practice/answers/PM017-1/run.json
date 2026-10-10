@@ -3,74 +3,99 @@
   "decision": "request_info",
   "escalated": "no",
   "failures": 0,
-  "durationSec": 22.544,
+  "durationSec": 25.636,
   "decisionLine": "request_info",
-  "sessionId": "wrun_01M4JSW6EM7C1EF8J47MA1BTW8",
-  "startedAt": "2026-10-10T11:41:19.578Z",
-  "finishedAt": "2026-10-10T11:41:42.122Z",
+  "sessionId": "wrun_01M4JY90HCJBN7KK83Y95DHA3J",
+  "startedAt": "2026-10-10T12:58:14.904Z",
+  "finishedAt": "2026-10-10T12:58:40.540Z",
   "usage": {
-    "inputTokens": 35417,
-    "outputTokens": 2274
+    "inputTokens": 61306,
+    "outputTokens": 2681
   },
-  "eventCount": 116,
+  "eventCount": 148,
   "dryRun": false,
   "result": {
-    "case_id": "R/PM017-1 (ticket 9)",
+    "case_id": "35 (R/PM017-1)",
     "decision": "request_info",
-    "summary": "The landlord's reply (event 008) points to an isolator switch to the right of the hob, which probably explains why the extractor fan won't turn on. The landlord did not approve or decline a repair, so approval #5 stays pending and nothing has been booked. I emailed the tenant asking her to switch it on and tell us whether the fan works, and put the ticket on hold for 3 days.",
-    "situation": "The tenant reported on 11 Sep that the kitchen extractor fan at Flat 1, 31 Juniper Mews won't turn on. On 13 Sep the agency asked the landlord whether to use their own contractor or one of ours. The tenant then replied 'Thank you!' (event 007). The landlord replied on 15 Sep that there is a switch to the right-hand side of the hob that needs to be switched on (event 008). Stage: landlord_approval, with approval #5 pending.",
+    "summary": "The landlord didn't approve a repair. They replied that the fan has its own switch to the right of the hob that needs to be on. I passed this to the tenant and asked them to try it and tell us whether the fan works. The ticket is on hold for 3 days. Approval 14 is still pending until we know whether a repair is needed.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "Event 008 is the landlord's answer to the agency's question in event 004. It's a troubleshooting tip, not an approval. classify_reply rated it as auto, intent 'other', with a 0.04 chance of being an unconditional approval. Only the tenant can confirm whether the switch fixes it, so I asked them and placed a hold instead of escalating.",
+      "alternatives_considered": [
+        {
+          "option": "Record approval and assign contractor",
+          "why_not": "The landlord didn't approve any work, and a callout may not be needed if the switch fixes it."
+        },
+        {
+          "option": "Escalate to human",
+          "why_not": "Routine low-risk issue that the tenant can resolve by trying the switch; nothing is conflicting or disputed."
+        },
+        {
+          "option": "Close ticket",
+          "why_not": "The tenant hasn't confirmed the fan works yet."
+        }
+      ],
+      "checks_performed": [
+        "Loaded the ticket context: no holds, no property history, approval 14 pending with no amount",
+        "Classified the landlord's reply in event 008",
+        "Event 007 from the tenant is only a thank-you, so no action was needed on it",
+        "No safety signals in the report"
+      ],
+      "assumptions": [
+        "The switch the landlord means is the fan's isolator or spur switch",
+        "The tenant's first name is Clara (from event 003)"
+      ]
+    },
+    "situation": "The tenant reported that the kitchen extractor fan won't turn on. The agency asked the landlord how to proceed. The landlord replied that a switch to the right of the hob needs to be on.",
     "actions_taken": [
       {
-        "tool": "get_ticket_context",
-        "description": "Loaded the ticket, profiles, events and approvals",
-        "result": "8 events, approval #5 pending, no holds, no property history",
+        "tool": "classify_reply",
+        "description": "Classified the landlord's email in event 008",
+        "result": "autonomy auto, intent other, unconditional approval 0.04",
         "ok": true
       },
       {
         "tool": "send_message",
-        "description": "Emailed the tenant with the landlord's advice: turn on the switch to the right of the hob, test the fan and report back. Included a safety caveat about damaged or hot switches.",
-        "result": "message_id 8 queued",
-        "ok": true
-      },
-      {
-        "tool": "add_profile_fact",
-        "description": "Recorded on the property that the extractor fan is powered by a switch to the right of the hob",
-        "result": "fact 16 recorded, no conflict",
+        "description": "Emailed the tenant: check the switch to the right of the hob, confirm whether the fan works, plus basic safety advice",
+        "result": "Message 45 queued; the guard didn't block it",
         "ok": true
       },
       {
         "tool": "place_hold",
-        "description": "Hold waiting on the tenant to confirm whether the fan works after using the switch",
-        "result": "hold_id 18, follow-up in 3 days",
+        "description": "Hold waiting on the tenant's confirmation",
+        "result": "Hold 70, follow-up in 3 days",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded on the property that the extractor fan has its own switch to the right of the hob",
+        "result": "Fact 43 saved",
         "ok": true
       }
     ],
     "approvals": [
       {
         "party": "Landlord",
-        "status": "pending (approval #5). The landlord gave troubleshooting advice, not an approval or a decline, so I did not resolve it.",
+        "status": "pending (not approved; landlord gave troubleshooting advice)",
         "channel": "email"
       }
     ],
     "escalation": {
       "needed": false,
-      "reason": "Routine non-safety issue with a clear next step",
+      "reason": "Routine. The tenant can confirm whether the switch fixes it.",
       "handover_summary": "",
-      "recommendation": ""
+      "recommendation": "If the tenant says the fan works, close the ticket and mark approval 14 as expired. If not, go back to the landlord about a repair and whether to use their own contractor or ours."
     },
     "unverified": [
-      "Whether the switch is off and whether turning it on fixes the fan",
-      "The picture mentioned in event 004 is not available",
-      "Tenant and landlord contact details and preferred channels are not on the profiles"
+      "Whether the switch fixes the fan",
+      "The picture mentioned in event 004 isn't visible in the records"
     ],
     "failures": [],
-    "risks_or_red_flags": [
-      "Approval #5 has been pending since 11 Sep without a clear APPROVE or DECLINE. If the fan is still faulty, a new decision is needed from the landlord, including whether to use their own contractor or ours."
-    ],
-    "final_status": "Open, stage landlord_approval, on hold waiting for the tenant (hold 18)",
+    "risks_or_red_flags": [],
+    "final_status": "landlord_approval stage, on hold waiting for the tenant (hold 70)",
     "next_follow_up": {
-      "when": "In 3 days (hold 18)",
-      "what": "Chase the tenant. If the fan now works, close the ticket and expire approval #5. If not, ask the landlord to approve a contractor visit and say whether to use their own contractor or ours."
+      "when": "In 3 days (hold 70)",
+      "what": "Chase the tenant for whether the fan works with the switch on. If it works, close the ticket; if not, go back to the landlord about a repair."
     },
     "confidence": 0.85
   }

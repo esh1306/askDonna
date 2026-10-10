@@ -2,40 +2,62 @@
   "case": "PM008-1",
   "decision": "escalate",
   "escalated": "yes",
-  "failures": 0,
-  "durationSec": 63.303,
+  "failures": 1,
+  "durationSec": 70.057,
   "decisionLine": "escalate",
-  "sessionId": "wrun_01M4JWF1RZHPNJE6J9RCPDBB3K",
-  "startedAt": "2026-10-10T12:26:35.488Z",
-  "finishedAt": "2026-10-10T12:27:38.791Z",
+  "sessionId": "wrun_01M4JY6W3NM5QHB5XMMEN6HA2E",
+  "startedAt": "2026-10-10T12:57:04.836Z",
+  "finishedAt": "2026-10-10T12:58:14.893Z",
   "usage": {
-    "inputTokens": 103000,
-    "outputTokens": 4258
+    "inputTokens": 131540,
+    "outputTokens": 5330
   },
-  "eventCount": 314,
+  "eventCount": 371,
   "dryRun": false,
   "result": {
-    "case_id": "48 (R/PM008-1, NBL-008-3466)",
+    "case_id": "17 (R/PM008-1 / NBL-008-3466)",
     "decision": "escalate",
-    "summary": "The landlord hasn't approved anything. They've asked for a second contractor quote to compare against the first. I emailed them to say we'll get a second quote and send both side by side. I've passed the case to a person, who needs to pick and instruct the second contractor; there are no other contractors on record to choose from. The email that was meant to send the landlord the estimate seems to have attached the check-out inspection report instead, and I can't find the estimate anywhere in the records. The case is on hold waiting on the agency, with a follow-up in 2 days.",
-    "situation": "Check-out repair works after the tenant left. The first contractor was asked for an estimate (event 003). An 'estimate' was emailed to the landlord (event 006). The landlord replied asking for one more contractor quote to compare (event 009). The CRM stage says 'scheduling', but nothing has been approved.",
+    "summary": "The landlord hasn't approved the first estimate. They've asked for a second contractor's quote to compare against it. I emailed them to say we'll get a second quote and that no work goes ahead until they choose one. I also told them that our last email had the check-out inspection report attached instead of the estimate. Picking and instructing a second contractor, and finding the missing first estimate, need a person at the agency, so I've passed the case to the human queue and put it on hold until we get the second quote.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "Event 009 is a question/conditional request, not an approval (classifier: question 0.73, unconditional approval 0.02, needs human response 0.8). Event 008 asked whether the landlord needs a reply. They do: they asked for a second quote. No second contractor is on record and I can't see the first estimate, so someone at the agency has to source the quote. I let the landlord know so they aren't left waiting.",
+      "alternatives_considered": [
+        {
+          "option": "Return to auto mode without replying",
+          "why_not": "The landlord asked a direct question and needs a reply. The job also can't progress without a second quote."
+        },
+        {
+          "option": "Record an approval and assign contractor 1",
+          "why_not": "The landlord didn't approve anything. They asked for a comparison first."
+        },
+        {
+          "option": "Assign a second contractor myself",
+          "why_not": "There's no second contractor on record or used before at this property. Choosing one is the agency's call."
+        }
+      ],
+      "checks_performed": [
+        "Loaded full context: 9 events, no approvals, holds or property history",
+        "Searched 'estimate': no estimate document or amount in the records",
+        "Read both attachments: both are check-out inspection reports, not estimates",
+        "Classified the landlord reply",
+        "Checked the stage: it shows 'scheduling', which is ahead of the evidence"
+      ],
+      "assumptions": [
+        "'Can try one other subcontractor' means the landlord wants a second quote before deciding"
+      ]
+    },
+    "situation": "Check-out works after the tenant left Flat 5, 55 Lantern Quay. Contractor 1 was asked for an estimate. The agency emailed the landlord saying the estimate was attached, but the attachment was the inspection report. The landlord replied asking for one other subcontractor to quote so they can compare.",
     "actions_taken": [
       {
-        "tool": "get_ticket_context",
-        "description": "Loaded the case",
-        "result": "9 events, no approvals or holds, no other jobs at the property",
-        "ok": true
-      },
-      {
         "tool": "classify_reply",
-        "description": "Classified the landlord's reply",
-        "result": "A question, flagged for review; unconditional approval probability 0.02",
+        "description": "Classified the landlord's email from event 009",
+        "result": "Question; review; needs human response 0.8",
         "ok": true
       },
       {
         "tool": "read_attachment",
-        "description": "Read both attachments",
-        "result": "Both are check-out inspection reports dated 5 Jan 2026; neither is an estimate",
+        "description": "Read both attachments to look for the estimate",
+        "result": "Both are check-out inspection reports; no estimate visible",
         "ok": true
       },
       {
@@ -45,67 +67,68 @@
         "ok": true
       },
       {
-        "tool": "find_tickets",
-        "description": "Looked for other jobs at the property",
-        "result": "Only this ticket",
-        "ok": true
-      },
-      {
         "tool": "send_message",
-        "description": "Emailed the landlord to say we'll get a second quote and won't go ahead in the meantime",
-        "result": "Message 61 sent; guard passed",
+        "description": "Emailed the landlord: we'll get a second quote, no work goes ahead until they choose, and the previous attachment looked like the inspection report",
+        "result": "Sent (message 27); guard passed",
         "ok": true
       },
       {
         "tool": "add_profile_fact",
-        "description": "Recorded on the landlord's profile that they want comparison quotes",
-        "result": "Fact 73",
+        "description": "Recorded on the landlord's profile that they want comparison quotes (first attempt failed: invalid entity_type, retried as contact)",
+        "result": "Fact 33 recorded",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded that the property is vacant",
+        "result": "Fact 31 recorded",
         "ok": true
       },
       {
         "tool": "escalate_to_human",
-        "description": "Asked a person to source the second contractor and find the original estimate",
-        "result": "Queue item 16",
+        "description": "Asked the agency to source a second quote and find the original estimate",
+        "result": "Queue item 10",
         "ok": true
       },
       {
         "tool": "place_hold",
-        "description": "Put the case on hold waiting on the agency",
-        "result": "Hold 129, follow-up in 2 days",
+        "description": "Put the case on hold, waiting on the agency for the second quote",
+        "result": "Hold 61, follow-up in 5 days",
         "ok": true
       }
     ],
     "approvals": [
       {
         "party": "Landlord (Langley)",
-        "status": "not given – asked for a comparison quote first",
+        "status": "not given: landlord wants a second comparison quote first",
         "channel": "email"
       }
     ],
     "escalation": {
       "needed": true,
-      "reason": "A person needs to pick and instruct a second contractor. The original estimate isn't visible, and the landlord may have been sent the inspection report instead.",
-      "handover_summary": "The landlord wants a second quote before deciding. No other contractors are on record. The 6 Apr email attached the inspection report, not an estimate. The report dates (5 Jan 2026) don't fit the case timeline. The stage says scheduling but nothing is approved.",
-      "recommendation": "Find the first estimate and send it to the landlord; instruct a second contractor to quote for the same scope; send both quotes for approval; check the inspection date and whether any costs go against the deposit; correct the stage to landlord_approval."
+      "reason": "The landlord wants a second quote. Choosing and instructing another contractor is the agency's call, and the original estimate isn't in the records.",
+      "handover_summary": "The landlord (event 009) wants a second quote for the check-out works before deciding. The estimate emailed in event 006 wasn't actually attached: the inspection report was sent twice. The landlord has had an acknowledgement. No contractor details are in the CRM.",
+      "recommendation": "1. Find contractor 1's estimate and add it to the ticket. 2. Instruct a second contractor to quote the same scope. 3. Send both quotes to the landlord together. 4. Correct the ticket stage. 5. Send damage costs to the deposit team if a deduction is intended."
     },
     "unverified": [
-      "Whether the first contractor's estimate exists and how much it is",
-      "Who the first contractor is",
-      "The inspection date of 5 January 2026 (after the case was created)",
-      "Whether any of the damage is chargeable to the tenant's deposit"
+      "Contractor 1's name and estimate amount",
+      "Whether the landlord ever received the actual estimate",
+      "The inspection report's appointment date of 5 January 2026, which doesn't fit the April 2025 case dates"
     ],
-    "failures": [],
+    "failures": [
+      "First add_profile_fact call failed (used entity_type 'landlord'); the retry as 'contact' worked"
+    ],
     "risks_or_red_flags": [
-      "The landlord may have been sent the inspection report instead of the estimate",
-      "The stage says 'scheduling' but nothing has been approved",
-      "Inspection report dates don't fit the case timeline",
-      "Tenant damage may lead to a deposit claim"
+      "The estimate was apparently never attached to the landlord email",
+      "The inspection report date conflicts with the case dates",
+      "The stage shows 'scheduling' with nothing approved",
+      "There may be deposit deductions (burnt carpet) for the lettings team"
     ],
-    "final_status": "On hold waiting on the agency (hold 129); passed to a person (queue 16); CRM stage still says scheduling",
+    "final_status": "Open: on hold waiting on the agency for the second quote (hold 61), and in the human queue (item 10). The stage still says 'scheduling'; it needs correcting by a person, because stages can't move backwards.",
     "next_follow_up": {
-      "when": "In 2 days (2025-04-08)",
-      "what": "Check that a second contractor has been asked to quote and that the original estimate has been found"
+      "when": "In 5 days (hold 61)",
+      "what": "Check the second quote has been instructed or received and both quotes sent to the landlord; update the landlord as promised"
     },
-    "confidence": 0.82
+    "confidence": 0.85
   }
 }

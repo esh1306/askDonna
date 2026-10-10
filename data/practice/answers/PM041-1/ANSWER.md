@@ -6,50 +6,69 @@
 
 ## Summary
 
-The landlord, Miles Kendall, is handling this repair himself. His operative, Amelia, will contact the tenant about the washing machine and towel rail (event 011). The tenant has been told and has acknowledged this, so they don't need another message. I emailed the landlord that the tenant's own fix had failed and suggested checking the sink spigot first, because it was blocked in 2023. I moved the ticket to scheduling and put it on hold for 3 days while we wait for the landlord to confirm the visit and outcome.
+The landlord, Miles Kendall, is arranging his own operative, Amelia, to contact the tenant and look at the washing machine and the towel rail (event 011). The tenant has been told this (event 012). The tenant said the drain pump steps didn't fix the machine (event 014), then thanked us for the update (event 015). I passed the failed fix on to the landlord so Amelia knows before she attends, and sent the tenant a short update with a chase date. I also recorded the landlord's contractor arrangement and the machine's history, and put the ticket on a 3-day hold waiting on the landlord.
+
+## Judgement
+
+- **Case type:** maintenance
+- **Why this decision:** The landlord took the job on himself (event 011). Nothing needs the agency's approval and we have no contractor to assign. The only new information is the tenant saying the drain pump steps didn't work (event 014). That matters for Amelia's diagnosis, so I sent it to the landlord. The tenant had already been told Amelia would call, so they only needed a short update with a date for us to chase. The next step is the landlord's, so I placed a hold with a follow-up date.
+
+| Alternative considered | Why not |
+|---|---|
+| Assign Amelia via assign_contractor and move to scheduling | The landlord is instructing Amelia directly. We have no contact details or agency booking for her, and it isn't confirmed that a visit is booked. |
+| Escalate because the classifier said review | The tenant's 'still broken' is already covered by Amelia's coming visit. There is no safety risk (0.06) and no complaint, so the case doesn't need agency judgement. |
+| No message to anyone | Amelia's diagnosis benefits from knowing the pump fix failed, and the tenant had reported it hadn't worked, so a short update with a date was reasonable. |
+
+**Checks performed before acting**
+
+- Loaded ticket context: no open holds, approvals, attachments or property history
+- Checked the landlord's approval status: no formal approval for the £65+VAT engineer. The landlord chose to use his own operative instead
+- Classified the tenant messages: still_broken, safety 0.06
+- Event 006 mentions an 'ERPC appointment 28 Sept'. It is unclear what this is, and I did not rely on it
+
+**Assumptions**
+
+- Amelia is the landlord's own operative and will contact the tenant directly
+- The landlord's email address on the ticket is valid for messages
 
 ## Actions taken
 
 | # | Tool | Input (gist) | Result | Output (gist) |
 |---|---|---|---|---|
-| 1 | `get_ticket_context` | {"ticket_id":18} | ok | {"ok":true,"ticket":{"id":18,"case_ref":"R/PM041-1","property_id":17,"tenant_id":40,"landlord_id":41,"contractor_id":nu… |
-| 2 | `add_profile_fact` | {"entity_type":"contact","entity_id":41,"key":"arranges_own_contractor","value":"true - for washing machine/towel rail on R/PM041-1 landlor… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":29,"entity_type":"contact","entity_id":41,"key":"arranges_ow… |
-| 3 | `add_profile_fact` | {"entity_type":"property","entity_id":17,"key":"appliance_washing_machine_fitted","value":"2021-06-21","source_ref":"event 011 (landlord em… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":30,"entity_type":"property","entity_id":17,"key":"appliance_… |
-| 4 | `add_profile_fact` | {"entity_type":"property","entity_id":17,"key":"washing_machine_prior_fault","value":"2023-05-25 machine not emptying; Lantern Solutions re… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":31,"entity_type":"property","entity_id":17,"key":"washing_ma… |
-| 5 | `add_profile_fact` | {"entity_type":"contact","entity_id":41,"key":"name","value":"Miles Kendall","source_ref":"events 006, 007, 011","confidence":0.9} | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":32,"entity_type":"contact","entity_id":41,"key":"name","valu… |
-| 6 | `add_profile_fact` | {"entity_type":"contact","entity_id":40,"key":"name","value":"Turner","source_ref":"events 001, 015 (tenant sign-off)","confidence":0.8} | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":33,"entity_type":"contact","entity_id":40,"key":"name","valu… |
-| 7 | `send_message` | {"ticket_id":18,"to":"landlord","channel":"email","subject":"Flat 18, 108 Lantern Quay – washing machine (ref R/PM041-1)","body":"Dear Mile… | ok | {"ok":true,"message_id":22} |
-| 8 | `place_hold` | {"ticket_id":18,"reason":"Landlord (Miles Kendall) is arranging his own operative, Amelia, to contact the tenant and attend to the washing … | ok | {"ok":true,"hold_id":43} |
-| 9 | `move_stage` | {"ticket_id":18,"to":"scheduling","reason":"Provider chosen by the landlord: Miles Kendall's email (event 011) says his operative Amelia wi… | ok | {"ok":true,"from":"provider_selection","to":"scheduling","status":"on_hold"} |
+| 1 | `get_ticket_context` | {"ticket_id":75} | ok | {"ok":true,"ticket":{"id":75,"case_ref":"R/PM041-1","property_id":55,"tenant_id":186,"landlord_id":187,"contractor_id":… |
+| 2 | `classify_reply` | {"ticket_id":75,"text":"The customer reports that the washing machine problem has not been resolved after attempting the advised solution t… | ok | {"autonomy":"review","intent":"still_broken","intent_probs":{"confirms_fixed":0,"still_broken":1,"access_or_availabilit… |
+| 3 | `send_message` | {"ticket_id":75,"to":"landlord","channel":"email","subject":"Flat 18, 108 Lantern Quay – washing machine (ref R/PM041-1)","body":"Dear Mile… | ok | {"ok":true,"message_id":100,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.17,"promises… |
+| 4 | `send_message` | {"ticket_id":75,"to":"tenant","channel":"email","subject":"Flat 18, 108 Lantern Quay – washing machine (ref R/PM041-1)","body":"Hi Turner,\… | ok | {"ok":true,"message_id":99,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.49,"promises_… |
+| 5 | `place_hold` | {"ticket_id":75,"reason":"Landlord (Miles Kendall) arranging his own operative, Amelia, to contact tenant and attend washing machine + towe… | ok | {"ok":true,"hold_id":173} |
+| 6 | `add_profile_fact` | {"entity_type":"contact","entity_id":187,"key":"arranges_own_contractor","value":"true - landlord sends jobs to own operative Amelia (washi… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":107,"entity_type":"contact","entity_id":187,"key":"arranges_… |
+| 7 | `add_profile_fact` | {"entity_type":"property","entity_id":55,"key":"appliance_washing_machine_fitted","value":"2021-06-21; previous not-emptying fault 2023-05-… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":108,"entity_type":"property","entity_id":55,"key":"appliance… |
 
 Agent's own account of its actions (from the structured result):
 
-- `get_ticket_context` - Loaded the ticket context -> 15 events; no holds, approvals or attachments
-- `add_profile_fact` - Recorded that the landlord is arranging his own operative (Amelia) -> fact 29
-- `add_profile_fact` - Recorded the washing machine fitting date, 21 Jun 2021 -> fact 30
-- `add_profile_fact` - Recorded the May 2023 fault (blocked sink spigot) -> fact 31
-- `add_profile_fact` - Recorded the landlord's name (Miles Kendall) and the tenant's name (Turner) -> facts 32, 33
-- `send_message` - Emailed the landlord that the tenant's fix failed, suggested checking the sink spigot, and asked for the visit date and outcome -> message 22 queued
-- `place_hold` - Put the ticket on hold awaiting the landlord's confirmation of Amelia's visit -> hold 43, follow-up in 3 days
-- `move_stage` - Moved the ticket from provider_selection to scheduling, since the landlord has chosen the provider -> now scheduling, on hold
+- `classify_reply` - Classified tenant messages from events 014 and 015 -> still_broken; review; safety 0.06; dissatisfied 0.56
+- `send_message` - Emailed the landlord that the drain pump steps failed (for Amelia) and asked for the visit date once arranged -> Queued, id 100; guard did not block
+- `send_message` - Emailed the tenant: thanked them, said Amelia will be in touch, and that we'll chase if they haven't heard by 27 Sept -> Queued, id 99; guard did not block
+- `place_hold` - Hold waiting on the landlord, 3-day follow-up -> hold_id 173
+- `add_profile_fact` - Recorded that the landlord arranges his own contractor (Amelia; Lantern Solutions used before) -> fact 107
+- `add_profile_fact` - Recorded the washing machine's fit date (June 2021) and the May 2023 sink spigot fix -> fact 108
 
 ## Approvals
 
 | Party | Status | Channel |
 |---|---|---|
-| Landlord (Miles Kendall) | not_needed | email |
+| Landlord (Miles Kendall) | not_needed: landlord is arranging his own operative | email |
 
 ## Escalation & handover
 
 - Escalation needed: **no**
-- Reason: The landlord is handling the repair himself, and there is no safety, cost or dispute issue.
+- Reason: Routine. The landlord is handling the repair through his own operative.
+- Recommendation: Chase the landlord on 27 Sept for Amelia's visit date if there's no update.
 
 ## What could not be verified
 
 - Whether Amelia has contacted the tenant or booked a visit
-- The 'ERPC appointment 28 September 2024' in the call summary (event 006): unclear what it is or whether it relates to this job
-- Amelia's surname, company and contact details
-- Whether the landlord accepts the £65 + VAT engineer option (he arranged his own operative instead)
+- What the 'ERPC appointment 28 September 2024' in event 006 refers to
+- Amelia's contact details and company
 
 ## What failed
 
@@ -57,21 +76,20 @@ _No failures recorded._
 
 ## Risks & red flags
 
-- The tenant has no working washing machine and has had to drain it by hand several times
-- The towel rail issue is being handled with this job but has no ticket of its own
-- Event 004's hold note says 'awaiting contractor', but no contractor was instructed: the hold label was wrong
+- The tenant is without a working washing machine, and water gets trapped in the drum, which locks the door
+- The ticket stage (provider_selection) doesn't fully reflect that the landlord is arranging his own contractor
 
 ## Final result / next follow-up
 
-- Final status: scheduling – on hold, waiting for the landlord's operative (Amelia) to visit
-- Next follow-up: 2024-09-27 - Ask the landlord and tenant whether Amelia has made contact and visited. If not, or the fault remains, offer to send the agency's appliance engineer (needs landlord approval). Clarify the 28 Sep ERPC appointment.
-- Confidence: 0.82
+- Final status: Open, provider_selection, on hold waiting on the landlord (hold 173)
+- Next follow-up: 2024-09-27 - Ask the landlord whether Amelia has booked a visit, and check with the tenant whether she has been in touch
+- Confidence: 0.8
 
 ## Run metadata
 
 - Case folder: `C:\Users\sahid\Documents\Projects\Hackathons\DwellyHack\dwelly-agent\data\practice\cases\PM041-1`
-- Session id: wrun_01M4JSYQ11R1CAJ1K6F1QPRFY4
-- Started: 2026-10-10T11:42:43.099Z  Finished: 2026-10-10T11:43:18.807Z  Duration: 35.7s
-- Events recorded: 217
+- Session id: wrun_01M4JYEJZQ6F9806J9ADCW5X17
+- Started: 2026-10-10T13:01:17.590Z  Finished: 2026-10-10T13:02:04.571Z  Duration: 47.0s
+- Events recorded: 210
 - Model(s): anthropic/claude-opus-5.5
-- Tokens: in 62733 / out 4081; cost: not reported
+- Tokens: in 73683 / out 4200; cost: not reported

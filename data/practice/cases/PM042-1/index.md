@@ -27,6 +27,3 @@ The engineer repaired the washing machine by replacing the wiring to the heating
 
 [Read the complete event history](history.md).
 
-## Attachments
-
-No attachments are required or available for this case.

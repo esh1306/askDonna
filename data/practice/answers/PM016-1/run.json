@@ -3,89 +3,117 @@
   "decision": "wait",
   "escalated": "no",
   "failures": 0,
-  "durationSec": 32.853,
+  "durationSec": 34.179,
   "decisionLine": "wait",
-  "sessionId": "wrun_01M4JWGWN23K2F3VYH7KS2RSJD",
-  "startedAt": "2026-10-10T12:27:35.938Z",
-  "finishedAt": "2026-10-10T12:28:08.791Z",
+  "sessionId": "wrun_01M4JY8ADX2WC4H8R5DFJ5H5BJ",
+  "startedAt": "2026-10-10T12:57:52.256Z",
+  "finishedAt": "2026-10-10T12:58:26.435Z",
   "usage": {
-    "inputTokens": 72004,
-    "outputTokens": 2722
+    "inputTokens": 79028,
+    "outputTokens": 3224
   },
-  "eventCount": 169,
+  "eventCount": 184,
   "dryRun": false,
   "result": {
-    "case_id": "54 (R/PM016-1)",
+    "case_id": "R/PM016-1 (ticket 31)",
     "decision": "wait",
-    "summary": "This is a routine repair (classifier: routine, 0.99). The tenant's back/garden door is stiff to close and creaking, with hinges that look misaligned. The landlord was emailed on 11 Oct and hasn't replied in 3 days, and this is the first missed follow-up, so I chased them by email rather than escalating. I also gave the tenant an update and asked whether the door still locks securely, so it can be treated as urgent if not. The case is on hold for 2 days. If the landlord still hasn't replied by then, it should go to a human.",
-    "situation": "Stage: landlord_approval. Approval #28 (email, no amount) has been waiting since 11 Oct and nobody has replied. There's no contractor, cost estimate or attachment yet. The photo mentioned in event 003 can't be seen.",
+    "summary": "The landlord hasn't replied to the 11 Oct approval request for a routine garden door hinge repair. I sent the landlord a reminder by email asking them to reply APPROVE, with a quote coming first if the job is bigger. I updated the tenant, said they'd hear from us by 16 Oct, and asked whether the door still locks. The ticket is on hold for 2 days. This is the first chase, so it doesn't need a human yet.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "Event 005 flags no reply 3 days after the landlord was emailed (event 003). Approval 12 is still pending and no spend limit is recorded. The job is a routine door/hinge repair (classifier: routine 0.98, emergency 0), so it can't go ahead without the landlord's approval. Escalation rules call for two missed follow-ups, and this is only the first. A reminder plus a hold is the proportionate step.",
+      "alternatives_considered": [
+        {
+          "option": "Escalate to human now",
+          "why_not": "Only one follow-up period has passed and nothing is unsafe. The landlord can still answer, so escalating now would stall the job for no reason."
+        },
+        {
+          "option": "Assign a contractor without approval",
+          "why_not": "There is no approval and no pre-approved limit, and this is not an emergency."
+        },
+        {
+          "option": "New approval request",
+          "why_not": "Approval 12 is already pending, and only one is allowed per ticket. I sent a reminder instead."
+        }
+      ],
+      "checks_performed": [
+        "Approval 12 status: still pending, no amount",
+        "Landlord profile: no preferred channel and no spend limit recorded, so I used email, as the original request did",
+        "Classified intake: doors_windows_locks, routine, safety risk 0.27",
+        "No open holds or human-queue items before this action",
+        "Photo mentioned in event 003 can't be seen in the records"
+      ],
+      "assumptions": [
+        "The door still closes and locks. I asked the tenant to confirm.",
+        "Landlord contact details are held by the CRM outbox even though the profile has no email address"
+      ]
+    },
+    "situation": "The tenant at Flat 17, 113 Juniper Mews reports that the garden door is stiff, creaks and has misaligned hinges. The landlord was emailed on 11 Oct and hasn't replied in 3 days, and the system flagged the ticket for manual review.",
     "actions_taken": [
       {
         "tool": "get_ticket_context",
         "description": "Loaded the case",
-        "result": "5 events, approval #28 pending, no holds or facts",
+        "result": "Stage landlord_approval, approval 12 pending, no holds",
         "ok": true
       },
       {
         "tool": "classify_intake",
         "description": "Classified the repair",
-        "result": "doors_windows_locks, routine, safety_risk 0.27",
+        "result": "doors_windows_locks, routine, route request_landlord_approval",
         "ok": true
       },
       {
         "tool": "send_message",
-        "description": "Emailed the landlord to chase approval: APPROVE to send a contractor to fix if simple or quote if not",
-        "result": "message 67 queued, guard passed",
+        "description": "Sent the landlord an approval reminder by email",
+        "result": "Sent, message 37",
         "ok": true
       },
       {
         "tool": "send_message",
-        "description": "Emailed the tenant an update and asked whether the door still closes and locks securely",
-        "result": "message 68 queued, guard passed",
+        "description": "Sent the tenant a status update, said they'd hear back by 16 Oct, and asked whether the door locks securely",
+        "result": "Sent, message 38",
         "ok": true
       },
       {
         "tool": "place_hold",
-        "description": "Put the case on hold waiting for the landlord, follow up in 2 days",
-        "result": "hold 135",
+        "description": "Put the ticket on hold waiting on the landlord, follow-up in 2 days",
+        "result": "Hold 66",
         "ok": true
       },
       {
         "tool": "add_profile_fact",
-        "description": "Recorded the tenant's stated availability",
-        "result": "fact 77",
+        "description": "Recorded the tenant's access availability",
+        "result": "Fact 40",
         "ok": true
       }
     ],
     "approvals": [
       {
         "party": "Landlord",
-        "status": "requested (pending since 11 Oct, chased 14 Oct)",
+        "status": "requested (pending, reminder sent)",
         "channel": "email"
       }
     ],
     "escalation": {
       "needed": false,
-      "reason": "This is the first missed follow-up on a routine job, so chasing is the right step for now",
+      "reason": "First non-response only, and the job is routine",
       "handover_summary": "",
-      "recommendation": "If the landlord hasn't replied by the follow-up date, escalate so the agency can call them or decide how to proceed. Escalate sooner if the tenant says the door won't lock."
+      "recommendation": "If there's still no reply at the 16 Oct follow-up, chase by phone, or escalate if contact details are missing"
     },
     "unverified": [
-      "Landlord's and tenant's contact details and preferred channels aren't on file, so I can't confirm the emails will reach them",
-      "The door photo mentioned in event 003 can't be seen",
       "Whether the door still locks securely",
-      "Cost of the repair"
+      "The photo mentioned in event 003, which can't be seen in the records",
+      "Landlord contact details and preferred channel (the profile is empty)"
     ],
     "failures": [],
     "risks_or_red_flags": [
-      "If the door gets worse and stops locking, the property becomes insecure (an emergency)",
-      "The tenant's stated availability may now be out of date"
+      "If the door can't be locked, the property is insecure and this becomes an emergency",
+      "There is no landlord contact information on the profile, so the messages may not reach them"
     ],
-    "final_status": "landlord_approval – on hold waiting for landlord (hold 135)",
+    "final_status": "landlord_approval – on hold waiting on the landlord (hold 66)",
     "next_follow_up": {
       "when": "2025-10-16",
-      "what": "Check for a reply from the landlord. If none, escalate to a human for a phone chase or a decision. Also check the tenant's answer on whether the door locks securely."
+      "what": "Check for the landlord's reply on approval 12 and the tenant's answer on whether the door locks. If the landlord hasn't replied after this second follow-up, escalate to a human or chase by phone."
     },
-    "confidence": 0.8
+    "confidence": 0.82
   }
 }

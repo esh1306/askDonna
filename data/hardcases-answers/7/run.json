@@ -1,117 +1,114 @@
 {
   "case": "7",
-  "decision": "act",
+  "decision": "no_action",
   "escalated": "no",
-  "failures": 0,
-  "durationSec": 32.897,
-  "decisionLine": "act",
-  "sessionId": "wrun_01M4JXFNBM3CZMAJVCRVX0MXS3",
-  "startedAt": "2026-10-10T12:44:24.240Z",
-  "finishedAt": "2026-10-10T12:44:57.137Z",
+  "failures": 1,
+  "durationSec": 36.703,
+  "decisionLine": "no_action",
+  "sessionId": "wrun_01M4JY7EHRV61DH02AV9YH4N6F",
+  "startedAt": "2026-10-10T12:57:23.712Z",
+  "finishedAt": "2026-10-10T12:58:00.415Z",
   "usage": {
-    "inputTokens": 58573,
-    "outputTokens": 3306
+    "inputTokens": 75291,
+    "outputTokens": 3594
   },
-  "eventCount": 137,
+  "eventCount": 133,
   "dryRun": false,
   "result": {
-    "case_id": "59 (R/7)",
-    "decision": "act",
-    "summary": "The tenant's SMS (event 006) asks whether we got their earlier message about the dishwasher. That job is already approved (landlord, up to £120, event 002) and booked by the contractor for Tue 7 Oct 10:00–12:00 (events 003–005). I sent the tenant one short SMS confirming we have their message and the booking still stands. I also moved the ticket forward from intake to scheduling, since it was behind the evidence, recorded the landlord's £120 cap, and set a hold to follow up after the visit. No contractor action or escalation is needed.",
+    "case_id": "23 (R/7)",
+    "decision": "no_action",
+    "summary": "The tenant's SMS (event 006) is a check-in about a job that's already sorted. The landlord approved up to £120 (event 002). The contractor confirmed a visit on Tue 7 Oct, 10:00–12:00 (event 003). We told the tenant (event 004) and they said thanks (event 005). I didn't send another message. I tidied the CRM instead: moved the stage forward to scheduling, recorded the £120 limit, and set a hold to check how the visit went.",
     "case_type": "maintenance",
     "judgement": {
-      "why_this_decision": "Event 006 repeats an earlier message about a job that is already approved (event 002), confirmed by the contractor (event 003), passed on to the tenant (event 004) and acknowledged (event 005). The classifier read it as a plain question (0.99) with no safety concern (0.02) and low dissatisfaction (0.13). The visit is the next morning, so one short reply confirming the booking settles the tenant's question and helps make sure someone is home to let the contractor in. Nothing else needed doing apart from bringing the CRM up to date.",
+      "why_this_decision": "Event 006 only asks whether we got the dishwasher message. The records show it was received and acted on: the landlord approved (event 002), the contractor confirmed the booking (event 003), and the tenant was told (event 004) and replied (event 005). The classifier rated it a question with a low chance of needing a person to reply (0.21), almost no safety concern (0.02) and low dissatisfaction (0.16). It only flagged 'review' for a check, and checking showed nothing open. Another message would just repeat event 004, so the right call is no action, plus fixing the CRM: the stage still said intake.",
       "alternatives_considered": [
         {
-          "option": "no_action (treat as duplicate)",
-          "why_not": "The tenant asked a direct question the evening before the visit. A one-line confirmation costs little and protects access, so leaving it unanswered would be poor service."
+          "option": "Send the tenant an SMS repeating the booking",
+          "why_not": "The tenant was given the date in writing (event 004) and replied (event 005), so a repeat adds nothing. It's an easy option if ops would rather reply to every direct question."
         },
         {
-          "option": "Contact contractor to re-confirm",
-          "why_not": "The contractor already confirmed in event 003 and nothing has suggested a change. Chasing them again would be unnecessary."
+          "option": "Escalate to a human",
+          "why_not": "There's no conflict, complaint, safety risk or cost problem."
         },
         {
-          "option": "Escalate",
-          "why_not": "There is no conflict, complaint, safety risk or cost issue."
+          "option": "Re-request landlord approval",
+          "why_not": "The landlord already approved in event 002, and the cap is now on the profile."
         }
       ],
       "checks_performed": [
-        "Reviewed all 6 events: approval, contractor confirmation, tenant notice and acknowledgement are all in the records",
-        "No open holds, pending approvals or human-queue items before this action",
-        "Appointment date in event 003 matches the date in event 004 (Tue 7 Oct 10:00–12:00)",
-        "Classified the inbound SMS: a question, no safety concern",
-        "Outbound guard passed the SMS"
+        "Landlord approval: event 002, 'Approved, up to £120'. No approval record existed in the CRM, so I added the cap as a profile fact.",
+        "Booking: the contractor confirmed Tue 7 Oct, 10:00–12:00, at 14 Fenwick Road (event 003). The address matches the property.",
+        "Tenant: told in event 004 and acknowledged in event 005.",
+        "No open holds, approvals or human-queue items before this turn.",
+        "Safety: standing water inside the dishwasher is contained. Not an emergency.",
+        "Classified event 006 with classify_reply: a question, with a 0.21 chance it needs a person to reply."
       ],
       "assumptions": [
-        "'My message' means the original dishwasher report (event 001), not a separate message we can't see",
-        "The current date is 6 Oct (event 006), so 'tomorrow' means 7 Oct"
+        "Event 006 is a delayed or repeated check-in, not a new problem.",
+        "The appointment hasn't happened yet. As of event 006 (6 Oct, 18:05) it is the next day."
       ]
     },
-    "situation": "Dishwasher not draining at 14 Fenwick Road. The landlord approved up to £120 and the contractor booked Tue 7 Oct 10:00–12:00, which the tenant was told about and acknowledged. On 6 Oct the tenant sent an SMS checking that we had received their message.",
+    "situation": "Tenant at 14 Fenwick Road, Torley, ZZ6 6ZZ: the dishwasher isn't draining. The landlord approved up to £120, the contractor confirmed a visit on Tue 7 Oct 10:00–12:00, and the tenant was told and said thanks. The tenant has now texted to ask whether we got their message.",
     "actions_taken": [
       {
         "tool": "get_ticket_context",
         "description": "Loaded the ticket context",
-        "result": "6 events. Stage was intake; no holds or approvals recorded",
+        "result": "6 events, no holds, no approvals, stage intake",
         "ok": true
       },
       {
         "tool": "classify_reply",
-        "description": "Classified the tenant's SMS (event 006)",
-        "result": "Question 0.99, needs human response 0.28, safety concern 0.02, autonomy: review",
-        "ok": true
-      },
-      {
-        "tool": "add_profile_fact",
-        "description": "Recorded the landlord's £120 cap for this job (event 002)",
-        "result": "Fact 30 saved, no conflict",
+        "description": "Classified the tenant SMS (event 006)",
+        "result": "Question; 0.21 chance it needs a person to reply; safety 0.02; flagged 'review'",
         "ok": true
       },
       {
         "tool": "move_stage",
-        "description": "Moved the ticket from intake to scheduling to match the evidence",
-        "result": "Now in scheduling",
+        "description": "Moved the stage forward to match the evidence (events 002–005)",
+        "result": "Moved from intake to scheduling",
         "ok": true
       },
       {
-        "tool": "send_message",
-        "description": "SMS to tenant confirming we received their message and the booking for Tue 7 Oct 10:00–12:00 stands",
-        "result": "Message 14 queued, guard passed",
+        "tool": "add_profile_fact",
+        "description": "Recorded the landlord's £120 cap. First try failed because I used entity_type 'landlord'; retried as 'contact'.",
+        "result": "Fact 30 recorded, no conflict",
         "ok": true
       },
       {
         "tool": "place_hold",
-        "description": "Hold waiting on the contractor's outcome or invoice after the visit",
-        "result": "Hold 244, follow-up in 1.75 days",
+        "description": "Hold to check the visit outcome on 7 Oct, and check any invoice against the £120 cap",
+        "result": "Hold 56 created, 1-day follow-up",
         "ok": true
       }
     ],
     "approvals": [
       {
-        "party": "Landlord",
-        "status": "granted (up to £120, event 002; not recorded as a CRM approval)",
+        "party": "Landlord (R/7)",
+        "status": "granted (up to £120, event 002)",
         "channel": "email"
       }
     ],
     "escalation": {
       "needed": false,
-      "reason": "Routine reassurance; no conflict, safety or cost issue",
+      "reason": "",
       "handover_summary": "",
       "recommendation": ""
     },
     "unverified": [
-      "Whether the tenant meant a separate message that isn't in the records",
-      "Contractor's identity and the cost of the job (not visible)"
+      "Whether the visit on 7 Oct goes ahead and fixes the problem",
+      "The final cost of the repair"
     ],
-    "failures": [],
+    "failures": [
+      "First add_profile_fact call was rejected because I used entity_type 'landlord'. The retry as 'contact' worked."
+    ],
     "risks_or_red_flags": [
-      "Any invoice must stay within the landlord's £120 cap; anything above it needs fresh approval"
+      "The landlord only approved up to £120. Any invoice above that needs fresh approval."
     ],
-    "final_status": "scheduling; on hold waiting on the contractor's outcome after the 7 Oct visit",
+    "final_status": "Scheduling. Visit confirmed for Tue 7 Oct 10:00–12:00; hold 56 is waiting on the contractor's outcome.",
     "next_follow_up": {
-      "when": "2026-10-08 (hold 244)",
-      "what": "Chase the contractor for the visit outcome and invoice; check it is within £120 and confirm with the tenant that the dishwasher is fixed"
+      "when": "2026-10-07 (after the 10:00–12:00 visit)",
+      "what": "Get the visit outcome from the contractor, confirm with the tenant that it's fixed, and check any invoice against the £120 cap"
     },
-    "confidence": 0.88
+    "confidence": 0.85
   }
 }

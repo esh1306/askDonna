@@ -1,0 +1,120 @@
+{
+  "case": "PM016-2",
+  "decision": "act",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 41.618,
+  "decisionLine": "act",
+  "sessionId": "wrun_01M4JY8WTJ3FPS4RQJZ7A21R3Z",
+  "startedAt": "2026-10-10T12:58:11.097Z",
+  "finishedAt": "2026-10-10T12:58:52.715Z",
+  "usage": {
+    "inputTokens": 106279,
+    "outputTokens": 3857
+  },
+  "eventCount": 204,
+  "dryRun": false,
+  "result": {
+    "case_id": "33 (R/PM016-2)",
+    "decision": "act",
+    "summary": "Beacon Works reported after the 24/10/2025 visit that the garden door now works properly after settling on its own. They said no repair and no invoice were needed. I moved the ticket from works to closeout and emailed the tenant asking her to confirm the door is fine. I put the ticket on hold with a 7-day follow-up. The landlord is not affected, because there is no cost and nothing to approve.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "Event 022 is a clear completion report: door working, no invoice. classify_reply returned completion_report with probability 1.0 and autonomy auto. The landlord approved attendance only (event 009) and no cost arose, so no approval or invoice check is needed. The usual next step is closeout with tenant confirmation, rather than closing straight away on the contractor's word alone.",
+      "alternatives_considered": [
+        {
+          "option": "Close the ticket immediately",
+          "why_not": "The only evidence the door is fixed comes from the contractor. A short tenant confirmation is cheap and would catch any recurrence."
+        },
+        {
+          "option": "Escalate to human (system flagged manual review in event 021)",
+          "why_not": "The flag only means the automatic parse failed. The email itself is clear and routine, with no cost, dispute or safety issue."
+        },
+        {
+          "option": "Notify landlord",
+          "why_not": "No cost and no decision is needed from them. They can be told when the ticket closes if the agency wants that."
+        }
+      ],
+      "checks_performed": [
+        "Approval 13 status: approved (event 009), attendance only, no cost cap or amount",
+        "Checked whether event 022 mentions an invoice or amount: says no invoice is required, and no attachments are visible",
+        "Checked the visit date against the booking: booked 24/10 at 3pm (events 016-019), completion report the same evening",
+        "Safety: none, because the door closes (stiff, not insecure)",
+        "Discrepancy: event 015 says 'door handle', but the rest of the case is about hinges and closing. Probably a transcription slip that doesn't change anything.",
+        "Property history: ticket 31 (R/PM016-1) has the same title and is still on hold at landlord_approval. It may be a duplicate."
+      ],
+      "assumptions": [
+        "The 'door handle' wording in event 015 refers to the same garden door job",
+        "Ticket 31 is an earlier duplicate of this request"
+      ]
+    },
+    "situation": "The tenant reported that the garden door was stiff and creaking. The landlord approved a contractor check, and Beacon Works were booked for 24/10/2025 at 3pm. After the visit, Beacon Works emailed to say the door is working after settling naturally, with no repair or invoice needed. The system could not read that email automatically and asked for a manual review.",
+    "actions_taken": [
+      {
+        "tool": "classify_reply",
+        "description": "Classified the contractor's email from event 022",
+        "result": "completion_report (1.0), autonomy auto, safety 0.02, mentions amount 0.03",
+        "ok": true
+      },
+      {
+        "tool": "move_stage",
+        "description": "Moved the ticket from works to closeout because the contractor reported completion",
+        "result": "works → closeout",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant to say what the contractor found and ask her to confirm the door works, or tell us if it is still sticking",
+        "result": "message 47 queued; guard passed",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Property 24: the garden door stuck seasonally and was fine after settling, with no repair needed",
+        "result": "fact 44 recorded",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Landlord 85: agency emails were landing in spam, so a call may work better",
+        "result": "fact 45 recorded",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold waiting on tenant confirmation, 7-day follow-up",
+        "result": "hold 82",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (R/PM016-2)",
+        "status": "granted (attendance only, event 009); no further approval needed as no cost incurred",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "A routine completion report with no cost, dispute or safety issue",
+      "handover_summary": "",
+      "recommendation": "An ops user may want to close duplicate ticket 31 (R/PM016-1), which is still on hold at landlord_approval, so the landlord isn't chased again."
+    },
+    "unverified": [
+      "That the door actually works now: so far only the contractor has said so, and the tenant has not confirmed",
+      "What Beacon Works did on site, if anything, and whether the hinges were adjusted",
+      "Event 015 calls the job a 'door handle' fix, which doesn't match the hinge/closing report"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "Ticket 31 (R/PM016-1) has the same title and is still open on hold at landlord_approval. It may be a duplicate that leads to the landlord being chased again for no reason.",
+      "The problem may have been caused by heat, so it could come back seasonally"
+    ],
+    "final_status": "closeout, on hold waiting for tenant confirmation (hold 82)",
+    "next_follow_up": {
+      "when": "2025-10-31 (7 days)",
+      "what": "If the tenant confirms the door works, or doesn't reply, close the ticket. If it is still sticking, arrange for Beacon Works to come back."
+    },
+    "confidence": 0.85
+  }
+}

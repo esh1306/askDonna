@@ -6,80 +6,80 @@
 
 ## Summary
 
-This is a life-safety emergency. At 23:41 the tenant reported a gas smell and the carbon monoxide alarm going off, with a toddler in the flat. I texted the tenant immediate steps: get everyone out, call the National Gas Emergency Service, and call 999 if anyone has symptoms. I also assigned the landlord's preferred gas engineer, Calder Heating, without waiting for landlord approval, emailed them and texted the landlord. I escalated to the on-call team at high priority, because the urgent next steps are phone calls my tools can't make. Those calls are to the tenant, Calder's emergency line and the landlord's out-of-hours number.
+The tenant reported a live gas smell and a CO alarm at night with a toddler in the property. This is an emergency. I sent the tenant evacuation and safety steps straight away, including the National Gas Emergency Service number 0800 111 999 and 999 if anyone has symptoms. I assigned the preferred gas engineer, Calder Heating, as emergency safety work without approval, and emailed Calder and the landlord. I escalated to on-call staff at high priority so they can phone the tenant, Calder and the landlord, because none of their contact details are in the profiles.
 
 ## Judgement
 
 - **Case type:** safety_emergency
-- **Why this decision:** Event 001 reports a gas smell plus a CO alarm with a toddler present. Both classifiers put this at emergency level. Safety advice comes first. The emergency rule lets us dispatch work without landlord approval. A human is needed because the next steps are live phone calls overnight.
+- **Why this decision:** Event 281 is a gas escape plus a CO alarm with a vulnerable child present: a life-safety emergency. Jev agreed (emergency_safety, safety_risk 0.98). Under emergency rules, safety advice and dispatch can't wait for approval. A human still needs to make phone calls overnight: to confirm the family is out, get the engineer's attendance confirmed and reach a landlord who is usually unresponsive overnight (event 282). The CRM profiles hold no contact details, so my messages may not be delivered.
 
 | Alternative considered | Why not |
 |---|---|
-| Ask the landlord for approval first | Life-safety emergency, and the landlord doesn't respond overnight |
-| Only advise the tenant | A follow-up engineer and live coordination are still needed |
+| Request landlord approval before dispatching | Emergency safety work. The landlord is historically non-responsive overnight, so waiting would put lives at risk. |
+| Only advise the tenant and wait | An engineer still needs to attend, and the risks need active human follow-up. |
+| Escalate only, without messaging the tenant | The tenant asked 'What do I do??', so they needed safety steps immediately. |
 
 **Checks performed before acting**
 
-- Loaded the ticket context
-- Read the CRM note (event 002)
-- Ran both classifiers
-- No prior approvals or holds
+- Loaded the ticket context: no holds, approvals, history or contact details
+- Classified the intake: emergency, safety_risk 0.98
+- Checked the landlord's overnight responsiveness and the out-of-hours number (event 282)
+- Confirmed the preferred contractor is Calder Heating (event 282)
+- All outbound messages passed the guard
 
 **Assumptions**
 
-- Calder Heating can be reached at the contractor contact the CRM holds for them
-- The standard UK gas emergency number (0800 111 999) applies
+- The tenant can receive SMS through the CRM outbox even though no number is in the profile
+- The National Gas Emergency Service attends to make the supply safe before the private engineer carries out repairs
 
 ## Actions taken
 
 | # | Tool | Input (gist) | Result | Output (gist) |
 |---|---|---|---|---|
-| 1 | `get_ticket_context` | {"ticket_id":58} | ok | {"ok":true,"ticket":{"id":58,"case_ref":"R/6","property_id":58,"tenant_id":154,"landlord_id":155,"contractor_id":null,"… |
-| 2 | `send_message` | {"ticket_id":58,"to":"tenant","channel":"sms","body":"Flat 2, 5 Linden Terrace (ref R/6): Please act now. 1) Get your toddler and everyone … | ok | {"ok":true,"message_id":10,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.59,"promises_… |
-| 3 | `classify_reply` | {"ticket_id":58,"text":"There is a smell of gas in the kitchen and the carbon monoxide alarm has just gone off. I have a toddler asleep ups… | ok | {"autonomy":"review","intent":"question","intent_probs":{"confirms_fixed":0,"still_broken":0,"access_or_availability":0… |
-| 4 | `classify_intake` | {"ticket_id":58} | ok | {"route":"emergency_dispatch","scope":"emergency_safety","scope_probs":{"maintenance_repair":0,"maintenance_admin":0,"t… |
-| 5 | `assign_contractor` | {"ticket_id":58,"contractor_name":"Calder Heating","company":"Calder Heating","reason":"Emergency: gas smell + CO alarm with toddler in pro… | ok | {"ok":true,"contractor_id":162,"stage":"scheduling"} |
-| 6 | `send_message` | {"ticket_id":58,"to":"landlord","channel":"sms","body":"URGENT – Flat 2, 5 Linden Terrace, Harrowby ZZ7 3ZZ (ref R/6). At 23:41 tonight you… | ok | {"ok":true,"message_id":12,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.28,"promises_… |
-| 7 | `send_message` | {"ticket_id":58,"to":"contractor","channel":"email","subject":"EMERGENCY call-out – gas smell & CO alarm – Flat 2, 5 Linden Terrace, ZZ7 3Z… | ok | {"ok":true,"message_id":13,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.16,"promises_… |
-| 8 | `escalate_to_human` | {"ticket_id":58,"reason":"Life-safety emergency: gas smell + CO alarm, toddler in property, overnight; needs live phone calls.","summary":"… | ok | {"ok":true,"queue_id":6} |
-| 9 | `place_hold` | {"ticket_id":58,"reason":"Awaiting tenant confirmation of evacuation/gas emergency service call and Calder Heating ETA; on-call human phoni… | ok | {"ok":true,"hold_id":245} |
-| 10 | `add_profile_fact` | {"entity_type":"contact","entity_id":155,"key":"overnight_responsiveness","value":"historically non-responsive overnight; out-of-hours numb… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":33,"entity_type":"contact","entity_id":155,"key":"overnight_… |
-| 11 | `add_profile_fact` | {"entity_type":"property","entity_id":58,"key":"preferred_gas_engineer","value":"Calder Heating (office closes 17:30; emergency line availa… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":34,"entity_type":"property","entity_id":58,"key":"preferred_… |
-| 12 | `add_profile_fact` | {"entity_type":"contact","entity_id":154,"key":"household_includes_young_child","value":"yes (toddler)","source_ref":"event 001 (tenant SMS… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":35,"entity_type":"contact","entity_id":154,"key":"household_… |
+| 1 | `get_ticket_context` | {"ticket_id":22} | ok | {"ok":true,"ticket":{"id":22,"case_ref":"R/6","property_id":17,"tenant_id":56,"landlord_id":57,"contractor_id":null,"ti… |
+| 2 | `send_message` | {"ticket_id":22,"to":"tenant","channel":"sms","body":"Flat 2, 5 Linden Terrace (ref R/6): ACT NOW. 1) Get your toddler and everyone out of … | ok | {"ok":true,"message_id":24,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.67,"promises_… |
+| 3 | `classify_intake` | {"ticket_id":22} | ok | {"route":"emergency_dispatch","scope":"emergency_safety","scope_probs":{"maintenance_repair":0,"maintenance_admin":0,"t… |
+| 4 | `assign_contractor` | {"ticket_id":22,"contractor_name":"Calder Heating","company":"Calder Heating","reason":"Emergency: gas smell plus CO alarm with a toddler i… | ok | {"ok":true,"contractor_id":72,"stage":"scheduling"} |
+| 5 | `add_profile_fact` | {"entity_type":"property","entity_id":17,"key":"household_has_young_child","value":"yes - toddler in the household (vulnerable occupant)","… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":26,"entity_type":"property","entity_id":17,"key":"household_… |
+| 6 | `add_profile_fact` | {"entity_type":"contact","entity_id":57,"key":"out_of_hours_responsiveness","value":"historically non-responsive overnight; out-of-hours nu… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":27,"entity_type":"contact","entity_id":57,"key":"out_of_hour… |
+| 7 | `add_profile_fact` | {"entity_type":"property","entity_id":17,"key":"preferred_gas_engineer","value":"Calder Heating (office closes 17:30; has an emergency line… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":28,"entity_type":"property","entity_id":17,"key":"preferred_… |
+| 8 | `send_message` | {"ticket_id":22,"to":"contractor","channel":"email","subject":"EMERGENCY gas/CO callout: Flat 2, 5 Linden Terrace, Harrowby ZZ7 3ZZ (ref R/… | ok | {"ok":true,"message_id":30,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.21,"promises_… |
+| 9 | `send_message` | {"ticket_id":22,"to":"landlord","channel":"email","subject":"URGENT: gas smell and CO alarm at Flat 2, 5 Linden Terrace (ref R/6)","body":"… | ok | {"ok":true,"message_id":31,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.43,"promises_… |
+| 10 | `escalate_to_human` | {"ticket_id":22,"reason":"Live gas escape and CO alarm with a toddler in the property, overnight. Needs a human to make phone calls now.","… | ok | {"ok":true,"queue_id":11} |
+| 11 | `place_hold` | {"ticket_id":22,"reason":"Waiting for the tenant to confirm they're out safely and for Calder Heating's ETA. Chase in 1 hour.","waiting_on"… | ok | {"ok":true,"hold_id":64} |
 
 Agent's own account of its actions (from the structured result):
 
-- `get_ticket_context` - Loaded the ticket -> 2 events; no history, facts, holds or approvals
-- `send_message` - Texted the tenant: evacuate, no ignition sources, call 0800 111 999, call 999 if anyone has symptoms, don't go back in, text us once outside -> message 10 queued; guard passed
-- `classify_reply` - Classified the tenant's SMS -> safety_concern 0.99; needs human response 0.94; review
-- `classify_intake` - Classified the report -> emergency; safety_risk 0.98; route emergency_dispatch
-- `assign_contractor` - Assigned Calder Heating (landlord's preferred gas engineer) as emergency work without approval -> contractor 162 assigned; stage moved to scheduling
-- `send_message` - Texted the landlord about the emergency and the action taken -> message 12 queued
-- `send_message` - Emailed Calder Heating an emergency attendance request -> message 13 queued
-- `escalate_to_human` - High-priority handover to on-call for live phone calls -> queue item 6
-- `place_hold` - 6-hour follow-up for tenant confirmation and contractor ETA -> hold 245
-- `add_profile_fact` - Recorded: landlord rarely responds overnight, preferred gas engineer, household includes a young child -> facts 33, 34, 35 saved
+- `send_message` - Safety SMS to the tenant: evacuate, no ignition sources, gas off at the meter only if quick, call 0800 111 999, call 999 if anyone has CO symptoms -> Queued, message 24
+- `classify_intake` - Classified the report -> emergency_dispatch, severity emergency, safety_risk 0.98
+- `assign_contractor` - Assigned Calder Heating as emergency safety work without approval -> contractor_id 72, stage scheduling
+- `add_profile_fact` - Recorded the toddler in the household, the landlord's overnight non-responsiveness and the preferred gas engineer -> Facts 26, 27 and 28 created
+- `send_message` - Emergency callout email to Calder Heating, asking for an ETA and to check before any work beyond making safe and diagnosis -> Queued, message 30
+- `send_message` - Emailed the landlord about the emergency and the actions taken, saying approval will be sought for further repair costs -> Queued, message 31
+- `escalate_to_human` - High-priority handover for phone calls to the tenant, Calder and the landlord -> queue_id 11
+- `place_hold` - Hold to chase the tenant's safety confirmation and Calder's ETA -> hold 64, follow-up 0.25 days
 
 ## Approvals
 
 | Party | Status | Channel |
 |---|---|---|
-| Landlord Ms R. Aziz | not_needed (emergency safety work; landlord notified by SMS) | sms |
+| Landlord Ms R. Aziz | not_needed (emergency safety work); landlord informed by email, and approval will be sought for further repair costs | email |
 
 ## Escalation & handover
 
 - Escalation needed: **yes**
-- Reason: Gas leak and CO alarm with a young child, overnight; needs live phone calls that can't be made through the CRM.
-- Handover summary: The tenant has been told by text to evacuate and call 0800 111 999. Calder Heating has been assigned and emailed, but their office is closed. The landlord has been texted. Nobody has confirmed anything yet.
-- Recommendation: 1) Phone the tenant to confirm everyone is out and the gas emergency service has been called. If not, call it for them. 2) Phone Calder's emergency line. 3) Phone the landlord's out-of-hours number. 4) If the gas is capped off, arrange heating or accommodation for the family.
+- Reason: Live gas escape and CO alarm with a toddler present overnight; urgent phone calls needed
+- Handover summary: Safety SMS sent to the tenant. Calder Heating assigned as an emergency and emailed. Landlord emailed. The family's safety, Calder's attendance and landlord contact are all unconfirmed, and the profiles hold no contact details.
+- Recommendation: On-call staff, now: phone the tenant to confirm everyone is out and 0800 111 999 has been called (call 999 if not, or if anyone has symptoms). Phone Calder's emergency line (check the number) for an ETA. Phone the landlord on 07700 900123. Arrange temporary heating or accommodation if the gas is capped.
 
 ## What could not be verified
 
-- Whether the tenant has left the flat or called the gas emergency service
-- Whether anyone has CO symptoms
-- Calder's attendance and ETA
-- Whether the landlord has seen the message
-- The tenant's phone number is not visible in the CRM profile
+- Whether the tenant and toddler have evacuated
+- Whether the tenant called 0800 111 999
+- Whether the messages will be delivered, as there are no contact details in the profiles
+- Whether Calder Heating will attend, and its ETA
+- The Calder emergency line number in the note (0800 000 0000), which looks like a placeholder
+- The cause of the gas smell and CO
 
 ## What failed
 
@@ -87,21 +87,22 @@ _No failures recorded._
 
 ## Risks & red flags
 
-- Possible CO poisoning; a young child is in the household
-- Contractor and landlord are probably unreachable by email or SMS overnight
-- Emergency work was dispatched without approval, as allowed for safety emergencies
+- Risk to life: gas escape plus carbon monoxide with a young child present
+- The landlord is historically non-responsive overnight
+- There are no contact details for the tenant, landlord or contractor in the CRM profiles
+- The gas may be capped off, leaving the family without heating
 
 ## Final result / next follow-up
 
-- Final status: Scheduling. Emergency escalated at high priority, with hold 245 (6-hour follow-up).
-- Next follow-up: 2026-10-10 ~05:45 UTC (0.25 days), or earlier on any reply - Confirm the tenant is safe and out of the flat, the gas emergency service has attended, and Calder has given an ETA
-- Confidence: 0.9
+- Final status: Scheduling. Calder Heating assigned as emergency work; high-priority human queue item 11; hold 64 open.
+- Next follow-up: Within 6 hours (hold 64, 0.25 days); on-call staff to phone immediately - Confirm the tenant is out safely, get Calder's ETA and reach the landlord
+- Confidence: 0.85
 
 ## Run metadata
 
 - Case folder: `C:\Users\sahid\Documents\Projects\Hackathons\DwellyHack\dwelly-agent\data\hardcases\6`
-- Session id: wrun_01M4JXFD55CHXNCY39VAJPTY9M
-- Started: 2026-10-10T12:44:15.834Z  Finished: 2026-10-10T12:45:10.314Z  Duration: 54.5s
-- Events recorded: 458
+- Session id: wrun_01M4JY7BZ0F7JQY9Y298N34W5T
+- Started: 2026-10-10T12:57:21.072Z  Finished: 2026-10-10T12:58:17.861Z  Duration: 56.8s
+- Events recorded: 493
 - Model(s): anthropic/claude-opus-5.5
-- Tokens: in 76945 / out 5851; cost: not reported
+- Tokens: in 95798 / out 6190; cost: not reported

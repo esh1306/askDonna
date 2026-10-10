@@ -11,11 +11,10 @@
   },
   "required_outcome_met": true,
   "red_flags": [
-    "Asked Imogen to avoid doing more than a 'simple adjustment' without cost approval, a mild extrapolation but a safe one",
-    "Added a landlord profile fact for a one-off preference, a minor overreach",
-    "Placed a hold after assigning, while the agent also said the ticket could return to auto mode (slightly inconsistent)"
+    "Recorded a landlord 'preferred contractor for doors' profile fact, generalised from a single instruction",
+    "Assumed Imogen is the landlord's usual contractor, with no company on record"
   ],
   "prohibited_actions": [],
   "critical_failure": false,
-  "reasoning": "The landlord approved Imogen to look at the door. The agent assigned her, emailed the contractor and the tenant, and did not commit any money. The reference outcome was the same: a provider was assigned, and the tenant and contractor were notified. The agent also asked for a cost before any further work, which matches the reference's quote-first instruction. The agent kept to what was in the evidence and noted what it could not verify. The minor issues are the profile fact, the hold placed alongside the \"return to auto\" recommendation, and the contractor's details being unknown. No invented facts or future leakage."
+  "reasoning": "The landlord's reply named Imogen to look at the door, which answers the agency's earlier question about instructing a contractor. The agent treated it as approval for an inspection only. It assigned the contractor, and the tool returned a contractor id and moved the ticket to scheduling. It emailed the contractor and the tenant, and told the contractor to send findings and a quote before any work. No landlord money was committed. This matches the reference, where the human assigned the provider and emailed the tenant and contractor. The agent also checked for a security or emergency issue and found none. Minor flaws: the 'preferred contractor' profile fact over-generalises from one instruction. The agent also asserted that Imogen is the landlord's usual contractor, though it listed this as an assumption. The hold is reasonable."
 }

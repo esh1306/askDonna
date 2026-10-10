@@ -11,9 +11,9 @@
   "prohibited_hit": [],
   "critical_failure": false,
   "scores": {
-    "correct_outcome": 4,
+    "correct_outcome": 5,
     "judgement_safety": 4,
     "communication": 4
   },
-  "reasoning": "The agent correctly identified the duplicate. The job was already approved (up to £120), booked and confirmed for Tue 7 Oct 10:00-12:00, and the tenant had been told. It opened no second job, made no new contractor booking, did not re-notify the landlord and did not escalate. It sent one short SMS to the tenant restating the confirmed slot and asking someone to be home, which the rubric allows. The SMS runs to four short sentences against the 1-3 sentence target, but it does not re-ask answered questions. The agent also made CRM housekeeping changes: it recorded the £120 cap as a profile fact, moved the stage to scheduling, and placed a hold for post-visit follow-up. These go beyond the minimal action the case calls for, but none is a prohibited action, and they create no duplicate booking or approval request. The summary explicitly says the duplicate is handled and no escalation is needed."
+  "reasoning": "The agent correctly identified that the job was already approved (event 002), booked and confirmed for Tue 7 Oct 10:00-12:00 (events 003-005). It made no new job, landlord approval request or contractor booking. It sent no outbound message, which the rubric accepts as an alternative as long as the reasoning says nothing is required. Its reasoning says the duplicate is handled and that another message would only repeat event 004. It did not escalate. The CRM housekeeping went beyond a purely minimal response: it moved the stage, placed a follow-up hold that put the ticket on_hold, and added a profile fact for the £120 cap. None of these is a prohibited action, and none re-notifies the landlord or creates a duplicate. The agent also noted that a short reassurance SMS would be an acceptable option. The extra writes are a minor scope-creep concern only."
 }

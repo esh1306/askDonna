@@ -6,74 +6,97 @@
 
 ## Summary
 
-The contractor says the invoice for the checkout clean, rubbish removal and carpet clean went straight to Theo. I can't see that invoice in the CRM, and I can't see the approved estimate either, so there's nothing to check it against. I also can't see any landlord approval, confirmation that the work is finished, or a decision on whether the tenant's deposit pays. I've passed it to the operations queue at normal priority so Theo can upload both documents and check them before anything is paid.
+The contractor says the invoice for the checkout clean, rubbish removal and carpet clean went straight to Theo, so it isn't on the job record. The original estimate, its amount and any landlord approval aren't visible either. I asked the contractor to attach the invoice, the estimate and the completion date, and placed a 2-day hold. I also escalated to a human so the invoice can be checked against the estimate and any tenant deposit deduction can be decided.
+
+## Judgement
+
+- **Case type:** maintenance_admin
+- **Why this decision:** Event 17 says the invoice went to Theo directly. Without the estimate amount, the invoice itself or a record of who approved the spend (events 7, 10), the invoice can't be checked or paid. The contractor can provide the documents, and the agency has to decide on the spend authority and the deposit question.
+
+| Alternative considered | Why not |
+|---|---|
+| No action, because Theo already has the invoice | The CRM would stay unable to check the invoice, and the deposit question would go unhandled |
+| Move to closeout | Nothing in the records confirms the work is complete |
+| Ask the landlord for approval | There is no amount to put to them, and the agency has already approved the estimate. A human should confirm the right channel and the authority first |
+
+**Checks performed before acting**
+
+- Approval status
+- Invoice and estimate presence in the CRM
+- Attachment contents
+- Duplicate tickets at the property
+- Classifier on the latest message
+
+**Assumptions**
+
+- 'Bennett' is the contractor assigned to this ticket
 
 ## Actions taken
 
 | # | Tool | Input (gist) | Result | Output (gist) |
 |---|---|---|---|---|
-| 1 | `get_ticket_context` | {"ticket_id":27} | ok | {"ok":true,"ticket":{"id":27,"case_ref":"R/PM003-2","property_id":3,"tenant_id":61,"landlord_id":62,"contractor_id":63,… |
-| 2 | `classify_reply` | {"ticket_id":27,"text":"hi invoice sent to Theo x","sender_role":"contractor","context":"Checkout clean + rubbish removal + carpet clean; e… | ok | {"autonomy":"auto","intent":"invoice","intent_probs":{"quote_or_estimate":0,"invoice":1,"completion_report":0,"scheduli… |
-| 3 | `read_attachment` | {"ticket_id":27,"name":"attachment-01-checkout-inspection-report.pdf"} | ok | {"ok":true,"name":"attachment-01-checkout-inspection-report.pdf","text":"# Transcription: Northbridge Lettings, Checkou… |
-| 4 | `search_case` | {"ticket_id":27,"query":"estimate"} | ok | {"query":"estimate","matches":3,"events":[{"id":295,"ticket_id":27,"ts":"2025-07-22T15:49:57Z","kind":"note","direction… |
-| 5 | `find_tickets` | {"property_address":"Flat 30, 30 Harbour View"} | ok | {"matches":2,"tickets":[{"id":25,"case_ref":"R/PM003-1","title":"Checkout Cleaning Estimate and Invoice","category":nul… |
-| 6 | `escalate_to_human` | {"ticket_id":27,"reason":"Contractor says invoice was sent straight to Theo, but neither the invoice nor the approved estimate is in the CR… | ok | {"ok":true,"queue_id":11} |
+| 1 | `get_ticket_context` | {"ticket_id":8} | ok | {"ok":true,"ticket":{"id":8,"case_ref":"R/PM003-2","property_id":7,"tenant_id":17,"landlord_id":18,"contractor_id":19,"… |
+| 2 | `classify_reply` | {"ticket_id":8,"text":"hi invoice sent to Theo x","sender_role":"contractor","context":"Checkout clean + rubbish removal + carpet clean; es… | ok | {"autonomy":"auto","intent":"invoice","intent_probs":{"quote_or_estimate":0,"invoice":1,"completion_report":0,"scheduli… |
+| 3 | `search_case` | {"ticket_id":8,"query":"invoice"} | ok | {"query":"invoice","matches":1,"events":[{"id":96,"ticket_id":8,"ts":"2025-07-23T18:50:56Z","kind":"email","direction":… |
+| 4 | `read_attachment` | {"ticket_id":8,"name":"attachment-01-checkout-inspection-report.pdf"} | ok | {"ok":true,"name":"attachment-01-checkout-inspection-report.pdf","text":"# Transcription\n\n## Page 1\n\n**Northbridge … |
+| 5 | `send_message` | {"ticket_id":8,"to":"contractor","channel":"email","subject":"Invoice – Job NBL-003-2766, Flat 30, 30 Harbour View, Northbridge, ZZ9 0ZZ","… | ok | {"ok":true,"message_id":13,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.54,"promises_… |
+| 6 | `place_hold` | {"ticket_id":8,"reason":"Waiting for contractor (Bennett) to attach invoice and original estimate to job NBL-003-2766 and confirm completio… | ok | {"ok":true,"hold_id":26} |
+| 7 | `escalate_to_human` | {"ticket_id":8,"reason":"Invoice sent directly to Theo off-system; no estimate amount, invoice or landlord approval visible to check it aga… | ok | {"ok":true,"queue_id":3} |
 
 Agent's own account of its actions (from the structured result):
 
-- `get_ticket_context` - Loaded the full case -> 17 events; no approvals, holds or profile facts; one attachment
-- `classify_reply` - Classified the contractor's email in event 17 -> Intent: invoice; autonomy: auto; no amount mentioned
-- `read_attachment` - Read the checkout inspection report -> Northbridge Lettings report for Flat 30, with an appointment date of 16 March 2026
-- `search_case` - Searched the case for 'estimate' -> No estimate document or amount visible
-- `find_tickets` - Looked for other tickets on the property -> Ticket 25 (R/PM003-1) has the same title and is on hold
-- `escalate_to_human` - Handed over for the invoice and estimate to be checked and the deposit question decided -> queue_id 11
+- `get_ticket_context` - Loaded the ticket context -> 17 events, no holds or approvals, sister ticket R/PM003-1 open
+- `classify_reply` - Classified the contractor's message in event 17 -> intent invoice, autonomy auto, mentions_amount 0.02
+- `search_case` - Searched the case for 'invoice' -> Only match is event 17
+- `search_case` (FAILED) - Searched the case for '£' -> Failed: the search needs at least 2 characters. I did not retry.
+- `read_attachment` - Read the checkout inspection report -> Standard checkout report that mentions deposit deductions. Appointment date shows 16 March 2026.
+- `send_message` - Emailed the contractor asking for the invoice, the original estimate and the completion date -> Sent (message 13), not blocked by the guard
+- `place_hold` - Placed a hold waiting on the contractor, follow-up in 2 days -> hold 26
+- `escalate_to_human` - Handed over for invoice checking, spend authority and the deposit question -> queue item 3
 
 ## Approvals
 
 | Party | Status | Channel |
 |---|---|---|
-| Agency (Theo Quinn) | granted (internal estimate approval, ev 10) | email/CRM note |
+| Agency (Theo Quinn) | granted (estimate approved, event 10; amount not visible) | email/internal note |
 | Landlord | not visible in records | n/a |
 
 ## Escalation & handover
 
 - Escalation needed: **yes**
-- Reason: The invoice was sent to Theo outside the CRM, and the estimate, the landlord's approval and confirmation that the work is finished aren't visible, so the invoice can't be checked.
-- Handover summary: Job NBL-003-2766 is a checkout clean, rubbish removal and carpet clean. The agency approved the estimate on 22 Jul (ev 9–10). The contractor says the invoice went to Theo (ev 17). Neither document is in the CRM, and the cost may need to be recharged to the tenant's deposit.
-- Recommendation: Theo: upload the estimate and invoice and check they match. Confirm landlord authority and decide on any deposit recharge. Confirm the work is finished and move the job to closeout. Check the report date, and check whether ticket 25 is a duplicate. Don't pay until all this is done.
+- Reason: The invoice went to Theo outside the CRM. There is no estimate amount or landlord approval to check it against, and the cost probably affects the tenant's deposit.
+- Handover summary: Bennett (contractor) sent an estimate (event 7, not in the CRM). Theo approved it (events 9–10). Bennett says the invoice was sent to Theo (event 17). I asked Bennett to attach the invoice, the estimate and the completion date (hold 26, 2 days).
+- Recommendation: Theo should upload the invoice and estimate to the ticket and check that the amount and payee match the estimate. He should also confirm who authorised the spend and tell the landlord. The deposits team should decide on any deduction from the tenant's deposit. Check whether R/PM003-1 duplicates this job.
 
 ## What could not be verified
 
-- Estimate amount and contents
+- Estimate amount
 - Invoice amount and payee
-- That the works have been finished
-- That the landlord approved the spend
-- Whether the tenant's deposit pays
-- The checkout report date of 16 March 2026, which doesn't match this July 2025 job
+- Whether the works are complete
+- Whether the landlord approved the cost
+- Whether the cost will be deducted from the tenant's deposit
 
 ## What failed
 
-- Agent reported: The first search_case call was rejected because the query '£' was too short (it must be at least 2 characters); I didn't retry it
+- Agent reported: search_case with '£' was rejected because the query was too short. I did not retry.
 
 ## Risks & red flags
 
-- The invoice was sent outside the CRM, so there's no record of it on the ticket
-- The estimate was approved by the agency with no landlord approval on record
-- The cost may be a deposit deduction
-- Ticket 25 may be a duplicate, which risks paying the same invoice twice
-- The checkout report date doesn't match the job
+- The invoice was handled outside the CRM, so it can't be checked against the approved estimate yet
+- The checkout report's appointment date (16 March 2026) is after the job was raised (22 July 2025), so the date may be wrong
+- Possible duplicate: sister ticket R/PM003-1 has the same title and property
 
 ## Final result / next follow-up
 
-- Final status: Stage: scheduling. In the human queue (item 11) for the invoice and estimate to be checked.
-- Next follow-up: When the operations queue responds or the documents are uploaded - Check the invoice against the estimate, then move the job to closeout
-- Confidence: 0.8
+- Final status: Still at the scheduling stage, with a hold waiting on the contractor and an item in the human queue
+- Next follow-up: 2025-07-25 - Chase the contractor for the invoice, estimate and completion date if they haven't arrived
+- Confidence: 0.75
 
 ## Run metadata
 
 - Case folder: `C:\Users\sahid\Documents\Projects\Hackathons\DwellyHack\dwelly-agent\data\practice\cases\PM003-2`
-- Session id: wrun_01M4JW6PPKBJ64CHGP98PQM11Q
-- Started: 2026-10-10T12:22:02.002Z  Finished: 2026-10-10T12:22:53.852Z  Duration: 51.9s
-- Events recorded: 235
+- Session id: wrun_01M4JY5GSAVTKJNJD4GBF85DZH
+- Started: 2026-10-10T12:56:20.109Z  Finished: 2026-10-10T12:57:17.101Z  Duration: 57.0s
+- Events recorded: 277
 - Model(s): anthropic/claude-opus-5.5
-- Tokens: in 81450 / out 3587; cost: not reported
+- Tokens: in 92226 / out 4408; cost: not reported

@@ -6,29 +6,52 @@
 
 ## Summary
 
-The tenant has confirmed the toilet is fixed, so the only open job is the bedroom window that won't close properly. The landlord never replied to our earlier email about the toilet and the window. I've now sent them a formal approval request by email (approval 10) for the window only, with no cost given because there is no quote yet. I've asked the tenant whether the window can be secured, since that decides whether it's a security emergency. The case is on hold for the landlord's reply, with a follow-up in 2 days.
+The landlord was asked on 22 Feb (event 004) about two jobs: a blocked toilet and a bedroom window that won't close. They haven't replied, and there is no approval on record. The tenant has since said the toilet is fixed (event 006). I sent the landlord a formal approval request covering only the window inspection and repair or quote (approval 44). I updated the tenant and asked whether the window can still be secured. The case is on hold for 2 days while we wait for the landlord.
+
+## Judgement
+
+- **Case type:** maintenance
+- **Why this decision:** The landlord was asked in event 004 whether we could send a contractor, but no reply is visible and no approval or spend limit is recorded, so I can't assign a contractor yet. The tenant's reply (event 006, classified 'confirms_fixed', autonomy 'auto') reduces the job to the window only, so the landlord needed an updated, clear request. The window has a moderate safety-risk score (0.61). If it can't be secured, that would make it urgent or an emergency, so I asked the tenant directly.
+
+| Alternative considered | Why not |
+|---|---|
+| Assign a contractor now | There is no landlord approval or pre-approved limit on record, and the job isn't an emergency based on current information. |
+| Escalate to a human | This is a routine window repair with no conflict, complaint or confirmed safety issue. The next step belongs to the landlord. |
+| Do nothing | The landlord's request still mentioned the toilet, and no approval was tracked in the CRM, so there was nothing to follow up on. |
+
+**Checks performed before acting**
+
+- Loaded the ticket: no approvals, holds, contractor or profile facts.
+- Classified the tenant reply: confirms_fixed (toilet), safety 0.12.
+- Classified the job: doors_windows_locks, routine, safety_risk 0.61, route request_landlord_approval.
+- Checked the scope: the event 004 email to the landlord mixed in the toilet issue, which is now resolved.
+
+**Assumptions**
+
+- Email is a suitable channel for the landlord, as it was used in event 004. No preferred channel is recorded.
+- The window isn't on the ground floor or otherwise insecure. This is unconfirmed, so I asked the tenant.
 
 ## Actions taken
 
 | # | Tool | Input (gist) | Result | Output (gist) |
 |---|---|---|---|---|
-| 1 | `get_ticket_context` | {"ticket_id":20} | ok | {"ok":true,"ticket":{"id":20,"case_ref":"R/PM047-1","property_id":19,"tenant_id":45,"landlord_id":46,"contractor_id":nu… |
-| 2 | `classify_intake` | {"ticket_id":20} | ok | {"route":"request_landlord_approval","category":"doors_windows_locks","category_probs":{"plumbing":0,"appliance":0,"doo… |
-| 3 | `request_landlord_approval` | {"ticket_id":20,"summary":"Bedroom window at Flat 24 is not closing properly. Asking the landlord to approve sending an agency contractor t… | ok | {"ok":true,"approval_id":10,"message_id":27,"landlord":"Landlord (R/PM047-1)"} |
-| 4 | `send_message` | {"ticket_id":20,"to":"tenant","channel":"email","subject":"Bedroom window – Flat 24, 150 Copperfield Walk (Ref R/PM047-1)","body":"Hello,\n… | ok | {"ok":true,"message_id":28} |
-| 5 | `move_stage` | {"ticket_id":20,"to":"landlord_approval","reason":"The landlord has not yet replied to the event 004 email asking whether we may send a con… | FAILED: cannot move backwards from 'provider_selection' to 'landlord_approval' |  |
-| 6 | `place_hold` | {"ticket_id":20,"reason":"Waiting for the landlord to approve the bedroom window contractor (approval 10), or to tell us they'll use their … | ok | {"ok":true,"hold_id":44} |
-| 7 | `add_profile_fact` | {"entity_type":"property","entity_id":19,"key":"toilet_blockage_feb2024_status","value":"resolved by tenant's family; no plumber needed","s… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":38,"entity_type":"property","entity_id":19,"key":"toilet_blo… |
+| 1 | `get_ticket_context` | {"ticket_id":84} | ok | {"ok":true,"ticket":{"id":84,"case_ref":"R/PM047-1","property_id":61,"tenant_id":207,"landlord_id":208,"contractor_id":… |
+| 2 | `classify_reply` | {"ticket_id":84,"text":"Hi.My mother managed to fix the toilet.You can just send somebody to fix the window,thank you!","sender_role":"tena… | ok | {"autonomy":"auto","intent":"confirms_fixed","intent_probs":{"confirms_fixed":0.78,"still_broken":0.03,"access_or_avail… |
+| 3 | `classify_intake` | {"ticket_id":84,"text":"Bedroom window in Flat 24 isn't closing properly. Tenant asks for someone to fix it. (Separate toilet blockage now … | ok | {"route":"request_landlord_approval","scope":"maintenance_repair","scope_probs":{"maintenance_repair":1,"maintenance_ad… |
+| 4 | `request_landlord_approval` | {"ticket_id":84,"summary":"Bedroom window at Flat 24 is not closing properly. Proposed: send an agency contractor to inspect, repair if str… | ok | {"ok":true,"approval_id":44,"message_id":112,"landlord":"Landlord (R/PM047-1)","guard":{"blocked":false,"reasons":[],"p… |
+| 5 | `send_message` | {"ticket_id":84,"to":"tenant","channel":"email","subject":"Flat 24, 150 Copperfield Walk – bedroom window (ref R/PM047-1)","body":"Hello,\n… | ok | {"ok":true,"message_id":111,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.52,"promises… |
+| 6 | `place_hold` | {"ticket_id":84,"reason":"Waiting for the landlord to APPROVE or DECLINE sending a contractor for the bedroom window (approval 44). Also as… | ok | {"ok":true,"hold_id":206} |
+| 7 | `add_profile_fact` | {"entity_type":"property","entity_id":61,"key":"toilet_blockage_feb2024_status","value":"resolved by tenant's family (no contractor used)",… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":124,"entity_type":"property","entity_id":61,"key":"toilet_bl… |
 
 Agent's own account of its actions (from the structured result):
 
-- `get_ticket_context` - Loaded the ticket, profiles and event history -> 6 events. No holds, approvals, profile facts or contractor on file.
-- `classify_intake` - Classified the window report -> Category: doors/windows/locks. Severity: urgent (probability 0.51; emergency 0.08). Needs landlord approval: 0.81. Safety risk: 0.39. Suggested route: request landlord approval.
-- `request_landlord_approval` - Emailed the landlord to approve our contractor inspecting, repairing or quoting for the bedroom window, or to say they'll use their own. Told them the toilet is now resolved. -> Approval 10 created; message 27 queued
-- `send_message` - Emailed the tenant: thanked them for the toilet update, said we're waiting on the landlord, and asked whether the window can be secured (and which floor the flat is on if not) -> Message 28 queued
-- `move_stage` (FAILED) - Tried to move the ticket back to landlord_approval, since the landlord hasn't approved yet -> Rejected: the CRM won't move a ticket backwards from provider_selection
-- `place_hold` - Put the ticket on hold waiting for the landlord, follow-up in 2 days -> Hold 44 created
-- `add_profile_fact` - Recorded that the toilet blockage was resolved by the tenant's family -> Fact 38 saved
+- `get_ticket_context` - Loaded the case -> 6 events; no approvals, holds or contractor
+- `classify_reply` - Classified the tenant's email (event 006) -> confirms_fixed 0.78, autonomy auto
+- `classify_intake` - Classified the window job -> doors_windows_locks, routine, route request_landlord_approval
+- `request_landlord_approval` - Emailed the landlord asking for approval to send a contractor to inspect, repair or quote for the window, and told them the toilet is resolved -> approval_id 44, message 112
+- `send_message` - Emailed the tenant: thanked them for the toilet update, explained the landlord has been asked, said we'll update them by 26 Feb, and asked whether the window can be secured -> message 111 sent
+- `place_hold` - Placed a hold while we wait for the landlord's decision -> hold 206, follow up in 2 days
+- `add_profile_fact` - Recorded that the toilet blockage was resolved without a contractor -> fact 124
 
 ## Approvals
 
@@ -39,38 +62,34 @@ Agent's own account of its actions (from the structured result):
 ## Escalation & handover
 
 - Escalation needed: **no**
-- Reason: Nothing calls for a human yet: no reported security risk, dispute or overdue follow-up.
-- Recommendation: Escalate with high priority if the tenant says the window can't be secured, especially on a ground or easily reached floor. Escalate with normal priority if the landlord still hasn't replied after a second chase.
+- Reason: Routine job waiting on the landlord's approval
+- Recommendation: If the tenant says the window can't be secured, treat it as urgent or an emergency and escalate.
 
 ## What could not be verified
 
-- Whether the window can be shut and locked securely
-- Which floor the flat is on
-- The landlord's preferred contact channel; email was used because the agency used it before
-- The cost of the repair; no quote exists
+- Whether the window can be locked or secured, and which floor the flat is on
+- The cost of the repair
+- The landlord's preferred channel and whether they want to use their own contractor
 
 ## What failed
 
-- Tool `move_stage` failed: cannot move backwards from 'provider_selection' to 'landlord_approval'
-- Agent reported: move_stage to landlord_approval was rejected because the CRM doesn't allow moving backwards. The ticket stays in provider_selection even though the landlord hasn't approved yet.
+_No failures recorded._
 
 ## Risks & red flags
 
-- A window that doesn't close could leave the flat insecure (classifier safety risk 0.39). This becomes an emergency if the window can't be secured and is reachable from outside.
-- The landlord hasn't replied to the first email (event 004).
-- The CRM stage (provider_selection) is ahead of the actual position: landlord approval is still pending.
+- A window that can't be closed could be a security or weather-exposure risk, depending on the floor. This is pending the tenant's answer.
 
 ## Final result / next follow-up
 
-- Final status: On hold (hold 44), waiting for the landlord's approval (approval 10). The stage stays at provider_selection because the CRM wouldn't move it back.
-- Next follow-up: In 2 days (about 2024-02-24) - Chase the landlord on approval 10 if they haven't replied. Check the tenant's answer on whether the window can be secured, and escalate with high priority if it can't.
+- Final status: On hold (provider_selection stage), waiting for the landlord's approval (approval 44)
+- Next follow-up: In 2 days (hold 206) - Chase the landlord for APPROVE/DECLINE on the window. Check the tenant's answer about security. If approved, assign a contractor.
 - Confidence: 0.8
 
 ## Run metadata
 
 - Case folder: `C:\Users\sahid\Documents\Projects\Hackathons\DwellyHack\dwelly-agent\data\practice\cases\PM047-1`
-- Session id: wrun_01M4JSZA35N1RWMW2H42K5P7D9
-- Started: 2026-10-10T11:43:02.682Z  Finished: 2026-10-10T11:43:41.222Z  Duration: 38.5s
-- Events recorded: 244
+- Session id: wrun_01M4JYGJA8JA6F9DV02RT1E4ZM
+- Started: 2026-10-10T13:02:22.447Z  Finished: 2026-10-10T13:02:59.987Z  Duration: 37.5s
+- Events recorded: 217
 - Model(s): anthropic/claude-opus-5.5
-- Tokens: in 61321 / out 3770; cost: not reported
+- Tokens: in 79377 / out 3910; cost: not reported

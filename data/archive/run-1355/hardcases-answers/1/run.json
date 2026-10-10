@@ -1,0 +1,127 @@
+{
+  "case": "1",
+  "decision": "request_info",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 45.564,
+  "decisionLine": "request_info",
+  "sessionId": "wrun_01M4JXE912DF7X071FANS45KJD",
+  "startedAt": "2026-10-10T12:43:38.666Z",
+  "finishedAt": "2026-10-10T12:44:24.230Z",
+  "usage": {
+    "inputTokens": 75987,
+    "outputTokens": 4373
+  },
+  "eventCount": 252,
+  "dryRun": false,
+  "result": {
+    "case_id": "53 (R/1)",
+    "decision": "request_info",
+    "summary": "The tenant reported an urgent heating fault: her boiler keeps losing pressure and the radiators are cold. She asked us to send someone to Flat 6, but the CRM says she is the tenant of Flat 4, and Flat 6 is let to J. Okafor. Because the address decides which landlord we ask and whose home the engineer enters, I emailed her to confirm her flat and whether the shared-cupboard boiler heats only her flat. The email also gave her safe interim advice. The ticket is on hold with a 12-hour follow-up because the job is urgent.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "Event 001 asks for attendance at Flat 6. Event 002 shows the sender is the tenant of Flat 4 and that Flat 6 belongs to another tenant. Event 004 adds that the boiler is in a shared landing cupboard on the 2nd floor. So we don't know which property, which landlord or which tenancy this is. The tenant can answer that quickly, so I asked her rather than escalating. It isn't an emergency: there's no gas smell, no uncontained leak and no known vulnerability, so we can't send anyone to a flat that may not be hers before it's confirmed.",
+      "alternatives_considered": [
+        {
+          "option": "Ask the Flat 4 landlord for approval now",
+          "why_not": "If the boiler serves Flat 6 or is shared plant, we would be asking the wrong landlord or freeholder."
+        },
+        {
+          "option": "Escalate to a human now",
+          "why_not": "A quick question to the tenant can settle the address. I'll escalate if she doesn't reply or if it turns out to be a communal or Flat 6 boiler."
+        },
+        {
+          "option": "Treat as an emergency and send an engineer",
+          "why_not": "There's no gas smell, uncontrolled leak or known vulnerable occupant, and the address is unclear."
+        }
+      ],
+      "checks_performed": [
+        "Tenancy in the CRM lookup (event 002) compared with the flat named in the report (event 001)",
+        "No open approvals, holds or contractor on the ticket",
+        "Landlord profile: no recorded spend limit and no preferred channel",
+        "No other jobs on record for this property",
+        "Intake classifier: urgent heating; reply classifier: needs review"
+      ],
+      "assumptions": [
+        "The Thursday she asked about is 1 October 2026; this is not confirmed with her",
+        "She is probably the Flat 4 tenant and the Flat 6 mention is probably a mistake or refers to where the cupboard is; this is not verified"
+      ]
+    },
+    "situation": "An urgent report of a boiler losing pressure, with two different flats named. The CRM lists the tenant at Flat 4; she asked for an engineer at Flat 6, which is let to J. Okafor. The boiler is in a shared utility cupboard on the 2nd-floor landing.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the case",
+        "result": "4 events; no holds, approvals or contractor",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the tenant's 09:40 email (event 004)",
+        "result": "Access/availability message; flagged for review",
+        "ok": true
+      },
+      {
+        "tool": "classify_intake",
+        "description": "Classified the reported fault",
+        "result": "Heating; urgent; landlord approval likely needed",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant to confirm her flat and whether the boiler serves other flats, with safe interim advice",
+        "result": "Sent (message 5); passed the outbound guard",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Put the ticket on hold until the tenant confirms",
+        "result": "Hold 240, follow-up in 0.5 days",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded where the boiler is (as reported by the tenant)",
+        "result": "Fact 25",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the tenant's Thursday-afternoon availability",
+        "result": "Fact 26",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (R/1)",
+        "status": "not yet requested – waiting for the tenant to confirm the address",
+        "channel": "none"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "The tenant can confirm the address herself",
+      "handover_summary": "",
+      "recommendation": "If she doesn't reply by the follow-up, or the boiler turns out to serve Flat 6 or the whole building, hand it to a human."
+    },
+    "unverified": [
+      "Which flat the tenant actually lives in and which flat the boiler serves",
+      "Whether the boiler is communal plant (it may be the freeholder's responsibility)",
+      "Who the landlord is and how they prefer to be contacted",
+      "Whether anyone in the household is vulnerable"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "Flat 6 is let to a different tenant (J. Okafor), so sending an engineer there could mean entering another tenant's home",
+      "A shared-cupboard boiler may be communal, so the cost could belong to a different party",
+      "Urgent heating fault with cold weather forecast; delay matters"
+    ],
+    "final_status": "intake, on hold waiting for the tenant (hold 240)",
+    "next_follow_up": {
+      "when": "2026-09-28 about 21:40 UTC (in 12 hours)",
+      "what": "Chase the tenant for the address. Once confirmed, ask the right landlord for approval, mentioning her Thursday-afternoon availability; otherwise escalate."
+    },
+    "confidence": 0.8
+  }
+}

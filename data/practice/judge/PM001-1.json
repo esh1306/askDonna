@@ -11,10 +11,11 @@
   },
   "required_outcome_met": true,
   "red_flags": [
-    "Sent an unrequested tenant status update, though the content reportedly avoids over-promising",
-    "Added a pet fact to the CRM, which was unnecessary but harmless and sourced from the intake Q&A"
+    "Sent tenant an update, which the human did not do; the content is unseen and it is not clear it was necessary",
+    "Recorded the pet as a property profile fact; this is harmless but unrelated to the decision",
+    "Assumed Grace Nolan is the landlord's side with no verification, though the agent flagged this as an assumption"
   ],
   "prohibited_actions": [],
   "critical_failure": false,
-  "reasoning": "The landlord's reply gave no approval. It said a site meeting had happened and quotes were awaited. The agent chose to wait: it placed a hold, left the approval pending, and set a follow-up for about 14 Oct. This closely matches the human operator, who placed a hold and chased the landlord later. The agent committed no landlord money and made no false claims. It also flagged the name mismatch (Grace Nolan vs Rowan) and the question of who is responsible for the communal areas. The tenant message was extra, and the tenant has no contact details on file, so it may not be delivered. The agent noted this itself. The issue is routine with no safety risk, so these are minor flaws."
+  "reasoning": "The landlord's email is a progress update, not an approval. The agent correctly kept the approval pending and placed a hold with a follow-up on 14 Oct. The human did the same: a hold, then a chase on 16 Oct. The agent made no landlord-money commitment and did not wrongly assign a contractor. It also flagged the possible duplicate ticket and the communal-ownership question. Minor issues: it messaged the tenant, which was optional, and the message passed the guard. It also wrote an unrelated pet fact to the property profile. It noted that the tenant has no email or phone on file, so delivery is unconfirmed. Overall this is a sound wait decision."
 }

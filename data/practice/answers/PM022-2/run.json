@@ -2,86 +2,99 @@
   "case": "PM022-2",
   "decision": "wait",
   "escalated": "no",
-  "failures": 2,
-  "durationSec": 34.041,
+  "failures": 0,
+  "durationSec": 33.017,
   "decisionLine": "wait",
-  "sessionId": "wrun_01M4JWH6NBKQT6DJE6SWEP72CZ",
-  "startedAt": "2026-10-10T12:27:46.141Z",
-  "finishedAt": "2026-10-10T12:28:20.182Z",
+  "sessionId": "wrun_01M4JYAC7HKAKM9RA414JJKM05",
+  "startedAt": "2026-10-10T12:58:59.634Z",
+  "finishedAt": "2026-10-10T12:59:32.651Z",
   "usage": {
-    "inputTokens": 85752,
-    "outputTokens": 3143
+    "inputTokens": 76278,
+    "outputTokens": 2924
   },
-  "eventCount": 180,
+  "eventCount": 106,
   "dryRun": false,
   "result": {
-    "case_id": "57 (R/PM022-2)",
+    "case_id": "48 (R/PM022-2)",
     "decision": "wait",
-    "summary": "Ticket 57 is at closeout. The latest contractor email (event 018) is an automated appointment confirmation, so it needs no reply. I asked the tenant to confirm the lock now works and whether she has had new keys. I also put the ticket on hold for 5 days, waiting for the contractor's invoice and the new key (event 016). Nothing needs a person yet. When the invoice arrives, check it before paying, because no landlord approval or amount is recorded.",
-    "situation": "This was a routine (not emergency) report of a stiff front door lock at Flat 23, 155 Willowmere Road. A contractor was sent, recorded as Oliver Sawyer and called 'Maya' in internal notes. On 18/11 he said he was on his way with two locks in the van (event 011). On 20/11 the agency marked the job complete. An internal note says 'Maya done repair – he will drop new key off and send invoice' (event 016). The newest inbound is a contractor email confirming the appointment (event 018). The classifier rated it a routine scheduling message (autonomy auto), so no reply is needed.",
+    "summary": "The latest inbound (event 018) is the contractor's automatic appointment confirmation. Classify_reply rated it 'auto' (scheduling 0.87, needs a human response 0.18), so the provider doesn't need a reply. The agency's own note (event 016) records the repair as done, with the contractor to drop off the new key and send an invoice. I placed a 5-day hold on the contractor so the closeout gets chased.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "Event 017 asked whether the provider needs a response. Event 018 only confirms the appointment and gives job details. It asks no question and the classifier marked it auto. The next step, the invoice and key drop-off (event 016), is the contractor's, and there was no open hold, so I added one with a follow-up date. I didn't message the tenant because duplicate ticket 46 already records asking the tenant whether the lock is fixed.",
+      "alternatives_considered": [
+        {
+          "option": "Close the ticket now",
+          "why_not": "No invoice has arrived and the key drop-off isn't confirmed. Event 013, the call cited as evidence of completion, mentions Flat 22, 42 Harbour View, not this flat."
+        },
+        {
+          "option": "Reply to the contractor",
+          "why_not": "Event 018 is an automatic confirmation with no question in it, so a reply wouldn't move the job on."
+        },
+        {
+          "option": "Escalate",
+          "why_not": "No conflict, cost decision or safety issue needs a person to decide right now."
+        }
+      ],
+      "checks_performed": [
+        "Loaded ticket context: stage closeout, no open holds, approvals or human-queue items",
+        "Ran classify_reply on event 018: auto, scheduling",
+        "Searched the case for 'invoice': only the event 016 note, no invoice or attachments visible",
+        "Checked property history: ticket 46 (R/PM022-1) has the same request and events, is in scheduling with open hold 90"
+      ],
+      "assumptions": [
+        "'Maya' in the internal notes is the same contractor as Oliver Sawyer named in events 007/008"
+      ]
+    },
+    "situation": "This is a tenant's report of a stiff front door lock at Flat 23, 155 Willowmere Road. A contractor was sent (events 004–011) and the agency recorded the repair as done (events 015/016). The case is waiting for the new key to be dropped off and for the invoice. Event 018 is the contractor's automatic appointment-confirmation email.",
     "actions_taken": [
       {
-        "tool": "get_ticket_context",
-        "description": "Loaded ticket, profiles, events, property history",
-        "result": "Stage closeout; no holds, approvals or attachments; 18 events",
-        "ok": true
-      },
-      {
         "tool": "classify_reply",
-        "description": "Classified contractor email event 018",
-        "result": "Scheduling intent 0.90, autonomy auto: no reply needed",
+        "description": "Classified the contractor email (event 018)",
+        "result": "autonomy auto, intent scheduling 0.87, needs a human response 0.18",
         "ok": true
       },
       {
         "tool": "search_case",
-        "description": "Searched for invoice",
+        "description": "Looked for an invoice in the case history",
         "result": "Only the event 016 note; no invoice visible",
         "ok": true
       },
       {
-        "tool": "send_message",
-        "description": "Emailed tenant to confirm the lock works and whether she has new keys",
-        "result": "First draft blocked by the guard for implying the work was done; reworded version sent (message 73)",
+        "tool": "get_ticket_context",
+        "description": "Checked the related ticket 46 at the same property",
+        "result": "Duplicate of this job, in scheduling with open hold 90",
         "ok": true
       },
       {
         "tool": "place_hold",
-        "description": "Hold waiting on contractor for the invoice and key drop-off, and on the tenant's confirmation",
-        "result": "Hold 136, follow-up in 5 days",
+        "description": "Hold on the contractor for the invoice and confirmation of key drop-off",
+        "result": "hold_id 93, follow up in 5 days",
         "ok": true
       }
     ],
-    "approvals": [
-      {
-        "party": "Landlord",
-        "status": "none recorded on ticket",
-        "channel": "n/a"
-      }
-    ],
+    "approvals": [],
     "escalation": {
       "needed": false,
-      "reason": "Routine closeout; the contractor email needs no reply",
+      "reason": "Routine closeout wait",
       "handover_summary": "",
-      "recommendation": "When the invoice arrives, check the property, contractor and amount. No landlord approval or cap is recorded, so pass any non-trivial lock-replacement cost to a person before paying."
+      "recommendation": "When the invoice arrives, check it matches this property, job and contractor before paying. Merge or close duplicate ticket 46."
     },
     "unverified": [
-      "That the repair or lock change at Flat 23 is done: this rests only on internal note event 016. The call in event 013 was about Flat 22, 42 Harbour View.",
-      "Whether the lock was repaired or replaced, and what it cost",
+      "The repair is confirmed only by an internal agency note (event 016), not by the contractor or the tenant",
+      "Event 013's call is about Flat 22, 42 Harbour View and doesn't clearly confirm work at this flat",
       "Whether the new key has been given to the tenant",
-      "That 'Maya', 'Oliver Sawyer' and 'Miles' are the same contractor or agency staff (assumed to be naming differences)"
+      "Invoice amount; no landlord approval is on record"
     ],
-    "failures": [
-      "First tenant message was blocked by the outbound guard for implying the work was done; reworded and sent"
-    ],
+    "failures": [],
     "risks_or_red_flags": [
-      "No landlord approval is on the ticket, and the contractor brought two locks, so the invoice may cover a full lock replacement",
-      "The event 013 call covered other properties (Flat 22, 42 Harbour View; Flat 18, 68 Harbour View), so check the invoice is for Flat 23",
-      "Another ticket at this property (R/PM022-1, same title) is on hold in scheduling and may be a duplicate needing closure"
+      "Duplicate ticket 46 (R/PM022-1) for the same job could lead to the invoice being processed twice",
+      "No landlord approval is recorded for the cost, so the invoice may need the landlord's sign-off",
+      "Completion evidence is muddled with another property (event 013)"
     ],
-    "final_status": "closeout – on hold (hold 136) waiting for contractor invoice/key and tenant confirmation",
+    "final_status": "closeout, on hold waiting on contractor (hold 93)",
     "next_follow_up": {
-      "when": "In 5 days (around 2024-11-26)",
-      "what": "Chase the contractor for the invoice and key drop-off and the tenant for confirmation. Check the invoice against the property and contractor, and pass the cost to a person or the landlord since no approval is recorded."
+      "when": "In 5 days (from 2024-11-21)",
+      "what": "Chase the contractor for the invoice and confirmation that the new key was given to the tenant; check the invoice against this job and property"
     },
     "confidence": 0.8
   }

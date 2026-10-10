@@ -1,0 +1,147 @@
+{
+  "case": "PM020-2",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 0,
+  "durationSec": 68.328,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4JY9QTT8W2EHD9T79AHZ92J",
+  "startedAt": "2026-10-10T12:58:38.738Z",
+  "finishedAt": "2026-10-10T12:59:47.066Z",
+  "usage": {
+    "inputTokens": 75647,
+    "outputTokens": 5096
+  },
+  "eventCount": 334,
+  "dryRun": false,
+  "result": {
+    "case_id": "R/PM020-2 (ticket 42)",
+    "decision": "escalate",
+    "summary": "The routine inspection is finished: the report was sent to the landlord saying no issues were found. The landlord then replied with two new points. A dog flap was fitted without his approval, and he wants the spare front door key back after a lock change. Both are tenancy-terms and access questions that need agency judgement, so I sent the case to the human queue at normal priority. I also emailed the landlord to say we've received it, recorded the facts on the property and set a 2-day follow-up.",
+    "case_type": "out_of_scope",
+    "judgement": {
+      "why_this_decision": "Event 020 raises a tenant alteration made without consent (dog flap) and a key/lock-change access question. Neither is a repair: they turn on the tenancy agreement, may need the tenant asked to put things right, and involve security and access. classify_reply returned 'review' with needs_human_response 0.79. The inspection itself is done (events 017-018), so there is nothing to move through repair stages.",
+      "alternatives_considered": [
+        {
+          "option": "no_action / return to auto mode",
+          "why_not": "The landlord asked a direct question and is unhappy about an alteration he didn't approve. Leaving it unanswered would stall the case."
+        },
+        {
+          "option": "Open a repair job to remove the dog flap",
+          "why_not": "Nobody has decided yet on reinstatement versus retrospective consent, or on who pays. The landlord hasn't approved any work, and this depends on the tenancy terms."
+        },
+        {
+          "option": "Message the tenant directly about the key and the dog flap",
+          "why_not": "Raising a possible tenancy breach with the tenant needs a property manager's judgement and wording. Left to the human handling the escalation."
+        },
+        {
+          "option": "Close the inspection ticket",
+          "why_not": "There is an open landlord query on it. Closing would hide it."
+        }
+      ],
+      "checks_performed": [
+        "Loaded the full ticket context: no profile facts, approvals or holds before this turn",
+        "Read the inspection report attachment: the transcription shows only boilerplate, with no mention of a dog flap or lock change. The summary says no issues",
+        "Classified the landlord reply: review, question intent, safety_concern 0.2, dissatisfied 0.19",
+        "Name check: report addressed to Oliver Bennett, reply from Felix Clarke. Noted as unconfirmed, not treated as a conflict",
+        "Date check: inspection booked for 15/02, report dated 16/02. A small slip, noted",
+        "Found sibling ticket R/PM020-1 (inspection) open at the same property"
+      ],
+      "assumptions": [
+        "Felix Clarke is linked to the landlord account (co-owner, partner or representative)",
+        "The lock change was done by or for the tenant. The landlord's email text is only a summary, so this isn't clear"
+      ]
+    },
+    "situation": "Inspection ticket at Flat 12, 162 Beacon Close. The inspection was moved to 15/02/2024 because of the tenant's dog, and the report (dated 16/02) was sent to the landlord with no issues. The landlord then wrote back (event 020) about a dog flap fitted without his approval and the return of the spare front door key after a lock change.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded ticket 42 context",
+        "result": "20 events, no facts, holds or approvals; sibling ticket R/PM020-1 open",
+        "ok": true
+      },
+      {
+        "tool": "read_attachment",
+        "description": "Read the inspection report",
+        "result": "Boilerplate only; no defects, dog flap or lock change visible",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the landlord email (event 020)",
+        "result": "review; question; needs_human_response 0.79",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the landlord to confirm we've received both points and that the team will reply within 2 working days",
+        "result": "message_id 65, guard passed",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Handed over the dog flap and spare key questions",
+        "result": "queue_id 24",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "has_pets = dog",
+        "result": "Recorded; flagged as a conflict with existing fact 55 (same meaning, different wording)",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Lock change / spare key access question",
+        "result": "Recorded (fact 64)",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Dog flap reported as fitted without approval",
+        "result": "Recorded (fact 65)",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold on the agency, follow up in 2 days",
+        "result": "hold_id 95",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord",
+        "status": "not_needed",
+        "channel": "n/a"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "Possible tenancy breach (dog flap fitted without approval) and a key/access question after a lock change. Both need agency judgement.",
+      "handover_summary": "The inspection is done and the report said no issues. The landlord, signing as Felix Clarke though the report went to Oliver Bennett, says a dog flap was fitted without his approval and wants the spare front door key back after a lock change. The landlord has been told to expect a reply within 2 working days.",
+      "recommendation": "Property manager to check the report photos and the tenancy clauses, contact the tenant about the dog flap and the key, check whether the management key still works, then reply to the landlord with options. Also confirm Felix Clarke's link to the landlord account."
+    },
+    "unverified": [
+      "Whether a dog flap was actually fitted, and by whom",
+      "Who changed the locks and when; who holds the keys now",
+      "Whether the agency's management key still works",
+      "How Felix Clarke is linked to landlord Oliver Bennett",
+      "The landlord's full email text (only a summary is visible)",
+      "Why the inspection reported no issues"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "The inspection said 'no issues' even though the landlord reports an alteration made without his approval, so the inspection may have missed it",
+      "The agency may not have access (management key) after the lock change",
+      "The landlord may be unhappy (dissatisfied 0.19)",
+      "Name mismatch between the report addressee and the person who replied"
+    ],
+    "final_status": "Stage intake (inspection done); escalated (queue 24); on hold waiting on the agency (hold 95)",
+    "next_follow_up": {
+      "when": "2024-02-20 (2 days)",
+      "what": "Check that the property manager has replied to the landlord about the dog flap and spare key; chase if not"
+    },
+    "confidence": 0.85
+  }
+}

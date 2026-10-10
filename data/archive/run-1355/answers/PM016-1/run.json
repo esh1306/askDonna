@@ -1,0 +1,91 @@
+{
+  "case": "PM016-1",
+  "decision": "wait",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 32.853,
+  "decisionLine": "wait",
+  "sessionId": "wrun_01M4JWGWN23K2F3VYH7KS2RSJD",
+  "startedAt": "2026-10-10T12:27:35.938Z",
+  "finishedAt": "2026-10-10T12:28:08.791Z",
+  "usage": {
+    "inputTokens": 72004,
+    "outputTokens": 2722
+  },
+  "eventCount": 169,
+  "dryRun": false,
+  "result": {
+    "case_id": "54 (R/PM016-1)",
+    "decision": "wait",
+    "summary": "This is a routine repair (classifier: routine, 0.99). The tenant's back/garden door is stiff to close and creaking, with hinges that look misaligned. The landlord was emailed on 11 Oct and hasn't replied in 3 days, and this is the first missed follow-up, so I chased them by email rather than escalating. I also gave the tenant an update and asked whether the door still locks securely, so it can be treated as urgent if not. The case is on hold for 2 days. If the landlord still hasn't replied by then, it should go to a human.",
+    "situation": "Stage: landlord_approval. Approval #28 (email, no amount) has been waiting since 11 Oct and nobody has replied. There's no contractor, cost estimate or attachment yet. The photo mentioned in event 003 can't be seen.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the case",
+        "result": "5 events, approval #28 pending, no holds or facts",
+        "ok": true
+      },
+      {
+        "tool": "classify_intake",
+        "description": "Classified the repair",
+        "result": "doors_windows_locks, routine, safety_risk 0.27",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the landlord to chase approval: APPROVE to send a contractor to fix if simple or quote if not",
+        "result": "message 67 queued, guard passed",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant an update and asked whether the door still closes and locks securely",
+        "result": "message 68 queued, guard passed",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Put the case on hold waiting for the landlord, follow up in 2 days",
+        "result": "hold 135",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the tenant's stated availability",
+        "result": "fact 77",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord",
+        "status": "requested (pending since 11 Oct, chased 14 Oct)",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "This is the first missed follow-up on a routine job, so chasing is the right step for now",
+      "handover_summary": "",
+      "recommendation": "If the landlord hasn't replied by the follow-up date, escalate so the agency can call them or decide how to proceed. Escalate sooner if the tenant says the door won't lock."
+    },
+    "unverified": [
+      "Landlord's and tenant's contact details and preferred channels aren't on file, so I can't confirm the emails will reach them",
+      "The door photo mentioned in event 003 can't be seen",
+      "Whether the door still locks securely",
+      "Cost of the repair"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "If the door gets worse and stops locking, the property becomes insecure (an emergency)",
+      "The tenant's stated availability may now be out of date"
+    ],
+    "final_status": "landlord_approval – on hold waiting for landlord (hold 135)",
+    "next_follow_up": {
+      "when": "2025-10-16",
+      "what": "Check for a reply from the landlord. If none, escalate to a human for a phone chase or a decision. Also check the tenant's answer on whether the door locks securely."
+    },
+    "confidence": 0.8
+  }
+}

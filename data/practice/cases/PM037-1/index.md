@@ -26,6 +26,3 @@ The contractor replaced the snapped shower hose and sent an attachment-91-docume
 
 [Read the complete event history](history.md).
 
-## Attachments
-
-No attachments are required or available for this case.

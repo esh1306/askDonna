@@ -25,6 +25,3 @@ The inspection was completed, and the report stated that no issues were identifi
 
 [Read the complete event history](history.md).
 
-## Attachments
-
-- [attachment-01-property-inspection-report.pdf](attachments/attachment-01-property-inspection-report.pdf)

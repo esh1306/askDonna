@@ -1,0 +1,104 @@
+{
+  "case": "PM042-1",
+  "decision": "act",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 37.481,
+  "decisionLine": "act",
+  "sessionId": "wrun_01M4JSSG26CF5ZB757QKD9ND3M",
+  "startedAt": "2026-10-10T11:39:52.086Z",
+  "finishedAt": "2026-10-10T11:40:29.567Z",
+  "usage": {
+    "inputTokens": 56678,
+    "outputTokens": 3608
+  },
+  "eventCount": 243,
+  "dryRun": false,
+  "result": {
+    "case_id": "R/PM042-1 (ticket 2, job ref NBL-042)",
+    "decision": "act",
+    "summary": "The landlord replied \"Yes please arrange an engineer, thank you\" (event 008) to our request to send an appliance engineer to inspect the washing machine. That is a clear yes, so I recorded the approval and moved the ticket to provider selection. I also let the landlord and tenant know where things stand. The approval only covers the inspection. Any repair cost will go back to the landlord for approval.",
+    "situation": "Tenant Noah reported that the washing machine at Flat 20, 120 Alder Lane doesn't heat water on 60°C+ cycles. The rest of the hot water supply works. This is routine. Event 004 asked landlord Mercer by email whether we could send an engineer, approval 2 was pending, and the landlord said yes in event 008. Event 007 asked whether the landlord needs a response. The answer is only a short acknowledgement, which I've sent. No contractor is assigned yet.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded ticket, profiles, events, approvals",
+        "result": "Approval 2 pending; landlord said yes in event 008; no open holds; no contractor",
+        "ok": true
+      },
+      {
+        "tool": "record_approval_response",
+        "description": "Recorded the landlord's yes to sending an engineer, quoting event 008",
+        "result": "Approval 2 status = approved",
+        "ok": true
+      },
+      {
+        "tool": "move_stage",
+        "description": "Moved from landlord_approval to provider_selection",
+        "result": "Stage now provider_selection",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the washing machine make as given by the tenant (unverified)",
+        "result": "Fact 5 saved, no conflict",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the landlord's likely preferred channel as email",
+        "result": "Fact 6 saved, no conflict",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Thanked the landlord by email and said any repair cost will come back to them for approval",
+        "result": "Queued, message_id 1",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant: landlord has agreed, we're finding an engineer, nothing booked yet; asked for make/model; gave safety advice",
+        "result": "Queued, message_id 2",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Placed a hold for the agency to choose and assign an appliance engineer",
+        "result": "hold_id 3, follow-up in 1 day",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (Mercer)",
+        "status": "granted — covers engineer attendance/diagnosis only, no amount agreed",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "Routine job, clear approval, no conflict or safety risk",
+      "handover_summary": "",
+      "recommendation": ""
+    },
+    "unverified": [
+      "Washing machine make 'Harbour Surveying'. This sounds like a company name, not an appliance brand. Model is unknown.",
+      "Who owns the washing machine (landlord-supplied appliance) is assumed, not confirmed in the records",
+      "Event 004 mentions a tenant photo, but no photo is on file",
+      "No cost estimate or spend limit is on record"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "The ticket is filed under 'Heating & Hot Water' but it's really an appliance fault, so it may need recategorising for the right contractor",
+      "The landlord approved attendance only. Any repair quote needs a new approval before work goes ahead",
+      "The hold from event 006 was not showing as open in the CRM"
+    ],
+    "final_status": "Stage provider_selection. Approval 2 approved. On hold (id 3) waiting for the agency to assign an appliance engineer.",
+    "next_follow_up": {
+      "when": "In 1 day (from the hold placed now)",
+      "what": "Make sure an appliance engineer has been assigned and contacts the tenant to book a visit. Check whether the tenant has sent the make/model."
+    },
+    "confidence": 0.9
+  }
+}

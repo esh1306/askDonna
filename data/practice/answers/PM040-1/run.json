@@ -1,0 +1,126 @@
+{
+  "case": "PM040-1",
+  "decision": "wait",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 52.58,
+  "decisionLine": "wait",
+  "sessionId": "wrun_01M4JYEJ7F0W4KSSFHH45W7MVW",
+  "startedAt": "2026-10-10T13:01:16.809Z",
+  "finishedAt": "2026-10-10T13:02:09.389Z",
+  "usage": {
+    "inputTokens": 114139,
+    "outputTokens": 5039
+  },
+  "eventCount": 316,
+  "dryRun": false,
+  "result": {
+    "case_id": "74 (R/PM040-1)",
+    "decision": "wait",
+    "summary": "I recorded the landlord's approval for an engineer to check the washing machine. I haven't booked anyone yet, because the tenant had already swapped in their own machine and put the faulty one in the garage, and the landlord's reply doesn't mention the swap. I've emailed the landlord to ask whether they still want their machine inspected, and asked the tenant for their holiday dates and whether the garage can be reached while they're away. The case is on hold with a follow-up in 7 days.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "Event 009 is a clear go-ahead for an engineer to attend (classifier: approve 0.98), so I recorded approval 37 as approved. But event 008, sent 25 minutes earlier, says the tenant swapped machines and stored the faulty one in the garage because they are leaving on holiday soon. That changes what the visit is for and makes access uncertain. The landlord's reply doesn't mention the swap. There is also no contractor on the ticket and no job history at this property, so I had no contractor to assign. Asking the landlord and tenant one question each is quicker and cheaper than booking a visit that may not be wanted or may not get in.",
+      "alternatives_considered": [
+        {
+          "option": "Assign a contractor straight away",
+          "why_not": "There is no contractor on record or in the property history. The faulty machine is now in the garage and the tenant is going away, so the landlord may not want a visit and access may not work."
+        },
+        {
+          "option": "Close the ticket as resolved by the tenant",
+          "why_not": "The landlord's machine is still faulty and the landlord has asked for it to be checked. Closing would ignore what the landlord said."
+        },
+        {
+          "option": "Escalate to a human",
+          "why_not": "Nothing here is a real conflict, a cost dispute or a safety emergency. The landlord and tenant can answer the open questions themselves."
+        }
+      ],
+      "checks_performed": [
+        "Loaded ticket context: no holds, approval 37 pending, no contractor, no property history, no attachments",
+        "Classified tenant reply (confirms_fixed, review, safety 0.05) and landlord reply (approve 0.98, auto)",
+        "Compared timing: tenant's swap email (11:47) arrived before the landlord's approval (12:12)",
+        "Safety: tenant says there are no isolation valves and they fitted the machine themselves; no leak reported, so I told the tenant to keep an eye on the pipe connections"
+      ],
+      "assumptions": [
+        "The landlord most likely didn't know about the swap when they replied",
+        "'Rowan' is the tenant or a member of the household"
+      ]
+    },
+    "situation": "The landlord's Juniper Services NBL-040-4451 washing machine fills with water but won't start a cycle. The tenant has since fitted their own machine and stored the faulty one in the garage before going on holiday. The landlord then said they are happy for someone to go and check the washing machine.",
+    "actions_taken": [
+      {
+        "tool": "classify_reply",
+        "description": "Classified tenant email (event 008)",
+        "result": "confirms_fixed; autonomy review; needs_human_response 0.6",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified landlord email (event 009)",
+        "result": "approve 0.98; autonomy auto",
+        "ok": true
+      },
+      {
+        "tool": "record_approval_response",
+        "description": "Recorded approval 37 as approved, quoting event 009",
+        "result": "approved; guard not blocked",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed landlord about the tenant's swap and asked whether to still send an engineer to their machine in the garage; mentioned the missing isolation valves",
+        "result": "message 98 queued",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed tenant: acknowledged the swap, asked for holiday dates and garage access, told them to watch the pipe connections for leaks, said we'd be in touch by 31 December",
+        "result": "message 97 queued",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold waiting on landlord's decision, follow-up in 7 days",
+        "result": "hold 176",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the washing machine status, the missing isolation valves and that the tenant fitted their own appliance",
+        "result": "facts 110, 111, 112 recorded, no conflicts",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (Oliver)",
+        "status": "granted (attendance to check washing machine, no cost cap stated)",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "The landlord and tenant can answer the open questions themselves.",
+      "handover_summary": "",
+      "recommendation": ""
+    },
+    "unverified": [
+      "Whether the landlord knew about the tenant's swap when approving",
+      "Tenant's holiday dates and whether the garage can be reached",
+      "Whether the tenant's self-installed machine is connected safely (no isolation valves)",
+      "Who Rowan is"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "The tenant fitted their own washing machine with no isolation valves, so there is a small leak risk while they are away",
+      "Getting access for a visit may be hard during the tenant's holiday",
+      "The landlord's appliance is now in the garage, so check its condition and whether it is stored safely"
+    ],
+    "final_status": "Stage landlord_approval with approval 37 now approved. On hold (hold 176) waiting on the landlord's decision about the stored machine.",
+    "next_follow_up": {
+      "when": "2026-12-31",
+      "what": "If the landlord wants the machine inspected, pick a contractor, assign them and arrange access around the tenant's holiday. If not, close the ticket and note the stored appliance. Chase the landlord and tenant if they haven't replied."
+    },
+    "confidence": 0.78
+  }
+}

@@ -3,83 +3,112 @@
   "decision": "wait",
   "escalated": "no",
   "failures": 0,
-  "durationSec": 30.722,
+  "durationSec": 33.179,
   "decisionLine": "wait",
-  "sessionId": "wrun_01M4JWGWZ26QX5KDSWV22FXR6V",
-  "startedAt": "2026-10-10T12:27:36.257Z",
-  "finishedAt": "2026-10-10T12:28:06.979Z",
+  "sessionId": "wrun_01M4JY9BV1SV9HVWWNPCREPT0J",
+  "startedAt": "2026-10-10T12:58:26.446Z",
+  "finishedAt": "2026-10-10T12:58:59.625Z",
   "usage": {
-    "inputTokens": 73805,
-    "outputTokens": 2744
+    "inputTokens": 63178,
+    "outputTokens": 3134
   },
-  "eventCount": 166,
+  "eventCount": 174,
   "dryRun": false,
   "result": {
-    "case_id": "55 (R/PM019-1)",
+    "case_id": "39 (R/PM019-1)",
     "decision": "wait",
-    "summary": "This is a routine garden job: clearing rubbish, levelling the ground and laying gravel. Approval 29 has been waiting on the landlord since 17 Jan, with no reply after 3 days. This is the first missed follow-up, so I sent the landlord a reminder asking them to approve or decline a contractor visit to quote, or to pick part of the work. I also asked the tenant to resend the photos, which aren't visible in the records. The ticket is on hold until the landlord replies, with a follow-up in 3 days.",
-    "situation": "The tenant at Flat 25, 185 Copperfield Walk asked for the garden to be cleared of rubbish and construction waste, levelled, and covered with gravel. The agency emailed the landlord (Jenkins) on 17 Jan, and approval 29 is still pending with no amount. Neither the landlord nor the tenant has replied in 3 days. The tenant's photos aren't visible. There are no profile facts, contact details or preferred channel for the landlord.",
+    "summary": "This is a routine garden request: removing rubbish and construction waste, levelling the ground and laying gravel. The landlord was asked on 17 Jan and hasn't replied, so the first 3-day follow-up was missed. I sent the landlord one reminder asking them to approve a contractor visit to quote, or to choose part of the work or decline. I updated the tenant, asked them to resend the photos we can't see, and set a 3-day hold. I'll escalate only if this second deadline also passes with no reply.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "Event 006 is the first missed follow-up. Approval 16 is still pending and nothing has come back from the landlord. Under the rules, I escalate only after no response at two follow-up deadlines, so the proportionate step is to chase once and set a hold. The classifier rated it a routine garden/external job (safety risk 0.23). Nothing suggests an emergency.",
+      "alternatives_considered": [
+        {
+          "option": "Escalate to a human now",
+          "why_not": "Only one follow-up deadline has been missed, and the landlord can answer this themselves."
+        },
+        {
+          "option": "Assign a contractor to quote without approval",
+          "why_not": "There is no approval and no pre-approved spend limit on record, and part of the request (levelling and gravel) may be an improvement for the landlord to decide on."
+        },
+        {
+          "option": "Request a new approval",
+          "why_not": "Approval 16 is already pending, and only one can be pending per ticket."
+        }
+      ],
+      "checks_performed": [
+        "Approval 16 is pending with no amount and no response",
+        "No holds were open",
+        "No landlord contact details, preferred channel or spend limit on record",
+        "No previous jobs at this property",
+        "Attachments: none visible; the photos the tenant mentions are noted as unavailable",
+        "Classifier: routine, garden_external, safety_risk 0.23"
+      ],
+      "assumptions": [
+        "The outbox will deliver email to the landlord and tenant even though there are no email addresses on their records",
+        "Asking for a quote first is a sensible first step because there is no cost estimate"
+      ]
+    },
+    "situation": "The tenant asked for the garden to be cleared of rubbish and construction waste, levelled and gravelled. The agency emailed the landlord (Jenkins) on 17 Jan and acknowledged the tenant. Three days later there was no reply, and the system flagged the case for manual review.",
     "actions_taken": [
       {
         "tool": "get_ticket_context",
-        "description": "Loaded ticket 55",
-        "result": "Stage landlord_approval, approval 29 pending, no holds, no attachments",
+        "description": "Loaded the case",
+        "result": "Stage landlord_approval; approval 16 pending; no holds",
         "ok": true
       },
       {
         "tool": "classify_intake",
         "description": "Classified the request",
-        "result": "garden_external, routine, safety_risk 0.22, route request_landlord_approval",
+        "result": "Routine, garden_external; needs_landlord_approval 0.66; safety_risk 0.23",
         "ok": true
       },
       {
         "tool": "send_message",
-        "description": "Sent the landlord an email reminder asking APPROVE/DECLINE for a contractor to attend and quote, or to choose part of the work",
-        "result": "message 70 sent, guard passed",
+        "description": "Emailed the landlord a reminder asking them to APPROVE a contractor visit to quote, approve part of the work, or decline",
+        "result": "Sent, message 52",
         "ok": true
       },
       {
         "tool": "send_message",
-        "description": "Sent the tenant an update and asked them to resend the photos and report any immediate hazard",
-        "result": "message 69 sent, guard passed",
+        "description": "Emailed the tenant an update with the 23 Jan update date, advice to keep clear of the waste, and a request to resend the photos",
+        "result": "Sent, message 51",
         "ok": true
       },
       {
         "tool": "place_hold",
-        "description": "Put the ticket on hold waiting on the landlord, follow-up in 3 days",
-        "result": "hold 133",
+        "description": "Set a hold on the landlord for 3 days",
+        "result": "Hold 84",
         "ok": true
       }
     ],
     "approvals": [
       {
         "party": "Landlord (Jenkins)",
-        "status": "requested (pending since 17 Jan, chased once)",
+        "status": "requested (pending; reminder sent)",
         "channel": "email"
       }
     ],
     "escalation": {
       "needed": false,
-      "reason": "This is the first missed follow-up and the job is routine and non-urgent, so a reminder comes before escalating.",
+      "reason": "Only the first follow-up deadline has been missed",
       "handover_summary": "",
-      "recommendation": "If the landlord still hasn't replied at the next follow-up, try them by phone if a number becomes available, then escalate."
+      "recommendation": "If the landlord hasn't replied by the 23 Jan follow-up, escalate to the human queue to contact the landlord by phone."
     },
     "unverified": [
-      "Tenant photos (not visible in records)",
-      "Whether the garden is part of the tenancy demise, as the tenant says",
-      "How much construction waste there is, and who left it",
-      "Landlord's contact details or preferred channel (none recorded)"
+      "The tenant's garden photos are not visible on our records",
+      "How much construction waste there is, what it is, and where it came from",
+      "Whether the levelling and gravel are a repair or an improvement",
+      "The landlord's contact details and preferred channel"
     ],
     "failures": [],
     "risks_or_red_flags": [
-      "Levelling and gravelling may count as an improvement rather than a repair, so the landlord decides",
-      "If there is construction waste, there could be minor safety hazards (sharp debris)",
-      "No landlord contact details are recorded, so the chase may not get through"
+      "The construction waste could be a minor trip or cut hazard; the tenant has been told to keep clear",
+      "The CRM has no contact details for the landlord, so emails may not reach them"
     ],
-    "final_status": "landlord_approval – on hold waiting on the landlord (hold 133)",
+    "final_status": "landlord_approval, on hold waiting on the landlord (hold 84)",
     "next_follow_up": {
       "when": "2025-01-23",
-      "what": "Check for a landlord reply. If there is none, chase a second time (call if possible) and escalate to a human for non-response. Also check whether the tenant has sent the photos."
+      "what": "Check for a landlord reply on approval 16. If there is none, escalate to a human for a phone chase (second missed deadline)."
     },
     "confidence": 0.8
   }

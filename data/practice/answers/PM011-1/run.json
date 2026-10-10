@@ -3,76 +3,104 @@
   "decision": "wait",
   "escalated": "no",
   "failures": 0,
-  "durationSec": 27.381,
+  "durationSec": 27.951,
   "decisionLine": "wait",
-  "sessionId": "wrun_01M4JWG1XPYCVGP0DWY9DDCWDD",
-  "startedAt": "2026-10-10T12:27:08.549Z",
-  "finishedAt": "2026-10-10T12:27:35.930Z",
+  "sessionId": "wrun_01M4JY730CPZZWKH20TJRAK2SZ",
+  "startedAt": "2026-10-10T12:57:11.892Z",
+  "finishedAt": "2026-10-10T12:57:39.843Z",
   "usage": {
-    "inputTokens": 59509,
-    "outputTokens": 2371
+    "inputTokens": 64602,
+    "outputTokens": 2811
   },
-  "eventCount": 146,
+  "eventCount": 153,
   "dryRun": false,
   "result": {
-    "case_id": "51 (R/PM011-1)",
+    "case_id": "20 (R/PM011-1)",
     "decision": "wait",
-    "summary": "The landlord hasn't answered the 29 Nov email asking to send a contractor for the dishwasher, and the system flagged it after 3 days. This is the first missed follow-up on a routine fault, so it's too early to escalate. I sent the landlord a reminder asking them to reply APPROVE or DECLINE for a diagnostic visit, told the tenant we're chasing and how to keep things safe, and put the ticket on hold for 2 days.",
-    "situation": "Routine appliance fault: the dishwasher fills and washes but never finishes its cycle. The stage is landlord_approval and approval 27 has been pending since 29 Nov. The landlord has no recorded spend limit or preferred channel, and there is no contact email or phone in the CRM. No reply in 3 days (event 006).",
+    "summary": "This is a routine dishwasher fault, and the landlord hasn't answered the approval request from 29 Nov after 3 days. This was the first deadline missed, so I sent the landlord a reminder asking for APPROVE/DECLINE, updated the tenant with safe interim advice, and set a 3-day hold. If there's still no reply then, a human should take over.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "Approval #8 is still pending with no landlord reply since event 004 (29 Nov). Event 006 is the first missed follow-up deadline. The rules say to escalate only after two missed deadlines, and the landlord can still answer this, so a reminder and a hold is the proportionate step. The tenant hadn't had an update, so I sent one.",
+      "alternatives_considered": [
+        {
+          "option": "Escalate to human now",
+          "why_not": "This is only the first missed deadline. The job is routine and not a safety risk, and the landlord can still respond."
+        },
+        {
+          "option": "Assign contractor without approval",
+          "why_not": "There is no approval or pre-approved spend limit on record, and the job isn't an emergency."
+        },
+        {
+          "option": "Raise a new approval request",
+          "why_not": "Approval #8 is already pending, and only one can be open per ticket. I chased it with a message instead."
+        }
+      ],
+      "checks_performed": [
+        "Pending approval #8, no response recorded",
+        "No open holds before this action",
+        "No pre-approved spend limit or preferred channel on the landlord profile",
+        "Severity is routine; no leak or safety issue reported",
+        "No earlier jobs at this property and no attachments"
+      ],
+      "assumptions": [
+        "Email is a suitable channel because the original approval request went by email and no preferred channel is recorded",
+        "The landlord's and tenant's email addresses are not in the CRM, but both messages were accepted into the outbox"
+      ]
+    },
+    "situation": "The tenant reported on 29 Nov that the dishwasher never finishes its cycle. On the same day the agency emailed landlord Turner asking if a contractor could attend. There has been no reply in 3 days, and the system flagged the case for manual review.",
     "actions_taken": [
       {
         "tool": "get_ticket_context",
-        "description": "Loaded the case context",
-        "result": "Approval 27 pending. No holds, no spend limit, no contractor history",
+        "description": "Loaded the ticket context",
+        "result": "Stage is landlord_approval, approval #8 is pending, and there were no holds",
         "ok": true
       },
       {
         "tool": "send_message",
-        "description": "Sent the landlord a reminder asking them to reply APPROVE or DECLINE for a diagnostic visit",
-        "result": "Queued as message 63, guard passed",
+        "description": "Sent the landlord a reminder by email asking them to reply APPROVE/DECLINE for a contractor visit",
+        "result": "Queued (message 18), guard passed",
         "ok": true
       },
       {
         "tool": "send_message",
-        "description": "Told the tenant we're waiting on the landlord and gave safe-use advice (stop using it, switch off at the wall, report any leak)",
-        "result": "Queued as message 62, guard passed",
+        "description": "Updated the tenant by email with the status, safe interim advice (switch the dishwasher off, watch for leaks) and when to expect the next update",
+        "result": "Queued (message 19), guard passed",
         "ok": true
       },
       {
         "tool": "place_hold",
-        "description": "Put the ticket on hold waiting on the landlord, follow-up in 2 days",
-        "result": "Hold 128 created",
+        "description": "Placed a hold waiting on the landlord, with a follow-up in 3 days",
+        "result": "Hold 48 created",
         "ok": true
       }
     ],
     "approvals": [
       {
         "party": "Landlord (Turner)",
-        "status": "requested (pending since 2026-11-29, reminder sent 2026-12-02)",
+        "status": "requested (pending, reminder sent)",
         "channel": "email"
       }
     ],
     "escalation": {
       "needed": false,
-      "reason": "First missed follow-up on a routine job. One reminder is the proportionate step.",
+      "reason": "First missed deadline only. The landlord has been chased.",
       "handover_summary": "",
-      "recommendation": "If there's still no reply at the next follow-up, try calling the landlord or escalate to a person as the second missed deadline."
+      "recommendation": "If the landlord still hasn't replied at the follow-up on 5 Dec, escalate so a human can phone the landlord."
     },
     "unverified": [
-      "Landlord's email address and phone number aren't on the CRM contact record, so it's unclear whether the emails will reach them",
-      "Repair cost unknown",
-      "Make and model of the dishwasher unknown (the record says 'Riverside Services')",
-      "Tenant's contact details and availability unknown"
+      "The landlord and tenant email addresses are not in the CRM, so delivery isn't confirmed",
+      "The dishwasher make and warranty status are unknown",
+      "Whether the tenant sent photos isn't visible in the records"
     ],
     "failures": [],
     "risks_or_red_flags": [
-      "The landlord contact record has no email or phone, which may explain why they haven't replied",
-      "Small risk of a leak if the dishwasher runs nonstop. The tenant has been told to switch it off"
+      "Contact details for the landlord and tenant are missing from the CRM",
+      "A dishwasher left running continuously could leak. The tenant has been told to switch it off."
     ],
-    "final_status": "landlord_approval, on hold waiting on the landlord (hold 128)",
+    "final_status": "landlord_approval, on hold waiting on the landlord (hold 48)",
     "next_follow_up": {
-      "when": "2026-12-04",
-      "what": "Check for the landlord's reply to approval 27. If approved, assign a contractor. If there's still no reply, try a call or escalate as the second missed follow-up."
+      "when": "2026-12-05",
+      "what": "Check for the landlord's reply to approval #8. If there's none, escalate to a human to phone the landlord. If they've approved, assign a contractor."
     },
     "confidence": 0.8
   }

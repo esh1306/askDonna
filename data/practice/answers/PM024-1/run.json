@@ -2,64 +2,97 @@
   "case": "PM024-1",
   "decision": "act",
   "escalated": "no",
-  "failures": 2,
-  "durationSec": 40.315,
+  "failures": 0,
+  "durationSec": 40.189,
   "decisionLine": "act",
-  "sessionId": "wrun_01M4JSX1BW5C88QFAAGBMMSSA9",
-  "startedAt": "2026-10-10T11:41:48.168Z",
-  "finishedAt": "2026-10-10T11:42:28.483Z",
+  "sessionId": "wrun_01M4JYB34NFHPH8YJVG66TCP20",
+  "startedAt": "2026-10-10T12:59:23.082Z",
+  "finishedAt": "2026-10-10T13:00:03.271Z",
   "usage": {
-    "inputTokens": 60794,
-    "outputTokens": 3933
+    "inputTokens": 88559,
+    "outputTokens": 4242
   },
-  "eventCount": 290,
+  "eventCount": 264,
   "dryRun": false,
   "result": {
-    "case_id": "R/PM024-1 (ticket 12)",
+    "case_id": "51 (R/PM024-1)",
     "decision": "act",
-    "summary": "The tenant replied to our 5 August advice. They tried the suggested settings, the oven still doesn't heat, and they want someone to inspect it. So the tenant did need a response, and the case shouldn't just go back to auto mode. There's no pre-approved spending limit, so I asked the landlord by email to approve an engineer inspection. I replied to the tenant with safety advice and asked if the oven is gas or electric. The ticket is on hold until the landlord answers, with a follow-up in 2 days.",
-    "situation": "The oven at Flat 6, 56 Juniper Mews isn't heating properly: chips or nuggets are still uncooked after 1.5 hours. On 5 August Oliver sent the tenant the manual and suggested settings (event 003). The tenant replied that it still doesn't work, hasn't worked since they moved in, and asked for an inspection (event 006). The internal note asked whether the tenant needs a response (event 005). They do. There's no contractor, cost or approval on file yet.",
+    "summary": "Yes, the tenant needed a reply. In event 006 they said the suggested settings didn't help, the oven hasn't worked since they moved in, and they asked for someone to come and inspect it. The landlord has no recorded spend limit, so I emailed the landlord asking them to approve an engineer to inspect it. I also replied to the tenant to say what happens next. A hold is set to chase the landlord in 2 days.",
+    "case_type": "maintenance",
+    "situation": "The tenant reported the oven is not heating properly. Food such as chips or nuggets is still uncooked after 1.5 hours. The agency (Oliver) sent the tenant a manual and suggested settings. The tenant replied that these didn't help, the oven has never worked since they moved in, and they want someone to inspect it. No contractor, approval or cost is on record. The ticket says 'provider_selection', but no landlord approval exists.",
+    "judgement": {
+      "why_this_decision": "Event 006 shows the workaround from event 003 failed and the tenant asked for an inspection, so they were owed a reply. Classify_reply marked the message as routine ('auto'): the oven is still broken and there is no safety concern. Classify_intake says this is an urgent appliance repair that needs landlord approval. The landlord's profile has no pre-approved spend limit and no preferred channel, so I asked for approval by email (the default). I did not assign a contractor because there is no approval yet and no landlord authority on record.",
+      "alternatives_considered": [
+        {
+          "option": "Assign a contractor straight away",
+          "why_not": "No landlord approval or spend limit is recorded, and this is not an emergency."
+        },
+        {
+          "option": "Escalate to a human",
+          "why_not": "This is a routine appliance fault with a clear next step (landlord approval). There is no conflict, complaint or safety risk."
+        },
+        {
+          "option": "No reply to the tenant",
+          "why_not": "The tenant said the fix didn't work and asked for someone to be sent, so they need an update."
+        },
+        {
+          "option": "Use sibling ticket 52 (same property, same description, contractor Lantern Works)",
+          "why_not": "Its relevant events are dated after the current time on this case (from 2026-08-05 03:31 onwards), so using them would mean acting on future information."
+        }
+      ],
+      "checks_performed": [
+        "Loaded the ticket context: no holds, no approvals, no attachments, no contractor",
+        "Checked the landlord profile: no spend limit or preferred channel",
+        "Ran classify_reply on event 006: still_broken 0.86, safety 0.05, autonomy auto",
+        "Ran classify_intake: appliance, urgent, route request_landlord_approval",
+        "Looked at sibling ticket 52 for possible duplication; its events fall after now, so I didn't rely on them"
+      ],
+      "assumptions": [
+        "Email is used for the landlord because no preferred channel is recorded",
+        "The ticket's current stage is left unchanged because stages can't be moved backwards"
+      ]
+    },
     "actions_taken": [
       {
-        "tool": "get_ticket_context",
-        "description": "Loaded ticket, profiles and events",
-        "result": "6 events. No profile facts, approvals, holds or attachments. Landlord has no preferred channel or pre-approved limit on file",
+        "tool": "classify_reply",
+        "description": "Classified the tenant's reply (event 006)",
+        "result": "still_broken, autonomy auto, safety 0.05",
         "ok": true
       },
       {
         "tool": "classify_intake",
-        "description": "Classified the follow-up report",
-        "result": "Appliance, urgent (0.91). Needs landlord approval 0.79, self-fixable 0.12, safety risk 0.15. Suggested route: request_landlord_approval",
+        "description": "Classified the oven fault",
+        "result": "appliance, urgent, route request_landlord_approval",
+        "ok": true
+      },
+      {
+        "tool": "get_ticket_context",
+        "description": "Checked related ticket 52 at the same property",
+        "result": "Same description; later events are dated in the future, so not used",
         "ok": true
       },
       {
         "tool": "request_landlord_approval",
-        "description": "Emailed the landlord asking for approval of an engineer inspection and diagnosis, with any repair to be quoted separately. Used email because no preferred channel is recorded. No amount stated because no cost is known",
-        "result": "Approval 6 created, message 14 sent",
+        "description": "Emailed the landlord asking them to approve an engineer to inspect and diagnose, with any repair to be quoted back for approval",
+        "result": "approval_id 22, message 68, guard passed",
         "ok": true
       },
       {
         "tool": "send_message",
-        "description": "Emailed the tenant: approval has been requested, no date confirmed yet, safety advice (including the gas emergency number), and a request for the oven type and model",
-        "result": "Message 15 queued",
+        "description": "Emailed the tenant: landlord approval requested, update within 2 working days, plus basic safety advice",
+        "result": "message 69, guard passed",
         "ok": true
       },
       {
-        "tool": "move_stage",
-        "description": "Tried to move the ticket to landlord_approval",
-        "result": "Rejected: the CRM won't move a ticket backwards from provider_selection. Ticket left in provider_selection with a landlord hold",
-        "ok": false
-      },
-      {
         "tool": "place_hold",
-        "description": "Hold on the landlord's reply to approval 6",
-        "result": "Hold 25, follow-up in 2 days",
+        "description": "Hold while waiting for the landlord's decision",
+        "result": "hold 119, follow-up in 2 days",
         "ok": true
       },
       {
         "tool": "add_profile_fact",
-        "description": "Recorded the reported oven condition on the property",
-        "result": "Fact 21 recorded",
+        "description": "Recorded the oven fault history on the property",
+        "result": "fact 70",
         "ok": true
       }
     ],
@@ -72,29 +105,26 @@
     ],
     "escalation": {
       "needed": false,
-      "reason": "Routine appliance fault with a clear next step (landlord approval). No safety risk, dispute or conflict found that needs a human.",
+      "reason": "Routine appliance repair waiting on landlord approval",
       "handover_summary": "",
       "recommendation": ""
     },
     "unverified": [
-      "Whether the oven is gas or electric, and its make and model",
-      "Agent's statement that the oven worked fine with the previous tenant (event 003)",
-      "Contents of the oven manual sent in event 003 (not available to me)",
-      "Cost of an inspection or repair",
-      "Landlord's preferred contact channel and email address (none on file)"
+      "Whether the oven worked for the previous tenant (the agency said so; the tenant says it has never worked since they moved in)",
+      "What the oven manual says (the attachment in event 003 can't be seen)",
+      "Repair cost: unknown",
+      "Whether ticket 52 is a duplicate of this job"
     ],
-    "failures": [
-      "move_stage to landlord_approval was rejected because the CRM doesn't allow moving backwards from provider_selection. The ticket stays in provider_selection with approval 6 pending and hold 25."
-    ],
+    "failures": [],
     "risks_or_red_flags": [
-      "The tenant says the oven has never worked since they moved in, so this may be a pre-existing fault at the start of the tenancy",
-      "If the oven is gas, poor heating could point to a gas supply or burner fault. The tenant has been given gas safety advice",
-      "No landlord email is on file, so the approval email may not be delivered. Check this at the follow-up"
+      "Ticket 52 has the same property, description and creation time, so it may be a duplicate. Check before a second contractor is dispatched.",
+      "The stage 'provider_selection' is ahead of the evidence: no approval exists yet.",
+      "The tenant may be unhappy (dissatisfied score 0.47) about going without a working oven."
     ],
-    "final_status": "Open. Stage is provider_selection (the move to landlord_approval was blocked). Approval 6 is pending and hold 25 is on the landlord.",
+    "final_status": "Open. Stage provider_selection, on hold (119) waiting for the landlord's decision on approval 22.",
     "next_follow_up": {
-      "when": "In 2 days (hold 25)",
-      "what": "Chase the landlord for APPROVE/DECLINE on approval 6. If approved, choose an appliance engineer and arrange access with the tenant."
+      "when": "2026-08-07 (2 days)",
+      "what": "If there's no reply, chase the landlord on approval 22. Once approved, assign an appliance engineer and tell the tenant."
     },
     "confidence": 0.8
   }

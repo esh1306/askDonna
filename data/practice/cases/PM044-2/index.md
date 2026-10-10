@@ -25,6 +25,3 @@ The provider reported that the window repair was complete and that an invoice wa
 
 [Read the complete event history](history.md).
 
-## Attachments
-
-No attachments are required or available for this case.

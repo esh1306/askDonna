@@ -25,6 +25,3 @@ The tenant tried opening the latch with the key before closing the door, and it 
 
 [Read the complete event history](history.md).
 
-## Attachments
-
-No attachments are required or available for this case.

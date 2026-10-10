@@ -25,6 +25,3 @@ The contractor freed the prematurely engaged door lock and tested the dishwasher
 
 [Read the complete event history](history.md).
 
-## Attachments
-
-No attachments are required or available for this case.

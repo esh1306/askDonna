@@ -1,0 +1,79 @@
+{
+  "case": "PM020-1",
+  "decision": "request_info",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 35.843,
+  "decisionLine": "request_info",
+  "sessionId": "wrun_01M4JT2BT8GRGMBM2SPKXS6ZA4",
+  "startedAt": "2026-10-10T11:44:42.644Z",
+  "finishedAt": "2026-10-10T11:45:18.487Z",
+  "usage": {
+    "inputTokens": 48725,
+    "outputTokens": 2192
+  },
+  "eventCount": 113,
+  "dryRun": false,
+  "result": {
+    "case_id": "R/PM020-1 (ticket 23)",
+    "decision": "request_info",
+    "summary": "The tenant asked to move the routine inspection from 13/02/2024 to \"Friday 15th February\" because their dog gets overexcited. 15/02/2024 is actually a Thursday. I texted the tenant to ask whether they want Thu 15 or Fri 16 Feb, and told them the 13/02 booking stands until a new date is confirmed. The ticket is on hold until the tenant replies. No escalation is needed: this is a routine scheduling question the tenant can answer.",
+    "situation": "Routine property inspection at Flat 12, 162 Beacon Close, booked for 13/02/2024 in the morning (approved visit time 11:00, event 004). The tenant emailed asking to move it to \"Friday 15th February\" because of the dog (event 006). A system note (event 005) asked whether the tenant needs a reply. They do.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the ticket, profiles and events",
+        "result": "6 events, no holds or approvals. The pet fact is already on the property record from event 006",
+        "ok": true
+      },
+      {
+        "tool": "read_attachment",
+        "description": "Read the inspection report attachment",
+        "result": "Generic Northbridge Lettings report template with the appointment date 16 February 2024. No findings or defects are recorded",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Texted the tenant to ask whether they want Thu 15/02 or Fri 16/02 (morning), and said the 13/02 booking stands until a new date is confirmed",
+        "result": "message_id 30",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold while waiting for the tenant to confirm the date",
+        "result": "hold_id 50, follow-up in 2 days",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord",
+        "status": "not_needed",
+        "channel": "n/a"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "Routine rescheduling. The only unclear point is the date, and the tenant can answer that.",
+      "handover_summary": "",
+      "recommendation": ""
+    },
+    "unverified": [
+      "Which date the tenant wants: Thursday 15/02 or Friday 16/02/2024",
+      "Whether the inspector is free on the new date",
+      "The 16 Feb date in the report attachment probably comes from a later rebooking or is a template placeholder; it is not confirmed by any event"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "The 13/02 booking is still active; it needs moving or keeping before then",
+      "The dog needs managing at the visit; the inspector should be told",
+      "The SMS was sent as Oakfield Services, but the report says Northbridge Lettings. This is probably a trading-name difference, not a real conflict"
+    ],
+    "final_status": "intake – on hold waiting for the tenant (hold 50)",
+    "next_follow_up": {
+      "when": "2024-02-10",
+      "what": "If the tenant hasn't replied, chase them and decide whether the 13/02 visit goes ahead. Once they confirm, rebook and notify the tenant and inspector."
+    },
+    "confidence": 0.85
+  }
+}

@@ -11,10 +11,11 @@
   },
   "required_outcome_met": true,
   "red_flags": [
-    "Sent an extra email to the tenant when the tenant had just promised photos the next day; this was not strictly needed.",
-    "Profile facts stored a name discrepancy and personal context, which is marginal and unnecessary."
+    "Stored an inferred 'tenant responsible for garden' profile fact at 0.7 confidence without tenancy agreement evidence (disclosed as an assumption)",
+    "release_hold returned status 'open', yet the agent reported the hold as released; this wasn't reconciled",
+    "Short 2-day follow-up is slightly tighter than the human's 3-day chase, which is harmless"
   ],
   "prohibited_actions": [],
   "critical_failure": false,
-  "reasoning": "The agent decided to wait for the tenant's promised photos. That matches the eventual outcome, where the photo arrived and the task was closed. It replaced an open-ended hold with one that has a follow-up date, which is a sensible process fix. It spotted that the earlier chaser quoted the wrong address (Flat 2, 72 Lantern Quay) and sent a short correction. This is a reasonable catch, because the human operator repeated the same wrong address in the reference. It involved no landlord money, invented no facts, and set clear escalation steps if no photos arrive. Minor flaws: the extra email was not strictly needed, and the profile facts add little value."
+  "reasoning": "The tenant had just promised to finish the garden that evening and send photos the next morning, so waiting was correct. The agent did not send a redundant chaser or escalate, and it did not close early. It replaced the follow-up-less hold with a dated one, which matches the human's later chase on 1 Mar and the eventual closure after the tenant sent photos. It spotted the wrong address in the earlier chaser and the duplicate email. It committed no landlord money. The flaws are minor. It stored a speculative profile fact, though it disclosed this as an assumption. The release_hold output was ambiguous and the agent didn't question it."
 }

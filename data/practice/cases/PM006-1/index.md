@@ -27,6 +27,3 @@ The landlord approved the quotation, and the contractor was recorded as having c
 
 [Read the complete event history](history.md).
 
-## Attachments
-
-No attachments are required or available for this case.

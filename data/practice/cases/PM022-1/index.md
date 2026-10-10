@@ -25,6 +25,3 @@ The contractor confirmed the work was complete, including replacement of the loc
 
 [Read the complete event history](history.md).
 
-## Attachments
-
-No attachments are required or available for this case.

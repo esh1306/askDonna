@@ -1,6 +1,6 @@
 # Intake classification eval (Jev)
 
-Run: 2026-10-10T12:42:39.384Z  |  cases: 50  |  model: jev-latest  |  mean latency: 291ms (p95 467ms)
+Run: 2026-10-10T12:56:22.671Z  |  cases: 50  |  model: jev-latest  |  mean latency: 261ms (p95 526ms)
 
 Labels come from `data/intake-labels.json` (derived from case outcomes/history, not from the classifier input). Input text is only the initial request (+ first pre-dispatch tenant message).
 
@@ -29,17 +29,17 @@ Confusion matrix (rows = label, columns = predicted):
 | needs_landlord_approval | precision@0.5 | 63.6% | 73.3% | 66.7% |
 | needs_landlord_approval | recall@0.5 | 100.0% | 100.0% | 100.0% |
 | needs_landlord_approval | Brier (base-rate baseline) | 0.217 (0.240) | 0.200 (0.196) | 0.212 (0.230) |
-| likely_self_fixable | accuracy@0.5 | 85.7% | 80.0% | 84.0% |
-| likely_self_fixable | precision@0.5 | 60.0% | 100.0% | 75.0% |
-| likely_self_fixable | recall@0.5 | 50.0% | 50.0% | 50.0% |
-| likely_self_fixable | Brier (base-rate baseline) | 0.115 (0.142) | 0.143 (0.240) | 0.123 (0.182) |
+| likely_self_fixable | accuracy@0.5 | 85.7% | 86.7% | 86.0% |
+| likely_self_fixable | precision@0.5 | 60.0% | 100.0% | 77.8% |
+| likely_self_fixable | recall@0.5 | 50.0% | 66.7% | 58.3% |
+| likely_self_fixable | Brier (base-rate baseline) | 0.115 (0.142) | 0.141 (0.240) | 0.123 (0.182) |
 
 Accuracy by decision threshold (tune / held-out / all):
 
 | question | 0.3 | 0.4 | 0.5 | 0.6 | 0.7 | 0.8 | 0.9 |
 |---|---|---|---|---|---|---|---|
 | needs_landlord_approval | 65.7% / 73.3% / 68.0% | 65.7% / 73.3% / 68.0% | 65.7% / 73.3% / 68.0% | 65.7% / 73.3% / 68.0% | 40.0% / 26.7% / 36.0% | 40.0% / 26.7% / 36.0% | 40.0% / 26.7% / 36.0% |
-| likely_self_fixable | 77.1% / 86.7% / 80.0% | 82.9% / 86.7% / 84.0% | 85.7% / 80.0% / 84.0% | 91.4% / 80.0% / 88.0% | 85.7% / 73.3% / 82.0% | 85.7% / 73.3% / 82.0% | 85.7% / 66.7% / 80.0% |
+| likely_self_fixable | 77.1% / 86.7% / 80.0% | 82.9% / 86.7% / 84.0% | 85.7% / 86.7% / 86.0% | 91.4% / 73.3% / 86.0% | 85.7% / 73.3% / 82.0% | 85.7% / 73.3% / 82.0% | 85.7% / 60.0% / 78.0% |
 
 ## needs_landlord_approval
 
@@ -57,49 +57,49 @@ TP 32 / FP 16 / TN 2 / FN 0
 
 ## likely_self_fixable (label: resolved_without_contractor)
 
-n=50, base rate 24.0%, accuracy@0.5 **84.0%**, precision 75.0%, recall 50.0%, Brier 0.123 (always-base-rate baseline 0.182)
+n=50, base rate 24.0%, accuracy@0.5 **86.0%**, precision 77.8%, recall 58.3%, Brier 0.123 (always-base-rate baseline 0.182)
 
-TP 6 / FP 2 / TN 36 / FN 6
+TP 7 / FP 2 / TN 36 / FN 5
 
 | bucket | n | mean predicted | fraction true |
 |---|---|---|---|
 | 0.0-0.2 | 30 | 0.11 | 0.13 |
 | 0.2-0.4 | 10 | 0.26 | 0.10 |
-| 0.4-0.6 | 4 | 0.52 | 0.25 |
-| 0.6-0.8 | 3 | 0.61 | 1.00 |
+| 0.4-0.6 | 5 | 0.53 | 0.40 |
+| 0.6-0.8 | 2 | 0.61 | 1.00 |
 | 0.8-1.0 | 3 | 0.88 | 1.00 |
 
 ## Unlabelled questions (mean predicted probability)
 
-safety_risk: 0.311, needs_more_info: 0.163. No ground truth exists for these in the cases; Dwelly rated every case with an intake note ROUTINE.
+safety_risk: 0.312, needs_more_info: 0.162. No ground truth exists for these in the cases; Dwelly rated every case with an intake note ROUTINE.
 
 ## Severity vs Dwelly's own intake classification
 
-Cases with a Dwelly severity: 12. Agreement: **100.0%**. Predicted severity distribution (all cases): {"routine":44,"urgent":2,"emergency":4}
+Cases with a Dwelly severity: 12. Agreement: **100.0%**. Predicted severity distribution (all cases): {"routine":42,"urgent":4,"emergency":4}
 
 ## Routes
 
-{"request_landlord_approval":39,"ask_for_info":2,"standard":2,"self_fix_first":3,"emergency_dispatch":4}
+{"request_landlord_approval":41,"standard":2,"self_fix_first":2,"emergency_dispatch":4,"ask_for_info":1}
 
 ## Worst misses
 
 | case | question | label | predicted | confidence in label | note |
 |---|---|---|---|---|---|
-| 028 | self_fixable | true | p=0.11 | 0.11 | Loose Water Pipe in the Back Garden |
+| 028 | self_fixable | true | p=0.10 | 0.10 | Loose Water Pipe in the Back Garden |
 | 035 | self_fixable | true | p=0.11 | 0.11 | Shower Repair Request |
-| 041 | self_fixable | true | p=0.13 | 0.13 | Washing Machine Repair Request |
-| 014 | self_fixable | true | p=0.15 | 0.15 | Front Door Repair Request |
-| 009 | category | garden_external | cleaning_checkout_works | 0.22 | Front garden maintenance follow-up |
+| 041 | self_fixable | true | p=0.12 | 0.12 | Washing Machine Repair Request |
+| 014 | self_fixable | true | p=0.14 | 0.14 | Front Door Repair Request |
+| 009 | category | garden_external | cleaning_checkout_works | 0.29 | Front garden maintenance follow-up |
 | 047 | self_fixable | true | p=0.29 | 0.29 | Bedroom Window Repair Request |
 | 006 | needs_landlord_approval | false | p=0.67 | 0.33 | Check-Out Works: Carpet Replacement and Repainting |
-| 015 | needs_landlord_approval | false | p=0.66 | 0.34 | Front Door Repair Request |
 | 022 | needs_landlord_approval | false | p=0.66 | 0.34 | Front Door Lock Repair Request |
 | 029 | needs_landlord_approval | false | p=0.66 | 0.34 | Cracked basin repair request |
-| 044 | needs_landlord_approval | false | p=0.66 | 0.34 | Window Handle Repair Request |
-| 012 | needs_landlord_approval | false | p=0.66 | 0.34 | Dishwasher Door Repair |
+| 015 | needs_landlord_approval | false | p=0.66 | 0.34 | Front Door Repair Request |
+| 037 | needs_landlord_approval | false | p=0.66 | 0.34 | Shower Repair Request |
+| 041 | needs_landlord_approval | false | p=0.66 | 0.34 | Washing Machine Repair Request |
+| 003 | needs_landlord_approval | false | p=0.66 | 0.34 | Checkout Cleaning Estimate and Invoice |
+| 005 | needs_landlord_approval | false | p=0.66 | 0.34 | Check-Out Cleaning |
 | 013 | needs_landlord_approval | false | p=0.66 | 0.34 | Integrated Dishwasher Repair Request |
-| 023 | needs_landlord_approval | false | p=0.66 | 0.34 | Balcony Door Lock Repair |
-| 024 | needs_landlord_approval | false | p=0.66 | 0.34 | Oven repair request |
 
 ## Iterations
 

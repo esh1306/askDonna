@@ -6,45 +6,65 @@
 
 ## Summary
 
-This item was raised at inspection and the tenant is responsible for it: the front garden needs tidying. The tenant replied on 26 Feb (event 013) saying it would be finished that evening and photos would follow the next morning. The right step is to wait for the photos. I replaced the open hold, which had no follow-up date, with one that chases in 2 days. I also sent the tenant a short correction because the 26 Feb email (event 011) gave the wrong property address. No landlord money or approval is involved.
+This is the tenant's own job: tidying the front garden after it was raised at inspection. In their latest email (event 013) the tenant says it will be finished this evening and they'll send photos tomorrow morning. Nothing needs to be done until those photos are due. The old hold had no follow-up date, so I replaced it with one that chases in 2 days. I did not message the tenant because they had just told us what they would do next.
+
+## Judgement
+
+- **Case type:** maintenance
+- **Why this decision:** The tenant's reply (event 013) gives a specific completion time and says when the photos will arrive. The classifier rated it routine (autonomy auto, safety 0.02). The next step is the tenant's and nothing is overdue yet, so the right move is a hold with a firm follow-up date. There is no contractor or landlord money involved, so no approval is needed.
+
+| Alternative considered | Why not |
+|---|---|
+| Send the tenant an acknowledgement or another chaser | The tenant has just told us what they will do and when. Another message would add nothing; the hold covers the chase. |
+| Escalate for repeated non-response | The tenant has now replied and committed to a time, so they are not unresponsive. |
+| Move to closeout | The work hasn't been confirmed as done and no photos have been received. |
+
+**Checks performed before acting**
+
+- Loaded full ticket context: 15 events, no attachments, no approvals, no contractor
+- Classified the tenant reply in event 013: routine, no safety concern
+- Open hold 36 had no follow-up date, so I replaced it
+- Checked addresses: event 011 used the wrong property address (Flat 2, 72 Lantern Quay, Eastmere)
+
+**Assumptions**
+
+- The tenant is responsible for the garden upkeep. This is inferred from the agency asking the tenant to do it after inspection, not from the tenancy agreement.
+- The image of the garden's condition mentioned in event 007 isn't visible in the records
 
 ## Actions taken
 
 | # | Tool | Input (gist) | Result | Output (gist) |
 |---|---|---|---|---|
-| 1 | `get_ticket_context` | {"ticket_id":6} | ok | {"ok":true,"ticket":{"id":6,"case_ref":"R/PM009-1","property_id":5,"tenant_id":13,"landlord_id":14,"contractor_id":null… |
-| 2 | `release_hold` | {"hold_id":10} | ok | {"ok":true,"status":"open"} |
-| 3 | `place_hold` | {"ticket_id":6,"reason":"Tenant said on 26 Feb (event 013) that the front garden would be finished that evening and photos sent the next mo… | ok | {"ok":true,"hold_id":12} |
-| 4 | `send_message` | {"ticket_id":6,"to":"tenant","channel":"email","subject":"Front garden – Flat 4, 174 Beacon Close (ref R/PM009-1)","body":"Good afternoon,\… | ok | {"ok":true,"message_id":5} |
-| 5 | `add_profile_fact` | {"entity_type":"contact","entity_id":13,"key":"tenant_name","value":"Bennett (event 007 records \"Nora Bennett\" but refers to the tenant a… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":11,"entity_type":"contact","entity_id":13,"key":"tenant_name… |
-| 6 | `add_profile_fact` | {"entity_type":"contact","entity_id":13,"key":"responds_to","value":"Replied after a phone call (event 006) and after the fifth email (even… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":12,"entity_type":"contact","entity_id":13,"key":"responds_to… |
+| 1 | `get_ticket_context` | {"ticket_id":18} | ok | {"ok":true,"ticket":{"id":18,"case_ref":"R/PM009-1","property_id":14,"tenant_id":47,"landlord_id":48,"contractor_id":nu… |
+| 2 | `classify_reply` | {"ticket_id":18,"text":"Sorry for the delay will be finished this evening will get photos to you tomorrow morning\n\nThanks","sender_role":… | ok | {"autonomy":"auto","intent":"other","intent_probs":{"confirms_fixed":0.06,"still_broken":0,"access_or_availability":0.1… |
+| 3 | `release_hold` | {"hold_id":36} | ok | {"ok":true,"status":"open"} |
+| 4 | `place_hold` | {"ticket_id":18,"reason":"Tenant (event 013, 26 Feb) says front garden will be finished this evening and photos sent tomorrow morning (27 F… | ok | {"ok":true,"hold_id":47} |
+| 5 | `add_profile_fact` | {"entity_type":"property","entity_id":14,"key":"front_garden_maintenance_responsibility","value":"tenant (picked up at inspection; agency a… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":22,"entity_type":"property","entity_id":14,"key":"front_gard… |
 
 Agent's own account of its actions (from the structured result):
 
-- `get_ticket_context` - Loaded the ticket, profiles, events and holds -> 15 events; open hold 10 with no follow-up date; no approvals, contractor or attachments
-- `release_hold` - Released hold 10 because it had no follow-up date, so the case could go silent -> Released
-- `place_hold` - New hold waiting on the tenant's promised photos, with a follow-up date -> Hold 12 created, follow-up in 2 days
-- `send_message` - Emailed the tenant to thank them, correct the wrong address in event 011 and ask for photos once the garden is done -> Message 5 queued
-- `add_profile_fact` - Recorded the tenant's surname, noting that the first name and pronouns don't match -> Fact 11 recorded
-- `add_profile_fact` - Recorded how the tenant tends to respond -> Fact 12 recorded
+- `classify_reply` - Classified tenant email event 013 -> Routine (auto); intent other; safety 0.02
+- `release_hold` - Released hold 36, which had no follow-up date -> ok
+- `place_hold` - New hold waiting on the tenant's photos, follow-up in 2 days -> hold 47
+- `add_profile_fact` - Recorded that front garden upkeep is the tenant's responsibility (confidence 0.7) -> fact 22, no conflict
 
 ## Approvals
 
 | Party | Status | Channel |
 |---|---|---|
-| Landlord | not_needed | n/a: the tenant is doing the work, so there is no landlord cost |
+| Landlord | not_needed | n/a |
 
 ## Escalation & handover
 
 - Escalation needed: **no**
-- Reason: Not needed now: the tenant has replied and committed to a date. Escalate if the photos haven't arrived after the next chase.
-- Recommendation: If no photos arrive by the follow-up date: phone the tenant (calls have worked better than emails), then send to a human to decide whether to re-inspect or take action under the tenancy.
+- Reason: Routine wait for the tenant's evidence
+- Recommendation: If photos arrive and show the garden tidied, close the ticket. If not, chase once, then consider checking it at a visit or re-inspection.
 
 ## What could not be verified
 
-- Whether the garden has actually been finished: no photos received yet
-- Tenant's full name: the note says 'Nora Bennett' but uses he/his
-- The current condition of the garden: the image mentioned in event 007 can't be opened
+- That the garden work has actually been finished
+- The image of the garden's condition mentioned in event 007 isn't visible in the records
+- The tenant's name: the event 007 note says 'Nora Bennett' but uses 'he'
 
 ## What failed
 
@@ -52,22 +72,20 @@ _No failures recorded._
 
 ## Risks & red flags
 
-- Event 011 was sent to this tenant with another property's address (Flat 2, 72 Lantern Quay). This is a minor data/process slip, and the other property's own case may need a check.
-- Duplicate chasers were sent on 8 Feb (events 003 and 004)
-- Long chase history: over 4 weeks and 5 emails before a reply
-- Earlier holds had no follow-up dates
+- The chaser in event 011 was sent to this tenant with another property's address (Flat 2, 72 Lantern Quay, Eastmere, ZZ4 0ZZ). This is a minor data-handling slip; the team should be aware.
+- The emails on 8 Feb were sent twice (events 003 and 004).
 
 ## Final result / next follow-up
 
-- Final status: On hold (hold 12): waiting for the tenant's completion photos. Stage left at intake; no contractor or landlord stage applies.
-- Next follow-up: 2024-02-28 (2 days after 26 Feb) - Check for the tenant's garden photos. If they're fine, close the ticket. If none, phone the tenant once, then escalate to a human.
+- Final status: intake, on hold waiting for the tenant's photos (hold 47)
+- Next follow-up: In 2 days (around 28 Feb 2024) - Check whether the tenant's photos of the finished front garden have arrived. Close if satisfactory; otherwise chase the tenant once.
 - Confidence: 0.85
 
 ## Run metadata
 
 - Case folder: `C:\Users\sahid\Documents\Projects\Hackathons\DwellyHack\dwelly-agent\data\practice\cases\PM009-1`
-- Session id: wrun_01M4JSTY2HEQ9NKAF3MBXSTQH8
-- Started: 2026-10-10T11:40:39.189Z  Finished: 2026-10-10T11:41:10.824Z  Duration: 31.6s
-- Events recorded: 157
+- Session id: wrun_01M4JY70M9DK9M4T8QYW5QY48X
+- Started: 2026-10-10T12:57:09.447Z  Finished: 2026-10-10T12:57:37.105Z  Duration: 27.7s
+- Events recorded: 100
 - Model(s): anthropic/claude-opus-5.5
-- Tokens: in 41207 / out 3230; cost: not reported
+- Tokens: in 68050 / out 2744; cost: not reported

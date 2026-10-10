@@ -1,0 +1,125 @@
+{
+  "case": "PM047-2",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 0,
+  "durationSec": 49.638,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4JYGV55PYRBRNNY4XBDZ48B",
+  "startedAt": "2026-10-10T13:02:31.494Z",
+  "finishedAt": "2026-10-10T13:03:21.132Z",
+  "usage": {
+    "inputTokens": 109364,
+    "outputTokens": 4642
+  },
+  "eventCount": 345,
+  "dryRun": false,
+  "result": {
+    "case_id": "85 (R/PM047-2)",
+    "decision": "escalate",
+    "summary": "The contractor, Oscar Turner, has not replied to the job instruction sent on 1 Mar or to the three reminders sent on 4, 6 and 8 Mar, so the bedroom window job has stalled. I passed it to the ops team at normal priority. I recommended they phone him, find another contractor if he can't attend, and get the landlord's go-ahead first, because none is on record for the window. I also emailed the tenant to ask whether he has been in touch and whether the window can be secured, and set a hold to follow up in 2 days.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "Event 026 flags no reply from the contractor after the job instruction (event 018) and 3 reminders (events 020-025). That is repeated non-response, so a person should step in, by phoning him or choosing another contractor. Separately, the landlord's only reply (event 010) is about a plumber at a different address and says nothing about the window. No approval is recorded, so ops should confirm the landlord's go-ahead before any quote goes ahead. The tenant can quickly tell us whether the contractor has contacted her and whether the window is secure, so I asked her.",
+      "alternatives_considered": [
+        {
+          "option": "Send a 4th reminder to the contractor",
+          "why_not": "Three reminders by email and text have already gone unanswered. Another automated chase is unlikely to work."
+        },
+        {
+          "option": "Reassign to a new contractor myself",
+          "why_not": "There is no other contractor on record for this property, and the landlord's go-ahead for the window isn't on record. A person should choose who to use and confirm with the landlord."
+        },
+        {
+          "option": "Treat as an emergency",
+          "why_not": "The classifier rates it routine (0.97), and nothing shows it is a ground-floor window or that the property is insecure. I asked the tenant to confirm."
+        }
+      ],
+      "checks_performed": [
+        "Read all 26 events: no message from the contractor is visible",
+        "Approvals: none on the ticket; the landlord's reply (event 010) refers to Flat 18, 88 Alder Lane, a different address",
+        "Duplicates: ticket 84 (R/PM047-1) is for the same window at the same property",
+        "Intake classification: doors/windows, routine, safety_risk 0.42",
+        "Profiles: no preferred channels or spend limits recorded"
+      ],
+      "assumptions": [
+        "Flat 24 is probably not on the ground floor, but the floor level isn't recorded"
+      ]
+    },
+    "situation": "Routine bedroom window repair. The contractor was assigned on 1 Mar and has not replied after 3 reminders. The system flagged this on 10 Mar. The case is still at the scheduling stage.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the case",
+        "result": "26 events, no holds, no approvals, duplicate ticket 84 found",
+        "ok": true
+      },
+      {
+        "tool": "find_tickets",
+        "description": "Checked for other tickets at this property",
+        "result": "Ticket 84 (R/PM047-1) is a duplicate for the same window",
+        "ok": true
+      },
+      {
+        "tool": "classify_intake",
+        "description": "Checked severity and safety",
+        "result": "Doors/windows, routine, safety_risk 0.42",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant to ask whether the contractor has been in touch and whether the window can be secured; gave safety advice and said she'll get an update by 13 Mar",
+        "result": "Sent, message 113",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Handed the stalled contractor and the missing landlord go-ahead to ops",
+        "result": "Queue item 38",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Set a hold to follow up in 2 days",
+        "result": "Hold 214",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Noted on the contractor's profile that he didn't respond",
+        "result": "Fact 125",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (signed Isaac Oakley)",
+        "status": "not on record for the window; his reply in event 010 refers to a different property",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "Contractor hasn't replied after the job instruction and 3 reminders; no landlord go-ahead on record for the window",
+      "handover_summary": "Window not closing at Flat 24, 150 Copperfield Walk. Oscar Turner was assigned on 1 Mar and chased 3 times with no reply. The landlord's only reply is about a plumber at another address. Duplicate ticket 84 is open. The tenant has been emailed today to ask whether he has been in touch.",
+      "recommendation": "Phone Oscar Turner. If he doesn't answer or can't attend, use another contractor. Confirm the landlord's go-ahead for the window and check whether event 010 was sent to us by mistake. Merge or close ticket 84."
+    },
+    "unverified": [
+      "Whether the contractor has contacted the tenant directly",
+      "The landlord's agreement for the agency to send a contractor for the window",
+      "Which floor the window is on and whether the room can be secured"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "The landlord's reply (event 010) refers to a different property, Flat 18, 88 Alder Lane, so it may have been sent to us by mistake",
+      "Duplicate ticket 84 is open for the same issue",
+      "A window that won't close properly could be a security or weather risk"
+    ],
+    "final_status": "At the scheduling stage, on hold waiting for the contractor, and handed to ops (queue item 38)",
+    "next_follow_up": {
+      "when": "In 2 days (by 13 Mar 2024)",
+      "what": "Check the tenant's reply and what ops have done about the contractor, then send the tenant an update"
+    },
+    "confidence": 0.85
+  }
+}

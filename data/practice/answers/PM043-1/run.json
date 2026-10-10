@@ -1,0 +1,134 @@
+{
+  "case": "PM043-1",
+  "decision": "act",
+  "escalated": "yes",
+  "failures": 2,
+  "durationSec": 59.598,
+  "decisionLine": "act",
+  "sessionId": "wrun_01M4JYFH7YFNJGMJMS8MX9B4K0",
+  "startedAt": "2026-10-10T13:01:48.593Z",
+  "finishedAt": "2026-10-10T13:02:48.191Z",
+  "usage": {
+    "inputTokens": 112776,
+    "outputTokens": 5813
+  },
+  "eventCount": 425,
+  "dryRun": false,
+  "result": {
+    "case_id": "78 (R/PM043-1)",
+    "decision": "act",
+    "summary": "Ava Rowan, the landlord, clearly approved sending a contractor (event 013), and Oakfield Homes is already on the job, so scheduling carries on. One problem needed fixing: a manual email to the contractor (event 011) gave another person's name and phone number as the tenant. I emailed Oakfield with the correct tenant details and asked them to delete the wrong ones. I also replied to the landlord, put a 3-day hold on the contractor and passed the data issue to the human queue.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "Event 013: 'Yes, that is fine to send out a contractor' answers the agency's questions in events 003 and 006. The classifier rated it an unconditional approval (0.92, auto). Oakfield Homes was already assigned (events 008, 010), so no new assignment was needed. Event 011 gave the contractor 'Grace Ashford, 07700 900641', which doesn't match the tenant on the ticket (Isaac Quinn, 07700 900844, event 010). Left as it was, the contractor might ring the wrong person, and someone else's data has been shared. I corrected it with the contractor directly. The possible data protection issue needs a human to decide.",
+      "alternatives_considered": [
+        {
+          "option": "No action (system return to auto mode)",
+          "why_not": "The wrong tenant contact would have stayed with the contractor, and the landlord would have had no acknowledgement."
+        },
+        {
+          "option": "Re-assign contractor",
+          "why_not": "Oakfield Homes is already assigned and the landlord approved attendance. Assigning again would add nothing."
+        },
+        {
+          "option": "Escalate and hold the job",
+          "why_not": "The job is approved and routine. Only the data issue needs a human, so the repair can keep moving."
+        }
+      ],
+      "checks_performed": [
+        "Landlord reply classified: approve, unconditional 0.92, needs human response 0.09",
+        "Compared tenant details in events 009/010 with event 011: name and phone differ",
+        "Looked for pending approvals or spend limits: none recorded",
+        "No attachments or invoices on the ticket",
+        "No open holds before this action"
+      ],
+      "assumptions": [
+        "Grace Ashford's details were pasted from another case by mistake",
+        "'Oliver' in event 011 is the contact at Oakfield Homes"
+      ]
+    },
+    "situation": "Washing machine not draining at Flat 8, 118 Meadow Row. The ticket is in scheduling with Oakfield Homes assigned. The landlord has now approved contractor attendance by email. Event 011 sent the contractor the wrong tenant's contact details.",
+    "actions_taken": [
+      {
+        "tool": "classify_reply",
+        "description": "Classified landlord email event 013",
+        "result": "approve, unconditional 0.92, auto",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "First draft of contractor correction",
+        "result": "Blocked by outbound guard (wording suggested authority to complete repair)",
+        "ok": false
+      },
+      {
+        "tool": "send_message",
+        "description": "Landlord acknowledgement: contractor to arrange visit; any quote for parts will come to her for approval",
+        "result": "Sent, message 103",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded landlord's approval of attendance with no cost cap",
+        "result": "Fact 115",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded landlord preferred channel as email (low confidence)",
+        "result": "Fact 116",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Rewritten contractor email: correct tenant Isaac Quinn 07700 900844, delete Grace Ashford details, quote before any parts or complex work",
+        "result": "Sent, message 107",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Waiting on contractor to confirm appointment or send quote",
+        "result": "Hold 200, follow-up in 3 days",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Wrong tenant contact sent to contractor (possible data protection issue)",
+        "result": "Queue item 35",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Ava Rowan (landlord)",
+        "status": "granted (contractor attendance; no cost cap stated)",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "Another person's name and phone number were sent to the contractor in error (event 011)",
+      "handover_summary": "Event 011 named Grace Ashford, 07700 900641 as the tenant. The tenant on the ticket is Isaac Quinn, 07700 900844. I have sent the contractor a correction and asked them to delete the wrong details. The repair itself is approved and moving.",
+      "recommendation": "Find which case Grace Ashford belongs to, then assess and log under the data protection process. Confirm Oakfield deleted the details. Consider asking the landlord for a spend limit."
+    },
+    "unverified": [
+      "Who Grace Ashford / 07700 900641 is",
+      "Whether Oakfield has already contacted the wrong number",
+      "The 'easy and cheap' instruction in event 011: no matching landlord message is visible before it",
+      "Appointment date (none arranged yet)"
+    ],
+    "failures": [
+      "First contractor message was blocked by the outbound guard. I rewrote it and sent it."
+    ],
+    "risks_or_red_flags": [
+      "Possible data protection incident: a third party's details were shared with the contractor",
+      "No spend limit is recorded, so any repair beyond attendance needs a quote and approval"
+    ],
+    "final_status": "scheduling – on hold waiting for contractor (hold 200); human queue item 35 open for the data issue",
+    "next_follow_up": {
+      "when": "in 3 days (around 2026-04-16)",
+      "what": "Chase Oakfield Homes for an appointment date with Isaac Quinn or a quote if parts are needed"
+    },
+    "confidence": 0.85
+  }
+}

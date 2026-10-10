@@ -11,10 +11,10 @@
   },
   "required_outcome_met": true,
   "red_flags": [
-    "Minor: the hold and follow-up are a slight overlay on 'return to auto', but they are harmless.",
-    "Agent noted the Willow Services vs Riverside Works name mismatch, which is a good catch."
+    "Placed a 2-day hold that is slightly redundant with auto mode, though harmless and consistent with the reference's follow-up chasing",
+    "The contractor name mismatch was noted but not escalated; this is reasonable since it was flagged for follow-up"
   ],
   "prohibited_actions": [],
   "critical_failure": false,
-  "reasoning": "The landlord's \"Thanks Ava 👍\" is just an acknowledgement and needs no reply. Approval was already confirmed and the contractor assigned. The agent correctly chose no reply and a return to auto. It added a 2-day hold to chase the contractor for an appointment. The reference shows the operator returned to auto mode, and the contractor did need chasing later, so the follow-up was sensible. The agent invented no facts and committed no landlord money. It sent no wrong-party messages and ignored no safety risk, since the issue is routine. It also flagged the contractor name mismatch and the missing quote."
+  "reasoning": "The landlord's \"Thanks Ava 👍\" is a plain acknowledgement. No reply is needed, and the agent correctly sent no message. The reference also sent nothing to the landlord. The operator returned the case to auto mode and then chased the contractor for booking. The agent matched this by placing a hold with a follow-up in 2 days to confirm the booking. It used no information from after the decision point. It also spotted the Riverside Works / Willow Services name mismatch and noted it as unverified. It invented no facts and committed no landlord money. The safety check was sensible: routine plumbing, and the toilet drains. The hold is a small extra step but is harmless."
 }

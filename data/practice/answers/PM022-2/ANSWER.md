@@ -6,68 +6,85 @@
 
 ## Summary
 
-Ticket 57 is at closeout. The latest contractor email (event 018) is an automated appointment confirmation, so it needs no reply. I asked the tenant to confirm the lock now works and whether she has had new keys. I also put the ticket on hold for 5 days, waiting for the contractor's invoice and the new key (event 016). Nothing needs a person yet. When the invoice arrives, check it before paying, because no landlord approval or amount is recorded.
+The latest inbound (event 018) is the contractor's automatic appointment confirmation. Classify_reply rated it 'auto' (scheduling 0.87, needs a human response 0.18), so the provider doesn't need a reply. The agency's own note (event 016) records the repair as done, with the contractor to drop off the new key and send an invoice. I placed a 5-day hold on the contractor so the closeout gets chased.
+
+## Judgement
+
+- **Case type:** maintenance
+- **Why this decision:** Event 017 asked whether the provider needs a response. Event 018 only confirms the appointment and gives job details. It asks no question and the classifier marked it auto. The next step, the invoice and key drop-off (event 016), is the contractor's, and there was no open hold, so I added one with a follow-up date. I didn't message the tenant because duplicate ticket 46 already records asking the tenant whether the lock is fixed.
+
+| Alternative considered | Why not |
+|---|---|
+| Close the ticket now | No invoice has arrived and the key drop-off isn't confirmed. Event 013, the call cited as evidence of completion, mentions Flat 22, 42 Harbour View, not this flat. |
+| Reply to the contractor | Event 018 is an automatic confirmation with no question in it, so a reply wouldn't move the job on. |
+| Escalate | No conflict, cost decision or safety issue needs a person to decide right now. |
+
+**Checks performed before acting**
+
+- Loaded ticket context: stage closeout, no open holds, approvals or human-queue items
+- Ran classify_reply on event 018: auto, scheduling
+- Searched the case for 'invoice': only the event 016 note, no invoice or attachments visible
+- Checked property history: ticket 46 (R/PM022-1) has the same request and events, is in scheduling with open hold 90
+
+**Assumptions**
+
+- 'Maya' in the internal notes is the same contractor as Oliver Sawyer named in events 007/008
 
 ## Actions taken
 
 | # | Tool | Input (gist) | Result | Output (gist) |
 |---|---|---|---|---|
-| 1 | `get_ticket_context` | {"ticket_id":57} | ok | {"ok":true,"ticket":{"id":57,"case_ref":"R/PM022-2","property_id":10,"tenant_id":135,"landlord_id":136,"contractor_id":… |
-| 2 | `classify_reply` | {"ticket_id":57,"text":"The email confirms an appointment for a lock repair request at Flat 23, 155 Willowmere Road, Alderwick, ZZ5 2ZZ and… | ok | {"autonomy":"auto","intent":"scheduling","intent_probs":{"quote_or_estimate":0,"invoice":0,"completion_report":0.09,"sc… |
-| 3 | `search_case` | {"ticket_id":57,"query":"invoice"} | ok | {"query":"invoice","matches":1,"events":[{"id":683,"ticket_id":57,"ts":"2024-11-20T16:33:31Z","kind":"hold","direction"… |
-| 4 | `send_message` | {"ticket_id":57,"to":"tenant","channel":"email","subject":"Front door lock – Flat 23, 155 Willowmere Road (ref R/PM022-2)","body":"Dear Ame… | FAILED: Blocked by Jev outbound guard (message). claims_work_done_unverified (p=0.77): claims work is done/booked/paid/approved… |  |
-| 5 | `place_hold` | {"ticket_id":57,"reason":"Closeout: awaiting contractor invoice and new key drop-off (event 016), plus tenant confirmation that the lock wo… | ok | {"ok":true,"hold_id":136} |
-| 6 | `send_message` | {"ticket_id":57,"to":"tenant","channel":"email","subject":"Front door lock – Flat 23, 155 Willowmere Road (ref R/PM022-2)","body":"Dear Ame… | ok | {"ok":true,"message_id":73,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.18,"promises_… |
+| 1 | `get_ticket_context` | {"ticket_id":48} | ok | {"ok":true,"ticket":{"id":48,"case_ref":"R/PM022-2","property_id":35,"tenant_id":119,"landlord_id":120,"contractor_id":… |
+| 2 | `classify_reply` | {"ticket_id":48,"text":"The email confirms an appointment for a lock repair request at Flat 23, 155 Willowmere Road, Alderwick, ZZ5 2ZZ and… | ok | {"autonomy":"auto","intent":"scheduling","intent_probs":{"quote_or_estimate":0,"invoice":0,"completion_report":0.08,"sc… |
+| 3 | `search_case` | {"ticket_id":48,"query":"invoice"} | ok | {"query":"invoice","matches":1,"events":[{"id":608,"ticket_id":48,"ts":"2024-11-20T16:33:31Z","kind":"hold","direction"… |
+| 4 | `get_ticket_context` | {"ticket_id":46,"events":10} | ok | {"ok":true,"ticket":{"id":46,"case_ref":"R/PM022-1","property_id":35,"tenant_id":114,"landlord_id":115,"contractor_id":… |
+| 5 | `place_hold` | {"ticket_id":48,"reason":"Closeout: agency note (event 016) says Maya/Oliver Sawyer completed the lock repair and will drop off the new key… | ok | {"ok":true,"hold_id":93} |
 
 Agent's own account of its actions (from the structured result):
 
-- `get_ticket_context` - Loaded ticket, profiles, events, property history -> Stage closeout; no holds, approvals or attachments; 18 events
-- `classify_reply` - Classified contractor email event 018 -> Scheduling intent 0.90, autonomy auto: no reply needed
-- `search_case` - Searched for invoice -> Only the event 016 note; no invoice visible
-- `send_message` - Emailed tenant to confirm the lock works and whether she has new keys -> First draft blocked by the guard for implying the work was done; reworded version sent (message 73)
-- `place_hold` - Hold waiting on contractor for the invoice and key drop-off, and on the tenant's confirmation -> Hold 136, follow-up in 5 days
+- `classify_reply` - Classified the contractor email (event 018) -> autonomy auto, intent scheduling 0.87, needs a human response 0.18
+- `search_case` - Looked for an invoice in the case history -> Only the event 016 note; no invoice visible
+- `get_ticket_context` - Checked the related ticket 46 at the same property -> Duplicate of this job, in scheduling with open hold 90
+- `place_hold` - Hold on the contractor for the invoice and confirmation of key drop-off -> hold_id 93, follow up in 5 days
 
 ## Approvals
 
-| Party | Status | Channel |
-|---|---|---|
-| Landlord | none recorded on ticket | n/a |
+_None reported._
 
 ## Escalation & handover
 
 - Escalation needed: **no**
-- Reason: Routine closeout; the contractor email needs no reply
-- Recommendation: When the invoice arrives, check the property, contractor and amount. No landlord approval or cap is recorded, so pass any non-trivial lock-replacement cost to a person before paying.
+- Reason: Routine closeout wait
+- Recommendation: When the invoice arrives, check it matches this property, job and contractor before paying. Merge or close duplicate ticket 46.
 
 ## What could not be verified
 
-- That the repair or lock change at Flat 23 is done: this rests only on internal note event 016. The call in event 013 was about Flat 22, 42 Harbour View.
-- Whether the lock was repaired or replaced, and what it cost
+- The repair is confirmed only by an internal agency note (event 016), not by the contractor or the tenant
+- Event 013's call is about Flat 22, 42 Harbour View and doesn't clearly confirm work at this flat
 - Whether the new key has been given to the tenant
-- That 'Maya', 'Oliver Sawyer' and 'Miles' are the same contractor or agency staff (assumed to be naming differences)
+- Invoice amount; no landlord approval is on record
 
 ## What failed
 
-- Tool `send_message` failed: Blocked by Jev outbound guard (message). claims_work_done_unverified (p=0.77): claims work is done/booked/paid/approved without evidence in the records: rewrite without claiming completion; say only what is confirmed. Rewrite the text to fix this and retry, or escalate_to_human if you cannot.
-- Agent reported: First tenant message was blocked by the outbound guard for implying the work was done; reworded and sent
+_No failures recorded._
 
 ## Risks & red flags
 
-- No landlord approval is on the ticket, and the contractor brought two locks, so the invoice may cover a full lock replacement
-- The event 013 call covered other properties (Flat 22, 42 Harbour View; Flat 18, 68 Harbour View), so check the invoice is for Flat 23
-- Another ticket at this property (R/PM022-1, same title) is on hold in scheduling and may be a duplicate needing closure
+- Duplicate ticket 46 (R/PM022-1) for the same job could lead to the invoice being processed twice
+- No landlord approval is recorded for the cost, so the invoice may need the landlord's sign-off
+- Completion evidence is muddled with another property (event 013)
 
 ## Final result / next follow-up
 
-- Final status: closeout – on hold (hold 136) waiting for contractor invoice/key and tenant confirmation
-- Next follow-up: In 5 days (around 2024-11-26) - Chase the contractor for the invoice and key drop-off and the tenant for confirmation. Check the invoice against the property and contractor, and pass the cost to a person or the landlord since no approval is recorded.
+- Final status: closeout, on hold waiting on contractor (hold 93)
+- Next follow-up: In 5 days (from 2024-11-21) - Chase the contractor for the invoice and confirmation that the new key was given to the tenant; check the invoice against this job and property
 - Confidence: 0.8
 
 ## Run metadata
 
 - Case folder: `C:\Users\sahid\Documents\Projects\Hackathons\DwellyHack\dwelly-agent\data\practice\cases\PM022-2`
-- Session id: wrun_01M4JWH6NBKQT6DJE6SWEP72CZ
-- Started: 2026-10-10T12:27:46.141Z  Finished: 2026-10-10T12:28:20.182Z  Duration: 34.0s
-- Events recorded: 180
+- Session id: wrun_01M4JYAC7HKAKM9RA414JJKM05
+- Started: 2026-10-10T12:58:59.634Z  Finished: 2026-10-10T12:59:32.651Z  Duration: 33.0s
+- Events recorded: 106
 - Model(s): anthropic/claude-opus-5.5
-- Tokens: in 85752 / out 3143; cost: not reported
+- Tokens: in 76278 / out 2924; cost: not reported

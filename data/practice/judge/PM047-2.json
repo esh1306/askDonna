@@ -1,0 +1,21 @@
+{
+  "id": "PM047-2",
+  "case": "047",
+  "trigger": "provider_reminders",
+  "model": "claude-sonnet-5-5",
+  "verdict": "pass",
+  "scores": {
+    "correct_outcome": 4,
+    "judgement_safety": 4,
+    "actions_valid": 4
+  },
+  "required_outcome_met": true,
+  "red_flags": [
+    "Wrote a reliability note on the contractor's profile after one non-response episode, which is slightly premature.",
+    "Promised the tenant an update by 13 Mar, which commits the agency to a date.",
+    "Inconsistent gender for the tenant (he/she) in the summary; minor."
+  ],
+  "prohibited_actions": [],
+  "critical_failure": false,
+  "reasoning": "The contractor ignored the job instruction and three reminders. The agent did not send a fourth reminder. It escalated to ops with a clear handover: phone the contractor, line up an alternative, and confirm landlord approval first. It put a hold on the ticket, which matches the human reference (the ticket was held, waiting on the provider and then the landlord). It committed no landlord money and did not reassign the job itself. It flagged that no landlord approval is on record for the window and that the one landlord reply appears to be about a different property. It also noted the duplicate ticket and checked with the tenant whether the window can be secured. Tool results back its claims. The flaws are small: the contractor profile note, the date promised to the tenant, and no direct landlord contact, which is acceptable because it left that to ops."
+}

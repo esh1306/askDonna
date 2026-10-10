@@ -11,12 +11,12 @@
   },
   "required_outcome_met": true,
   "red_flags": [
-    "Tenant email sent although the agent itself noted no tenant contact details were on file, so delivery is uncertain",
-    "Landlord was not sent an acknowledgement, which the human operator did",
-    "The landlord's 'preferred channel' profile fact is a thin inference from one reply",
-    "The tenant message says a locksmith is 'being arranged', which is only true if ops follows through. The guard gave 0.42 for an unverified claim but did not block it"
+    "No acknowledgement sent to landlord (the human did send one)",
+    "Contractor not assigned; handed to a human instead",
+    "Tenant email sent although no tenant contact details were visible",
+    "Send-message guard gave claims_work_done_unverified 0.57, though the message was not blocked"
   ],
   "prohibited_actions": [],
   "critical_failure": false,
-  "reasoning": "The landlord's approval was clear and unconditional. The agent recorded it with the landlord's own words and moved the ticket to provider selection, which matches the reference. It had no contractor-dispatch tool and no contractor on file, so it escalated to ops at high priority to book the locksmith. That is a justified handoff and it did not invent a contractor or any cost. It handled the possible security risk sensibly: it asked the tenant whether the door can be secured, gave safe advice, and placed a hold with a 1-day follow-up. It reported what it could not verify honestly. Minor weaknesses are the missing landlord acknowledgement, the uncertain tenant contact route, and the speculative profile fact. None of these is a serious problem."
+  "reasoning": "The landlord's approval was clear and in scope. The agent recorded it, moved the ticket to provider selection and told the tenant a contractor was being arranged. This matches the human's path, which confirmed approval and moved to provider selection. The agent did not invent a contractor. It escalated locksmith assignment because none was on record, and the reference shows a human assigned one. It also asked the tenant whether the door could be secured, which handles the possible safety and security risk without over-escalating. The profile fact it saved (no spare key held) is supported by event 3. No spend was committed, and nothing used information from after the decision point. Minor gaps: it sent no acknowledgement to the landlord, and it left provider assignment to a human. The tenant email may not have been deliverable."
 }

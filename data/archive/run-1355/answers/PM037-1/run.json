@@ -1,0 +1,106 @@
+{
+  "case": "PM037-1",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 2,
+  "durationSec": 63.069,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4JSYNBVG6CBZ6W4G5N5PCMT",
+  "startedAt": "2026-10-10T11:42:41.432Z",
+  "finishedAt": "2026-10-10T11:43:44.501Z",
+  "usage": {
+    "inputTokens": 94528,
+    "outputTokens": 5457
+  },
+  "eventCount": 434,
+  "dryRun": false,
+  "result": {
+    "case_id": "17 (R/PM037-1)",
+    "decision": "escalate",
+    "summary": "The landlord, Freya, replied \"Please get the shower hose replaced.\" That answers our question in event 003: she wants us to organise the repair. So the answer to event 006 is that one short reply to her was needed, and I've sent it. I couldn't put the ticket back into auto mode, because it is at provider selection with no contractor and I have no tool to pick or book one. I've passed it to ops to choose a contractor (normal priority) and put a 1-day follow-up on it. The tenant has been sent interim advice and asked whether it's the hose or an electric cable.",
+    "situation": "Tenant reported a damaged, leaking shower \"cable\" by the handle. We had asked the landlord whether she would arrange the repair or wanted us to, and asked the tenant for photos (not received yet). The landlord has now told us to get the shower hose replaced. There is no contractor, no quote and no spend limit on the landlord's profile.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the ticket",
+        "result": "7 events, no attachments, approvals, holds or facts",
+        "ok": true
+      },
+      {
+        "tool": "classify_intake",
+        "description": "Classified the report",
+        "result": "Plumbing; severity emergency 0.96, safety risk 0.69. I treated this as evidence only: a leaking hose can be contained, so I judged it routine to urgent unless it turns out to be an electric shower cable",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded on the landlord's profile that she wants the agency to organise this repair (event 007)",
+        "result": "fact 34 saved",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the landlord: we'll organise the hose replacement, no price yet, and we'll ask again if the job grows",
+        "result": "message 23 queued",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant: interim containment and electrical safety advice, plus a request for photos and to confirm hose or cable",
+        "result": "message 24 queued",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "First try at the handover",
+        "result": "Error: database is locked",
+        "ok": false
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Tried again: handover to ops to assign a contractor",
+        "result": "queue item 6",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold waiting on ops (agency) for a contractor and on the tenant's photos",
+        "result": "hold 45, follow-up in 1 day",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (Freya)",
+        "status": "granted: instruction by email to replace the shower hose (event 007); no cost agreed",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "Landlord has told us to organise the job, but no contractor is assigned and I can't pick or book one. Hose vs electric cable also needs checking.",
+      "handover_summary": "Landlord said by email (event 007) to replace the shower hose. I've acknowledged this to her and sent the tenant safety advice. There is no contractor, no quote and no photos yet.",
+      "recommendation": "Assign a plumber for the hose replacement and move the ticket to scheduling. Switch to an electrician and urgent priority if it is an electric shower cable. Go back to the landlord if the quote is more than a routine hose replacement."
+    },
+    "unverified": [
+      "Whether the fault is the flexible shower hose or an electric shower power cable",
+      "Cost of the repair",
+      "Whether the outbox messages will be delivered: no email or phone is on file for the tenant or landlord",
+      "The tenant's name (\"Eliza\") comes only from our earlier email"
+    ],
+    "failures": [
+      "escalate_to_human failed the first time with 'database is locked'; it worked on the second try"
+    ],
+    "risks_or_red_flags": [
+      "The report says \"cable\" but the landlord says \"hose\": if it is an electric shower, a leak near the electrics is dangerous",
+      "The classifier flagged the case as an emergency",
+      "Water could get through to the flat below if the leak is not contained"
+    ],
+    "final_status": "provider_selection, on hold waiting on the agency (hold 45); ops queue item 6 open",
+    "next_follow_up": {
+      "when": "In 1 day (hold 45)",
+      "what": "Check a contractor has been assigned and whether the tenant has sent photos; move to scheduling once a contractor is confirmed"
+    },
+    "confidence": 0.78
+  }
+}

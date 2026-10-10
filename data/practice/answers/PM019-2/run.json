@@ -1,0 +1,154 @@
+{
+  "case": "PM019-2",
+  "decision": "act",
+  "escalated": "yes",
+  "failures": 0,
+  "durationSec": 71.02,
+  "decisionLine": "act",
+  "sessionId": "wrun_01M4JY9ETG6MEH28K30X0MBFTM",
+  "startedAt": "2026-10-10T12:58:29.502Z",
+  "finishedAt": "2026-10-10T12:59:40.522Z",
+  "usage": {
+    "inputTokens": 157231,
+    "outputTokens": 7018
+  },
+  "eventCount": 471,
+  "dryRun": false,
+  "result": {
+    "case_id": "40 (R/PM019-2)",
+    "decision": "act",
+    "summary": "The landlord's reply, \"Please go ahead with the removal.\" (event 25), is a clear approval of the removal job Maya described on 15 March at around £600. I recorded the approval, moved the ticket to provider selection, and emailed both the landlord and the tenant. I didn't assign a contractor because the records don't say who it should be: \"Oakley's contractor\" and Harbour Compliance both appear and may not be the same firm. There's also an open note from Maya to get funds from the landlord up front. I've sent both points to a human and placed a 3-day hold.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "Event 25 is the landlord's answer to the chaser in event 22, which followed Maya's email of 15 March (event 19) describing removal of builders' material at around £600. The classifier rated the intent as approve (1.0) and suggested auto handling. 'Go ahead' approves the attendance described, so the approval is recorded and the job moves forward. Two things stop me assigning a contractor: the provider's name isn't confirmed (event 9 names Harbour Compliance on a £500+VAT quote, but events 15, 16 and 19 refer to Oakley's contractor quoting later), and event 10 asks for the landlord's funds up front. Both are agency decisions that the tenant and landlord can't answer.",
+      "alternatives_considered": [
+        {
+          "option": "Assign Harbour Compliance straight away",
+          "why_not": "It's the only firm named in the records, but the later events point to a different contractor (Oakley's contact) who quoted after 21 February. Assigning the wrong firm could commit the landlord's money to the wrong payee."
+        },
+        {
+          "option": "Wait without recording the approval",
+          "why_not": "The landlord answered clearly, and the system asked whether a reply was needed (event 24). Leaving it would stall a job that has already waited more than two months."
+        },
+        {
+          "option": "Treat it as approval for the whole request, including levelling and gravel",
+          "why_not": "The landlord only said 'the removal', so levelling and gravel weren't approved. I asked the landlord whether he wants them quoted."
+        }
+      ],
+      "checks_performed": [
+        "Approval status: #17 was pending and is now approved, covering removal only",
+        "Amount: around £600 per event 19; event 9 says £500+VAT (same total if VAT is included). No written quote visible",
+        "Contractor identity: Harbour Compliance (event 9) vs Oakley's contractor (events 15, 16, 19). Not resolved",
+        "Searched the case for 'Harbour'",
+        "Duplicate check: ticket 39 (R/PM019-1) is open for the same request at the same property",
+        "No safety emergency"
+      ],
+      "assumptions": [
+        "'The removal' means the removal and disposal of builders' material described in event 19",
+        "The approved cost is about £600; no exact cap was stated"
+      ]
+    },
+    "situation": "Tenant asked for the garden to be cleared of construction waste, levelled and gravelled. After a long run of holds and chasers, the landlord replied on 25 March approving the removal, after being told the cost would be around £600.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the case",
+        "result": "Stage was landlord_approval, approval #17 pending, no attachments",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the landlord's reply",
+        "result": "Intent: approve (1.0); suggested handling: auto",
+        "ok": true
+      },
+      {
+        "tool": "find_tickets",
+        "description": "Checked for other tickets at the property",
+        "result": "Found ticket 39 (R/PM019-1), a possible duplicate",
+        "ok": true
+      },
+      {
+        "tool": "search_case",
+        "description": "Searched the case for 'Harbour'",
+        "result": "Only mention is event 9",
+        "ok": true
+      },
+      {
+        "tool": "record_approval_response",
+        "description": "Recorded approval #17 as approved, scope limited to removal",
+        "result": "Approved",
+        "ok": true
+      },
+      {
+        "tool": "move_stage",
+        "description": "Moved landlord_approval → provider_selection",
+        "result": "Done",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the landlord's approved amount and how responsive he is, plus the garden's condition on the property",
+        "result": "3 facts added",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the landlord to acknowledge the approval and ask if he wants levelling/gravel quoted",
+        "result": "Queued (id 61)",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant: removal approved, contractor being arranged, update within 3 working days, levelling/gravel not yet approved",
+        "result": "Queued (id 60)",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Asked the agency to confirm the contractor, the upfront-funds requirement and the duplicate ticket",
+        "result": "Queue item 23",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold waiting on the agency",
+        "result": "Hold 94, 3-day follow-up",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (Jenkins)",
+        "status": "granted (removal only, ~£600)",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "The contractor to instruct isn't confirmed in the records, and there's an open instruction to get the landlord's funds up front",
+      "handover_summary": "Landlord approved garden waste removal at ~£600 (event 25). Ticket is now in provider_selection. The records don't confirm whether the contractor is Harbour Compliance (event 9) or Oakley's contractor (events 15, 16, 19). No written quote visible. Event 10 says to get funds up front. Ticket 39 may be a duplicate.",
+      "recommendation": "Maya/Oakley: confirm the contractor's name and contact details and assign them; get a written quote of £600 or less; decide on upfront funds; merge ticket 39 if it's a duplicate."
+    },
+    "unverified": [
+      "Contractor's name and contact details",
+      "Exact quote amount and whether it includes VAT",
+      "Whether landlord funds have been requested or received",
+      "Whether ticket 39 is a duplicate",
+      "Garden photos (marked unavailable in the records)"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "Tenant has waited more than two months and has already chased (event 18)",
+      "Two possible contractors are named; a wrong assignment could mean the wrong payee",
+      "The approved amount is approximate; any invoice above ~£600 needs fresh landlord approval",
+      "Landlord is slow to respond"
+    ],
+    "final_status": "provider_selection; on hold waiting on the agency (hold 94); escalated (queue 23)",
+    "next_follow_up": {
+      "when": "in 3 days",
+      "what": "Check the agency has confirmed the contractor; then assign them and notify the contractor and tenant. Also chase the landlord's answer on levelling/gravel."
+    },
+    "confidence": 0.78
+  }
+}

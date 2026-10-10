@@ -6,65 +6,90 @@
 
 ## Summary
 
-The landlord agreed to a contractor attending (event 006). Juniper Surveying has been assigned, and the locksmith has left a voicemail to arrange a time. The voicemail was logged for "Freya Langley" rather than the tenant, Theo Ingram, so I emailed the tenant to call the locksmith back or send a better number. The provider doesn't need a reply from us yet. The ticket is on hold waiting for the contractor to book a time and send a quote, which will need the landlord's approval.
+The landlord approved attendance (event 6) and Juniper Surveying is already assigned (events 8–11). The locksmith has tried to reach the tenant to book a time (event 12), so the provider doesn't need a reply. I emailed the tenant asking them to call the locksmith back or send times they're available, and put the ticket on hold with a 1-day follow-up.
+
+## Judgement
+
+- **Case type:** maintenance
+- **Why this decision:** Event 6, Isaac: 'Yes that sounds like it needs sorting fairly soon' approves attendance. The contractor was assigned and told about the job (events 8–11), and the locksmith left a voicemail to book a time (event 12). Event 13 asks whether the provider needs a reply. It doesn't: the next step is the tenant and contractor agreeing a time. The voicemail went to 'Freya Langley', not Theo Ingram (the tenant on record), so I emailed Theo so the request reaches him, and set a hold so the job doesn't go quiet.
+
+| Alternative considered | Why not |
+|---|---|
+| Treat as an emergency (insecure property) | It's a balcony door to a flat, so probably not at ground level, and the landlord asked for it to be sorted 'fairly soon', not urgently. I still told the tenant to report straight away if the flat can't be secured. |
+| Request formal landlord approval | The landlord already approved attendance. Any repair cost will come back as a quote for approval. The contractor email says they must not proceed until approved. |
+| Escalate to a human | Routine scheduling. The name difference can be cleared up with the tenant and doesn't change the decision. |
+| Message the contractor | They are already acting. Messaging again would add nothing. |
+
+**Checks performed before acting**
+
+- Approval status: landlord's email in event 6 approves attendance
+- Contractor assignment and notifications confirmed (events 8–11)
+- Contractor contact attempt (event 12): voicemail recipient's name differs from the tenant on record
+- Open holds and approvals: none before this action
+- Property history: ticket 49 open for the same issue
+- Safety: lock fault on a balcony door, not judged an emergency
+
+**Assumptions**
+
+- The balcony is not easily reachable from outside (flat, upper floor likely)
+- Freya Langley is probably a co-occupant or other household contact
 
 ## Actions taken
 
 | # | Tool | Input (gist) | Result | Output (gist) |
 |---|---|---|---|---|
-| 1 | `get_ticket_context` | {"ticket_id":58} | ok | {"ok":true,"ticket":{"id":58,"case_ref":"R/PM023-2","property_id":27,"tenant_id":138,"landlord_id":139,"contractor_id":… |
-| 2 | `classify_reply` | {"ticket_id":58,"text":"The locksmith left a voicemail for Freya Langley to organize a time for fixing the balcony door.","sender_role":"co… | ok | {"autonomy":"review","intent":"scheduling","intent_probs":{"quote_or_estimate":0,"invoice":0,"completion_report":0,"sch… |
-| 3 | `send_message` | {"ticket_id":58,"to":"tenant","channel":"email","subject":"Balcony door lock – Flat 20, 110 Meadow Row (ref R/PM023-2)","body":"Dear Theo,\… | ok | {"ok":true,"message_id":72,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.08,"promises_… |
-| 4 | `place_hold` | {"ticket_id":58,"reason":"Waiting for Juniper Surveying to agree an attendance time with the tenant (voicemail left event 012; name recorde… | ok | {"ok":true,"hold_id":137} |
-| 5 | `add_profile_fact` | {"entity_type":"contact","entity_id":139,"key":"approval_r_pm023_2_scope","value":"Agreed to contractor attendance for balcony door lock (\… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":78,"entity_type":"contact","entity_id":139,"key":"approval_r… |
+| 1 | `get_ticket_context` | {"ticket_id":50} | ok | {"ok":true,"ticket":{"id":50,"case_ref":"R/PM023-2","property_id":37,"tenant_id":124,"landlord_id":125,"contractor_id":… |
+| 2 | `send_message` | {"ticket_id":50,"to":"tenant","channel":"email","subject":"Balcony door lock – Flat 20, 110 Meadow Row (ref R/PM023-2)","body":"Dear Theo,\… | ok | {"ok":true,"message_id":66,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.08,"promises_… |
+| 3 | `place_hold` | {"ticket_id":50,"reason":"Juniper Surveying left voicemail (event 12) to arrange attendance/quote; waiting for appointment to be agreed wit… | ok | {"ok":true,"hold_id":99} |
+| 4 | `add_profile_fact` | {"entity_type":"property","entity_id":37,"key":"possible_additional_occupant_contact","value":"Freya Langley (contractor left voicemail for… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":67,"entity_type":"property","entity_id":37,"key":"possible_a… |
 
 Agent's own account of its actions (from the structured result):
 
-- `get_ticket_context` - Loaded the ticket context -> 13 events; no holds or approvals on record; an earlier related ticket R/PM023-1 is on hold
-- `classify_reply` - Classified the contractor's voicemail note (event 012) -> Intent: scheduling (0.81); flagged for review (needs a human response 0.56)
-- `send_message` - Emailed the tenant to return the locksmith's call or send a better contact number, mentioning the Freya Langley name, plus basic security advice -> Message 72 queued; guard did not block it
-- `place_hold` - Placed a hold waiting on the contractor to book a time and send a quote -> Hold 137, follow up in 2 days
-- `add_profile_fact` - Recorded that the landlord agreed to attendance only, with no cost approved -> Fact 78 recorded
+- `get_ticket_context` - Loaded ticket, profiles, events and property history -> 13 events; no holds or approvals; sibling ticket 49 (R/PM023-1) open for the same issue
+- `send_message` - Emailed the tenant asking them to return the locksmith's call or send times they're available, with advice to keep the door secured -> Queued (message 66); guard passed
+- `place_hold` - Hold waiting on contractor and tenant to agree an appointment -> Hold 99, follow-up in 1 day
+- `add_profile_fact` - Recorded Freya Langley as a possible occupant contact (relationship unverified) -> Fact 67 recorded
 
 ## Approvals
 
 | Party | Status | Channel |
 |---|---|---|
-| Landlord (Isaac) | granted for attendance only; the quote still needs approval | email (event 006) |
+| Landlord (Isaac) | granted (attendance only; any repair quote still needs approval) | email (event 6) |
 
 ## Escalation & handover
 
 - Escalation needed: **no**
-- Reason: This is routine scheduling, and the tenant can clear up the name mismatch
+- Reason: Routine scheduling; no conflict that changes the decision
+- Recommendation: Ops may want to check whether ticket 49 (R/PM023-1) duplicates this one and close it if so.
 
 ## What could not be verified
 
-- Who Freya Langley is (possibly someone else in the household, or a wrong contact or number)
-- Whether 07700 900353 is the tenant's number
-- Whether the flat's balcony can be reached from outside (affects how urgent the security risk is)
-- Cost of the repair
+- Who Freya Langley is in relation to tenant Theo Ingram
+- Whether the balcony is above ground level
+- Repair cost (no quote yet)
+- Whether ticket 49 is a duplicate
 
 ## What failed
 
-_No failures recorded._
+- Agent reported: My first structured reply was rejected as malformed and resubmitted; no CRM action failed
 
 ## Risks & red flags
 
-- Contact name mismatch: Freya Langley vs Theo Ingram
-- An exterior door that won't lock is a security risk; it becomes urgent if the balcony is reachable from outside
-- Duplicate or related ticket R/PM023-1 is on hold at provider selection and should be checked for duplication
+- The door can't be locked, so there is a security risk if the balcony can be reached from outside
+- Name difference between the voicemail recipient and the tenant on record
+- Possible duplicate ticket 49 for the same issue
 
 ## Final result / next follow-up
 
-- Final status: scheduling, on hold (waiting on contractor), hold 137
-- Next follow-up: in 2 days (around 2025-07-27) - Chase Juniper Surveying for an appointment and a quote; once the quote arrives, ask the landlord to approve it
-- Confidence: 0.78
+- Final status: scheduling, on hold (waiting on contractor and tenant to agree an appointment)
+- Next follow-up: 2025-07-26 (1 day) - Check whether Juniper Surveying and the tenant have agreed a visit; if not, chase both. When the quote arrives, ask the landlord to approve it.
+- Confidence: 0.82
 
 ## Run metadata
 
 - Case folder: `C:\Users\sahid\Documents\Projects\Hackathons\DwellyHack\dwelly-agent\data\practice\cases\PM023-2`
-- Session id: wrun_01M4JWH8DH647KR754VDW2QJD6
-- Started: 2026-10-10T12:27:47.975Z  Finished: 2026-10-10T12:28:18.655Z  Duration: 30.7s
-- Events recorded: 180
+- Session id: wrun_01M4JYAN1323ZFD13DFD1GK4EX
+- Started: 2026-10-10T12:59:08.641Z  Finished: 2026-10-10T12:59:54.947Z  Duration: 46.3s
+- Events recorded: 151
 - Model(s): anthropic/claude-opus-5.5
-- Tokens: in 83350 / out 3047; cost: not reported
+- Tokens: in 72584 / out 5123; cost: not reported

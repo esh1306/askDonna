@@ -1,0 +1,99 @@
+{
+  "case": "PM012-1",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 0,
+  "durationSec": 40.574,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4JSVSQDRQ842902AVN6T91G",
+  "startedAt": "2026-10-10T11:41:07.584Z",
+  "finishedAt": "2026-10-10T11:41:48.158Z",
+  "usage": {
+    "inputTokens": 71501,
+    "outputTokens": 3614
+  },
+  "eventCount": 229,
+  "dryRun": false,
+  "result": {
+    "case_id": "R/PM012-1 (ticket 7)",
+    "decision": "escalate",
+    "summary": "The tenant has done all the troubleshooting checks and the dishwasher door still won't close, so an engineer is needed. I emailed the tenant to acknowledge this and advised them not to use the appliance. An internal note says the landlord agreed for 'GS' to attend, but GS isn't recorded as a contractor and there is no formal approval or amount. I've escalated so a human can confirm the approval and instruct GS.",
+    "situation": "Stage is provider_selection. The fault was first reported in Sept 2025 and re-set up in April 2026. The troubleshooting checklist was sent on 19 Apr, and the tenant replied on 23 Apr that the door still won't close. The landlord's agreement for GS exists only as an informal internal note (event 008).",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded ticket 7",
+        "result": "11 events, no contractor, approvals, holds or contact details",
+        "ok": true
+      },
+      {
+        "tool": "classify_intake",
+        "description": "Classified the fault after the tenant's checks",
+        "result": "appliance, routine, needs approval 0.85, safety 0.25",
+        "ok": true
+      },
+      {
+        "tool": "search_case",
+        "description": "Searched for 'GS'",
+        "result": "Only event 008",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant: acknowledged the reply, said an engineer is being arranged (no date promised), advised keeping the dishwasher off",
+        "result": "message_id 7",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Property: troubleshooting done, fault persists",
+        "result": "fact 14",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Tenant signs off as Leo; flagged the 'Ruben' mismatch",
+        "result": "fact 15",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Handover to confirm the landlord's approval and instruct GS",
+        "result": "queue_id 3",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord",
+        "status": "reported as agreed in internal note (event 008); no CRM approval record, needs confirming",
+        "channel": "unknown"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "Contractor GS isn't in the CRM and the landlord's approval is only an informal note with no amount",
+      "handover_summary": "Tenant confirmed the door still won't close after the checks (event 011). Tenant has been acknowledged. The landlord reportedly agreed for GS to go out (event 008), but there's no approval record, contractor record or cost.",
+      "recommendation": "Confirm the landlord's approval and any cost cap, assign and instruct GS, move the ticket to scheduling, and check the tenant name (Ruben or Leo)."
+    },
+    "unverified": [
+      "Who GS is",
+      "Landlord approval scope and amount",
+      "Tenant name: Ruben (event 004) or Leo (event 011)",
+      "Dishwasher make, model and age"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "Long-running fault, first reported Sept 2025",
+      "Possible leak if the dishwasher is used with the door unlatched",
+      "Tenant name mismatch",
+      "Troubleshooting email was sent twice"
+    ],
+    "final_status": "provider_selection, escalated to the ops queue (queue 3)",
+    "next_follow_up": {
+      "when": "Within 2 working days",
+      "what": "Ops to confirm the landlord's approval and instruct GS, then update the tenant with appointment details"
+    },
+    "confidence": 0.8
+  }
+}

@@ -1,0 +1,155 @@
+{
+  "case": "PM050-1",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 0,
+  "durationSec": 60.933,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4JYHGFKAK8MX3JK7E0BD35F",
+  "startedAt": "2026-10-10T13:02:53.359Z",
+  "finishedAt": "2026-10-10T13:03:54.292Z",
+  "usage": {
+    "inputTokens": 205342,
+    "outputTokens": 5733
+  },
+  "eventCount": 388,
+  "dryRun": false,
+  "result": {
+    "case_id": "89 (R/PM050-1)",
+    "decision": "escalate",
+    "case_type": "maintenance",
+    "summary": "Nolan, the landlord, clearly approved sending someone to look at the bedroom window (event 009). I recorded approval 48 as approved, moved the ticket to provider_selection and emailed the tenant with next steps and safety advice. I couldn't assign a contractor because none is named or on record for this ticket. Ticket 90 is for the same job (same job ID NBL-050-2635), so I passed contractor choice and duplicate handling to the ops team rather than risk sending two contractors.",
+    "situation": "Routine repair: the bedroom window won't latch because the handle doesn't engage. The case was waiting for landlord approval, and the landlord has now approved attendance. Event 008 asked whether the landlord needs a reply. He doesn't: his message was a clear yes with no question in it.",
+    "judgement": {
+      "why_this_decision": "Event 009 is a clear yes to the question in event 004 (classify_reply: approve 0.99, autonomy auto), so I recorded the approval and moved the stage on. The normal next step would be assign_contractor, but no contractor appears in this ticket, the landlord's reply or the property history. 'Imogen' is the agency staff member, not a contractor. find_tickets shows ticket 90 with the same address, description, creation time and job ID, so a separate dispatch from ticket 89 could send two contractors. I took the safe steps (approval, stage, tenant update) and handed contractor choice and duplicate handling to ops, with a 1-day hold.",
+      "alternatives_considered": [
+        {
+          "option": "Assign a contractor now",
+          "why_not": "No contractor is named or on record for this ticket as of event 009. Picking one would be inventing a contractor, and a parallel ticket could lead to a double dispatch."
+        },
+        {
+          "option": "Use the contractor named in the later events on ticket 90",
+          "why_not": "Those events are dated after this case's current point (event 009). Using them would mean acting on future information."
+        },
+        {
+          "option": "Reply to the landlord",
+          "why_not": "His message needs no reply: it is an unconditional yes with no question."
+        },
+        {
+          "option": "Hold only, without escalating",
+          "why_not": "Choosing a contractor and resolving the duplicate are agency decisions, so the ops team needs to see it."
+        }
+      ],
+      "checks_performed": [
+        "Approval 48 was pending; the landlord's words are an unconditional approval for attendance",
+        "No amount quoted, so no money committed beyond attendance",
+        "No contractor on the ticket and no property job history",
+        "Checked for duplicates: ticket 90 matches this job",
+        "Safety: the window won't latch and the floor level is unknown; the tenant was given interim security advice",
+        "No access codes or pets reported"
+      ],
+      "assumptions": [
+        "The landlord's approval covers attendance and diagnosis; any repair quote goes back to him",
+        "Ticket 90 is probably a duplicate of this case"
+      ]
+    },
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded ticket 89",
+        "result": "Stage landlord_approval, approval 48 pending, no contractor",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the landlord's reply in event 009",
+        "result": "intent approve 0.99, autonomy auto",
+        "ok": true
+      },
+      {
+        "tool": "classify_intake",
+        "description": "Classified the original report",
+        "result": "doors_windows_locks, routine, safety_risk 0.67",
+        "ok": true
+      },
+      {
+        "tool": "record_approval_response",
+        "description": "Recorded approval 48 as approved, quoting the landlord's words",
+        "result": "approved, guard not blocked",
+        "ok": true
+      },
+      {
+        "tool": "find_tickets",
+        "description": "Searched for other tickets at this property",
+        "result": "Found ticket 90 (R/PM050-2), a probable duplicate",
+        "ok": true
+      },
+      {
+        "tool": "get_ticket_context",
+        "description": "Inspected ticket 90 to check whether it duplicates this job",
+        "result": "Same job ID and description; I did not rely on its later events",
+        "ok": true
+      },
+      {
+        "tool": "move_stage",
+        "description": "Moved landlord_approval to provider_selection",
+        "result": "ok",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the landlord's preferred channel as email",
+        "result": "fact 127",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant: landlord approved attendance, contractor being arranged, update within 1 working day, interim security advice",
+        "result": "message 118 queued",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Asked ops to choose a contractor and resolve the duplicate with ticket 90",
+        "result": "queue 41",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold waiting on the agency, follow up in 1 day",
+        "result": "hold 218",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord Nolan",
+        "status": "granted (attendance only, no amount)",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "A contractor must be chosen, and ticket 90 appears to be a duplicate of this job",
+      "handover_summary": "Landlord approved attendance (event 009). Approval recorded, stage set to provider_selection, tenant updated. No contractor is on record. Ticket 90 has the same job ID, NBL-050-2635.",
+      "recommendation": "If ticket 90 is handling this job, close 89 as a duplicate. Otherwise, assign the usual windows/locks contractor on 89 and send any repair quote to Nolan by email."
+    },
+    "unverified": [
+      "Which contractor should attend",
+      "Whether ticket 90 is the live record for this job",
+      "Floor level of the flat and whether the window can be reached from outside",
+      "Repair cost"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "Two contractors could be sent, because ticket 90 exists for the same job",
+      "The window can't be secured; if it can be reached from outside, this is a security risk and should be upgraded to urgent"
+    ],
+    "final_status": "provider_selection, on hold waiting on the agency (hold 218), human queue item 41",
+    "next_follow_up": {
+      "when": "in 1 day",
+      "what": "Check whether a contractor has been assigned or the ticket closed as a duplicate of 90, and update the tenant"
+    },
+    "confidence": 0.75
+  }
+}

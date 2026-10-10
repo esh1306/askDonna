@@ -27,6 +27,3 @@ The tenants fixed the shed door themselves. The task was completed without payme
 
 [Read the complete event history](history.md).
 
-## Attachments
-
-No attachments are required or available for this case.

@@ -1,0 +1,141 @@
+{
+  "case": "PM050-2",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 0,
+  "durationSec": 57.55,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4JYHKWPP10XTQSZSA89WDWZ",
+  "startedAt": "2026-10-10T13:02:56.839Z",
+  "finishedAt": "2026-10-10T13:03:54.389Z",
+  "usage": {
+    "inputTokens": 129600,
+    "outputTokens": 6090
+  },
+  "eventCount": 445,
+  "dryRun": false,
+  "result": {
+    "case_id": "90 (R/PM050-2)",
+    "decision": "escalate",
+    "summary": "On 3 July an invoice email came in under the name Cedar Solutions. The contractor on this job is Stonebridge Works, and the visit isn't until 8 July 2024. I can't see the invoice itself, so the amount is unknown. I've passed the invoice check to the operations team so nothing gets paid, asked Stonebridge Works to explain the name and send the invoice, told the landlord, and set a 2-day follow-up.",
+    "case_type": "maintenance_admin",
+    "judgement": {
+      "why_this_decision": "The landlord approved a contractor visit (ev 9), then replied 'Yes please proceed' (ev 21) to a quote of £35+VAT for a handle or £90+VAT for a lock. Stonebridge Works (Miles) booked 8 July (ev 26, 28-30). The invoice email (ev 32) is under a different company name, arrived before the booked visit, and has no visible document or amount. The payee can't be matched to the contractor, so the rules say don't pay and escalate. The classifier also said 'review' (needs_human_response 0.84).",
+      "alternatives_considered": [
+        {
+          "option": "Treat Cedar Solutions as a trading name and process the invoice",
+          "why_not": "No amount or document is visible, the payee doesn't match, and the invoice arrived before the visit. Paying would risk the landlord's money on an invoice we can't check."
+        },
+        {
+          "option": "No action and wait for the 8 July visit",
+          "why_not": "An invoice asking for prompt payment is sitting unprocessed, and someone needs to check it so it isn't paid by mistake."
+        },
+        {
+          "option": "Move the stage to works/closeout",
+          "why_not": "Nothing shows the work has been done. The visit is still booked for 8 July."
+        }
+      ],
+      "checks_performed": [
+        "Confirmed approval 49 is recorded as approved, plus the second 'proceed' in ev 21 for the £35/£90 + VAT options",
+        "Contractor on record is Stonebridge Works (Miles). 'Cedar' appears only in ev 32",
+        "No attachments on the ticket, so no invoice document, amount or bank details visible",
+        "Checked the invoice date (3 Jul) against the booked visit (8 Jul 10:00-16:00)",
+        "Spotted mismatched tenant details: ev 24 gave the contractor Eliza Langley / 07700 900931, but the tenant on record is Harriet Turner",
+        "Found duplicate ticket 89 (R/PM050-1) with the same job ID NBL-050-2635"
+      ],
+      "assumptions": [
+        "Harriet Turner is the correct tenant, based on the ticket record and system emails (ev 13, 29, 30)",
+        "Ev 32 is a system summary of the contractor's email, not the original wording"
+      ]
+    },
+    "situation": "Routine bedroom window repair, approved by the landlord, with the contractor booked for 8 July 2024. The new event is an invoice email under a different company name, arriving before the visit, with no document or amount visible.",
+    "actions_taken": [
+      {
+        "tool": "classify_reply",
+        "description": "Classified the invoice email from ev 32",
+        "result": "intent invoice, autonomy review, needs_human_response 0.84",
+        "ok": true
+      },
+      {
+        "tool": "search_case",
+        "description": "Searched the case for 'Cedar'",
+        "result": "Appears only in ev 32",
+        "ok": true
+      },
+      {
+        "tool": "get_ticket_context",
+        "description": "Checked the related ticket 89 for the same property",
+        "result": "Duplicate of the same job NBL-050-2635, still at landlord_approval",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Handed over the invoice mismatch, the tenant-details mismatch and the duplicate ticket",
+        "result": "queue_id 40, priority normal",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed Stonebridge Works asking them to confirm the Cedar Solutions name, send the invoice and say whether the work is done, and to use Harriet Turner's contact details",
+        "result": "message 117 sent, guard passed",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the landlord that the invoice is being checked and nothing will be paid until it matches what he approved",
+        "result": "message 119 sent, guard passed",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold waiting on the contractor's reply",
+        "result": "hold 217, follow-up in 2 days",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the invoice name mismatch on the contractor's profile",
+        "result": "fact 128",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded no pets at the property",
+        "result": "fact 129",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord Nolan",
+        "status": "granted (attendance ev 9; proceed with handle £35+VAT / lock £90+VAT ev 21)",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "An invoice from Cedar Solutions, which doesn't match the contractor on record, arrived before the booked visit with no amount visible",
+      "handover_summary": "Job NBL-050-2635, Flat 3, 171 Willowmere Road. Landlord approved a handle at £35+VAT or a lock at £90+VAT. Stonebridge Works is booked for 8 July. On 3 July an invoice email came in under the name Cedar Solutions with no document visible. Separately, ev 24 sent the contractor another tenant's name and number (Eliza Langley), and ticket 89 is a duplicate of this job.",
+      "recommendation": "Don't pay the invoice until it has the right payee and an amount within £42 or £108 inc VAT, and shows the work was done. Stonebridge's reply is chased in 2 days. Review the possible wrong-tenant data sharing in ev 24 and close duplicate ticket 89."
+    },
+    "unverified": [
+      "Whether Cedar Solutions is linked to Stonebridge Works",
+      "The invoice amount and what work it covers",
+      "Whether any work has been done",
+      "Whether the tenant details in ev 24 (Eliza Langley) were simply a mistake"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "The invoice payee (Cedar Solutions) is different from the contractor on record (Stonebridge Works)",
+      "The invoice arrived 5 days before the booked visit",
+      "Another tenant's name and phone number may have been shared with the contractor (ev 24)",
+      "Duplicate open ticket 89 for the same job could cause double processing"
+    ],
+    "final_status": "scheduling – on hold waiting on the contractor (hold 217), human queue item 40 open, invoice not to be paid",
+    "next_follow_up": {
+      "when": "In 2 days (hold 217)",
+      "what": "Chase Stonebridge Works for the invoice copy, the company-name confirmation and work status. Check that the 8 July visit goes ahead."
+    },
+    "confidence": 0.8
+  }
+}

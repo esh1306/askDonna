@@ -28,6 +28,3 @@ Northbridge Lettings told the tenant that the oven had been fixed and the reques
 
 [Read the complete event history](history.md).
 
-## Attachments
-
-No attachments are required or available for this case.

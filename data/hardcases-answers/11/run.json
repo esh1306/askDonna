@@ -2,133 +2,141 @@
   "case": "11",
   "decision": "escalate",
   "escalated": "yes",
-  "failures": 2,
-  "durationSec": 55.505,
+  "failures": 0,
+  "durationSec": 52.41,
   "decisionLine": "escalate",
-  "sessionId": "wrun_01M4JXGPZPJ52K6AAXFWR4SNWT",
-  "startedAt": "2026-10-10T12:44:58.675Z",
-  "finishedAt": "2026-10-10T12:45:54.180Z",
+  "sessionId": "wrun_01M4JY92NG2K2GZP4DX6GE74J1",
+  "startedAt": "2026-10-10T12:58:17.071Z",
+  "finishedAt": "2026-10-10T12:59:09.481Z",
   "usage": {
-    "inputTokens": 77132,
-    "outputTokens": 5858
+    "inputTokens": 76343,
+    "outputTokens": 5640
   },
-  "eventCount": 505,
+  "eventCount": 451,
   "dryRun": false,
   "result": {
-    "case_id": "63 (R/11)",
+    "case_id": "36 (R/11)",
     "decision": "escalate",
     "case_type": "safety_emergency",
-    "summary": "The tenant wrote in Polish. Water has been coming through the bathroom ceiling for about an hour, there is water near the socket by the mirror, and an elderly woman lives in the flat above. I treated this as an emergency. I sent the tenant safety advice in Polish and emailed the landlord. I couldn't send anyone out because the records have no contractor and no history for this property, so I passed the case to the operations team at high priority to send someone urgently and check on the neighbour upstairs. A hold is set to follow up in 6 hours.",
-    "situation": "Mr K. Nowak at Flat 3, 12 Bramble Gardens, Kingsfold ZZ6 4ZZ sent this WhatsApp in Polish at 18:22 on 9 Oct. Water has been coming from the bathroom ceiling into the bath for an hour. There is water near the socket by the mirror. An elderly woman lives upstairs. He doesn't know what to do and can be home tomorrow after 14:00. The system flagged it as an urgent plumbing leak. The ticket was only created at 12:44 on 10 Oct, about 18 hours after his message.",
+    "summary": "I've treated this as an emergency. The tenant wrote in Polish that water has been coming through the bathroom ceiling for about an hour and is near the socket by the mirror. I texted him safety advice in Polish, told the landlord by email and escalated to the operations team as high priority, because there's no contractor on record for me to send. I also recorded the tenant's language and the elderly neighbour in the flat above, moved the ticket to provider selection and set a 6-hour hold.",
+    "situation": "Tenant Mr K. Nowak, Flat 3, 12 Bramble Gardens, Kingsfold ZZ6 4ZZ. WhatsApp message at 18:22 on 9 Oct 2026 (Polish), translated: \"Good day, water has been coming from the bathroom ceiling into the bath for an hour, and an elderly lady lives upstairs. There is also water by the socket near the mirror. Please help, I don't know what to do. I can be home tomorrow after 2pm.\" The leak probably comes from the flat above, and the water near the socket is an electrical risk.",
+    "judgement": {
+      "why_this_decision": "Water near an electrical socket plus a leak that isn't contained counts as an emergency under our rules. The intake check agreed: emergency, safety risk 0.97. There's no contractor on record, so I couldn't send one myself. The safe steps were: give the tenant safety advice in his language, tell the landlord at the same time, and hand the call-out to a person as high priority.",
+      "alternatives_considered": [
+        {
+          "option": "Ask the landlord for approval first",
+          "why_not": "Approval doesn't hold up emergency safety work. Waiting for it would leave the electrical risk in place."
+        },
+        {
+          "option": "Assign a contractor myself",
+          "why_not": "There's no contractor on the ticket, at the property before, or named by the landlord. I won't invent one."
+        },
+        {
+          "option": "Book the visit for tomorrow after 14:00",
+          "why_not": "The leak is active now and water is near the electrics. It can't wait until tomorrow."
+        }
+      ],
+      "checks_performed": [
+        "Loaded the ticket: no events, contractor, property history, contact details or profile facts",
+        "Ran the intake check: emergency, plumbing, safety risk 0.97",
+        "Looked for a landlord spend limit: none on the profile (the £200 cap appears only in the case file)",
+        "No duplicate or open holds or approvals on the ticket"
+      ],
+      "assumptions": [
+        "The leak most likely comes from the flat above",
+        "The tenant will receive the SMS (no phone number is on record; he wrote via WhatsApp)",
+        "I used the address from the case file because the CRM property record has a placeholder address"
+      ]
+    },
     "actions_taken": [
       {
-        "tool": "get_ticket_context",
-        "description": "Loaded ticket 63",
-        "result": "No contractor, contact details, history, approvals or holds. The CRM shows the address as unknown.",
-        "ok": true
-      },
-      {
         "tool": "classify_intake",
-        "description": "Classified the tenant's report",
-        "result": "Emergency, plumbing, safety risk 0.98, route: emergency dispatch",
+        "description": "Classified the translated report",
+        "result": "emergency, plumbing, safety risk 0.97, route emergency_dispatch",
         "ok": true
       },
       {
         "tool": "send_message",
-        "description": "Sent the tenant safety advice by SMS, in Polish",
-        "result": "Message 19 queued; the guard let it through",
+        "description": "SMS to the tenant in Polish with safety advice and next steps",
+        "result": "message 48 queued; guard passed",
         "ok": true
       },
       {
         "tool": "send_message",
-        "description": "Emailed the landlord that this is an emergency and urgent attendance is being arranged",
-        "result": "Message 18 queued; the guard let it through",
-        "ok": true
-      },
-      {
-        "tool": "add_profile_fact",
-        "description": "Recorded the tenant's preferred language (Polish), an elderly resident in the flat above, and the default £200 approval cap (marked unconfirmed)",
-        "result": "Facts 39, 40 and 41 saved",
+        "description": "Emergency notice to the landlord by email; no cost agreed",
+        "result": "message 49 queued; guard passed",
         "ok": true
       },
       {
         "tool": "escalate_to_human",
-        "description": "High-priority handover to operations",
-        "result": "Queue item 10",
+        "description": "High-priority handover for emergency call-out",
+        "result": "queue_id 18",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Tenant's preferred language: Polish",
+        "result": "fact 52",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Tenant contacted us via WhatsApp",
+        "result": "fact 53",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Elderly resident lives in the flat above",
+        "result": "fact 54",
+        "ok": true
+      },
+      {
+        "tool": "move_stage",
+        "description": "Moved from intake to provider selection",
+        "result": "ok",
         "ok": true
       },
       {
         "tool": "place_hold",
-        "description": "Hold waiting on the agency to confirm dispatch, follow-up in 0.25 days",
-        "result": "Hold 247",
+        "description": "Hold on the agency for emergency call-out, follow-up in 6 hours",
+        "result": "hold 86",
         "ok": true
       }
     ],
     "approvals": [
       {
-        "party": "Mr D. Hewitt (landlord)",
-        "status": "not_needed",
-        "channel": "email (told about the emergency, not asked for approval)"
+        "party": "Landlord Mr D. Hewitt",
+        "status": "not_needed (emergency safety work); landlord notified",
+        "channel": "email"
       }
     ],
     "escalation": {
       "needed": true,
-      "reason": "Emergency: water coming through the ceiling, wet electrical socket, and no contractor on record to send",
-      "handover_summary": "Water is coming through the bathroom ceiling, probably from the flat above where an elderly woman lives, and there is water at the socket by the mirror. The tenant speaks Polish. He has had safety advice in Polish and the landlord has been told by email. The ticket was created about 18 hours after the report.",
-      "recommendation": "1. Phone the tenant, with a Polish speaker if possible, to check he is safe and whether it is still leaking. 2. Send an emergency plumber and an electrician; this is emergency safety work, so it can go ahead without landlord approval. 3. Contact the upstairs flat or the building's freeholder or managing agent, and check on the elderly resident. 4. Phone the landlord and add his contact details and the property address to the CRM."
+      "reason": "Emergency leak with water near the electrics, and no contractor on record to send",
+      "handover_summary": "Water has been coming through the bathroom ceiling of Flat 3, 12 Bramble Gardens into the bath for about an hour, with water near the socket by the mirror. The source is probably the elderly neighbour's flat above. The tenant, who writes in Polish, has had safety advice by SMS. The landlord has had an emergency notice by email. No contractor or cost yet.",
+      "recommendation": "Phone the tenant now, with a Polish speaker if possible, to confirm the electrics are off and the water has stopped. Send an emergency plumber tonight and an electrician to check the socket. Contact the block manager or the flat above, and do a welfare check on the elderly neighbour. Update the landlord on cost by phone."
     },
     "unverified": [
-      "Whether the leak is still active, or the socket still wet, 18 hours after the report",
-      "Where the leak is coming from and who is responsible for it",
-      "Whether the elderly neighbour upstairs is safe",
-      "Whether the SMS and email reached anyone: no phone number or email is on record",
-      "The £200 default approval cap (from the case file only, not confirmed by the landlord)",
-      "Whether 'tomorrow after 14:00' means 10 Oct"
+      "Where the leak is coming from",
+      "Whether the electrics have been turned off",
+      "Whether the elderly neighbour is OK",
+      "Whether the tenant received the SMS (no phone number on record)",
+      "The landlord's £200 spend limit (only in the case file, not on his profile)",
+      "The full property address (taken from the case file; CRM has a placeholder)"
     ],
-    "failures": [
-      "No contractor on record, so I couldn't send anyone myself",
-      "Tenant and landlord contact details are missing and the CRM shows the property address as unknown"
-    ],
+    "failures": [],
     "risks_or_red_flags": [
-      "Electrical danger: water at the socket",
-      "Escape of water still active when reported",
-      "A possibly vulnerable elderly resident upstairs",
-      "About 18 hours between the report and the ticket being created",
-      "Language barrier: the tenant wrote in Polish"
+      "Water near a live socket: risk of electric shock",
+      "Possible vulnerable elderly neighbour above, who may be the source of the leak",
+      "Language barrier: the tenant needs safety advice in Polish",
+      "No contact details on record in the CRM"
     ],
-    "final_status": "intake; escalated (queue 10, high priority); hold 247 waiting on the agency",
+    "final_status": "provider_selection; escalated (high); hold 86 on the agency",
     "next_follow_up": {
       "when": "In 6 hours (0.25 days)",
-      "what": "Confirm that a plumber and an electrician have been sent, the tenant is safe, and someone has checked on the upstairs neighbour"
+      "what": "Check that an emergency contractor has been sent and the electrics are confirmed safe; update the tenant in Polish"
     },
-    "confidence": 0.85,
-    "judgement": {
-      "why_this_decision": "Water still coming in plus water at an electrical socket counts as an emergency under the rules. Intake classification agreed: emergency, safety risk 0.98. Emergency work doesn't need landlord approval, but there was no contractor on record to send, so a person has to arrange it. I gave the tenant safety steps in his own language and told the landlord at the same time.",
-      "alternatives_considered": [
-        {
-          "option": "Ask the landlord to approve first",
-          "why_not": "Approval doesn't hold up emergency safety work"
-        },
-        {
-          "option": "Assign a contractor",
-          "why_not": "There is no contractor on the ticket or in this property's history"
-        },
-        {
-          "option": "Book a normal visit for tomorrow after 14:00",
-          "why_not": "Too slow for water at an electrical socket"
-        }
-      ],
-      "checks_performed": [
-        "Ticket context: no history, contacts or contractor",
-        "Translated the Polish message",
-        "Ran the intake classification",
-        "Checked approvals and holds: none existed",
-        "Outgoing messages passed the guard"
-      ],
-      "assumptions": [
-        "The flat above is the likely source of the leak",
-        "The tenant reads Polish best"
-      ]
-    }
+    "confidence": 0.85
   }
 }

@@ -1,0 +1,86 @@
+{
+  "case": "PM019-1",
+  "decision": "wait",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 30.722,
+  "decisionLine": "wait",
+  "sessionId": "wrun_01M4JWGWZ26QX5KDSWV22FXR6V",
+  "startedAt": "2026-10-10T12:27:36.257Z",
+  "finishedAt": "2026-10-10T12:28:06.979Z",
+  "usage": {
+    "inputTokens": 73805,
+    "outputTokens": 2744
+  },
+  "eventCount": 166,
+  "dryRun": false,
+  "result": {
+    "case_id": "55 (R/PM019-1)",
+    "decision": "wait",
+    "summary": "This is a routine garden job: clearing rubbish, levelling the ground and laying gravel. Approval 29 has been waiting on the landlord since 17 Jan, with no reply after 3 days. This is the first missed follow-up, so I sent the landlord a reminder asking them to approve or decline a contractor visit to quote, or to pick part of the work. I also asked the tenant to resend the photos, which aren't visible in the records. The ticket is on hold until the landlord replies, with a follow-up in 3 days.",
+    "situation": "The tenant at Flat 25, 185 Copperfield Walk asked for the garden to be cleared of rubbish and construction waste, levelled, and covered with gravel. The agency emailed the landlord (Jenkins) on 17 Jan, and approval 29 is still pending with no amount. Neither the landlord nor the tenant has replied in 3 days. The tenant's photos aren't visible. There are no profile facts, contact details or preferred channel for the landlord.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded ticket 55",
+        "result": "Stage landlord_approval, approval 29 pending, no holds, no attachments",
+        "ok": true
+      },
+      {
+        "tool": "classify_intake",
+        "description": "Classified the request",
+        "result": "garden_external, routine, safety_risk 0.22, route request_landlord_approval",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Sent the landlord an email reminder asking APPROVE/DECLINE for a contractor to attend and quote, or to choose part of the work",
+        "result": "message 70 sent, guard passed",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Sent the tenant an update and asked them to resend the photos and report any immediate hazard",
+        "result": "message 69 sent, guard passed",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Put the ticket on hold waiting on the landlord, follow-up in 3 days",
+        "result": "hold 133",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (Jenkins)",
+        "status": "requested (pending since 17 Jan, chased once)",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "This is the first missed follow-up and the job is routine and non-urgent, so a reminder comes before escalating.",
+      "handover_summary": "",
+      "recommendation": "If the landlord still hasn't replied at the next follow-up, try them by phone if a number becomes available, then escalate."
+    },
+    "unverified": [
+      "Tenant photos (not visible in records)",
+      "Whether the garden is part of the tenancy demise, as the tenant says",
+      "How much construction waste there is, and who left it",
+      "Landlord's contact details or preferred channel (none recorded)"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "Levelling and gravelling may count as an improvement rather than a repair, so the landlord decides",
+      "If there is construction waste, there could be minor safety hazards (sharp debris)",
+      "No landlord contact details are recorded, so the chase may not get through"
+    ],
+    "final_status": "landlord_approval – on hold waiting on the landlord (hold 133)",
+    "next_follow_up": {
+      "when": "2025-01-23",
+      "what": "Check for a landlord reply. If there is none, chase a second time (call if possible) and escalate to a human for non-response. Also check whether the tenant has sent the photos."
+    },
+    "confidence": 0.8
+  }
+}

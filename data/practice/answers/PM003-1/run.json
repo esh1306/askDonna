@@ -2,92 +2,109 @@
   "case": "PM003-1",
   "decision": "request_info",
   "escalated": "no",
-  "failures": 2,
-  "durationSec": 45.867,
+  "failures": 0,
+  "durationSec": 32.371,
   "decisionLine": "request_info",
-  "sessionId": "wrun_01M4JT5EKT726DTBGXSFGX65JK",
-  "startedAt": "2026-10-10T11:46:23.952Z",
-  "finishedAt": "2026-10-10T11:47:09.819Z",
+  "sessionId": "wrun_01M4JY5GSHEN9WWB7C33PNN2X3",
+  "startedAt": "2026-10-10T12:56:20.109Z",
+  "finishedAt": "2026-10-10T12:56:52.480Z",
   "usage": {
-    "inputTokens": 64040,
-    "outputTokens": 3139
+    "inputTokens": 66647,
+    "outputTokens": 2947
   },
-  "eventCount": 156,
+  "eventCount": 129,
   "dryRun": false,
   "result": {
-    "case_id": "25 (R/PM003-1)",
+    "case_id": "R/PM003-1 (ticket 11)",
     "decision": "request_info",
-    "summary": "The contractor, Bennett, emailed about job NBL-003-2766 (event 007) asking us to tell him if his attachment hadn't come through. Nothing was attached, so we have no estimate yet. I asked him by email to resend an itemised estimate for the clean, the removal of items left behind and the carpet clean, and told him not to start work until the landlord has approved it. I put the ticket on hold for 2 days. No landlord approval exists yet, so nothing has been approved or booked.",
-    "situation": "The agency asked the contractor for an estimate for a checkout clean at Flat 30, 30 Harbour View, Northbridge, ZZ9 0ZZ, covering the clean, removal of items left in the flat and a carpet clean (events 001–004). The agency's 'Waiting for Provider' hold was at event 005. The contractor replied at event 007 saying 'Please tell me if it didn't attach below', but no attachment arrived. Event 006 is a system prompt asking whether the provider needs a reply; it does, because the estimate is missing. The ticket is in 'scheduling', but there is no estimate or approval yet.",
+    "summary": "Bennett, the contractor, emailed to say he had attached something and asked us to tell him if it hadn't come through (event 007). There is no attachment on his email in the records, so a reply was needed. I asked him to resend the estimate with the total and how it splits across the clean, the removal of dumped items and the carpet clean. The ticket is on hold until he does, with a follow-up in 2 days. Nothing can be approved until we've seen the estimate.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "Event 006 asks whether the provider needs a reply. They do: event 007 asks us to say if the attachment didn't come through, and no attachment is visible on it. The only file on the ticket is the checkout inspection report the agency sent out. The next step is to get the estimate from the contractor, so asking him is the right move. There is nothing that needs agency judgement.",
+      "alternatives_considered": [
+        {
+          "option": "Return to auto mode with no reply",
+          "why_not": "The contractor asked a direct question and his estimate is missing. Without a reply the job would stall."
+        },
+        {
+          "option": "Approve the estimate or pass it to the landlord",
+          "why_not": "No estimate or amount is visible, and the landlord has no recorded approval or spend limit."
+        },
+        {
+          "option": "Escalate to a human",
+          "why_not": "The contractor can sort this out himself. There's no conflict, complaint or safety issue."
+        }
+      ],
+      "checks_performed": [
+        "Loaded ticket 11: stage 'scheduling', no open holds, no approvals, no facts recorded for the landlord or contractor",
+        "Checked whether event 007 had an attachment: none",
+        "Ran classify_reply: intent 'question', autonomy 'review', needs_human_response 0.47, mentions_amount 0.02",
+        "Looked at the property's other ticket 8 (R/PM003-2): its first 7 events are the same as this ticket's. I did not act on anything it records after 16:55:55, because that would be using later information.",
+        "The outbound message passed the guard"
+      ],
+      "assumptions": [
+        "'Bennett' is the contractor assigned to job NBL-003-2766",
+        "The thing he meant to attach is the estimate the agency asked for in event 004"
+      ]
+    },
+    "situation": "An estimate was requested for a checkout clean, removal of dumped items and a carpet clean at Flat 30, 30 Harbour View. The contractor replied mentioning an attachment, but none is visible. Separately, the system flagged that the provider might need a reply.",
     "actions_taken": [
       {
         "tool": "get_ticket_context",
-        "description": "Loaded the ticket context",
-        "result": "7 events. No holds, approvals or profile facts. The contractor's email at event 007 has no attachment.",
+        "description": "Loaded ticket 11",
+        "result": "Stage 'scheduling', 7 events, no holds or approvals",
         "ok": true
       },
       {
-        "tool": "read_attachment",
-        "description": "Read the checkout inspection report the agency sent to the contractor",
-        "result": "12-page text report with placeholder images only. Appointment date shown as 16 March 2026.",
+        "tool": "classify_reply",
+        "description": "Classified the contractor's email (event 007)",
+        "result": "Question, review, no amount mentioned",
+        "ok": true
+      },
+      {
+        "tool": "get_ticket_context",
+        "description": "Checked the property's other ticket 8 for duplication",
+        "result": "Same case recorded twice. I only used events up to the current time.",
         "ok": true
       },
       {
         "tool": "send_message",
-        "description": "Emailed the contractor to say the attachment didn't arrive, asked for an itemised estimate (clean, removal of items, carpet clean, total, VAT) and told him not to start work until the landlord approves",
-        "result": "Queued, message_id 33",
+        "description": "Emailed the contractor: no attachment visible, please resend the estimate with a breakdown",
+        "result": "Queued (message_id 2), guard passed",
         "ok": true
       },
       {
         "tool": "place_hold",
         "description": "Put the ticket on hold until the contractor resends the estimate",
-        "result": "hold_id 54, follow-up in 2 days",
+        "result": "hold_id 14, follow-up in 2 days",
         "ok": true
-      },
-      {
-        "tool": "add_profile_fact",
-        "description": "Recorded the contractor's first name as Bennett (from event 007)",
-        "result": "fact id 44, no conflict",
-        "ok": true
-      },
-      {
-        "tool": "move_stage",
-        "description": "Tried to move the ticket back to provider_selection to match the fact that no estimate or approval exists yet",
-        "result": "Rejected: the CRM won't move a ticket backwards from scheduling",
-        "ok": false
       }
     ],
     "approvals": [
       {
-        "party": "Landlord (R/PM003-1)",
-        "status": "not yet requested (no estimate received; landlord has no pre-approved limit or preferred channel on file)",
+        "party": "Landlord",
+        "status": "not_yet_requested (no estimate received)",
         "channel": "n/a"
       }
     ],
     "escalation": {
       "needed": false,
-      "reason": "The contractor can fix this himself by resending the estimate",
+      "reason": "The contractor can resolve this by resending the estimate",
       "handover_summary": "",
-      "recommendation": "When the estimate arrives, read it and check it matches the job, then ask the landlord for approval. If cleaning costs may be taken from the tenant's deposit, that decision goes to a human."
+      "recommendation": "Once the estimate arrives, read it and either get landlord approval or apply any agency authority that's on record"
     },
     "unverified": [
-      "Bennett's estimate amount and what it covers (not received)",
-      "The landlord's preferred channel and any spend limit (nothing on file)",
-      "Whether the property is now vacant (it presumably is after checkout, but this isn't recorded)",
-      "The report's appointment date of 16 March 2026 is after the case was created (22 July 2025)"
+      "Whether Bennett actually sent an attachment, and what the estimate amount is",
+      "The landlord's spend limit or preferred channel (none recorded)"
     ],
-    "failures": [
-      "move_stage to provider_selection failed: the CRM won't move a ticket backwards from scheduling. The ticket stays in 'scheduling' even though it is really waiting for an estimate."
-    ],
+    "failures": [],
     "risks_or_red_flags": [
-      "The checkout report's date (16 March 2026) doesn't match the case date (22 July 2025), so it may be the wrong report or have a typo. Check before using it to justify charges.",
-      "The report's photos are placeholders only, which gives weak evidence if costs are later taken from the tenant's deposit.",
-      "The stage label 'scheduling' is wrong because nothing is approved or booked."
+      "The same case appears on two tickets for this property (ticket 8, R/PM003-2, and ticket 11), so the work could be tracked twice. Ops should merge them or close one."
     ],
-    "final_status": "On hold waiting for the contractor to resend the estimate (hold 54). The ticket is still labelled 'scheduling' because the CRM wouldn't move it back.",
+    "final_status": "Scheduling stage, on hold waiting for the contractor to resend the estimate (hold 14)",
     "next_follow_up": {
-      "when": "In 2 days (hold 54 follow-up)",
-      "what": "Chase Bennett for the estimate if it hasn't arrived. Once it's in, read it, check it matches the job, and ask the landlord for approval."
+      "when": "In 2 days (around 2025-07-24)",
+      "what": "Chase Bennett for the estimate if it hasn't arrived. When it does, read it and ask the landlord to approve it."
     },
     "confidence": 0.85
   }

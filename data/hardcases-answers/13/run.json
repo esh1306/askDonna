@@ -2,147 +2,161 @@
   "case": "13",
   "decision": "escalate",
   "escalated": "yes",
-  "failures": 2,
-  "durationSec": 58.37,
+  "failures": 3,
+  "durationSec": 65.04,
   "decisionLine": "escalate",
-  "sessionId": "wrun_01M4JXHCY57CZRMV6612F212BF",
-  "startedAt": "2026-10-10T12:45:21.144Z",
-  "finishedAt": "2026-10-10T12:46:19.514Z",
+  "sessionId": "wrun_01M4JYA0W0CNEM95FV6H6SSW4C",
+  "startedAt": "2026-10-10T12:58:48.007Z",
+  "finishedAt": "2026-10-10T12:59:53.047Z",
   "usage": {
-    "inputTokens": 115820,
-    "outputTokens": 6115
+    "inputTokens": 100820,
+    "outputTokens": 6744
   },
-  "eventCount": 463,
+  "eventCount": 502,
   "dryRun": false,
   "result": {
-    "case_id": "65 (R/13)",
+    "case_id": "45 (R/13)",
     "decision": "escalate",
     "case_type": "safety_emergency",
-    "summary": "An 84-year-old tenant who lives alone with a heart condition has had no heating or hot water for over 3 days in cold weather, and now feels dizzy. The landlord hasn't replied to 3 emails and is away until 20 Oct. I treated this as emergency safety work, which landlord approval does not block. I texted the tenant with safety advice, texted the landlord's mobile, and escalated to ops at high priority for a welfare call and same-day engineer dispatch. I moved the stage to provider_selection, recorded profile facts, and set a 6-hour follow-up.",
-    "situation": "The heating failed on 6 Oct (boiler display blank, 3C overnight). Approval was requested on 6 Oct and chased on 7 and 8 Oct, but the landlord only sent an out-of-office reply. On 9 Oct the tenant reported still no heating and dizziness. There is no contractor on file and no pre-approved limit.",
-    "judgement": {
-      "why_this_decision": "Under emergency rules, a vulnerable tenant with no heating in cold weather is an emergency, and approval does not block safety work. Event 006's dizziness adds a possible medical risk. Classifiers: severity emergency 1.0, safety 0.94, reply needs a human 0.95. I couldn't assign a contractor because none is on the ticket or in the property history, so dispatch and the welfare call need a human. Two chases have passed with no landlord reply, which is also a reason to escalate.",
-      "alternatives_considered": [
-        {
-          "option": "Keep waiting for landlord approval",
-          "why_not": "Landlord is away until 20 Oct; the tenant's health is at risk now."
-        },
-        {
-          "option": "Assign a contractor myself",
-          "why_not": "No contractor is named in the records, and inventing one would break the rules. Ops must pick a Gas Safe engineer."
-        },
-        {
-          "option": "Request approval again by call",
-          "why_not": "Approval isn't needed for emergency work, and a pending approval could look like a blocker. I texted the landlord's mobile instead and asked ops to call."
-        }
-      ],
-      "checks_performed": [
-        "Loaded full ticket context: no holds, approvals, contractor or property history",
-        "Classified the tenant SMS (review, safety 0.87) and the intake (emergency, emergency_dispatch)",
-        "Confirmed there is no pre-approved spend limit on the landlord's profile",
-        "Landlord was emailed 3 times and sent an out-of-office (event 005)",
-        "Outbound guard blocked the first landlord SMS; I rewrote it to remove the implied booking and resent it successfully"
-      ],
-      "assumptions": [
-        "The estimate of up to £200 (event 002) is still a reasonable figure for the emergency call-out",
-        "The landlord's mobile in event 005 is current"
-      ]
-    },
+    "summary": "I've treated ticket R/13 as a safety emergency and handed it to the team at high priority. Mr Finch is 84, lives alone and has a heart condition. He has had no heating or hot water since 6 Oct, it is near freezing overnight, and he now says he feels dizzy. The landlord hasn't replied to three emails and is away until 20 Oct. Emergency safety work doesn't need the landlord's approval, but there is no contractor on record for me to assign. So the team needs to phone Mr Finch to check on him and send an emergency engineer. I texted Mr Finch with health and keep-warm advice, texted the landlord, recorded both people's details on file, moved the ticket forward and set a follow-up for 6 hours.",
+    "situation": "At 6 Primrose Court, Mr Finch (84, heart condition, walking frame, lives alone) has had no heating or hot water since 6 Oct. The boiler display is blank and 3C was forecast overnight. The landlord was emailed for approval of up to £200 on 6 Oct and chased on 7 and 8 Oct with no reply. Their out-of-office says they are away until 20 Oct. The 48-hour approval timer ran out on 8 Oct, but no engineer was sent. On 9 Oct Mr Finch texted that the heating is still off, he is wearing his coat indoors and he feels dizzy.",
     "actions_taken": [
       {
+        "tool": "get_ticket_context",
+        "description": "Loaded the ticket",
+        "result": "Stage was intake. No contractor, job history, profile facts, holds or approvals on record",
+        "ok": true
+      },
+      {
         "tool": "classify_reply",
-        "description": "Classified the tenant SMS from event 006",
-        "result": "still_broken, review, safety 0.87, needs human 0.95",
+        "description": "Classified Mr Finch's text of 9 Oct (event 006)",
+        "result": "Still broken. Safety concern 0.88, needs a human reply 0.95, flagged for review",
         "ok": true
       },
       {
         "tool": "classify_intake",
-        "description": "Classified the overall issue",
-        "result": "heating_hot_water, emergency, emergency_dispatch, safety 0.94",
-        "ok": true
-      },
-      {
-        "tool": "send_message",
-        "description": "SMS to tenant: told him he's not a bother and the team will call; 999/111 advice for dizziness; gas emergency advice; tips for keeping warm",
-        "result": "sent, message_id 20",
-        "ok": true
-      },
-      {
-        "tool": "send_message",
-        "description": "First SMS to landlord",
-        "result": "blocked by guard (claims_work_done_unverified)",
-        "ok": false
-      },
-      {
-        "tool": "send_message",
-        "description": "Rewritten SMS to landlord: emergency repair notice, estimate up to £200, asked him to call back",
-        "result": "sent, message_id 23",
+        "description": "Classified the problem",
+        "result": "Emergency, heating and hot water, safety risk 0.93, suggested route: emergency dispatch",
         "ok": true
       },
       {
         "tool": "escalate_to_human",
-        "description": "High-priority handover: welfare call, emergency Gas Safe dispatch, call landlord",
-        "result": "queue_id 12",
+        "description": "High-priority handover: phone Mr Finch to check on him, send an emergency engineer, provide temporary heaters, phone the landlord's mobile, consider a safeguarding referral",
+        "result": "Queue item 21",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "First text to Mr Finch",
+        "result": "Blocked by the outbound check: it read as claiming work was arranged and committing the landlord's money",
+        "ok": false
+      },
+      {
+        "tool": "send_message",
+        "description": "First text to the landlord",
+        "result": "Blocked by the outbound check: it read as claiming work was arranged",
+        "ok": false
+      },
+      {
+        "tool": "send_message",
+        "description": "Rewritten text to Mr Finch: call NHS 111, or 999 if worse; keep-warm steps; being treated as an emergency; the team will phone this evening",
+        "result": "Sent (message 63)",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Rewritten text to the landlord: the emergency, their emails going unanswered, a request to call the office",
+        "result": "Sent (message 64)",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded Mr Finch's vulnerability",
+        "result": "Fact 68",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded that the landlord didn't answer emails and is away; use the mobile for urgent matters",
+        "result": "Fact 69",
         "ok": true
       },
       {
         "tool": "move_stage",
-        "description": "intake → provider_selection (emergency work, approval not blocking)",
-        "result": "ok",
-        "ok": true
-      },
-      {
-        "tool": "add_profile_fact",
-        "description": "Tenant vulnerability fact",
-        "result": "fact 47",
-        "ok": true
-      },
-      {
-        "tool": "add_profile_fact",
-        "description": "Landlord away until 20 Oct and unresponsive to email; use mobile",
-        "result": "fact 48",
+        "description": "Moved the ticket from intake to provider selection",
+        "result": "Done",
         "ok": true
       },
       {
         "tool": "place_hold",
-        "description": "Waiting on agency for welfare call and dispatch; follow up in 6 hours",
-        "result": "hold 249",
+        "description": "Waiting on the agency team to check on Mr Finch and send an engineer; follow-up in 6 hours",
+        "result": "Hold 100",
         "ok": true
       }
     ],
     "approvals": [
       {
         "party": "Landlord",
-        "status": "not_needed (emergency safety work); requested 6 Oct and chased twice by email with no reply",
-        "channel": "email, then SMS notification"
+        "status": "not_needed: emergency safety work. Approval was asked for by email three times with no reply; landlord away until 20 Oct",
+        "channel": "email (earlier); SMS notice sent now"
       }
     ],
     "escalation": {
       "needed": true,
-      "reason": "Vulnerable 84-year-old tenant has had no heating for 3+ days, now feels dizzy, and the landlord can't be reached",
-      "handover_summary": "6 Primrose Court R/13: Mr Finch (84, heart condition, walking frame, lives alone) has had no heating or hot water since 6 Oct and is now dizzy. Landlord is away until 20 Oct and silent after 3 emails. Tenant and landlord have been texted. No contractor is on file.",
-      "recommendation": "Phone the tenant now for a welfare check and push 999/111 if he is still dizzy. Send a Gas Safe engineer today as emergency work, within about £200. Supply temporary heaters if needed. Phone the landlord on 07700 900456. Consider a welfare referral and contacting his daughter."
+      "reason": "Mr Finch is vulnerable and has had no heating for over 3 days, now with dizziness. The landlord can't be reached and there is no contractor on record to send.",
+      "handover_summary": "Mr Finch, 84, 6 Primrose Court (R/13): no heating or hot water since 6 Oct, now dizzy. The landlord didn't answer three emails and is away until 20 Oct. I texted Mr Finch health and keep-warm advice and texted the landlord. Queue item 21.",
+      "recommendation": "1) Phone Mr Finch now to check on him; call NHS 111 or 999 for him if needed, and get an emergency contact. 2) Send an emergency Gas Safe engineer from the agency's panel, then assign them on R/13. 3) Get him temporary electric heaters. 4) Phone the landlord's mobile, 07700 900456, and record why the work went ahead without approval. 5) Consider a safeguarding referral."
     },
     "unverified": [
-      "Cause of the dizziness (cold, his heart condition or CO)",
-      "Whether a CO alarm is fitted",
-      "Tenant's phone number and the daughter's contact details are not visible in the CRM",
-      "Whether the landlord has seen the SMS"
+      "How Mr Finch is now, beyond his text of 9 Oct",
+      "Whether the landlord's mobile has ever been called",
+      "No phone number or email for Mr Finch on his profile",
+      "Which engineer can attend, and when",
+      "What is wrong with the boiler (the blank display could be a power or supply fault)",
+      "Whether the £200 estimate came from an actual quote"
     ],
     "failures": [
-      "First landlord SMS was blocked by the outbound guard; rewritten and resent successfully"
+      "The first texts to Mr Finch and the landlord were blocked by the outbound check. I rewrote both without claiming an engineer was arranged or committing the landlord's money, and both then sent."
     ],
     "risks_or_red_flags": [
-      "Vulnerable elderly tenant with a heart condition, cold-related health risk, and dizziness reported",
-      "Tenant under-reports ('don't want to bother anyone')",
-      "No contractor dispatched in 3.5 days",
-      "Landlord unreachable until 20 Oct"
+      "Health risk: Mr Finch is 84 with a heart condition, has had no heating for over 3 days in near-freezing weather, and now feels dizzy",
+      "He plays things down ('don't want to bother anyone') and his daughter is away",
+      "The 48-hour approval timer ran out on 8 Oct and nothing was done, so there has been a day of delay",
+      "The landlord is unreachable until 20 Oct"
     ],
-    "final_status": "provider_selection; escalated high (queue 12); hold 249 waiting on agency",
+    "final_status": "Provider selection: on hold waiting on the agency team, high-priority queue item 21",
     "next_follow_up": {
-      "when": "In 6 hours (hold 249)",
-      "what": "Check that the welfare call happened and an emergency engineer was sent; log the landlord call outcome"
+      "when": "In 6 hours (evening of the day this was handled)",
+      "what": "Check that Mr Finch was phoned and is OK, and that an emergency engineer has been sent and assigned on R/13"
     },
-    "confidence": 0.88
+    "confidence": 0.9,
+    "judgement": {
+      "why_this_decision": "Under the emergency rule, no heating for a vulnerable tenant in cold weather is an emergency. Mr Finch is 84 with a heart condition (event 001), the landlord hasn't replied in two days and is away until 20 Oct (event 005), and he now feels dizzy (event 006). Approval doesn't hold up emergency safety work, but there is no contractor on record to assign, and checking on his welfare needs a person on the phone. So I escalated at high priority, gave safe advice and told the landlord.",
+      "alternatives_considered": [
+        {
+          "option": "Ask the landlord for approval again by phone and wait",
+          "why_not": "Emergency safety work doesn't need approval, and waiting risks Mr Finch's health"
+        },
+        {
+          "option": "Assign a contractor myself",
+          "why_not": "There is no contractor on the ticket or in the property's history, and I won't make up a name"
+        },
+        {
+          "option": "Wait until 20 Oct",
+          "why_not": "That would leave a vulnerable tenant without heating, which is unacceptable"
+        }
+      ],
+      "checks_performed": [
+        "Approval status: none on record; three emails unanswered; out-of-office until 20 Oct",
+        "Mr Finch's vulnerability from the event 001 tenancy notes",
+        "Contractor history: none",
+        "Both classifiers flagged an emergency and a safety risk",
+        "No pre-approved spend limit on record"
+      ],
+      "assumptions": [
+        "The overnight cold continues",
+        "The agency has an emergency Gas Safe engineer on its panel"
+      ]
+    }
   }
 }

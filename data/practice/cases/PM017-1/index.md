@@ -25,6 +25,3 @@ The tenant found the switch following the landlord’s instructions and confirme
 
 [Read the complete event history](history.md).
 
-## Attachments
-
-No attachments are required or available for this case.

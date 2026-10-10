@@ -1,0 +1,102 @@
+{
+  "case": "PM049-1",
+  "decision": "act",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 30.133,
+  "decisionLine": "act",
+  "sessionId": "wrun_01M4JT2BT598180JY49MQPF2R5",
+  "startedAt": "2026-10-10T11:44:42.668Z",
+  "finishedAt": "2026-10-10T11:45:12.801Z",
+  "usage": {
+    "inputTokens": 53043,
+    "outputTokens": 3172
+  },
+  "eventCount": 193,
+  "dryRun": false,
+  "result": {
+    "case_id": "R/PM049-1 (ticket 24)",
+    "decision": "act",
+    "summary": "The landlord clearly approved the tenant fixing the sagging shed door themselves, with a contractor as a fallback (event 007). I recorded that approval and told the tenant to go ahead if they can do it safely and to let us know the result. I then moved the ticket to works and put a 7-day hold on it while we wait for the tenant. This is a routine, non-urgent job, so it doesn't need a human.",
+    "situation": "Routine report: the shed door at Flat 13, 103 Meadow Row is sagging. The tenant offered to lift it themselves. The agency asked the landlord (event 004), and the landlord approved the tenant fixing it, with a contractor if they can't (event 007). The pending approval 12 had not been resolved.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded ticket context",
+        "result": "Stage landlord_approval, approval 12 pending, no holds, no attachments",
+        "ok": true
+      },
+      {
+        "tool": "record_approval_response",
+        "description": "Recorded landlord approval from event 007",
+        "result": "Approval 12 status approved",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed tenant: landlord approves self-fix, with safety advice and a request to confirm the outcome or tell us if a contractor is needed",
+        "result": "message_id 29 queued",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Landlord allows tenant minor self-repairs, contractor as fallback (event 007)",
+        "result": "fact 39",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Property has no pets (event 002)",
+        "result": "fact 40",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "No access considerations reported (event 002)",
+        "result": "fact 41",
+        "ok": true
+      },
+      {
+        "tool": "move_stage",
+        "description": "Moved landlord_approval to works (tenant self-fix approved)",
+        "result": "ok",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold on tenant for outcome of self-fix, follow up in 7 days",
+        "result": "hold_id 49",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (R/PM049-1)",
+        "status": "granted (tenant self-fix; contractor fallback, no cost stated)",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "Routine job with a clear landlord decision",
+      "handover_summary": "",
+      "recommendation": ""
+    },
+    "unverified": [
+      "Whether the tenant can fix the door themselves",
+      "How much a contractor would cost if needed (the landlord gave no amount)",
+      "The tenant has no email or phone on record, so delivery of message 29 is not confirmed"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "The contractor fallback was approved without a cost figure. Get a quote and confirm it with the landlord before booking.",
+      "The tenant contact record has no email or phone"
+    ],
+    "final_status": "works – on hold waiting on tenant (hold 49)",
+    "next_follow_up": {
+      "when": "7 days from now (hold 49)",
+      "what": "Chase the tenant on whether the self-fix worked. If yes, close the job. If no, move it to provider_selection, get a contractor quote and confirm the cost with the landlord."
+    },
+    "confidence": 0.85
+  }
+}

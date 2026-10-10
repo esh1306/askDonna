@@ -1,0 +1,141 @@
+{
+  "case": "6",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 0,
+  "durationSec": 54.48,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4JXFD55CHXNCY39VAJPTY9M",
+  "startedAt": "2026-10-10T12:44:15.834Z",
+  "finishedAt": "2026-10-10T12:45:10.314Z",
+  "usage": {
+    "inputTokens": 76945,
+    "outputTokens": 5851
+  },
+  "eventCount": 458,
+  "dryRun": false,
+  "result": {
+    "case_id": "58 (R/6)",
+    "decision": "escalate",
+    "case_type": "safety_emergency",
+    "summary": "This is a life-safety emergency. At 23:41 the tenant reported a gas smell and the carbon monoxide alarm going off, with a toddler in the flat. I texted the tenant immediate steps: get everyone out, call the National Gas Emergency Service, and call 999 if anyone has symptoms. I also assigned the landlord's preferred gas engineer, Calder Heating, without waiting for landlord approval, emailed them and texted the landlord. I escalated to the on-call team at high priority, because the urgent next steps are phone calls my tools can't make. Those calls are to the tenant, Calder's emergency line and the landlord's out-of-hours number.",
+    "situation": "Overnight report from the tenant of Flat 2, 5 Linden Terrace, Harrowby ZZ7 3ZZ: a gas smell in the kitchen and the CO alarm sounding, with a toddler asleep upstairs (event 001). The CRM note (event 002) says the landlord, Ms R. Aziz, usually doesn't answer overnight but has an out-of-hours number on file. The preferred gas engineer is Calder Heating: their office closes at 17:30, but they have an emergency line.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the ticket",
+        "result": "2 events; no history, facts, holds or approvals",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Texted the tenant: evacuate, no ignition sources, call 0800 111 999, call 999 if anyone has symptoms, don't go back in, text us once outside",
+        "result": "message 10 queued; guard passed",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the tenant's SMS",
+        "result": "safety_concern 0.99; needs human response 0.94; review",
+        "ok": true
+      },
+      {
+        "tool": "classify_intake",
+        "description": "Classified the report",
+        "result": "emergency; safety_risk 0.98; route emergency_dispatch",
+        "ok": true
+      },
+      {
+        "tool": "assign_contractor",
+        "description": "Assigned Calder Heating (landlord's preferred gas engineer) as emergency work without approval",
+        "result": "contractor 162 assigned; stage moved to scheduling",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Texted the landlord about the emergency and the action taken",
+        "result": "message 12 queued",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed Calder Heating an emergency attendance request",
+        "result": "message 13 queued",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "High-priority handover to on-call for live phone calls",
+        "result": "queue item 6",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "6-hour follow-up for tenant confirmation and contractor ETA",
+        "result": "hold 245",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded: landlord rarely responds overnight, preferred gas engineer, household includes a young child",
+        "result": "facts 33, 34, 35 saved",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord Ms R. Aziz",
+        "status": "not_needed (emergency safety work; landlord notified by SMS)",
+        "channel": "sms"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "Gas leak and CO alarm with a young child, overnight; needs live phone calls that can't be made through the CRM.",
+      "handover_summary": "The tenant has been told by text to evacuate and call 0800 111 999. Calder Heating has been assigned and emailed, but their office is closed. The landlord has been texted. Nobody has confirmed anything yet.",
+      "recommendation": "1) Phone the tenant to confirm everyone is out and the gas emergency service has been called. If not, call it for them. 2) Phone Calder's emergency line. 3) Phone the landlord's out-of-hours number. 4) If the gas is capped off, arrange heating or accommodation for the family."
+    },
+    "unverified": [
+      "Whether the tenant has left the flat or called the gas emergency service",
+      "Whether anyone has CO symptoms",
+      "Calder's attendance and ETA",
+      "Whether the landlord has seen the message",
+      "The tenant's phone number is not visible in the CRM profile"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "Possible CO poisoning; a young child is in the household",
+      "Contractor and landlord are probably unreachable by email or SMS overnight",
+      "Emergency work was dispatched without approval, as allowed for safety emergencies"
+    ],
+    "final_status": "Scheduling. Emergency escalated at high priority, with hold 245 (6-hour follow-up).",
+    "next_follow_up": {
+      "when": "2026-10-10 ~05:45 UTC (0.25 days), or earlier on any reply",
+      "what": "Confirm the tenant is safe and out of the flat, the gas emergency service has attended, and Calder has given an ETA"
+    },
+    "confidence": 0.9,
+    "judgement": {
+      "why_this_decision": "Event 001 reports a gas smell plus a CO alarm with a toddler present. Both classifiers put this at emergency level. Safety advice comes first. The emergency rule lets us dispatch work without landlord approval. A human is needed because the next steps are live phone calls overnight.",
+      "alternatives_considered": [
+        {
+          "option": "Ask the landlord for approval first",
+          "why_not": "Life-safety emergency, and the landlord doesn't respond overnight"
+        },
+        {
+          "option": "Only advise the tenant",
+          "why_not": "A follow-up engineer and live coordination are still needed"
+        }
+      ],
+      "checks_performed": [
+        "Loaded the ticket context",
+        "Read the CRM note (event 002)",
+        "Ran both classifiers",
+        "No prior approvals or holds"
+      ],
+      "assumptions": [
+        "Calder Heating can be reached at the contractor contact the CRM holds for them",
+        "The standard UK gas emergency number (0800 111 999) applies"
+      ]
+    }
+  }
+}

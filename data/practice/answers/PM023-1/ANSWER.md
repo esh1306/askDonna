@@ -6,72 +6,96 @@
 
 ## Summary
 
-The landlord has agreed in writing to us sending someone to look at the broken balcony door lock and quote for it. He didn't give a cost limit. No contractor is on file, and I have no tool to pick one, so I've sent the case to the ops team to assign a locksmith. I've also texted the tenant to ask whether the balcony can be reached from outside and when they can give access, and set a hold to chase them in one day.
+The landlord (Isaac) replied yes to sending someone for the balcony door lock that won't turn (event 006). I've treated that as approval for a contractor to attend, with no cost cap given. No contractor is named, on the ticket or in the property's history, so I couldn't assign one without making a name up. I've asked ops (high priority) to choose and assign a locksmith. I've also emailed the tenant asking for their availability and whether the balcony can be reached from outside, with advice on keeping the door secure for now.
+
+## Judgement
+
+- **Case type:** maintenance
+- **Why this decision:** Event 006 'Yes that sounds like it needs sorting fairly soon' answers the event 003 question 'happy for us to send someone to attend?'. classify_reply gave approve 0.95, auto. The next step would be assign_contractor, but no contractor is visible anywhere in the records. A door that won't lock is a security risk (safety_risk 0.79), so contractor choice should happen quickly, which is why I used high priority.
+
+| Alternative considered | Why not |
+|---|---|
+| Assign a contractor directly | No contractor name is on the ticket, in the property history or named by the landlord. I would have had to invent one. |
+| Treat as an emergency and dispatch now | There's no contractor to send, and as Flat 20 it is probably not at ground level. I've asked the tenant whether the balcony can be reached from outside so ops can decide. |
+| Ask the landlord again | The landlord has already approved attendance clearly. |
+| Use record_approval_response | There is no pending approval record to resolve. I recorded the approval as a profile fact instead. |
+
+**Checks performed before acting**
+
+- Loaded the ticket: no contractor, no holds, no approvals, no property history, no profile facts
+- classify_reply on landlord email: approve 0.95
+- classify_intake: doors_windows_locks, urgent, safety_risk 0.79
+- Name differences (Isaac / Oliver / Riverside Homes) don't change anything: same landlord thread, and no payee or bank details involved
+- Event 005 is an internal system note about priority validation, so no action needed
+
+**Assumptions**
+
+- The landlord's 'Yes' approves attendance and a quote, not an open-ended repair cost
+- Flat 20 is probably not on the ground floor (not confirmed)
 
 ## Actions taken
 
 | # | Tool | Input (gist) | Result | Output (gist) |
 |---|---|---|---|---|
-| 1 | `get_ticket_context` | {"ticket_id":35} | ok | {"ok":true,"ticket":{"id":35,"case_ref":"R/PM023-1","property_id":27,"tenant_id":82,"landlord_id":83,"contractor_id":nu… |
-| 2 | `classify_reply` | {"ticket_id":35,"text":"Hi Oliver\n\nYes that sounds like it needs sorting fairly soon.\n\nThanks\n\nIsaac\n\nSent from Riverside Homes","s… | ok | {"autonomy":"auto","intent":"approve","intent_probs":{"approve":0.9400000000000001,"decline":0,"conditional_approval":0… |
-| 3 | `classify_intake` | {"ticket_id":35} | ok | {"route":"emergency_dispatch","category":"doors_windows_locks","category_probs":{"plumbing":0,"appliance":0,"doors_wind… |
-| 4 | `send_message` | {"ticket_id":35,"to":"tenant","channel":"sms","body":"Northbridge Lettings re: balcony door lock, Flat 20, 110 Meadow Row, ZZ2 5ZZ (ref R/P… | FAILED: Blocked by Jev outbound guard (message). claims_work_done_unverified (p=0.71): claims work is done/booked/paid/approved… |  |
-| 5 | `add_profile_fact` | {"entity_type":"contact","entity_id":83,"key":"approved_attendance_balcony_lock_r_pm023_1","value":"Approved sending someone to attend balc… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":57,"entity_type":"contact","entity_id":83,"key":"approved_at… |
-| 6 | `send_message` | {"ticket_id":35,"to":"tenant","channel":"sms","body":"Northbridge Lettings re: balcony door lock, Flat 20, 110 Meadow Row, ZZ2 5ZZ (ref R/P… | ok | {"ok":true,"message_id":44,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.09,"promises_… |
-| 7 | `place_hold` | {"ticket_id":35,"reason":"Awaiting tenant reply on balcony accessibility (security risk level) and access availability for contractor atten… | ok | {"ok":true,"hold_id":89} |
-| 8 | `escalate_to_human` | {"ticket_id":35,"reason":"Landlord has agreed to attendance; a locksmith/contractor needs assigning and no contractor is on file or selecta… | ok | {"ok":true,"queue_id":14} |
+| 1 | `get_ticket_context` | {"ticket_id":49} | ok | {"ok":true,"ticket":{"id":49,"case_ref":"R/PM023-1","property_id":37,"tenant_id":122,"landlord_id":123,"contractor_id":… |
+| 2 | `classify_reply` | {"ticket_id":49,"text":"Hi Oliver\n\nYes that sounds like it needs sorting fairly soon.\n\nThanks\n\nIsaac\n\nSent from Riverside Homes","s… | ok | {"autonomy":"auto","intent":"approve","intent_probs":{"approve":0.95,"decline":0,"conditional_approval":0.05,"question"… |
+| 3 | `classify_intake` | {"ticket_id":49} | ok | {"route":"emergency_dispatch","scope":"maintenance_repair","scope_probs":{"maintenance_repair":0.99,"maintenance_admin"… |
+| 4 | `add_profile_fact` | {"entity_type":"contact","entity_id":123,"key":"approval_r_pm023_1_attendance","value":"Approved contractor attendance (no cost cap stated)… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":66,"entity_type":"contact","entity_id":123,"key":"approval_r… |
+| 5 | `send_message` | {"ticket_id":49,"to":"tenant","channel":"email","subject":"Balcony door lock – Flat 20, 110 Meadow Row (ref R/PM023-1)","body":"Hello,\n\nT… | FAILED: Blocked by Jev outbound guard (message). claims_work_done_unverified (p=0.79): claims work is done/booked/paid/approved… |  |
+| 6 | `send_message` | {"ticket_id":49,"to":"tenant","channel":"email","subject":"Balcony door lock – Flat 20, 110 Meadow Row (ref R/PM023-1)","body":"Hello,\n\nT… | ok | {"ok":true,"message_id":67,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.57,"promises_… |
+| 7 | `escalate_to_human` | {"ticket_id":49,"reason":"Landlord has approved attendance but no contractor is named or on record for this property – a person needs to pi… | ok | {"ok":true,"queue_id":26} |
+| 8 | `place_hold` | {"ticket_id":49,"reason":"Awaiting tenant availability and balcony accessibility info; contractor selection with ops.","waiting_on":"tenant… | ok | {"ok":true,"hold_id":116} |
 
 Agent's own account of its actions (from the structured result):
 
-- `get_ticket_context` - Loaded the ticket -> 6 events, no attachments, no profile facts, no approvals or holds
-- `classify_reply` - Classified the landlord's reply (event 006) -> Read as approval (0.94), safe to handle automatically; 0.69 that it is an unconditional approval
-- `classify_intake` - Classified the original report -> Doors/windows/locks; severity most likely routine (0.49); safety risk 0.8; suggested route was emergency dispatch
-- `add_profile_fact` - Recorded on the landlord's profile that he approved attendance, with no cost limit -> Fact 57 saved, no conflict
-- `send_message` (FAILED) - First text to the tenant -> Blocked by the outbound guard: it read the wording as claiming something was approved or booked without evidence
-- `send_message` - Rewrote and resent the text to the tenant: asked whether the balcony can be reached from outside and when they can give access, and gave basic advice on keeping the door secure -> Sent (message 44)
-- `place_hold` - Hold while waiting for the tenant to reply -> Hold 89, chase in 1 day
-- `escalate_to_human` - Asked ops to assign a locksmith to attend and quote -> Queue item 14
+- `classify_reply` - Classified the landlord email from event 006 -> approve 0.95, autonomy auto
+- `classify_intake` - Classified the repair -> doors_windows_locks, urgent, safety_risk 0.79
+- `add_profile_fact` - Recorded the landlord's approval for attendance on the landlord's contact record -> fact 66 saved
+- `send_message` (FAILED) - First tenant email -> Blocked by the outbound guard (flagged as claiming unverified approval or booking)
+- `send_message` - Rewritten tenant email: asks for availability and whether the balcony can be reached from outside, with advice on keeping the door secure for now -> message 67 queued
+- `escalate_to_human` - Asked ops to choose and assign a contractor -> queue item 26, high priority
+- `place_hold` - Waiting on the tenant's reply; follow up in 1 day -> hold 116
 
 ## Approvals
 
 | Party | Status | Channel |
 |---|---|---|
-| Landlord (Isaac) | granted for attendance/quote only, no cost limit | email |
+| Landlord (Isaac) | granted (attendance/quote, no cost cap) | email |
 
 ## Escalation & handover
 
 - Escalation needed: **yes**
-- Reason: A contractor needs assigning and none is on file or selectable through my tools
-- Handover summary: The landlord approved someone attending to look at and quote for the balcony door lock (event 006). The tenant has been texted asking whether the balcony can be reached from outside and when they can give access; hold 89 chases in 1 day. The intake classifier puts safety risk at 0.8 but severity most likely routine.
-- Recommendation: Assign a locksmith to attend and quote soon. If the tenant says the balcony can be reached from outside, treat it as an insecure property and send someone urgently. Get the landlord's approval for the repair cost once the quote is in.
+- Reason: The landlord has approved attendance, but there is no contractor on record to assign
+- Handover summary: Flat 20, 110 Meadow Row: balcony door lock won't turn or lock. The landlord approved attendance in event 006. The tenant has been emailed asking for availability and whether the balcony can be reached from outside. No contractor is on record.
+- Recommendation: Ops to choose and assign a locksmith today, or give Donna a name to assign and she will notify the contractor and tenant. The contractor should fix it if minor, otherwise quote, and the quote goes to the landlord. If the balcony can be reached from outside, treat it as an emergency make-safe.
 
 ## What could not be verified
 
-- Which floor the flat is on and whether the balcony can be reached from outside
-- Cost of the visit or repair
-- Tenant contact details (none on file; the text was queued against the tenant record)
+- Whether the balcony can be reached from outside, and which floor the flat is on
+- Tenant contact details are not on the ticket, so I can't confirm the email was delivered
+- Repair cost
 
 ## What failed
 
-- Tool `send_message` failed: Blocked by Jev outbound guard (message). claims_work_done_unverified (p=0.71): claims work is done/booked/paid/approved without evidence in the records: rewrite without claiming completion; say only what is confirmed. Rewrite the text to fix this and retry, or escalate_to_human if you cannot.
-- Agent reported: First tenant text was blocked by the outbound guard; rewritten and sent successfully
+- Tool `send_message` failed: Blocked by Jev outbound guard (message). claims_work_done_unverified (p=0.79): claims work is done/booked/paid/approved without evidence in the records: rewrite without claiming completion; say only what is confirmed. Rewrite the text to fix this and retry, or escalate_to_human if you cannot.
+- Agent reported: The first tenant message was blocked by the outbound guard. The rewritten version was sent.
 
 ## Risks & red flags
 
-- The property may be insecure if the balcony can be reached from outside (intake safety risk 0.8)
-- The landlord's approval covers attendance only; the repair cost still needs his approval
+- A balcony door that won't lock may leave the flat insecure
+- No contractor is assigned yet
 
 ## Final result / next follow-up
 
-- Final status: provider_selection; on hold waiting for the tenant; with the ops team to assign a contractor
-- Next follow-up: In 1 day (hold 89) - Chase the tenant about balcony access and availability, and check that ops have assigned a contractor
+- Final status: provider_selection: on hold (tenant reply), escalated to ops to choose a contractor
+- Next follow-up: in 1 day - Chase the tenant for availability and whether the balcony can be reached from outside, and check whether ops has assigned a contractor
 - Confidence: 0.78
 
 ## Run metadata
 
 - Case folder: `C:\Users\sahid\Documents\Projects\Hackathons\DwellyHack\dwelly-agent\data\practice\cases\PM023-1`
-- Session id: wrun_01M4JW8WFDVENMD3Q7F1ENMC6W
-- Started: 2026-10-10T12:23:13.618Z  Finished: 2026-10-10T12:23:59.796Z  Duration: 46.2s
-- Events recorded: 322
+- Session id: wrun_01M4JYAGBRCTRFCRZH2QGZFDRS
+- Started: 2026-10-10T12:59:03.848Z  Finished: 2026-10-10T12:59:55.543Z  Duration: 51.7s
+- Events recorded: 369
 - Model(s): anthropic/claude-opus-5.5
-- Tokens: in 85459 / out 4458; cost: not reported
+- Tokens: in 97918 / out 5164; cost: not reported

@@ -1,102 +1,112 @@
 {
   "case": "PM049-1",
-  "decision": "act",
+  "decision": "wait",
   "escalated": "no",
-  "failures": 0,
-  "durationSec": 30.133,
-  "decisionLine": "act",
-  "sessionId": "wrun_01M4JT2BT598180JY49MQPF2R5",
-  "startedAt": "2026-10-10T11:44:42.668Z",
-  "finishedAt": "2026-10-10T11:45:12.801Z",
+  "failures": 3,
+  "durationSec": 51.536,
+  "decisionLine": "wait",
+  "sessionId": "wrun_01M4JYHBEW7HZF875ME5C6P925",
+  "startedAt": "2026-10-10T13:02:48.202Z",
+  "finishedAt": "2026-10-10T13:03:39.738Z",
   "usage": {
-    "inputTokens": 53043,
-    "outputTokens": 3172
+    "inputTokens": 96182,
+    "outputTokens": 3596
   },
-  "eventCount": 193,
+  "eventCount": 181,
   "dryRun": false,
   "result": {
-    "case_id": "R/PM049-1 (ticket 24)",
-    "decision": "act",
-    "summary": "The landlord clearly approved the tenant fixing the sagging shed door themselves, with a contractor as a fallback (event 007). I recorded that approval and told the tenant to go ahead if they can do it safely and to let us know the result. I then moved the ticket to works and put a 7-day hold on it while we wait for the tenant. This is a routine, non-urgent job, so it doesn't need a human.",
-    "situation": "Routine report: the shed door at Flat 13, 103 Meadow Row is sagging. The tenant offered to lift it themselves. The agency asked the landlord (event 004), and the landlord approved the tenant fixing it, with a contractor if they can't (event 007). The pending approval 12 had not been resolved.",
+    "case_id": "88 (R/PM049-1)",
+    "decision": "wait",
+    "summary": "The landlord replied that the tenant can fix the sagging shed door themselves, and that a contractor should be assigned only if they can't. I emailed the tenant to go ahead if it's safe and to tell us whether it worked. The ticket is now on hold waiting for the tenant, with a follow-up in 7 days. I haven't assigned a contractor, because that only happens if the tenant can't fix it. Approval 47 is still pending, because the CRM guard wouldn't record a conditional reply as approved.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "Event 007: the landlord 'approves the tenant to fix the door if they can, otherwise to assign it to a contractor.' The next step is clear: the tenant does the fix they offered (events 001/004). This is a routine, non-urgent job with no safety signals. A contractor is only needed if the tenant reports they can't fix it.",
+      "alternatives_considered": [
+        {
+          "option": "Assign a contractor now",
+          "why_not": "The landlord wants the tenant to try first, and the tenant offered to do it. Sending a contractor now would cost money that isn't needed."
+        },
+        {
+          "option": "Escalate to a human because the classifier flagged a conditional approval",
+          "why_not": "Both outcomes of the condition are clear, so the next step needs no agency judgement. Escalating would only stall a minor job."
+        },
+        {
+          "option": "Ask the landlord to clarify",
+          "why_not": "Their answer is clear enough for the current step. Clarifying would only matter if the contractor fallback is needed."
+        }
+      ],
+      "checks_performed": [
+        "Loaded ticket context: no holds, no prior property history, no contractor on the ticket, approval 47 pending with no amount",
+        "classify_reply: conditional_approval 0.93, review",
+        "Safety: routine shed door, tenant said no ceiling issues and nothing about access or pets",
+        "Guard refused to record the conditional reply as approved, and I did not try to get around it"
+      ],
+      "assumptions": [
+        "Lifting the door is a minor job the tenant can do safely, as they said themselves"
+      ]
+    },
+    "situation": "The tenant reported a sagging shed door and offered to lift it themselves. The agency asked the landlord whether the tenants should do it or a contractor should go out. The landlord approved the tenant fixing it, with a contractor as the fallback.",
     "actions_taken": [
       {
-        "tool": "get_ticket_context",
-        "description": "Loaded ticket context",
-        "result": "Stage landlord_approval, approval 12 pending, no holds, no attachments",
+        "tool": "classify_reply",
+        "description": "Classified the landlord reply from event 007",
+        "result": "conditional_approval 0.93, autonomy review",
         "ok": true
       },
       {
         "tool": "record_approval_response",
-        "description": "Recorded landlord approval from event 007",
-        "result": "Approval 12 status approved",
-        "ok": true
+        "description": "Tried to record approval 47 as approved",
+        "result": "Guard refused because the wording is conditional. Approval left pending.",
+        "ok": false
       },
       {
         "tool": "send_message",
-        "description": "Emailed tenant: landlord approves self-fix, with safety advice and a request to confirm the outcome or tell us if a contractor is needed",
-        "result": "message_id 29 queued",
+        "description": "Emailed the tenant: landlord is happy for them to lift the door if safe; asked them to confirm it's fixed or tell us they can't; follow-up in 7 days",
+        "result": "Sent (message 116), not blocked by the guard",
         "ok": true
       },
       {
         "tool": "add_profile_fact",
-        "description": "Landlord allows tenant minor self-repairs, contractor as fallback (event 007)",
-        "result": "fact 39",
-        "ok": true
-      },
-      {
-        "tool": "add_profile_fact",
-        "description": "Property has no pets (event 002)",
-        "result": "fact 40",
-        "ok": true
-      },
-      {
-        "tool": "add_profile_fact",
-        "description": "No access considerations reported (event 002)",
-        "result": "fact 41",
-        "ok": true
-      },
-      {
-        "tool": "move_stage",
-        "description": "Moved landlord_approval to works (tenant self-fix approved)",
-        "result": "ok",
+        "description": "Recorded the landlord's preference for tenants fixing minor jobs themselves",
+        "result": "Fact 126 saved (first try failed because I used the wrong entity_type; retried and it worked)",
         "ok": true
       },
       {
         "tool": "place_hold",
-        "description": "Hold on tenant for outcome of self-fix, follow up in 7 days",
-        "result": "hold_id 49",
+        "description": "Put the ticket on hold waiting for the tenant's confirmation",
+        "result": "Hold 216, follow-up in 7 days",
         "ok": true
       }
     ],
     "approvals": [
       {
         "party": "Landlord (R/PM049-1)",
-        "status": "granted (tenant self-fix; contractor fallback, no cost stated)",
+        "status": "conditional – tenant to fix it themselves, contractor as fallback; approval 47 still pending in the CRM",
         "channel": "email"
       }
     ],
     "escalation": {
       "needed": false,
-      "reason": "Routine job with a clear landlord decision",
+      "reason": "A routine job with a clear next step from the landlord",
       "handover_summary": "",
       "recommendation": ""
     },
     "unverified": [
-      "Whether the tenant can fix the door themselves",
-      "How much a contractor would cost if needed (the landlord gave no amount)",
-      "The tenant has no email or phone on record, so delivery of message 29 is not confirmed"
+      "Whether the tenant can fix the door",
+      "Cost of a contractor if the fallback is needed: the landlord set no cost limit"
     ],
-    "failures": [],
+    "failures": [
+      "record_approval_response was refused by the guard because the landlord's wording is conditional",
+      "First add_profile_fact call used an invalid entity_type; the retry worked"
+    ],
     "risks_or_red_flags": [
-      "The contractor fallback was approved without a cost figure. Get a quote and confirm it with the landlord before booking.",
-      "The tenant contact record has no email or phone"
+      "Approval 47 stays pending in the CRM, so a person may want to close it by hand once the outcome is known"
     ],
-    "final_status": "works – on hold waiting on tenant (hold 49)",
+    "final_status": "landlord_approval stage, on hold waiting for the tenant (hold 216)",
     "next_follow_up": {
-      "when": "7 days from now (hold 49)",
-      "what": "Chase the tenant on whether the self-fix worked. If yes, close the job. If no, move it to provider_selection, get a contractor quote and confirm the cost with the landlord."
+      "when": "7 days (around 2024-03-13)",
+      "what": "Check with the tenant whether the door is fixed. If yes, close the ticket. If no, go back to the landlord about contractor attendance (and confirm the cost if needed), then assign a contractor."
     },
-    "confidence": 0.85
+    "confidence": 0.82
   }
 }

@@ -3,79 +3,88 @@
   "decision": "escalate",
   "escalated": "yes",
   "failures": 0,
-  "durationSec": 38.035,
+  "durationSec": 39.997,
   "decisionLine": "escalate",
-  "sessionId": "wrun_01M4JXGNG95MBMH8QY77GMGZDD",
-  "startedAt": "2026-10-10T12:44:57.145Z",
-  "finishedAt": "2026-10-10T12:45:35.180Z",
+  "sessionId": "wrun_01M4JY8ZHGVNS79AHNTSEBXWFQ",
+  "startedAt": "2026-10-10T12:58:13.887Z",
+  "finishedAt": "2026-10-10T12:58:53.884Z",
   "usage": {
-    "inputTokens": 70361,
-    "outputTokens": 3543
+    "inputTokens": 101709,
+    "outputTokens": 3873
   },
-  "eventCount": 229,
+  "eventCount": 254,
   "dryRun": false,
   "result": {
-    "case_id": "62 (R/10)",
+    "case_id": "34 (R/10)",
     "decision": "escalate",
-    "summary": "This is a neighbour noise and antisocial-behaviour complaint (suspected drug dealing, strangers in the stairwell), not a repair. I acknowledged the tenant, signposted police/council routes and asked them to report any communal security defects, then escalated to the human queue for the property/tenancy team to take forward.",
+    "summary": "This is a neighbour complaint, not a repair. The tenant reports noise, suspected drug dealing and strangers in the stairwell, all linked to Flat 12. I sent the tenant an acknowledgement with safe advice (police on 999/101, Crimestoppers, the council's noise team, keeping a log) and said they'd hear from us within 2 working days. I handed the case to the property management team (normal priority) and placed a 2-day hold.",
     "case_type": "out_of_scope",
     "judgement": {
-      "why_this_decision": "Event 001 describes neighbour behaviour from Flat 12, with no repair defect; event 002 system note agrees. classify_reply rated it a complaint needing a human response (0.94) with possible safety concern (0.58). Antisocial-behaviour matters need agency judgement and may involve police and other parties, so it can't go through the repair pipeline.",
+      "why_this_decision": "Event 442 describes noise, suspected crime and antisocial behaviour by a neighbour. Our maintenance tools can't fix any of that, and the intake note (event 443) also found no repair issue. classify_reply suggested review: it rated the message as a complaint, with a 0.93 chance it needs a human response and 0.56 for a safety concern. Under the rules for cases that aren't maintenance jobs, I acknowledged the tenant, gave safety advice and handed over to a human.",
       "alternatives_considered": [
         {
           "option": "Assign a contractor / move through repair stages",
-          "why_not": "There's no repair to fix. A contractor can't stop noise or criminal activity."
-        },
-        {
-          "option": "Treat as emergency, high priority",
-          "why_not": "No immediate danger or insecure property was reported. The tenant was told to use 999 if in danger. Normal priority with a prompt call-back is proportionate."
+          "why_not": "There's nothing to repair."
         },
         {
           "option": "No action",
-          "why_not": "The tenant is waiting and distressed, and suspected crime needs signposting and human follow-up."
+          "why_not": "The tenant is distressed and waiting for an answer, and there's a possible safety concern."
+        },
+        {
+          "option": "High priority escalation",
+          "why_not": "There's no immediate danger in the report, and the tenant now has the 999 advice."
+        },
+        {
+          "option": "Contact the landlord directly",
+          "why_not": "There are no contact details on the record. Whether to involve the landlord depends on who manages Flat 12, which the team needs to decide."
         }
       ],
       "checks_performed": [
-        "Loaded ticket context: 2 events, no attachments, no profile facts, no holds or approvals",
-        "Searched other tickets at 40 Crown Parade: none",
-        "classify_reply on tenant email",
-        "Outbound guard passed on tenant email"
+        "Loaded the ticket context: no history, profile facts, attachments or contact details",
+        "Searched find_tickets for other cases at 40 Crown Parade: only this one",
+        "Classified the tenant's message with classify_reply",
+        "The outbound message passed the guard"
       ],
       "assumptions": [
-        "The tenant's email address on the ticket is reachable (no contact details are visible in the profile)",
-        "It isn't known whether the agency manages Flat 12 or the communal areas"
+        "UK police and council reporting routes apply"
       ]
     },
-    "situation": "The tenant at Flat 11, 40 Crown Parade reports loud weekend parties until 4am at Flat 12, suspected drug dealing and strangers in the stairwell. The tenant hasn't slept properly in weeks and asks us to send someone.",
+    "situation": "The tenant at Flat 11, 40 Crown Parade complains that Flat 12 holds parties until 4am most weekends, that drugs may be being dealt there and that strangers are in the stairwell. They report weeks without proper sleep and asked us to \"send someone to fix this\".",
     "actions_taken": [
       {
         "tool": "get_ticket_context",
         "description": "Loaded the case",
-        "result": "2 events, no history or facts",
+        "result": "2 events, no facts or history",
         "ok": true
       },
       {
         "tool": "classify_reply",
-        "description": "Classified the tenant email",
-        "result": "complaint; needs_human_response 0.94; safety 0.58; review",
+        "description": "Classified the tenant's email",
+        "result": "complaint, review, needs_human 0.93, safety 0.56",
         "ok": true
       },
       {
         "tool": "find_tickets",
         "description": "Checked for related tickets at 40 Crown Parade",
-        "result": "Only this ticket",
+        "result": "Only ticket 34",
         "ok": true
       },
       {
         "tool": "send_message",
-        "description": "Emailed the tenant: acknowledged the report, said it has been passed to the team, signposted 999/101/Crimestoppers and the council noise team, suggested keeping a diary, and asked them to report any communal security defects",
-        "result": "Message 17 queued; guard passed",
+        "description": "Acknowledged the tenant and gave safety and reporting advice",
+        "result": "message 46 queued, guard passed",
         "ok": true
       },
       {
         "tool": "escalate_to_human",
-        "description": "Handed the antisocial-behaviour complaint to the human queue",
-        "result": "queue_id 9",
+        "description": "Handed the ASB complaint to property management",
+        "result": "queue item 16",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold waiting on the agency, 2-day follow-up",
+        "result": "hold 83",
         "ok": true
       }
     ],
@@ -88,26 +97,26 @@
     ],
     "escalation": {
       "needed": true,
-      "reason": "Out-of-scope neighbour noise and antisocial-behaviour complaint with suspected drug dealing",
-      "handover_summary": "Flat 11 tenant reports Flat 12 parties until 4am most weekends, suspected drug dealing and strangers in the stairwell. Tenant is sleep-deprived. Tenant has been acknowledged and signposted to police/council. No repair is involved.",
-      "recommendation": "Tenancy/property manager to call the tenant within 1-2 working days, check their wellbeing and whether the communal entry is secure, then raise the issue with Flat 12's tenant/landlord if we manage it, or with the block managing agent/freeholder if not. Inform the Flat 11 landlord as appropriate."
+      "reason": "A neighbour antisocial-behaviour and suspected drug-dealing complaint is outside maintenance scope.",
+      "handover_summary": "The tenant at Flat 11 reports late-night parties, suspected drug dealing and strangers in the stairwell, all linked to Flat 12. They have been acknowledged and given police and council advice, and were told to expect contact within 2 working days. We don't know whether the agency manages Flat 12 or the block.",
+      "recommendation": "Call the tenant. Check whether we manage Flat 12 or the block. If we do, start the ASB/tenancy-breach process. If not, refer to the freeholder/managing agent and the council. Then close this maintenance ticket or move it to the tenancy queue."
     },
     "unverified": [
-      "Suspected drug dealing (tenant's belief only)",
+      "Drug dealing allegation",
       "Whether the agency manages Flat 12 or the communal areas",
-      "Whether the communal entrance is secure",
-      "Tenant contact details and vulnerability"
+      "Whether the tenant has already reported this to the police or council",
+      "Tenant contact details and any vulnerability"
     ],
     "failures": [],
     "risks_or_red_flags": [
-      "Possible criminal activity and strangers in the communal stairwell (security risk)",
-      "Tenant wellbeing: weeks without proper sleep",
-      "Risk of the complaint escalating if there's no prompt human follow-up"
+      "Possible criminal activity in the communal stairwell",
+      "Tenant wellbeing: weeks of sleep deprivation",
+      "There are no contact details on record, so the message may not be delivered"
     ],
-    "final_status": "Open in intake, escalated to the human queue (item 9); not moved through repair stages",
+    "final_status": "Open, at intake stage; escalated to the human queue (item 16) and on hold waiting on the agency (hold 83)",
     "next_follow_up": {
-      "when": "Within 1-2 working days",
-      "what": "Human team to call the tenant and decide on action with Flat 12 / the block management"
+      "when": "2026-10-10",
+      "what": "Check whether property management has contacted the tenant about the ASB complaint"
     },
     "confidence": 0.88
   }

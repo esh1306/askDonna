@@ -1,0 +1,100 @@
+{
+  "case": "PM047-1",
+  "decision": "wait",
+  "escalated": "no",
+  "failures": 2,
+  "durationSec": 38.54,
+  "decisionLine": "wait",
+  "sessionId": "wrun_01M4JSZA35N1RWMW2H42K5P7D9",
+  "startedAt": "2026-10-10T11:43:02.682Z",
+  "finishedAt": "2026-10-10T11:43:41.222Z",
+  "usage": {
+    "inputTokens": 61321,
+    "outputTokens": 3770
+  },
+  "eventCount": 244,
+  "dryRun": false,
+  "result": {
+    "case_id": "R/PM047-1 (ticket 20)",
+    "decision": "wait",
+    "summary": "The tenant has confirmed the toilet is fixed, so the only open job is the bedroom window that won't close properly. The landlord never replied to our earlier email about the toilet and the window. I've now sent them a formal approval request by email (approval 10) for the window only, with no cost given because there is no quote yet. I've asked the tenant whether the window can be secured, since that decides whether it's a security emergency. The case is on hold for the landlord's reply, with a follow-up in 2 days.",
+    "situation": "The tenant reported a bedroom window that isn't closing properly at Flat 24, 150 Copperfield Walk, Kingshaven, ZZ3 7ZZ. Our earlier landlord email (event 004) covered both a blocked toilet and the window and asked whether we may send a contractor; the landlord hasn't replied. The tenant then said their mother fixed the toilet and asked us to send someone for the window only (event 006). No contractor, quote or pre-approved spend limit is on file. We don't know which floor the flat is on or whether the window can be locked.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the ticket, profiles and event history",
+        "result": "6 events. No holds, approvals, profile facts or contractor on file.",
+        "ok": true
+      },
+      {
+        "tool": "classify_intake",
+        "description": "Classified the window report",
+        "result": "Category: doors/windows/locks. Severity: urgent (probability 0.51; emergency 0.08). Needs landlord approval: 0.81. Safety risk: 0.39. Suggested route: request landlord approval.",
+        "ok": true
+      },
+      {
+        "tool": "request_landlord_approval",
+        "description": "Emailed the landlord to approve our contractor inspecting, repairing or quoting for the bedroom window, or to say they'll use their own. Told them the toilet is now resolved.",
+        "result": "Approval 10 created; message 27 queued",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant: thanked them for the toilet update, said we're waiting on the landlord, and asked whether the window can be secured (and which floor the flat is on if not)",
+        "result": "Message 28 queued",
+        "ok": true
+      },
+      {
+        "tool": "move_stage",
+        "description": "Tried to move the ticket back to landlord_approval, since the landlord hasn't approved yet",
+        "result": "Rejected: the CRM won't move a ticket backwards from provider_selection",
+        "ok": false
+      },
+      {
+        "tool": "place_hold",
+        "description": "Put the ticket on hold waiting for the landlord, follow-up in 2 days",
+        "result": "Hold 44 created",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded that the toilet blockage was resolved by the tenant's family",
+        "result": "Fact 38 saved",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (R/PM047-1)",
+        "status": "requested",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "Nothing calls for a human yet: no reported security risk, dispute or overdue follow-up.",
+      "handover_summary": "",
+      "recommendation": "Escalate with high priority if the tenant says the window can't be secured, especially on a ground or easily reached floor. Escalate with normal priority if the landlord still hasn't replied after a second chase."
+    },
+    "unverified": [
+      "Whether the window can be shut and locked securely",
+      "Which floor the flat is on",
+      "The landlord's preferred contact channel; email was used because the agency used it before",
+      "The cost of the repair; no quote exists"
+    ],
+    "failures": [
+      "move_stage to landlord_approval was rejected because the CRM doesn't allow moving backwards. The ticket stays in provider_selection even though the landlord hasn't approved yet."
+    ],
+    "risks_or_red_flags": [
+      "A window that doesn't close could leave the flat insecure (classifier safety risk 0.39). This becomes an emergency if the window can't be secured and is reachable from outside.",
+      "The landlord hasn't replied to the first email (event 004).",
+      "The CRM stage (provider_selection) is ahead of the actual position: landlord approval is still pending."
+    ],
+    "final_status": "On hold (hold 44), waiting for the landlord's approval (approval 10). The stage stays at provider_selection because the CRM wouldn't move it back.",
+    "next_follow_up": {
+      "when": "In 2 days (about 2024-02-24)",
+      "what": "Chase the landlord on approval 10 if they haven't replied. Check the tenant's answer on whether the window can be secured, and escalate with high priority if it can't."
+    },
+    "confidence": 0.8
+  }
+}

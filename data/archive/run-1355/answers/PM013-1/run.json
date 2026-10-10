@@ -1,0 +1,81 @@
+{
+  "case": "PM013-1",
+  "decision": "request_info",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 29.524,
+  "decisionLine": "request_info",
+  "sessionId": "wrun_01M4JWG9SGSKEAXEKNH1F4Z49Z",
+  "startedAt": "2026-10-10T12:27:16.602Z",
+  "finishedAt": "2026-10-10T12:27:46.126Z",
+  "usage": {
+    "inputTokens": 69295,
+    "outputTokens": 2485
+  },
+  "eventCount": 107,
+  "dryRun": false,
+  "result": {
+    "case_id": "52 (R/PM013-1)",
+    "decision": "request_info",
+    "summary": "The job is in scheduling. Harbour Surveying was assigned on 1 Oct. They tried to reach the tenant and spoke to her about the dishwasher model, then went quiet through three reminders. They emailed today (event 017), but the email has no readable content, and neither does their 1 Oct email. I've asked them to confirm the visit date and time, or say what is holding it up. The ticket is on hold until tomorrow, and I'll escalate if they don't reply.",
+    "situation": "Routine repair: the integrated dishwasher starts, beeps, the power light flashes and it stops. The landlord was told on 1 Oct that an engineer would attend (event 002). Harbour Surveying and the tenant missed each other on the phone, then spoke (event 010). The tenant couldn't give the model at the time and they agreed to keep in touch by text. The reminders went out on 4 and 5 Oct, then the system flagged 3+ reminders (event 016). The contractor emailed on 6 Oct (event 017), but the content isn't visible.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded ticket, profiles and 17 events",
+        "result": "Stage scheduling; no holds, approvals or attachments; contractor emails 011 and 017 have no readable content",
+        "ok": true
+      },
+      {
+        "tool": "search_case",
+        "description": "Checked the 'Meadow Solutions' mention in event 010",
+        "result": "Only appears in the call summary in event 010; probably a mis-transcription or another trading name, and it doesn't change the decision",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed Harbour Surveying asking for the booked visit date and time, or what is blocking the booking",
+        "result": "Queued, message 66; guard passed",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold waiting on the contractor, follow up in 1 day",
+        "result": "Hold 130 placed",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (Clara)",
+        "status": "not_needed",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "The contractor has replied, but we can't read it. Asking them is the proportionate next step.",
+      "handover_summary": "",
+      "recommendation": "If Harbour Surveying doesn't reply by the follow-up date, escalate to ops to check the raw mailbox for events 011 and 017. Consider swapping to another appliance engineer."
+    },
+    "unverified": [
+      "Contents of contractor emails event 011 (1 Oct) and event 017 (6 Oct)",
+      "Whether an appointment has been booked",
+      "Dishwasher make and model",
+      "Who 'Meadow Solutions' in event 010 is",
+      "Whether the landlord replied to event 002 (no reply visible)"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "The contractor didn't respond to 3+ reminders, which may mean it's unreliable",
+      "The 'Meadow Solutions' name in the call summary doesn't match Harbour Surveying",
+      "The CRM is losing inbound email content"
+    ],
+    "final_status": "Scheduling – on hold waiting on contractor (hold 130)",
+    "next_follow_up": {
+      "when": "2024-10-07",
+      "what": "Check whether Harbour Surveying has replied with an appointment date. If not, escalate to ops to read the raw emails and consider another contractor."
+    },
+    "confidence": 0.72
+  }
+}

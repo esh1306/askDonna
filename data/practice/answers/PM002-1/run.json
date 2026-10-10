@@ -1,47 +1,93 @@
 {
   "case": "PM002-1",
-  "decision": "request_info",
-  "escalated": "no",
+  "decision": "act",
+  "escalated": "yes",
   "failures": 0,
-  "durationSec": 42.081,
-  "decisionLine": "request_info",
-  "sessionId": "wrun_01M4JWF1S8ZBP35PSFT28SYSED",
-  "startedAt": "2026-10-10T12:26:35.487Z",
-  "finishedAt": "2026-10-10T12:27:17.568Z",
+  "durationSec": 49.328,
+  "decisionLine": "act",
+  "sessionId": "wrun_01M4JY5GS6XZER6J0F3F08SF7D",
+  "startedAt": "2026-10-10T12:56:20.109Z",
+  "finishedAt": "2026-10-10T12:57:09.437Z",
   "usage": {
-    "inputTokens": 65929,
-    "outputTokens": 2709
+    "inputTokens": 102301,
+    "outputTokens": 4402
   },
-  "eventCount": 180,
+  "eventCount": 277,
   "dryRun": false,
   "result": {
-    "case_id": "47 (R/PM002-1)",
-    "decision": "request_info",
-    "summary": "The landlord approved the work, Riverside Works was assigned and a visit was arranged for after 10:30 am on 8 or 9 August. Since then the CRM has no attendance report and no word from the contractor or tenant (event 014). I emailed Riverside Works and the tenant asking what happened and placed a 1-day hold to chase. Nothing yet needs a human.",
-    "situation": "Stage is 'works'. The toilet has to be removed to clear a blockage lodged by the pan connector. The visit was agreed on a call at 05:03 on 08/08: \"next day after 10:30\". The confirmations said \"tomorrow after half ten (08/08/2026)\", so the visit date was either the 8th or the 9th. As of 2026-08-11 the CRM has no attendance or outcome.",
+    "case_id": "R/PM002-1 (ticket 9)",
+    "decision": "act",
+    "summary": "The landlord approved the contractor visit for the blocked toilet. A visit was arranged for after 10:30 following Riverside Works' call on 8 Aug, but by 11 Aug there was still no result. I emailed Riverside Works to ask what happened at the visit and placed a 1-day hold to chase. I also flagged a duplicate ticket for the same job (R/PM002-2) to ops at low priority so it can be merged.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "The job is approved (events 002/003, approval 5) and in works. The visit was arranged (events 009–013), but a system flag on 11 Aug (event 014) shows no outcome recorded. The contractor is the person who can say whether they attended and what they found, so the proportionate step is to ask them and hold for a reply. The duplicate ticket needs an agency decision, so I sent it to ops.",
+      "alternatives_considered": [
+        {
+          "option": "Wait without messaging",
+          "why_not": "The visit date has passed and the system flagged no result. Waiting longer would let the job stall while the tenant may still have a blocked toilet."
+        },
+        {
+          "option": "Escalate the whole case at high priority",
+          "why_not": "There is nothing to suggest an emergency. The contractor can answer the open question."
+        },
+        {
+          "option": "Message the tenant as well",
+          "why_not": "Riverside Works holds the outcome. One clear ask is better; I'll contact the tenant if the contractor doesn't reply."
+        },
+        {
+          "option": "Use the later events on ticket 6",
+          "why_not": "Those events are dated after this case's current point (11 Aug). Using them would mean acting on future information."
+        }
+      ],
+      "checks_performed": [
+        "Approval status: approval 5 is approved, with no amount recorded",
+        "Contractor on job: Riverside Works (Leo and Eliza are named staff, which is normal)",
+        "Visit date: event 009 says 'next day after 10:30', but event 010 and the messages say 08/08/2026, a possible date slip",
+        "Duplicates: ticket 6 (R/PM002-2) is the same job, with events 001–014 identical",
+        "Open holds: none before this action",
+        "Attachments: none"
+      ],
+      "assumptions": [
+        "The current date is 11 Aug 2026 (event 014)",
+        "The blocked toilet is not an emergency (no report of overflow or of the flat having no working toilet)"
+      ]
+    },
+    "situation": "Blocked toilet: the pan needs removing to clear a run blockage at the pan connector. The landlord approved attendance and Riverside Works was assigned. A visit was arranged for after 10:30 on or about 8 Aug, and by 11 Aug no work result had been recorded.",
     "actions_taken": [
       {
         "tool": "get_ticket_context",
-        "description": "Loaded the ticket, profiles, events and approvals",
-        "result": "14 events; approval 26 shows approved; no holds, attachments or property history",
+        "description": "Loaded ticket 9 context",
+        "result": "Stage is works; approval 5 approved; no holds or attachments",
+        "ok": true
+      },
+      {
+        "tool": "find_tickets",
+        "description": "Checked for other tickets at the same address",
+        "result": "Found duplicate ticket 6 (R/PM002-2)",
+        "ok": true
+      },
+      {
+        "tool": "get_ticket_context",
+        "description": "Reviewed duplicate ticket 6",
+        "result": "Events 001–014 are identical to this ticket; later events on it are after this case's current point and were not used",
         "ok": true
       },
       {
         "tool": "send_message",
-        "description": "Emailed Riverside Works asking whether they attended and on what date, whether the toilet is working, and what is left to do with a quote if needed. Reminded them to quote before any extra work.",
-        "result": "Queued (message 58); guard did not block",
-        "ok": true
-      },
-      {
-        "tool": "send_message",
-        "description": "Emailed the tenant asking whether the contractor came, whether the toilet works and whether there is another WC. Advised not to flush the blocked toilet.",
-        "result": "Queued (message 59); guard did not block",
+        "description": "Emailed Riverside Works asking for the visit outcome: completion evidence and invoice, or a quote if more work is needed, or a reason and new date if they didn't attend",
+        "result": "Sent (message 15); the guard did not block it",
         "ok": true
       },
       {
         "tool": "place_hold",
-        "description": "Hold waiting on the contractor and tenant replies, with a 1-day follow-up",
-        "result": "hold_id 125",
+        "description": "Hold waiting on the contractor, follow-up in 1 day",
+        "result": "Hold 19",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Low-priority handover asking ops to merge the duplicate ticket",
+        "result": "Queue item 2",
         "ok": true
       }
     ],
@@ -49,34 +95,33 @@
       {
         "party": "Landlord (R/PM002-1)",
         "status": "granted (attendance only, no amount recorded)",
-        "channel": "phone/email (events 002-003)"
+        "channel": "phone/email per events 002–003"
       }
     ],
     "escalation": {
-      "needed": false,
-      "reason": "Routine chase: the contractor and tenant can say what happened",
-      "handover_summary": "",
-      "recommendation": "Escalate if neither replies by the follow-up date, or if the contractor quotes extra costs, since the landlord's approval has no amount."
+      "needed": true,
+      "reason": "A duplicate ticket (R/PM002-2) exists for the same job and needs merging or closing",
+      "handover_summary": "Blocked toilet at Flat 3, 15 Willowmere Road. Approved; Riverside Works arranged a visit around 8 Aug but no outcome is recorded. I've chased the contractor and set a 1-day hold. Ticket 6 duplicates this job and uses different tenant/landlord contact records.",
+      "recommendation": "Ops to choose a master ticket and merge or close the other, so the contractor and tenant don't get duplicate messages and only one invoice is processed."
     },
     "unverified": [
-      "Whether Riverside Works attended, and whether it was on 08/08 or 09/08",
+      "Whether the visit took place, and on 8 or 9 Aug",
       "Whether the blockage has been cleared",
-      "Whether the tenant has a second working toilet",
-      "Who the contractor contacts are: Leo (event 003) and Eliza (event 009) are both named for Riverside Works",
-      "Cost of the work: the landlord approved attendance with no amount"
+      "Any cost; no quote or invoice is visible",
+      "Whether the property has a second toilet"
     ],
     "failures": [],
     "risks_or_red_flags": [
-      "The visit date is unclear: the confirmations said 'tomorrow' but gave the same day's date",
-      "Event 009 says earlier attempts to unblock had failed, so this may become a bigger job with extra cost needing landlord approval",
-      "If this is the flat's only toilet, it becomes urgent",
-      "The tenant's vulnerability is unknown"
+      "Duplicate tickets could lead to duplicate invoices or conflicting instructions",
+      "Event 009 says 'next day' but the booking is recorded as 08/08, a possible date slip",
+      "Different tenant phone numbers appear across the records",
+      "The tenant may still be without a working toilet"
     ],
-    "final_status": "Stage 'works', on hold (hold 125) waiting on contractor and tenant replies",
+    "final_status": "Works stage, on hold waiting on the contractor (hold 19)",
     "next_follow_up": {
       "when": "2026-08-12",
-      "what": "Chase Riverside Works and the tenant for the visit outcome. If nobody replies again, escalate to the operations queue."
+      "what": "If Riverside Works hasn't replied, chase them again and contact tenant Noah Turner to confirm whether the visit happened and whether the toilet is usable"
     },
-    "confidence": 0.82
+    "confidence": 0.8
   }
 }

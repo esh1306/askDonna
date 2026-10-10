@@ -1,0 +1,91 @@
+{
+  "case": "PM039-1",
+  "decision": "act",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 33.191,
+  "decisionLine": "act",
+  "sessionId": "wrun_01M4JWJQPZTPP18EBBY99DS8H1",
+  "startedAt": "2026-10-10T12:28:36.405Z",
+  "finishedAt": "2026-10-10T12:29:09.596Z",
+  "usage": {
+    "inputTokens": 71715,
+    "outputTokens": 3199
+  },
+  "eventCount": 201,
+  "dryRun": false,
+  "result": {
+    "case_id": "65 (R/PM039-1)",
+    "decision": "act",
+    "summary": "The tenant replied to our question. They say the clicking is mechanical and comes from the machine itself, so I took that as a plausible answer to whether something loose was in the drum. The issue is routine (appliance, still working) and no landlord approval or spend limit is recorded. I emailed the landlord asking them to approve an engineer's diagnostic visit, and told them any repair cost would come back to them first. I also replied to the tenant, accepting her offer of a video and giving her safe-use advice. Then I put the ticket on hold for 2 days waiting on the landlord.",
+    "situation": "Tenant at Flat 29, 19 Copperfield Walk reported the washing machine clicking while rotating. It is still working. The agency asked her to check that nothing loose was in the drum and told her the landlord had been informed. No landlord approval was recorded. The tenant replied (event 006) that the clicking is mechanical, happens during washes, and offered a video. Event 005 asked whether the tenant needs a reply.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded ticket, profiles, events",
+        "result": "No approvals, holds, contractor or landlord facts on record",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified tenant reply (event 006)",
+        "result": "review; intent new_issue 0.51 / still_broken 0.39; safety 0.05. Read as the same fault, still present.",
+        "ok": true
+      },
+      {
+        "tool": "classify_intake",
+        "description": "Classified the request",
+        "result": "appliance, routine, route request_landlord_approval",
+        "ok": true
+      },
+      {
+        "tool": "request_landlord_approval",
+        "description": "Emailed the landlord asking them to approve an appliance engineer's diagnostic visit, with any repair quote to come back to them first",
+        "result": "approval_id 35 pending, message 80; guard passed",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant: thanks, landlord asked to approve, please send the video, stop using the machine if it gets worse",
+        "result": "message 81 sent; guard passed",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold waiting on landlord",
+        "result": "hold 158, follow-up in 2 days",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (R/PM039-1)",
+        "status": "requested",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "Routine appliance fault; next step is the landlord's approval",
+      "handover_summary": "",
+      "recommendation": ""
+    },
+    "unverified": [
+      "The tenant did not explicitly confirm the drum is empty; her answer that the noise is mechanical was taken at face value",
+      "Event 003 says the landlord was told, but there is no landlord reply or approval on record",
+      "The landlord's preferred channel is unknown, so I used email",
+      "Cost is unknown and no contractor is identified",
+      "The hold note in event 004 names 'Oakley' but the tenant is addressed as Nora, probably the same household or a nickname"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "Low risk: the fault could get worse (bearing or motor). The tenant has been told to stop using the machine if it does"
+    ],
+    "final_status": "The ticket is still at stage provider_selection (stages only move forward). It is on hold waiting on the landlord (hold 158), with approval 35 pending.",
+    "next_follow_up": {
+      "when": "In 2 days (hold 158)",
+      "what": "Chase the landlord for APPROVE/DECLINE. If approved, assign an appliance engineer and send them the tenant's video if she has sent one."
+    },
+    "confidence": 0.8
+  }
+}

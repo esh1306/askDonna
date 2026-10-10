@@ -3,103 +3,118 @@
   "decision": "wait",
   "escalated": "no",
   "failures": 0,
-  "durationSec": 55.886,
+  "durationSec": 53.586,
   "decisionLine": "wait",
-  "sessionId": "wrun_01M4JW6PP539WSVB1PNT537E2H",
-  "startedAt": "2026-10-10T12:22:02.003Z",
-  "finishedAt": "2026-10-10T12:22:57.889Z",
+  "sessionId": "wrun_01M4JY6P2RGCBM2XMSR2HDK9QG",
+  "startedAt": "2026-10-10T12:56:58.658Z",
+  "finishedAt": "2026-10-10T12:57:52.244Z",
   "usage": {
-    "inputTokens": 92578,
-    "outputTokens": 3867
+    "inputTokens": 84460,
+    "outputTokens": 4194
   },
-  "eventCount": 260,
+  "eventCount": 241,
   "dryRun": false,
   "result": {
-    "case_id": "28 (R/PM007-1, job NBL-007-0235)",
+    "case_id": "16 (R/PM007-1, Job NBL-007-0235)",
     "decision": "wait",
-    "summary": "Clarke has quoted £198.37 + VAT (£238.04 including VAT) to replace two lounge spotlights and one ceiling board. The landlord's earlier approval (event 002) was given before there was a quote and has no amount on it, so I've asked the landlord by email to approve this specific cost. To answer event 007: yes, the provider needed a reply. I've told Clarke we've received the quote and that nothing should be booked until the landlord approves. The ticket is on hold waiting for the landlord, with a follow-up in 2 days.",
-    "situation": "This job comes from the check-out report: two lounge spotlights aren't working and a ceiling tile has water damage. The landlord approved going ahead to find a provider, Clarke was asked for a quote, and the quote has now arrived (event 008). The stage says 'scheduling', but in practice the job is waiting on the landlord to approve the quoted cost.",
+    "summary": "Clarke has quoted £198.37 + VAT (£238.04 if VAT is 20%) for the lounge spotlights and ceiling board. The only landlord approval on file is a system note with no amount, logged before any quote existed. So I emailed the landlord the quote and asked them to reply APPROVE or DECLINE. I also told Clarke the quote is with the landlord and asked him not to book any work yet. A hold is set to chase the landlord in 2 days.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "Event 001/005 was a request for a quote, not an instruction to do the work. The approval in event 002 (approval id 7) was logged automatically 5 seconds after the ticket was created. It has no amount and came before the quote. No spend limit is recorded for the landlord, so the £198.37 + VAT quote in event 008 isn't clearly covered. Committing that money without the landlord seeing the figure would break the rule against spending a landlord's money without approval. Event 007 asked whether the provider needs a reply: yes, a short note to say the quote has been received and work shouldn't start yet.",
+      "alternatives_considered": [
+        {
+          "option": "Treat the event 002 approval as cover and tell Clarke to go ahead",
+          "why_not": "That approval has no amount and came before the quote. With no spend limit on file, committing £238 would mean spending the landlord's money without approval."
+        },
+        {
+          "option": "Escalate to a human",
+          "why_not": "Nothing conflicts or is disputed. Getting the landlord's approval is the normal next step, and I can do that myself."
+        },
+        {
+          "option": "Return to auto mode without replying to the provider",
+          "why_not": "Clarke would have no update and might book the work before the landlord has approved it."
+        }
+      ],
+      "checks_performed": [
+        "Loaded the ticket context: stage scheduling, no open holds, approval 7 approved with no amount",
+        "classify_reply on event 008: quote_or_estimate, autonomy auto, needs_human_response 0.2, safety_concern 0.11",
+        "Read the check-out report: lounge has two spotlights not working and water damage to a ceiling tile; no cause recorded",
+        "No spend limit for the landlord and no property history",
+        "Quote scope matches the request (two spotlights, one ceiling board)"
+      ],
+      "assumptions": [
+        "VAT is at the standard 20%, giving £238.04 including VAT",
+        "The landlord's preferred channel is email, as used for the earlier approval (none is recorded)"
+      ]
+    },
+    "situation": "Check-out works at Flat 8, 168 Alder Lane, Kingshaven, ZZ4 3ZZ: two lounge spotlights not working and a water-damaged ceiling tile. The agency asked contractor Clarke to quote, and he quoted £198.37 + VAT. The agency asked whether the provider needs a reply.",
     "actions_taken": [
       {
-        "tool": "get_ticket_context",
-        "description": "Loaded the ticket, profiles, events and approvals",
-        "result": "Approval 14 was approved with no amount; no pre-approved spend limit; no open holds",
-        "ok": true
-      },
-      {
         "tool": "classify_reply",
-        "description": "Classified the contractor's quote email (event 008)",
-        "result": "Quote/estimate, autonomy auto, mentions an amount 0.99, safety concern 0.09",
+        "description": "Classified Clarke's quote (event 008)",
+        "result": "quote_or_estimate, auto, needs_human_response 0.2",
         "ok": true
       },
       {
         "tool": "read_attachment",
         "description": "Read the check-out inspection report",
-        "result": "Lounge: two spotlights not working, ceiling tile water damage. The report doesn't say what caused the damage",
+        "result": "Confirms two spotlights not working and water damage to a ceiling tile in the lounge; no cause given",
         "ok": true
       },
       {
         "tool": "request_landlord_approval",
-        "description": "Asked the landlord by email to approve the quote of £198.37 + VAT (£238.04), and asked if they know of any leak above the lounge",
-        "result": "Approval 15 is pending; message 37 sent",
+        "description": "Emailed the landlord the £198.37 + VAT quote, asked for APPROVE/DECLINE and mentioned the option of a leak check",
+        "result": "Approval id 10 pending, message 20 sent",
         "ok": true
       },
       {
         "tool": "send_message",
-        "description": "Emailed Clarke to say the quote is received, it's with the landlord, and not to book or start work yet",
-        "result": "Message 38 is in the outbox",
+        "description": "Told Clarke the quote is with the landlord and asked him not to book or start work yet",
+        "result": "Message 26 sent",
         "ok": true
       },
       {
         "tool": "place_hold",
-        "description": "Put the ticket on hold waiting for the landlord's decision",
-        "result": "Hold 76, follow-up in 2 days",
+        "description": "Hold waiting on the landlord's decision",
+        "result": "Hold 51, follow-up in 2 days",
         "ok": true
       },
       {
         "tool": "add_profile_fact",
-        "description": "Recorded the contractor's quote on their profile",
-        "result": "Fact 48 saved, no conflict",
+        "description": "Recorded on the property that the cause of the ceiling water damage is unknown",
+        "result": "Fact 25 recorded",
         "ok": true
       }
     ],
     "approvals": [
       {
         "party": "Landlord (R/PM007-1)",
-        "status": "granted (approval 14, to proceed with provider selection, no amount)",
-        "channel": "email/system"
-      },
-      {
-        "party": "Landlord (R/PM007-1)",
-        "status": "requested (approval 15, £238.04 including VAT)",
+        "status": "requested",
         "channel": "email"
       }
     ],
     "escalation": {
       "needed": false,
-      "reason": "This is a routine quote approval that the landlord can decide",
+      "reason": "Routine wait for the landlord's approval of the quote",
       "handover_summary": "",
-      "recommendation": ""
+      "recommendation": "If the landlord replies APPROVE, record the approval, tell Clarke to go ahead and arrange access."
     },
     "unverified": [
-      "Whether the landlord's first approval was meant to cover any cost, since it had no amount",
-      "VAT rate assumed to be 20%, which gives £238.04",
-      "What caused the ceiling water damage, and whether a leak is still active",
-      "Whether the property is vacant or re-let (tenanted is not set)",
-      "The landlord has no contact details or preferred channel on file, so email was used by default"
+      "Whether the landlord's earlier system approval was meant to cover any amount",
+      "Cause of the ceiling water damage, including whether a leak is still active",
+      "Whether the property is empty after check-out or has a new tenant (tenanted status not recorded)",
+      "Check-out report shows an appointment date of 25 August 2026 but a signature date of 27 September 2025; the 2026 date looks like a typo"
     ],
     "failures": [],
     "risks_or_red_flags": [
-      "The water damage may come from an ongoing leak above the lounge. Replacing the board without finding the cause may not last",
-      "The check-out report's appointment date (25 August 2026) is later than its signature date (27 September 2025). This is probably a typo",
-      "These are check-out defects, so the agency may need to decide whether any cost goes against the tenant's deposit. That is outside this approval and needs human judgement if it comes up",
-      "The stage reads 'scheduling' although the quote isn't approved yet. Stages only move forward, so I left it as it is"
+      "The source of the water damage hasn't been checked; if a leak is still active, the new board could be damaged again",
+      "The check-out report says costs of damage may be deducted from the deposit. Any deposit question is for the lettings team, not maintenance"
     ],
-    "final_status": "On hold (hold 76) waiting for the landlord's decision on approval 15. Stage remains 'scheduling'",
+    "final_status": "Stage scheduling; on hold (51) waiting for the landlord to approve the quote (approval id 10)",
     "next_follow_up": {
-      "when": "In 2 days (2025-09-29)",
-      "what": "Chase the landlord for APPROVE/DECLINE on the £238.04 quote. If they approve, tell Clarke to arrange access and book the works"
+      "when": "In 2 days (hold 51)",
+      "what": "Chase the landlord for APPROVE/DECLINE on the £198.37 + VAT quote; if approved, tell Clarke to go ahead and arrange access"
     },
-    "confidence": 0.85
+    "confidence": 0.8
   }
 }

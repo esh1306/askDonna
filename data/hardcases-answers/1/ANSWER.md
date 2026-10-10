@@ -2,76 +2,77 @@
 
 ## Decision
 
-**request_info**
+**escalate**
 
 ## Summary
 
-The tenant reported an urgent heating fault: her boiler keeps losing pressure and the radiators are cold. She asked us to send someone to Flat 6, but the CRM says she is the tenant of Flat 4, and Flat 6 is let to J. Okafor. Because the address decides which landlord we ask and whose home the engineer enters, I emailed her to confirm her flat and whether the shared-cupboard boiler heats only her flat. The email also gave her safe interim advice. The ticket is on hold with a 12-hour follow-up because the job is urgent.
+Mrs Haddad reported a boiler losing pressure and cold radiators. She is the tenant of Flat 4 in the CRM, but she asked for someone to attend Flat 6, which is let to J. Okafor. She then said the boiler is in a shared utility cupboard on her landing. Until we know which flat's boiler it is, we don't know which landlord to ask or where to send an engineer, and there is no contractor or landlord contact on file. I emailed the tenant to confirm the flat and ask about vulnerability, with safety advice, set a 12-hour hold, and escalated at high priority.
 
 ## Judgement
 
 - **Case type:** maintenance
-- **Why this decision:** Event 001 asks for attendance at Flat 6. Event 002 shows the sender is the tenant of Flat 4 and that Flat 6 belongs to another tenant. Event 004 adds that the boiler is in a shared landing cupboard on the 2nd floor. So we don't know which property, which landlord or which tenancy this is. The tenant can answer that quickly, so I asked her rather than escalating. It isn't an emergency: there's no gas smell, no uncontained leak and no known vulnerability, so we can't send anyone to a flat that may not be hers before it's confirmed.
+- **Why this decision:** Event 2 shows the sender is the tenant of Flat 4 and that Flat 6 belongs to someone else. Event 4 says the boiler is in a shared landing cupboard, so the boiler could serve either flat or be communal. That decides who pays and who approves. It is urgent (cold weather forecast, event 3; Jev rated it an emergency), but there is no known vulnerable tenant, no leak or gas risk, no contractor on file and no landlord contact. Sending an engineer now could mean the wrong flat or the wrong person paying.
 
 | Alternative considered | Why not |
 |---|---|
-| Ask the Flat 4 landlord for approval now | If the boiler serves Flat 6 or is shared plant, we would be asking the wrong landlord or freeholder. |
-| Escalate to a human now | A quick question to the tenant can settle the address. I'll escalate if she doesn't reply or if it turns out to be a communal or Flat 6 boiler. |
-| Treat as an emergency and send an engineer | There's no gas smell, uncontrolled leak or known vulnerable occupant, and the address is unclear. |
+| Send an engineer as an emergency now | There is no contractor on record, the flat is unconfirmed, no vulnerable tenant is known and there is no gas or water risk. That falls short of the emergency criteria, and it could commit the wrong landlord's money. |
+| Ask landlord 2 (Flat 4) for approval | The boiler may belong to Flat 6 or be communal. Landlord 2 also has no contact details or preferred channel on file. |
+| Just ask the tenant and wait | It is urgent and the property details conflict. A person should check building records and phone the tenant today rather than wait for an email reply. |
 
 **Checks performed before acting**
 
-- Tenancy in the CRM lookup (event 002) compared with the flat named in the report (event 001)
-- No open approvals, holds or contractor on the ticket
-- Landlord profile: no recorded spend limit and no preferred channel
-- No other jobs on record for this property
-- Intake classifier: urgent heating; reply classifier: needs review
+- Loaded ticket context (events 1–4)
+- Compared the flat in the tenant's request with the CRM tenancy (Flat 4 vs Flat 6)
+- Checked for a contractor, landlord contact, spend limit or past jobs: none found
+- classify_intake: heating, severity emergency 0.95
+- classify_reply on event 4: needs review, access/availability
 
 **Assumptions**
 
-- The Thursday she asked about is 1 October 2026; this is not confirmed with her
-- She is probably the Flat 4 tenant and the Flat 6 mention is probably a mistake or refers to where the cupboard is; this is not verified
+- The 'Thursday afternoon' in event 4 means Thursday of the week starting 28/09
 
 ## Actions taken
 
 | # | Tool | Input (gist) | Result | Output (gist) |
 |---|---|---|---|---|
-| 1 | `get_ticket_context` | {"ticket_id":53} | ok | {"ok":true,"ticket":{"id":53,"case_ref":"R/1","property_id":53,"tenant_id":141,"landlord_id":142,"contractor_id":null,"… |
-| 2 | `classify_reply` | {"ticket_id":53,"text":"Sorry, I should say - the boiler is in the shared utility cupboard on our landing. I do live on the 2nd floor. Plea… | ok | {"autonomy":"review","intent":"access_or_availability","intent_probs":{"confirms_fixed":0,"still_broken":0,"access_or_a… |
-| 3 | `classify_intake` | {"ticket_id":53,"text":"Boiler keeps losing pressure and radiators are cold. Tenant (CRM: Flat 4) asked for attendance at Flat 6; boiler is… | ok | {"route":"request_landlord_approval","scope":"maintenance_repair","scope_probs":{"maintenance_repair":1,"maintenance_ad… |
-| 4 | `send_message` | {"ticket_id":53,"to":"tenant","channel":"email","subject":"Boiler losing pressure – 18 Orchard Court (ref R/1)","body":"Dear Mrs Haddad,\n\… | ok | {"ok":true,"message_id":5,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.1,"promises_sp… |
-| 5 | `place_hold` | {"ticket_id":53,"reason":"Waiting for tenant to confirm which flat (CRM says Flat 4, report says Flat 6) and whether the shared-cupboard bo… | ok | {"ok":true,"hold_id":240} |
-| 6 | `add_profile_fact` | {"entity_type":"property","entity_id":53,"key":"boiler_location","value":"Shared utility cupboard on 2nd-floor landing (tenant report; unco… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":25,"entity_type":"property","entity_id":53,"key":"boiler_loc… |
-| 7 | `add_profile_fact` | {"entity_type":"contact","entity_id":141,"key":"availability_note","value":"Asked whether she can be home Thursday afternoon for the boiler… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":26,"entity_type":"contact","entity_id":141,"key":"availabili… |
+| 1 | `get_ticket_context` | {"ticket_id":1} | ok | {"ok":true,"ticket":{"id":1,"case_ref":"R/1","property_id":1,"tenant_id":1,"landlord_id":2,"contractor_id":null,"title"… |
+| 2 | `classify_reply` | {"ticket_id":1,"text":"Sorry, I should say - the boiler is in the shared utility cupboard on our landing. I do live on the 2nd floor. Pleas… | ok | {"autonomy":"review","intent":"access_or_availability","intent_probs":{"confirms_fixed":0,"still_broken":0,"access_or_a… |
+| 3 | `classify_intake` | {"ticket_id":1,"text":"Boiler keeps losing pressure and radiators are cold. Boiler located in shared utility cupboard on the 2nd-floor land… | ok | {"route":"emergency_dispatch","scope":"maintenance_repair","scope_probs":{"maintenance_repair":1,"maintenance_admin":0,… |
+| 4 | `send_message` | {"ticket_id":1,"to":"tenant","channel":"email","subject":"Boiler losing pressure – 18 Orchard Court (ref R/1)","body":"Dear Mrs Haddad,\n\n… | ok | {"ok":true,"message_id":7,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.06,"promises_s… |
+| 5 | `place_hold` | {"ticket_id":1,"reason":"Awaiting tenant confirmation of which flat/boiler is affected (Flat 4 per CRM vs Flat 6 named in event 1; boiler i… | ok | {"ok":true,"hold_id":21} |
+| 6 | `add_profile_fact` | {"entity_type":"contact","entity_id":1,"key":"availability_note","value":"Says she can be at home Thursday afternoon (week of 2026-09-28) f… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":11,"entity_type":"contact","entity_id":1,"key":"availability… |
+| 7 | `add_profile_fact` | {"entity_type":"property","entity_id":1,"key":"boiler_location","value":"Tenant reports boiler is in shared utility cupboard on 2nd-floor l… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":12,"entity_type":"property","entity_id":1,"key":"boiler_loca… |
+| 8 | `add_profile_fact` | {"entity_type":"contact","entity_id":1,"key":"preferred_channel","value":"email","source_ref":"events 1 and 4 (tenant reported by email)","… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":13,"entity_type":"contact","entity_id":1,"key":"preferred_ch… |
+| 9 | `escalate_to_human` | {"ticket_id":1,"reason":"Urgent no-heating report with conflicting property: CRM tenant of Flat 4 asked for attendance at Flat 6 (let to J.… | ok | {"ok":true,"queue_id":6} |
 
 Agent's own account of its actions (from the structured result):
 
-- `get_ticket_context` - Loaded the case -> 4 events; no holds, approvals or contractor
-- `classify_reply` - Classified the tenant's 09:40 email (event 004) -> Access/availability message; flagged for review
-- `classify_intake` - Classified the reported fault -> Heating; urgent; landlord approval likely needed
-- `send_message` - Emailed the tenant to confirm her flat and whether the boiler serves other flats, with safe interim advice -> Sent (message 5); passed the outbound guard
-- `place_hold` - Put the ticket on hold until the tenant confirms -> Hold 240, follow-up in 0.5 days
-- `add_profile_fact` - Recorded where the boiler is (as reported by the tenant) -> Fact 25
-- `add_profile_fact` - Recorded the tenant's Thursday-afternoon availability -> Fact 26
+- `classify_reply` - Classified the tenant follow-up (event 4) -> Needs review, access/availability, needs a human reply 0.56
+- `classify_intake` - Classified the report -> Heating/hot water, emergency 0.95, needs landlord approval 0.65
+- `send_message` - Emailed the tenant asking her to confirm the flat/boiler and any vulnerability, with interim safety advice; noted Thursday availability without confirming a visit -> Sent, message 7, passed the guard
+- `place_hold` - Waiting on tenant clarification -> Hold 21, follow-up in 0.5 days
+- `add_profile_fact` - Recorded the tenant's Thursday afternoon availability, the boiler location (unconfirmed which flat it serves) and email as preferred channel -> Facts 11, 12, 13 recorded
+- `escalate_to_human` - Escalated at high priority: flats conflict, possible communal boiler, no contractor or landlord contact on file -> Queue item 6
 
 ## Approvals
 
 | Party | Status | Channel |
 |---|---|---|
-| Landlord (R/1) | not yet requested – waiting for the tenant to confirm the address | none |
+| Landlord (unconfirmed: Flat 4 or Flat 6) | not_requested: waiting for the flat to be confirmed | none |
 
 ## Escalation & handover
 
-- Escalation needed: **no**
-- Reason: The tenant can confirm the address herself
-- Recommendation: If she doesn't reply by the follow-up, or the boiler turns out to serve Flat 6 or the whole building, hand it to a human.
+- Escalation needed: **yes**
+- Reason: Urgent heating fault where the flat on record and the flat named conflict. The boiler may be communal, and there is no contractor or landlord contact on file.
+- Handover summary: Mrs Haddad (CRM: Flat 4) reports the boiler losing pressure and radiators cold, and asked for Flat 6 (let to J. Okafor). The boiler is in the shared 2nd-floor landing cupboard. She is available Thursday afternoon. I emailed her to clarify; hold 21 follows up in 12h.
+- Recommendation: Phone the tenant today to confirm the flat and any vulnerability. Check which flat the boiler serves and whether it is communal. Then get the correct landlord's approval (or treat as an emergency if someone vulnerable lives there) and instruct a Gas Safe engineer for Thursday afternoon. Check whether Flat 6's heating is also affected.
 
 ## What could not be verified
 
-- Which flat the tenant actually lives in and which flat the boiler serves
-- Whether the boiler is communal plant (it may be the freeholder's responsibility)
-- Who the landlord is and how they prefer to be contacted
+- Which flat the boiler serves (Flat 4 or Flat 6) and whether it is communal
 - Whether anyone in the household is vulnerable
+- Landlord contact details and approval route
+- Whether J. Okafor at Flat 6 is affected
 
 ## What failed
 
@@ -79,21 +80,21 @@ _No failures recorded._
 
 ## Risks & red flags
 
-- Flat 6 is let to a different tenant (J. Okafor), so sending an engineer there could mean entering another tenant's home
-- A shared-cupboard boiler may be communal, so the cost could belong to a different party
-- Urgent heating fault with cold weather forecast; delay matters
+- Cold weather forecast and no heating: could become an emergency if an occupant is vulnerable
+- Risk of sending an engineer to, or charging, the wrong flat or landlord
+- A shared boiler or cupboard may be the freeholder's responsibility
 
 ## Final result / next follow-up
 
-- Final status: intake, on hold waiting for the tenant (hold 240)
-- Next follow-up: 2026-09-28 about 21:40 UTC (in 12 hours) - Chase the tenant for the address. Once confirmed, ask the right landlord for approval, mentioning her Thursday-afternoon availability; otherwise escalate.
+- Final status: Intake. On hold waiting for the tenant (hold 21) and escalated to the human queue at high priority (item 6).
+- Next follow-up: 2026-09-28 evening (12h hold) - Chase the tenant's confirmation of the flat and vulnerability; ops to phone her and check building records
 - Confidence: 0.8
 
 ## Run metadata
 
 - Case folder: `C:\Users\sahid\Documents\Projects\Hackathons\DwellyHack\dwelly-agent\data\hardcases\1`
-- Session id: wrun_01M4JXE912DF7X071FANS45KJD
-- Started: 2026-10-10T12:43:38.666Z  Finished: 2026-10-10T12:44:24.230Z  Duration: 45.6s
-- Events recorded: 252
+- Session id: wrun_01M4JY5GH15YE39WY5PNATPE8B
+- Started: 2026-10-10T12:56:19.981Z  Finished: 2026-10-10T12:57:23.704Z  Duration: 63.7s
+- Events recorded: 467
 - Model(s): anthropic/claude-opus-5.5
-- Tokens: in 75987 / out 4373; cost: not reported
+- Tokens: in 96677 / out 5829; cost: not reported

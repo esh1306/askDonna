@@ -1,0 +1,73 @@
+{
+  "case": "PM030-1",
+  "decision": "no_action",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 24.145,
+  "decisionLine": "no_action",
+  "sessionId": "wrun_01M4JWHYGAYEN3YWTXRSSJW0WY",
+  "startedAt": "2026-10-10T12:28:10.584Z",
+  "finishedAt": "2026-10-10T12:28:34.729Z",
+  "usage": {
+    "inputTokens": 66890,
+    "outputTokens": 2212
+  },
+  "eventCount": 110,
+  "dryRun": false,
+  "result": {
+    "case_id": "R/PM030-1 (ticket 61)",
+    "decision": "no_action",
+    "summary": "The landlord's \"Thanks Ava 👍\" (event 010) just acknowledges the job and doesn't need a reply. Jev rated it 'auto' and gave an 11% chance it needs a human answer. Approval was already recorded and a contractor assigned and instructed, so the job can go back to auto mode. I put a 2-day hold on the ticket, waiting for the contractor to book an appointment with the tenants.",
+    "situation": "This is a routine plumbing job at Flat 7, 31 Willowmere Road: the toilet is slow to fill and the cold tap on the basin isn't working. The landlord was emailed (event 004), approval was confirmed (event 005), and a contractor was assigned and both the contractor and tenants were emailed (events 006–008). The ticket is at scheduling. The new message is the landlord's acknowledgement, and the system asked whether it needs a reply (event 009).",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the ticket, profiles, events and approvals",
+        "result": "Stage is scheduling. Approval 32 is approved. No open holds, attachments or property history.",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the landlord's message 'Thanks Ava 👍'",
+        "result": "autonomy=auto, intent approve/other, needs_human_response=0.11, safety_concern=0.02",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "2-day hold, waiting on the contractor to arrange an appointment with the tenants. The hold notes that the attending firm's name should be confirmed when chasing.",
+        "result": "hold_id 147",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (Freya)",
+        "status": "granted (already recorded, approval 32)",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "The landlord's reply is only an acknowledgement and the job is already approved and assigned.",
+      "handover_summary": "",
+      "recommendation": "Return to auto mode. Chase the contractor for an appointment if nothing has been booked by the time the hold is due."
+    },
+    "unverified": [
+      "Whether Willow Services (the CRM contractor, named in the tenant email) and Riverside Works (named in the landlord and contractor emails) are the same firm",
+      "Whether the contractor has received the job and contacted the tenants yet",
+      "The cost of the work: no quote or amount is recorded"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "The firm's name doesn't match across the records (Willow Services vs Riverside Works). It's probably just a trading name, but it should be confirmed when chasing the contractor.",
+      "There is no quote yet. If the contractor sends one, it needs checking against what the landlord approved before any work goes ahead.",
+      "The tenants have pets and the contractor has been told."
+    ],
+    "final_status": "Scheduling, on hold waiting for the contractor to arrange an appointment (hold 147)",
+    "next_follow_up": {
+      "when": "2024-10-04 (2 days)",
+      "what": "Chase the contractor for an appointment with the tenants and confirm which firm is attending (Willow Services or Riverside Works)"
+    },
+    "confidence": 0.88
+  }
+}

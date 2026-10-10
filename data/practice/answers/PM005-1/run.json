@@ -3,81 +3,102 @@
   "decision": "escalate",
   "escalated": "yes",
   "failures": 0,
-  "durationSec": 32.464,
+  "durationSec": 38.538,
   "decisionLine": "escalate",
-  "sessionId": "wrun_01M4JW6PPFAS5NMNMPX5FPSEYC",
-  "startedAt": "2026-10-10T12:22:02.003Z",
-  "finishedAt": "2026-10-10T12:22:34.467Z",
+  "sessionId": "wrun_01M4JY5GSC7WVFQZFPV4JMXKBC",
+  "startedAt": "2026-10-10T12:56:20.109Z",
+  "finishedAt": "2026-10-10T12:56:58.647Z",
   "usage": {
-    "inputTokens": 52663,
-    "outputTokens": 2968
+    "inputTokens": 60128,
+    "outputTokens": 3073
   },
-  "eventCount": 194,
+  "eventCount": 177,
   "dryRun": false,
   "result": {
-    "case_id": "R/PM005-1 (ticket 29)",
+    "case_id": "R/PM005-1 (ticket 12)",
     "decision": "escalate",
-    "summary": "The contractor won't quote for the check-out clean without the check-out report. I can't see one on the ticket and I can't produce it, so I've passed it to the agency team at normal priority. I've told the contractor the report is coming and put a 2-day follow-up hold on the ticket. No money has been committed. The landlord will need to approve the estimate when it arrives.",
-    "situation": "Flat 10, 160 Alder Lane is vacant. The agency asked the contractor (Ava, job NBL-005-0163) to estimate a full check-out clean: all appliances, a freezer defrost and a carpet clean in bedroom two. On 9 Nov the contractor asked us to attach the check-out report. No estimate yet, and no attachments visible. The ticket stage says 'scheduling', but the job is really still waiting for an estimate.",
+    "summary": "The contractor (Ava) asked for the check-out report so she can quote for the check-out clean at the vacant flat. No report is visible on the ticket and I can't attach files, so I've asked the agency team to send it. I emailed Ava to say it's being arranged and set a 2-day follow-up. No money has been committed. The landlord will need to approve the estimate when it comes in.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "Event 006 is a contractor question that only the agency can answer, because only the agency can supply the check-out report. No attachment is visible on the ticket. The job is at the estimate stage (event 004), so no approval or assignment decision is due yet.",
+      "alternatives_considered": [
+        {
+          "option": "No action",
+          "why_not": "Without the report the contractor can't quote, so the job would stall."
+        },
+        {
+          "option": "Ask the landlord for approval now",
+          "why_not": "There is no estimate yet, so there is nothing to approve."
+        },
+        {
+          "option": "Move the stage",
+          "why_not": "Stages only move forward. The stage is already 'scheduling', which is ahead of where the case really is. I flagged this to the human instead."
+        }
+      ],
+      "checks_performed": [
+        "Ticket context: no attachments, approvals, holds or property history",
+        "Classified the contractor reply: a question, flagged for review",
+        "Property is vacant (event 002)",
+        "Landlord profile has no spend limit"
+      ],
+      "assumptions": [
+        "'Checkout' means the check-out inspection report from the end of the tenancy"
+      ]
+    },
+    "situation": "Vacant property. An estimate for a check-out clean was requested from Ava on 2 Nov. On 9 Nov she asked for the check-out report to be attached.",
     "actions_taken": [
-      {
-        "tool": "get_ticket_context",
-        "description": "Loaded the case",
-        "result": "6 events, no attachments, approvals or holds; property not tenanted",
-        "ok": true
-      },
       {
         "tool": "classify_reply",
         "description": "Classified the contractor's email (event 006)",
-        "result": "Question; autonomy=review; needs a human reply 0.5",
+        "result": "Question; autonomy: review; needs human response 0.36",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the contractor to say the report is being arranged and asked for her estimate once she has it",
+        "result": "Queued (message_id 3); guard passed",
         "ok": true
       },
       {
         "tool": "escalate_to_human",
         "description": "Asked the agency team to find the check-out report and send it to the contractor",
-        "result": "queue_id 10",
-        "ok": true
-      },
-      {
-        "tool": "send_message",
-        "description": "Emailed the contractor to say the request has been passed on and to ask for the estimate once they have the report",
-        "result": "message_id 34, guard passed",
+        "result": "queue_id 1",
         "ok": true
       },
       {
         "tool": "place_hold",
-        "description": "Hold waiting on the agency for the report, then the estimate",
-        "result": "hold_id 66, follow-up in 2 days",
+        "description": "Hold waiting on the agency, follow-up in 2 days",
+        "result": "hold_id 16",
         "ok": true
       }
     ],
     "approvals": [
       {
         "party": "Landlord",
-        "status": "not_yet_needed (pending estimate)",
+        "status": "not_yet_needed (waiting for the estimate)",
         "channel": "n/a"
       }
     ],
     "escalation": {
       "needed": true,
-      "reason": "The contractor needs the check-out report to quote. I can't see one on the ticket and can't produce it.",
-      "handover_summary": "Vacant flat. A check-out clean estimate (job NBL-005-0163) was requested on 2 Nov. On 9 Nov the contractor asked for the check-out report. None is visible on the ticket.",
-      "recommendation": "Agency team: send the check-out report to the contractor and attach it to the ticket. Once the estimate arrives, send it to the landlord for approval."
+      "reason": "Contractor needs the check-out report, which isn't visible on the ticket and only the agency can supply.",
+      "handover_summary": "Vacant Flat 10, 160 Alder Lane. Ava (job NBL-005-0163) asked for the check-out report before she can quote for the clean, appliances, freezer defrost and bedroom two carpet. No estimate or approval yet.",
+      "recommendation": "Find the report, email it to Ava and add it to the ticket. Send her estimate to the landlord for approval before any work goes ahead."
     },
     "unverified": [
-      "Whether a check-out report exists and where it is",
-      "What the 3 Nov hold (event 005) was for (no text)",
-      "Landlord's contact details, preferred channel and any spend limit"
+      "Whether a check-out report exists",
+      "The landlord's spend limit and contact details",
+      "What the event 005 hold was for (no text recorded)"
     ],
     "failures": [],
     "risks_or_red_flags": [
-      "Ticket stage 'scheduling' is ahead of the evidence: no estimate or approval yet",
-      "The contractor waited 6 days for an answer, so the vacant flat may stay empty longer"
+      "The ticket stage 'scheduling' is ahead of reality: the job is still waiting for an estimate",
+      "The property is vacant, so delays add to void time"
     ],
-    "final_status": "Open, stage 'scheduling', on hold waiting for the agency (hold 66), in the human queue (item 10)",
+    "final_status": "Stage: scheduling. On hold waiting on the agency (hold 16) and escalated (queue 1).",
     "next_follow_up": {
-      "when": "2024-11-11",
-      "what": "Check the report has gone to the contractor, then chase the contractor for the estimate"
+      "when": "In 2 days (about 11 Nov 2024)",
+      "what": "Check the report has been sent to Ava and chase her estimate"
     },
     "confidence": 0.85
   }

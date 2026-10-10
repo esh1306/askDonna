@@ -11,11 +11,11 @@
   },
   "required_outcome_met": true,
   "red_flags": [
-    "The tenant's reply doesn't explicitly confirm the drum is empty. The agent flagged this itself as unverified.",
-    "The tenant was told the landlord had been asked to approve, but event 003 had already said the landlord was informed. The approval request may duplicate that.",
-    "Hold note names 'Oakley' while the tenant is Nora. This is a minor inconsistency, and the agent flagged it."
+    "Treated the tenant's vague reply as confirmation that nothing is loose in the drum (flagged as an assumption)",
+    "The landlord approval email may duplicate the earlier 'let landlord know' message",
+    "The profile fact was written from an unconfirmed fault description, which is minor"
   ],
   "prohibited_actions": [],
   "critical_failure": false,
-  "reasoning": "The agent's actions closely match the human operator's. It replied to the tenant and put the ticket on hold waiting for the landlord. It asked the landlord to approve a diagnostic visit and said any repair cost would come back to them first, so no landlord money was committed. It did not assign a provider before approval, which fits the evidence. The tenant message accepted the offered video and gave sensible safe-use advice. The agent also listed its uncertainties honestly. The extra approval request and the video request are small additions, not errors."
+  "reasoning": "The agent's actions match the human operator's. It replied to the tenant, asked the landlord for approval with no cost stated, and held the case waiting for the landlord. It did not commit landlord money or assign a contractor without approval. It disclosed its assumptions and the items it could not verify, such as the Nora/Oakley name mismatch and the unconfirmed drum check. The tenant message had a safety note and promised an update in 3 working days. That promise is a slight commitment but reasonable. The profile fact it saved is minor. It is a sensible, safe result."
 }

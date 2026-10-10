@@ -2,51 +2,77 @@
 
 ## Decision
 
-**act**
+**escalate**
 
 ## Summary
 
-The landlord, Sawyer, replied "Yes please!" when asked whether we could send a contractor to fix the shower knob. Jev classified this as an unconditional approval with high confidence, so no further reply to the landlord is needed. I recorded the approval, moved the ticket to provider_selection and emailed the tenant. No contractor is assigned yet, so the agency needs to pick one and book the work.
+The landlord's "Yes please!" (event 006) clearly approves sending a contractor to fix the broken shower knob. I recorded the approval, moved the ticket to provider_selection and saved email as the landlord's preferred channel. Ticket 70 (R/PM036-2) is for the same property and the same report and was created at the same moment, so I passed this to a human to merge the two before anyone assigns a contractor. That avoids booking the job twice. The landlord doesn't need another reply.
+
+## Judgement
+
+- **Case type:** maintenance
+- **Why this decision:** Event 003 asked the landlord if they were happy for a contractor to attend. Event 006 replied 'Yes please!', and the classifier rated it an approval (unconditional 0.82, autonomy 'auto'). So the approval is recorded and the stage moves forward. The landlord named no contractor and none is on this ticket. The property history shows a duplicate ticket (70) with the same description and creation time. Assigning a contractor here could book the job twice, so a human should merge the tickets first.
+
+| Alternative considered | Why not |
+|---|---|
+| Assign a contractor on ticket 69 now | No contractor is named or on record for this ticket. A duplicate ticket exists, so assigning here risks double-booking. |
+| Reply to the landlord | The approval is clear, so nothing more is needed from the landlord. |
+| Leave approval pending | The landlord's answer was clear, so leaving it pending would stall the job. |
+
+**Checks performed before acting**
+
+- Approval 33 status and landlord wording (event 006)
+- classify_reply on the landlord's message
+- Whether a contractor is named or on the ticket: none
+- Open holds: none
+- Attachments: none visible, although event 003 mentions photos
+- Property history: duplicate ticket 70 with the same title, description and creation time
+
+**Assumptions**
+
+- The approval covers a contractor visit to mend the shower knob. No cost cap was given.
+- Ticket 70 is the same job. I only compared the description, timestamp and property; I didn't use its later events.
 
 ## Actions taken
 
 | # | Tool | Input (gist) | Result | Output (gist) |
 |---|---|---|---|---|
-| 1 | `get_ticket_context` | {"ticket_id":40} | ok | {"ok":true,"ticket":{"id":40,"case_ref":"R/PM036-1","property_id":31,"tenant_id":94,"landlord_id":95,"contractor_id":nu… |
-| 2 | `classify_reply` | {"ticket_id":40,"text":"Yes please!\nThanks\nSawyer","sender_role":"landlord","context":"Agency asked landlord if happy to send a contracto… | ok | {"autonomy":"auto","intent":"approve","intent_probs":{"approve":1,"decline":0,"conditional_approval":0,"question":0,"ot… |
-| 3 | `record_approval_response` | {"approval_id":21,"decision":"approved","landlord_words":"\"Yes please! Thanks Sawyer\" (event 006, email 2026-09-25 08:57, replying to eve… | ok | {"ok":true,"approval":{"id":21,"ticket_id":40,"landlord_id":95,"summary":"Landlord approval to proceed: Shower Tap Repa… |
-| 4 | `classify_intake` | {"ticket_id":40} | ok | {"route":"request_landlord_approval","category":"plumbing","category_probs":{"plumbing":1,"appliance":0,"doors_windows_… |
-| 5 | `move_stage` | {"ticket_id":40,"to":"provider_selection","reason":"Landlord approved sending a contractor to mend the shower knob: \"Yes please!\" (event … | ok | {"ok":true,"from":"landlord_approval","to":"provider_selection","status":"open"} |
-| 6 | `send_message` | {"ticket_id":40,"to":"tenant","channel":"email","subject":"Shower knob repair – Flat 13, 73 Juniper Mews (ref R/PM036-1)","body":"Hello,\n\… | ok | {"ok":true,"message_id":49,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.22,"promises_… |
-| 7 | `add_profile_fact` | {"entity_type":"contact","entity_id":95,"key":"responds_by_email","value":"yes - replied to approval request by email within ~5 hours","sou… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":60,"entity_type":"contact","entity_id":95,"key":"responds_by… |
+| 1 | `get_ticket_context` | {"ticket_id":69} | ok | {"ok":true,"ticket":{"id":69,"case_ref":"R/PM036-1","property_id":50,"tenant_id":173,"landlord_id":174,"contractor_id":… |
+| 2 | `get_ticket_context` | {"ticket_id":70,"events":20} | ok | {"ok":true,"ticket":{"id":70,"case_ref":"R/PM036-2","property_id":50,"tenant_id":175,"landlord_id":176,"contractor_id":… |
+| 3 | `classify_reply` | {"ticket_id":69,"text":"Yes please!\nThanks\nSawyer","sender_role":"landlord","context":"Agency asked landlord if happy to send a contracto… | ok | {"autonomy":"auto","intent":"approve","intent_probs":{"approve":1,"decline":0,"conditional_approval":0,"question":0,"ot… |
+| 4 | `record_approval_response` | {"approval_id":33,"decision":"approved","landlord_words":"\"Yes please! Thanks Sawyer\" (event 006, 2026-09-25 08:57, reply to Leo's reques… | ok | {"ok":true,"approval":{"id":33,"ticket_id":69,"landlord_id":174,"summary":"Landlord approval to proceed: Shower Tap Rep… |
+| 5 | `move_stage` | {"ticket_id":69,"to":"provider_selection","reason":"Landlord approved contractor attendance in event 006 (\"Yes please!\") in reply to even… | ok | {"ok":true,"from":"landlord_approval","to":"provider_selection","status":"open"} |
+| 6 | `add_profile_fact` | {"entity_type":"contact","entity_id":174,"key":"preferred_channel","value":"email","source_ref":"event 006 (landlord replied to approval re… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":103,"entity_type":"contact","entity_id":174,"key":"preferred… |
+| 7 | `escalate_to_human` | {"ticket_id":69,"reason":"Approved job appears duplicated by ticket 70 (R/PM036-2) for the same property and report; needs merge before a c… | ok | {"ok":true,"queue_id":32} |
 
 Agent's own account of its actions (from the structured result):
 
-- `get_ticket_context` - Loaded ticket context -> Stage landlord_approval, approval 21 pending, no open holds, no contractor, no attachments visible
-- `classify_reply` - Classified the landlord's reply -> intent approve (1.0), unconditional approval 0.85, needs human response 0.13, autonomy auto
-- `record_approval_response` - Recorded approval 21 as approved, quoting event 006 -> Approved; guard not blocked
-- `classify_intake` - Classified the repair -> Plumbing, routine/urgent borderline (0.53/0.46), safety risk 0.19
-- `move_stage` - Moved the ticket forward because the landlord approved -> landlord_approval -> provider_selection
-- `send_message` - Emailed the tenant that the landlord approved the repair and a contractor is being arranged, with advice to report it if things get worse -> Message 49 queued; guard passed
-- `add_profile_fact` - Recorded that the landlord answers approval requests by email -> Fact 60 saved
+- `get_ticket_context` - Loaded ticket 69 -> Approval 33 pending, no contractor, duplicate ticket 70 in property history
+- `get_ticket_context` - Checked ticket 70 to see whether it is a duplicate -> Same property, description and creation time
+- `classify_reply` - Classified the landlord's reply -> approve, unconditional 0.82, autonomy auto
+- `record_approval_response` - Recorded approval 33 as approved -> approved
+- `move_stage` - landlord_approval -> provider_selection -> ok
+- `add_profile_fact` - Recorded landlord preferred_channel=email -> fact 103
+- `escalate_to_human` - Asked a human to merge the duplicate tickets before a contractor is assigned -> queue 32
 
 ## Approvals
 
 | Party | Status | Channel |
 |---|---|---|
-| Landlord (Sawyer) | granted | email |
+| Landlord Sawyer | granted | email |
 
 ## Escalation & handover
 
-- Escalation needed: **no**
-- Reason: The landlord's approval is clear and routine; no response to the landlord is needed
-- Recommendation: Ticket can go back to auto mode. The agency should assign a contractor to repair the shower knob.
+- Escalation needed: **yes**
+- Reason: Duplicate ticket 70 for the same job; needs merging before a contractor is assigned
+- Handover summary: The landlord approved contractor attendance (event 006) and approval 33 is recorded. Ticket 69 is now in provider_selection with no contractor assigned. Ticket 70 has the same report, property and creation time.
+- Recommendation: Merge the two tickets or close 69 as a duplicate, then assign a contractor and notify the tenant on one ticket only.
 
 ## What could not be verified
 
-- No amount or spend limit was given; the landlord approved the contractor visit but no cost
-- Event 003 says photos were attached, but no attachments are visible on the ticket; the tenant's video was never received
-- Whether the knob only needs a new cap or a full valve or mixer replacement
+- Photos mentioned in event 003 are not visible on the ticket
+- Tenant contact details are not on ticket 69
+- Which contractor should attend
 
 ## What failed
 
@@ -54,20 +80,19 @@ _No failures recorded._
 
 ## Risks & red flags
 
-- The approval has no cost on it; if the contractor's quote is significant or the job turns into a mixer or valve replacement, confirm the cost with the landlord first
-- No contractor is assigned yet, so the job could stall in provider_selection
+- The job could be booked twice through duplicate tickets 69 and 70
 
 ## Final result / next follow-up
 
-- Final status: open, provider_selection, landlord approval granted, no contractor assigned
-- Next follow-up: Next agency/system action - Pick a plumber or handyman and arrange access with the tenant
-- Confidence: 0.85
+- Final status: provider_selection; escalated to the ops queue (item 32) to merge the duplicate
+- Next follow-up: When ops responds to queue item 32 - Merge or close the duplicate, then assign a contractor and notify the tenant
+- Confidence: 0.78
 
 ## Run metadata
 
 - Case folder: `C:\Users\sahid\Documents\Projects\Hackathons\DwellyHack\dwelly-agent\data\practice\cases\PM036-1`
-- Session id: wrun_01M4JWA9JZAX52P6QRC4J8T1EK
-- Started: 2026-10-10T12:23:59.805Z  Finished: 2026-10-10T12:24:25.787Z  Duration: 26.0s
-- Events recorded: 147
+- Session id: wrun_01M4JYE27C399M34JJJYSRBQJ9
+- Started: 2026-10-10T13:01:00.447Z  Finished: 2026-10-10T13:01:48.585Z  Duration: 48.1s
+- Events recorded: 210
 - Model(s): anthropic/claude-opus-5.5
-- Tokens: in 65962 / out 2614; cost: not reported
+- Tokens: in 87016 / out 3842; cost: not reported

@@ -2,85 +2,115 @@
   "case": "PM023-2",
   "decision": "wait",
   "escalated": "no",
-  "failures": 0,
-  "durationSec": 30.68,
+  "failures": 1,
+  "durationSec": 46.306,
   "decisionLine": "wait",
-  "sessionId": "wrun_01M4JWH8DH647KR754VDW2QJD6",
-  "startedAt": "2026-10-10T12:27:47.975Z",
-  "finishedAt": "2026-10-10T12:28:18.655Z",
+  "sessionId": "wrun_01M4JYAN1323ZFD13DFD1GK4EX",
+  "startedAt": "2026-10-10T12:59:08.641Z",
+  "finishedAt": "2026-10-10T12:59:54.947Z",
   "usage": {
-    "inputTokens": 83350,
-    "outputTokens": 3047
+    "inputTokens": 72584,
+    "outputTokens": 5123
   },
-  "eventCount": 180,
+  "eventCount": 151,
   "dryRun": false,
   "result": {
-    "case_id": "58 (R/PM023-2)",
+    "case_id": "50 (R/PM023-2)",
     "decision": "wait",
-    "summary": "The landlord agreed to a contractor attending (event 006). Juniper Surveying has been assigned, and the locksmith has left a voicemail to arrange a time. The voicemail was logged for \"Freya Langley\" rather than the tenant, Theo Ingram, so I emailed the tenant to call the locksmith back or send a better number. The provider doesn't need a reply from us yet. The ticket is on hold waiting for the contractor to book a time and send a quote, which will need the landlord's approval.",
-    "situation": "Scheduling stage. The balcony glass door lock at Flat 20, 110 Meadow Row won't turn or lock. The landlord agreed to someone attending. Juniper Surveying was assigned and notified. The locksmith left a voicemail (event 012) logged for Freya Langley, but the tenant on record is Theo Ingram. No appointment has been agreed and no quote has come in.",
+    "summary": "The landlord approved attendance (event 6) and Juniper Surveying is already assigned (events 8–11). The locksmith has tried to reach the tenant to book a time (event 12), so the provider doesn't need a reply. I emailed the tenant asking them to call the locksmith back or send times they're available, and put the ticket on hold with a 1-day follow-up.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "Event 6, Isaac: 'Yes that sounds like it needs sorting fairly soon' approves attendance. The contractor was assigned and told about the job (events 8–11), and the locksmith left a voicemail to book a time (event 12). Event 13 asks whether the provider needs a reply. It doesn't: the next step is the tenant and contractor agreeing a time. The voicemail went to 'Freya Langley', not Theo Ingram (the tenant on record), so I emailed Theo so the request reaches him, and set a hold so the job doesn't go quiet.",
+      "alternatives_considered": [
+        {
+          "option": "Treat as an emergency (insecure property)",
+          "why_not": "It's a balcony door to a flat, so probably not at ground level, and the landlord asked for it to be sorted 'fairly soon', not urgently. I still told the tenant to report straight away if the flat can't be secured."
+        },
+        {
+          "option": "Request formal landlord approval",
+          "why_not": "The landlord already approved attendance. Any repair cost will come back as a quote for approval. The contractor email says they must not proceed until approved."
+        },
+        {
+          "option": "Escalate to a human",
+          "why_not": "Routine scheduling. The name difference can be cleared up with the tenant and doesn't change the decision."
+        },
+        {
+          "option": "Message the contractor",
+          "why_not": "They are already acting. Messaging again would add nothing."
+        }
+      ],
+      "checks_performed": [
+        "Approval status: landlord's email in event 6 approves attendance",
+        "Contractor assignment and notifications confirmed (events 8–11)",
+        "Contractor contact attempt (event 12): voicemail recipient's name differs from the tenant on record",
+        "Open holds and approvals: none before this action",
+        "Property history: ticket 49 open for the same issue",
+        "Safety: lock fault on a balcony door, not judged an emergency"
+      ],
+      "assumptions": [
+        "The balcony is not easily reachable from outside (flat, upper floor likely)",
+        "Freya Langley is probably a co-occupant or other household contact"
+      ]
+    },
+    "situation": "Balcony glass door lock not turning or locking at Flat 20, 110 Meadow Row. The landlord approved attendance. Juniper Surveying (locksmith) is assigned and has left a voicemail to arrange a visit and quote. The ticket was in scheduling with nothing tracking the next step.",
     "actions_taken": [
       {
         "tool": "get_ticket_context",
-        "description": "Loaded the ticket context",
-        "result": "13 events; no holds or approvals on record; an earlier related ticket R/PM023-1 is on hold",
-        "ok": true
-      },
-      {
-        "tool": "classify_reply",
-        "description": "Classified the contractor's voicemail note (event 012)",
-        "result": "Intent: scheduling (0.81); flagged for review (needs a human response 0.56)",
+        "description": "Loaded ticket, profiles, events and property history",
+        "result": "13 events; no holds or approvals; sibling ticket 49 (R/PM023-1) open for the same issue",
         "ok": true
       },
       {
         "tool": "send_message",
-        "description": "Emailed the tenant to return the locksmith's call or send a better contact number, mentioning the Freya Langley name, plus basic security advice",
-        "result": "Message 72 queued; guard did not block it",
+        "description": "Emailed the tenant asking them to return the locksmith's call or send times they're available, with advice to keep the door secured",
+        "result": "Queued (message 66); guard passed",
         "ok": true
       },
       {
         "tool": "place_hold",
-        "description": "Placed a hold waiting on the contractor to book a time and send a quote",
-        "result": "Hold 137, follow up in 2 days",
+        "description": "Hold waiting on contractor and tenant to agree an appointment",
+        "result": "Hold 99, follow-up in 1 day",
         "ok": true
       },
       {
         "tool": "add_profile_fact",
-        "description": "Recorded that the landlord agreed to attendance only, with no cost approved",
-        "result": "Fact 78 recorded",
+        "description": "Recorded Freya Langley as a possible occupant contact (relationship unverified)",
+        "result": "Fact 67 recorded",
         "ok": true
       }
     ],
     "approvals": [
       {
         "party": "Landlord (Isaac)",
-        "status": "granted for attendance only; the quote still needs approval",
-        "channel": "email (event 006)"
+        "status": "granted (attendance only; any repair quote still needs approval)",
+        "channel": "email (event 6)"
       }
     ],
     "escalation": {
       "needed": false,
-      "reason": "This is routine scheduling, and the tenant can clear up the name mismatch",
+      "reason": "Routine scheduling; no conflict that changes the decision",
       "handover_summary": "",
-      "recommendation": ""
+      "recommendation": "Ops may want to check whether ticket 49 (R/PM023-1) duplicates this one and close it if so."
     },
     "unverified": [
-      "Who Freya Langley is (possibly someone else in the household, or a wrong contact or number)",
-      "Whether 07700 900353 is the tenant's number",
-      "Whether the flat's balcony can be reached from outside (affects how urgent the security risk is)",
-      "Cost of the repair"
+      "Who Freya Langley is in relation to tenant Theo Ingram",
+      "Whether the balcony is above ground level",
+      "Repair cost (no quote yet)",
+      "Whether ticket 49 is a duplicate"
     ],
-    "failures": [],
+    "failures": [
+      "My first structured reply was rejected as malformed and resubmitted; no CRM action failed"
+    ],
     "risks_or_red_flags": [
-      "Contact name mismatch: Freya Langley vs Theo Ingram",
-      "An exterior door that won't lock is a security risk; it becomes urgent if the balcony is reachable from outside",
-      "Duplicate or related ticket R/PM023-1 is on hold at provider selection and should be checked for duplication"
+      "The door can't be locked, so there is a security risk if the balcony can be reached from outside",
+      "Name difference between the voicemail recipient and the tenant on record",
+      "Possible duplicate ticket 49 for the same issue"
     ],
-    "final_status": "scheduling, on hold (waiting on contractor), hold 137",
+    "final_status": "scheduling, on hold (waiting on contractor and tenant to agree an appointment)",
     "next_follow_up": {
-      "when": "in 2 days (around 2025-07-27)",
-      "what": "Chase Juniper Surveying for an appointment and a quote; once the quote arrives, ask the landlord to approve it"
+      "when": "2025-07-26 (1 day)",
+      "what": "Check whether Juniper Surveying and the tenant have agreed a visit; if not, chase both. When the quote arrives, ask the landlord to approve it."
     },
-    "confidence": 0.78
+    "confidence": 0.82
   }
 }

@@ -3,92 +3,129 @@
   "decision": "escalate",
   "escalated": "yes",
   "failures": 0,
-  "durationSec": 34.371,
+  "durationSec": 48.467,
   "decisionLine": "escalate",
-  "sessionId": "wrun_01M4JW8D4HDE253ZB0A2C2R91K",
-  "startedAt": "2026-10-10T12:22:57.900Z",
-  "finishedAt": "2026-10-10T12:23:32.271Z",
+  "sessionId": "wrun_01M4JY95P570F378VT9CWVK8CV",
+  "startedAt": "2026-10-10T12:58:20.163Z",
+  "finishedAt": "2026-10-10T12:59:08.630Z",
   "usage": {
-    "inputTokens": 73375,
-    "outputTokens": 3711
+    "inputTokens": 81541,
+    "outputTokens": 4519
   },
-  "eventCount": 279,
+  "eventCount": 314,
   "dryRun": false,
   "result": {
-    "case_id": "33 (R/PM018-1)",
+    "case_id": "38 (R/PM018-1)",
     "decision": "escalate",
-    "summary": "Riverside Services hasn't replied to the job instruction or 3 reminders, and no appointment is recorded. So I've passed the case to ops at normal priority to chase the contractor or assign another one. I've also asked them to check who is responsible for the garden, since the tenant says it's communal. I emailed the tenant to ask whether Riverside has been in touch and for her best phone number. The records show two different numbers for her. The ticket is on hold for 2 days for her reply.",
-    "situation": "Routine garden overgrowth job. The landlord approved it on 17 Dec with no amount set. Riverside Services was instructed on 17 Dec and chased on 18, 20 and 23 Dec with no response. The system flagged this on 25 Dec. The stage is still scheduling.",
+    "summary": "Riverside Services has not replied to the job instruction or 3 reminders sent between 17 and 23 Dec, so the routine garden job has stalled in scheduling. I've escalated it to the ops team (normal priority) to chase or reassign the contractor. I've also flagged three things: the contractor was given two different tenant phone numbers, the tenant said the garden is communal, and the approval on file has no cost cap. The tenant has been emailed an update and a 3-day follow-up hold is set.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "The contractor was instructed in event 008 and reminded in events 009, 010 and 011, and never replied. The system flag in event 012 asks someone to check. A fifth automated reminder is unlikely to work. Someone needs to phone the contractor or reassign the job, and that is agency judgement. The tenant's answer 'communal area' in event 002 raises a question about who is responsible for the garden, which also needs agency judgement. The tenant had not been updated since 17 Dec.",
+      "alternatives_considered": [
+        {
+          "option": "Send another reminder to Riverside",
+          "why_not": "Three reminders have already gone unanswered, so one more would only add noise."
+        },
+        {
+          "option": "Reassign to a different contractor myself",
+          "why_not": "There's no other contractor on record. The gardener may be back from leave soon (event 004). Communal responsibility may mean the job belongs to someone else, so a person should decide."
+        },
+        {
+          "option": "Wait",
+          "why_not": "Nothing has happened for 8 days and the system has flagged it. Waiting longer would leave the job sitting silent."
+        }
+      ],
+      "checks_performed": [
+        "Read all 12 events and the ticket context",
+        "Approval status: #15 approved, no amount",
+        "Holds: none open before this turn",
+        "Contractor replies: none on the ticket",
+        "Tenant contact numbers in event 008 and events 009-011 don't match",
+        "Tenant said the overgrowth is in a communal area (event 002)",
+        "No attachments are visible"
+      ],
+      "assumptions": [
+        "The 'gardener on annual leave' in event 004 refers to Riverside Services",
+        "Today is on or around 25 Dec 2025, the date of the last event"
+      ]
+    },
+    "situation": "Routine garden overgrowth job in scheduling. The landlord approved it (no amount set) and Riverside Services was assigned on 17 Dec. The contractor has not answered the instruction or 3 reminders, and the system has flagged the case for checking.",
     "actions_taken": [
       {
         "tool": "get_ticket_context",
-        "description": "Loaded the ticket context",
-        "result": "12 events, approval 16 approved with no amount, no holds, no attachments",
+        "description": "Loaded the full case",
+        "result": "12 events, approval #15 approved, no holds, no attachments",
         "ok": true
       },
       {
-        "tool": "send_message",
-        "description": "Emailed the tenant to ask whether Riverside has contacted her and for her best number",
-        "result": "Message 41 queued; guard passed",
-        "ok": true
-      },
-      {
-        "tool": "add_profile_fact",
-        "description": "Recorded on the contractor's profile that Riverside hasn't responded",
-        "result": "Fact 52 saved",
-        "ok": true
-      },
-      {
-        "tool": "add_profile_fact",
-        "description": "Recorded on the property that the garden is communal, per the tenant",
-        "result": "Fact 53 saved",
+        "tool": "search_case",
+        "description": "Checked for any other mention of 'communal'",
+        "result": "Only the intake Q&A (event 002)",
         "ok": true
       },
       {
         "tool": "escalate_to_human",
-        "description": "Passed the unresponsive contractor and the communal-garden responsibility question to ops",
-        "result": "Queue item 12",
+        "description": "Handed over the unresponsive contractor, the mismatched tenant numbers and the communal responsibility question",
+        "result": "queue_id 17",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant an update and a 3-day timeline",
+        "result": "message_id 54, guard passed",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded on the property that the garden is communal (per tenant)",
+        "result": "fact 50",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the contractor's non-response on their profile",
+        "result": "fact 51",
         "ok": true
       },
       {
         "tool": "place_hold",
-        "description": "Placed a 2-day hold for the tenant's reply",
-        "result": "Hold 83",
+        "description": "Set a 3-day follow-up waiting on the agency",
+        "result": "hold_id 85",
         "ok": true
       }
     ],
     "approvals": [
       {
-        "party": "Landlord",
-        "status": "granted (no amount set, 17 Dec 2025)",
+        "party": "Landlord (R/PM018-1)",
+        "status": "granted (approval #15, no amount set; recorded before this turn)",
         "channel": "email"
       }
     ],
     "escalation": {
       "needed": true,
-      "reason": "Contractor hasn't replied to the instruction or 3 reminders; the garden may be communal (possibly the freeholder's responsibility)",
-      "handover_summary": "Riverside Services was instructed on 17 Dec and chased 3 times with no reply and no appointment recorded. The tenant's phone number differs between messages (07700 900504 ext 900418 vs 07700 900710). The tenant says the garden is communal. The landlord's approval has no amount. Tenant asked today for an update.",
-      "recommendation": "Phone Riverside to confirm the job and give them the correct tenant number, or assign another gardener. Confirm whether the communal garden is the landlord's or the freeholder's/managing agent's responsibility. Get a cost estimate before work starts."
+      "reason": "Contractor has not replied to the instruction or 3 reminders, and whether the communal garden is the landlord's responsibility needs agency judgement",
+      "handover_summary": "Garden job at Flat 17, 67 Willowmere Road was approved and assigned to Riverside on 17 Dec. Riverside has not replied to anything. The gardener is reportedly on leave. The contractor was given two different tenant numbers. The tenant says the garden is communal. The approval has no cost cap.",
+      "recommendation": "Phone Riverside to get their return date and confirm the tenant number, or reassign the job. Confirm whether the freeholder or managing agent is responsible for the communal garden. Get the landlord to approve any quote amount."
     },
     "unverified": [
-      "Whether Riverside received the instruction or contacted the tenant",
+      "Whether Riverside received the instruction or is on annual leave",
       "Which tenant phone number is correct",
       "Whether the garden is communal and who is responsible for it",
-      "Who 'the gardener on annual leave' (event 004) is, and when they're back",
-      "Job cost; tree size; any safety hazard"
+      "Tree size and whether it is a hazard (near cables or the building)",
+      "Access arrangements and pets"
     ],
     "failures": [],
     "risks_or_red_flags": [
-      "Contractor hasn't responded after 4 contacts",
-      "Two different tenant phone numbers given to the contractor",
-      "A communal area may not be the landlord's responsibility",
-      "Approval has no amount set"
+      "Contractor unresponsive for 8 days",
+      "The contractor was given two different tenant numbers (07700 900504 ext 900418 vs 07700 900710)",
+      "The communal area may not be the landlord's responsibility",
+      "Approval was given with no amount, so any quote needs sign-off on the cost"
     ],
-    "final_status": "Scheduling; on hold for the tenant (hold 83); with ops (queue 12)",
+    "final_status": "scheduling – on hold (hold 85, waiting on agency), escalated to human queue item 17",
     "next_follow_up": {
-      "when": "In 2 days (hold 83)",
-      "what": "Chase the tenant if she hasn't replied about contractor contact and her phone number; check what ops did about Riverside"
+      "when": "in 3 days (around 28 Dec 2025)",
+      "what": "Check whether ops has reached Riverside or reassigned the job, and whether communal responsibility is confirmed. Send the tenant the update promised in today's email."
     },
-    "confidence": 0.8
+    "confidence": 0.85
   }
 }

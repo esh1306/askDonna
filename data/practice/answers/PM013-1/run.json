@@ -1,81 +1,117 @@
 {
   "case": "PM013-1",
   "decision": "request_info",
-  "escalated": "no",
+  "escalated": "yes",
   "failures": 0,
-  "durationSec": 29.524,
+  "durationSec": 41.688,
   "decisionLine": "request_info",
-  "sessionId": "wrun_01M4JWG9SGSKEAXEKNH1F4Z49Z",
-  "startedAt": "2026-10-10T12:27:16.602Z",
-  "finishedAt": "2026-10-10T12:27:46.126Z",
+  "sessionId": "wrun_01M4JY7WZE126G7KMPJ1421P93",
+  "startedAt": "2026-10-10T12:57:38.463Z",
+  "finishedAt": "2026-10-10T12:58:20.151Z",
   "usage": {
-    "inputTokens": 69295,
-    "outputTokens": 2485
+    "inputTokens": 124998,
+    "outputTokens": 4149
   },
-  "eventCount": 107,
+  "eventCount": 261,
   "dryRun": false,
   "result": {
-    "case_id": "52 (R/PM013-1)",
+    "case_id": "R/PM013-1 (ticket 27)",
     "decision": "request_info",
-    "summary": "The job is in scheduling. Harbour Surveying was assigned on 1 Oct. They tried to reach the tenant and spoke to her about the dishwasher model, then went quiet through three reminders. They emailed today (event 017), but the email has no readable content, and neither does their 1 Oct email. I've asked them to confirm the visit date and time, or say what is holding it up. The ticket is on hold until tomorrow, and I'll escalate if they don't reply.",
-    "situation": "Routine repair: the integrated dishwasher starts, beeps, the power light flashes and it stops. The landlord was told on 1 Oct that an engineer would attend (event 002). Harbour Surveying and the tenant missed each other on the phone, then spoke (event 010). The tenant couldn't give the model at the time and they agreed to keep in touch by text. The reminders went out on 4 and 5 Oct, then the system flagged 3+ reminders (event 016). The contractor emailed on 6 Oct (event 017), but the content isn't visible.",
+    "summary": "The contractor answered the reminders on 6 Oct (event 017), but the email text wasn't saved in the CRM, so I can't tell if a visit is booked. I emailed Harbour Surveying to ask for the booked date and time, or what is stopping them from booking. A hold will chase them in 1 day. I also sent a low-priority note to the human queue because ticket 28 (R/PM013-2) is an open duplicate of this job.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "The job is in scheduling. The contractor spoke to the tenant on 1 Oct (event 010) and replied after the reminders (event 017), so they are engaged. The only gap is that their message wasn't captured, and the contractor can fix that themselves, so asking them is the proportionate step. The duplicate ticket needs an agency decision to merge, so it went to the human queue at low priority.",
+      "alternatives_considered": [
+        {
+          "option": "Escalate the non-response at high priority",
+          "why_not": "The contractor did reply (events 011 and 017). The problem is that the text wasn't captured, not that they went silent."
+        },
+        {
+          "option": "Reassign to another contractor",
+          "why_not": "The contractor is engaged, and we don't know what their reply says."
+        },
+        {
+          "option": "Message the tenant",
+          "why_not": "There is nothing new to tell her until the visit date is known. She is already texting the contractor directly."
+        },
+        {
+          "option": "Do nothing",
+          "why_not": "The system flagged 3+ reminders and the latest reply can't be read, so the job would stall."
+        }
+      ],
+      "checks_performed": [
+        "Loaded ticket 27 context: no approvals, holds or attachments",
+        "classify_reply on event 017: needs review, content unknown",
+        "Checked property history: found duplicate ticket 28 (same tenant, description, contractor and creation time)",
+        "Outbound guard passed on the contractor email"
+      ],
+      "assumptions": [
+        "'Meadow Solutions' in the event 010 call summary is a transcription or trading-name slip, not a different job",
+        "The landlord was told an engineer would attend (event 002); quote approval comes later"
+      ]
+    },
+    "situation": "Dishwasher repair at Flat 2, 42 Beacon Close, Bellmere, ZZ4 2ZZ. Harbour Surveying was assigned on 1 Oct to inspect and quote. They spoke to the tenant about the model the same day. The system sent reminders and flagged 3+ of them. The contractor replied by email on 6 Oct, but the message body is missing from the CRM.",
     "actions_taken": [
       {
         "tool": "get_ticket_context",
-        "description": "Loaded ticket, profiles and 17 events",
-        "result": "Stage scheduling; no holds, approvals or attachments; contractor emails 011 and 017 have no readable content",
+        "description": "Loaded tickets 27 and 28",
+        "result": "Ticket 28 is a duplicate of the same job",
         "ok": true
       },
       {
-        "tool": "search_case",
-        "description": "Checked the 'Meadow Solutions' mention in event 010",
-        "result": "Only appears in the call summary in event 010; probably a mis-transcription or another trading name, and it doesn't change the decision",
+        "tool": "classify_reply",
+        "description": "Classified the contractor email in event 017",
+        "result": "Needs review; content unknown",
         "ok": true
       },
       {
         "tool": "send_message",
-        "description": "Emailed Harbour Surveying asking for the booked visit date and time, or what is blocking the booking",
-        "result": "Queued, message 66; guard passed",
+        "description": "Emailed the contractor asking them to resend the booked date and time, or say what is stopping the booking",
+        "result": "Message 32 queued; guard passed",
         "ok": true
       },
       {
         "tool": "place_hold",
-        "description": "Hold waiting on the contractor, follow up in 1 day",
-        "result": "Hold 130 placed",
+        "description": "Hold waiting on the contractor, chase in 1 day",
+        "result": "Hold 62",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded that the tenant and contractor agreed to talk by text (event 010)",
+        "result": "Fact 34",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Low-priority request to merge the duplicate ticket 28 and recover the email body from event 017",
+        "result": "Queue item 13",
         "ok": true
       }
     ],
-    "approvals": [
-      {
-        "party": "Landlord (Clara)",
-        "status": "not_needed",
-        "channel": "email"
-      }
-    ],
+    "approvals": [],
     "escalation": {
-      "needed": false,
-      "reason": "The contractor has replied, but we can't read it. Asking them is the proportionate next step.",
-      "handover_summary": "",
-      "recommendation": "If Harbour Surveying doesn't reply by the follow-up date, escalate to ops to check the raw mailbox for events 011 and 017. Consider swapping to another appliance engineer."
+      "needed": true,
+      "reason": "Duplicate open ticket R/PM013-2 for the same job",
+      "handover_summary": "Harbour Surveying is engaged. Their 6 Oct email body wasn't captured, so I've asked them to resend it, with a 1-day hold (hold 62). Ticket 28 duplicates this job.",
+      "recommendation": "Merge or close one of the two tickets, and check the original mailbox for the email from event 017."
     },
     "unverified": [
-      "Contents of contractor emails event 011 (1 Oct) and event 017 (6 Oct)",
-      "Whether an appointment has been booked",
-      "Dishwasher make and model",
-      "Who 'Meadow Solutions' in event 010 is",
-      "Whether the landlord replied to event 002 (no reply visible)"
+      "What the contractor's emails in events 011 and 017 say",
+      "Whether a visit is booked",
+      "The dishwasher's make and model",
+      "Who 'Meadow Solutions' is"
     ],
     "failures": [],
     "risks_or_red_flags": [
-      "The contractor didn't respond to 3+ reminders, which may mean it's unreliable",
-      "The 'Meadow Solutions' name in the call summary doesn't match Harbour Surveying",
-      "The CRM is losing inbound email content"
+      "Two open tickets for the same job could mean duplicate chasing or a double booking",
+      "Contractor messages are not being captured in the CRM"
     ],
-    "final_status": "Scheduling – on hold waiting on contractor (hold 130)",
+    "final_status": "scheduling – on hold waiting on contractor (hold 62)",
     "next_follow_up": {
       "when": "2024-10-07",
-      "what": "Check whether Harbour Surveying has replied with an appointment date. If not, escalate to ops to read the raw emails and consider another contractor."
+      "what": "Chase Harbour Surveying for the visit date and time if they haven't replied"
     },
-    "confidence": 0.72
+    "confidence": 0.75
   }
 }

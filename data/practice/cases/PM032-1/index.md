@@ -26,6 +26,3 @@ The provider confirmed that the toilet flush mechanism repair was complete and t
 
 [Read the complete event history](history.md).
 
-## Attachments
-
-No attachments are required or available for this case.

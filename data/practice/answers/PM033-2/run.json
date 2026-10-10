@@ -3,115 +3,134 @@
   "decision": "act",
   "escalated": "no",
   "failures": 2,
-  "durationSec": 44.361,
+  "durationSec": 44.538,
   "decisionLine": "act",
-  "sessionId": "wrun_01M4JWJP3JBXV58RFR0Y5WS10D",
-  "startedAt": "2026-10-10T12:28:34.736Z",
-  "finishedAt": "2026-10-10T12:29:19.097Z",
+  "sessionId": "wrun_01M4JYD7EWX1BQ0WF2RXV1B785",
+  "startedAt": "2026-10-10T13:00:33.039Z",
+  "finishedAt": "2026-10-10T13:01:17.577Z",
   "usage": {
-    "inputTokens": 135747,
-    "outputTokens": 4351
+    "inputTokens": 127941,
+    "outputTokens": 4887
   },
-  "eventCount": 292,
+  "eventCount": 291,
   "dryRun": false,
   "result": {
-    "case_id": "64 (R/PM033-2)",
+    "case_id": "66 (R/PM033-2)",
     "decision": "act",
-    "summary": "Juniper Solutions has been assigned to replace the bath taps and change the TRV, and both the contractor and the tenant have been told. The landlord, Freya Mercer, clearly approved the quote in event 023. Juniper Solutions inspected the problem and wrote the quote, so they were the obvious choice. The ticket is on hold in scheduling until they confirm an appointment date, with a follow-up in 2 days.",
-    "situation": "The tenant at Flat 19, 159 Juniper Mews reported that the bathroom tap squirts water when the shower runs. The landlord agreed for us to instruct a contractor (event 008), and Juniper Solutions attended (event 019). They said the bath taps need replacing, recommended changing the TRV, and sent a quote. The quote went to the landlord (event 020), who approved raising an order for the works (event 023). The case was in scheduling, waiting for the order to be raised and an appointment booked.",
+    "case_type": "maintenance",
+    "summary": "The landlord, Freya Mercer, clearly approved the quote from Juniper Solutions for replacing the bath taps and changing the TRV (event 23, replying to event 20). Juniper Solutions is already on the job, so I recorded them as the contractor and asked them to book the work with the tenant. I also told the tenant what happens next and put the ticket on hold for 3 days while we wait for a visit date. The quote amount isn't visible in the records, and ticket 65 looks like a duplicate that is still open.",
+    "situation": "Bathroom tap squirts water when the shower runs. The landlord agreed to send a contractor (event 8). Juniper Solutions attended alongside a gas safety check and quoted to replace the bath taps and change the TRV (event 19). The quote went to the landlord (event 20), who approved raising an order (event 23). The ticket is in the scheduling stage.",
     "actions_taken": [
       {
-        "tool": "get_ticket_context",
-        "description": "Loaded the ticket, events, property history and profiles",
-        "result": "23 events; no open holds or approvals; the quote file (event 020) is not visible in the ticket's attachments; there is a second open ticket R/PM033-1 at the same property",
-        "ok": true
-      },
-      {
         "tool": "classify_reply",
-        "description": "Classified the landlord's reply in event 023",
-        "result": "Intent: approve. 86% likely to be an unconditional approval. Autonomy: auto (handle without review).",
+        "description": "Classified the landlord's approval email (event 23)",
+        "result": "intent approve, unconditional approval p=0.92, autonomy auto",
         "ok": true
       },
       {
         "tool": "find_tickets",
-        "description": "Checked for other tickets at this property",
-        "result": "Found ticket 63 (R/PM033-1): same title, still open, in provider_selection",
+        "description": "Checked for other tickets at the same property",
+        "result": "Ticket 65 (R/PM033-1): same title, open in the provider_selection stage, so likely a duplicate",
+        "ok": true
+      },
+      {
+        "tool": "search_case",
+        "description": "Searched the case for the quote and its amount",
+        "result": "No amount found; the quote attachment isn't visible in the records",
         "ok": true
       },
       {
         "tool": "assign_contractor",
-        "description": "Assigned Juniper Solutions to the approved works",
-        "result": "Done; ticket stays in scheduling",
+        "description": "Recorded Juniper Solutions as the contractor. They already attended and quoted, and the landlord approved their quote",
+        "result": "Assigned (contractor_id 172), stage still scheduling",
         "ok": true
       },
       {
         "tool": "send_message",
         "description": "First email to the contractor",
-        "result": "Blocked by the outbound guard: it read the wording about keeping to the quoted price as committing the landlord's money",
+        "result": "Blocked by the outbound guard because it seemed to commit the landlord's money (it mentioned an invoice and the order)",
         "ok": false
       },
       {
         "tool": "send_message",
-        "description": "Rewrote and resent the contractor email: landlord happy for the quoted works to go ahead, please call the tenant on 07700 900324 to book, confirm the date, and send details before doing anything beyond the quote",
-        "result": "Sent (message 82)",
+        "description": "Rewrote the contractor email: the landlord is happy for the quoted works to go ahead, nothing beyond the quote's scope without checking with us, contact the tenant on 07700 900324 to arrange a visit, and reply with the confirmed date",
+        "result": "Sent (message 90)",
         "ok": true
       },
       {
         "tool": "send_message",
-        "description": "Emailed the tenant: works approved, Juniper Solutions will be in touch, plus advice to contain any leak (towel down, stopcock if needed)",
-        "result": "Sent (message 79)",
+        "description": "Emailed the tenant: works approved, Juniper Solutions will contact them to arrange a date, safe containment advice, and we will check in within 3 days",
+        "result": "Sent (message 89)",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded on the property that the landlord approved the quote (amount not visible)",
+        "result": "Fact 92 saved",
         "ok": true
       },
       {
         "tool": "place_hold",
-        "description": "Put the ticket on hold until the contractor confirms an appointment",
-        "result": "Hold 164 placed; follow-up in 2 days",
-        "ok": true
-      },
-      {
-        "tool": "add_profile_fact",
-        "description": "Recorded on the property that the landlord approved the taps and TRV works",
-        "result": "Fact 87 saved",
-        "ok": true
-      },
-      {
-        "tool": "add_profile_fact",
-        "description": "Recorded on the landlord's profile that they prefer the agency to instruct contractors",
-        "result": "Fact 86 saved",
+        "description": "Put the ticket on hold until the contractor confirms a visit date",
+        "result": "Hold 153, follow-up in 3 days",
         "ok": true
       }
     ],
     "approvals": [
       {
-        "party": "Landlord (Freya Mercer)",
+        "party": "Landlord Freya Mercer",
         "status": "granted",
-        "channel": "email (event 023)"
+        "channel": "email (event 23)"
       }
     ],
     "escalation": {
       "needed": false,
-      "reason": "Routine approved works with a clear landlord approval",
+      "reason": "The landlord gave a clear approval and the job is routine.",
       "handover_summary": "",
-      "recommendation": "An agent should check whether ticket 63 (R/PM033-1) duplicates this one and close it if so."
+      "recommendation": "An administrator should check whether ticket 65 (R/PM033-1) duplicates this one and close it if so."
     },
     "unverified": [
-      "The quote amount and its details: the quote file is not visible in the CRM",
-      "Whether the gas safety check engineer in event 013 is from Juniper Solutions",
-      "The visit date in events 014–016 is 03/10/2026, which is earlier than the email confirming it; the actual attendance date is unknown"
+      "The quote amount and line items: the attachment (attachment-03-document) isn't visible in the CRM",
+      "Whether the gas safety check visit on 3 Oct was arranged by the landlord or by the contractor",
+      "The original visit date of 03/10 is earlier than when the booking was confirmed (event 14), but the engineer's attendance is confirmed in event 19"
     ],
     "failures": [
-      "The first contractor email was blocked by the outbound guard for wording that seemed to commit the landlord's money. I rewrote it and the second version sent."
+      "The first contractor email was blocked by the outbound guard because it seemed to commit the landlord's money. I rewrote it and the second version was sent."
     ],
     "risks_or_red_flags": [
-      "Ticket 63 (R/PM033-1) is a possible duplicate: same title and property, still open in provider_selection",
-      "The quote amount isn't visible, so any invoice must be checked against the original quote before payment",
-      "The tap leaks while the shower runs, so there is a minor risk of water escaping; the tenant has been given advice on containing it"
+      "The quote amount isn't visible. When the invoice arrives, check it against the quote before paying.",
+      "Ticket 65 (R/PM033-1) is a probable duplicate and is still open."
     ],
-    "final_status": "In scheduling: Juniper Solutions assigned, on hold until they confirm an appointment (hold 164)",
+    "final_status": "Scheduling. Juniper Solutions has been asked to book the approved works with the tenant. On hold for the contractor (hold 153, 3 days).",
     "next_follow_up": {
-      "when": "2026-10-12 (2 days)",
-      "what": "If Juniper Solutions hasn't confirmed an appointment date with the tenant, chase them"
+      "when": "In 3 days (around 2026-10-10)",
+      "what": "If Juniper Solutions hasn't confirmed a visit date, chase them; once confirmed, update the tenant and landlord."
     },
-    "confidence": 0.85
+    "confidence": 0.85,
+    "judgement": {
+      "why_this_decision": "Event 23 is an unconditional approval of the quote sent in event 20 (classifier: approve, p=0.92 unconditional). Juniper Solutions is the contractor who attended and quoted, so the normal next step is to have them book the works with the tenant.",
+      "alternatives_considered": [
+        {
+          "option": "Escalate because the quote amount isn't visible",
+          "why_not": "The landlord approved the quote they were sent, and an invoice will be checked against that quote. Holding up a routine approved job adds nothing."
+        },
+        {
+          "option": "Wait / no action",
+          "why_not": "The approval had arrived and nobody had told the contractor or tenant, so the job would have stalled."
+        }
+      ],
+      "checks_performed": [
+        "Landlord approval wording and classifier result",
+        "Contractor is the same one who attended and quoted",
+        "Property address is the same throughout",
+        "Searched for a quote amount (none visible)",
+        "Checked for duplicate tickets (ticket 65 found)",
+        "No open holds or pending approvals in the CRM"
+      ],
+      "assumptions": [
+        "The landlord's approval covers the whole quote they were sent (bath taps and TRV)",
+        "07700 900677 is the contractor's number and 07700 900324 is the tenant's, as shown in events 11 and 16"
+      ]
+    }
   }
 }

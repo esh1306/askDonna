@@ -1,80 +1,115 @@
 {
   "case": "PM012-2",
-  "decision": "wait",
+  "decision": "request_info",
   "escalated": "no",
   "failures": 0,
-  "durationSec": 25.09,
-  "decisionLine": "wait",
-  "sessionId": "wrun_01M4JW841ZEVKAK4XK8TJN50B9",
-  "startedAt": "2026-10-10T12:22:48.520Z",
-  "finishedAt": "2026-10-10T12:23:13.610Z",
+  "durationSec": 33.972,
+  "decisionLine": "request_info",
+  "sessionId": "wrun_01M4JY7VPCKTHNMFD2FW8N89VW",
+  "startedAt": "2026-10-10T12:57:37.116Z",
+  "finishedAt": "2026-10-10T12:58:11.088Z",
   "usage": {
-    "inputTokens": 54544,
-    "outputTokens": 2595
+    "inputTokens": 83315,
+    "outputTokens": 3516
   },
-  "eventCount": 139,
+  "eventCount": 176,
   "dryRun": false,
   "result": {
-    "case_id": "31 (R/PM012-2)",
-    "decision": "wait",
-    "summary": "The dishwasher inspection was booked for 29/04/2026, and a contractor called the tenant that morning to say he was 15 minutes away. Three days later there is still no report on the visit. I emailed Riverside Compliance asking whether the visit went ahead, what they found, and whether the door was repaired or they need to send a quote. I told them not to do any further work until it is approved. The ticket is on hold until they reply, with a chase in 2 days.",
-    "situation": "Stage 'works'. The tenant did the troubleshooting checks and the door still doesn't close (event 011). Internal notes say the landlord agreed an engineer could go out (events 008, 012). Riverside Compliance was assigned (events 013–015), the appointment was confirmed for 29/04 between 8am and 12pm (events 017–019), and a contractor said he would arrive in about 15 minutes on 29/04 (event 021). There is no report on the outcome and the system has flagged that (events 022–023).",
+    "case_id": "26 (R/PM012-2)",
+    "decision": "request_info",
+    "summary": "The engineer appears to have attended on 29/04/2026: their call at 09:06 said they were about 15 minutes away. Three days later there is still no visit report. I emailed the contractor asking what they found and for a quote if more work is needed, emailed the tenant to ask whether the door now closes, and placed a 3-day hold to chase. No escalation is needed yet. The ticket stays in 'works'.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "Landlord agreed to the engineer attending (events 008, 012). A contractor was assigned (event 013) and the 29/04 appointment was confirmed (events 017–020). The engineer called on the day to say they were on the way (event 021). The system flagged 'no work results' on 02/05 (events 022–023). The contractor and tenant can tell us what happened, so asking them is the proportionate next step.",
+      "alternatives_considered": [
+        {
+          "option": "Move to closeout",
+          "why_not": "There is no evidence the repair was completed."
+        },
+        {
+          "option": "Escalate to human",
+          "why_not": "Nothing is in dispute or unresolved that the contractor or tenant can't answer. There has been no chase yet."
+        },
+        {
+          "option": "No action",
+          "why_not": "The job has stalled and the system flagged it 3 days after the visit."
+        }
+      ],
+      "checks_performed": [
+        "Approval: landlord agreement noted in events 008 and 012, with no cost cap recorded. No approvals are pending in the CRM.",
+        "Appointment confirmed for 29/04, with an on-the-day call from the contractor (event 021).",
+        "Contractor names: Riverside Compliance (record), Cedar Utilities (event 016), Meadow Services (event 021), Harbour Homes (SMS, event 020). Treated as trading or system name differences.",
+        "Tenant called 'Leo Kendall' in event 016, but Leo Turner everywhere else. Treated as a typo.",
+        "No attachments, invoices or quotes visible.",
+        "Open holds: none before mine.",
+        "Property history: another open ticket, R/PM012-1 (Dishwasher Door Repair, provider_selection), may be a duplicate."
+      ],
+      "assumptions": [
+        "The different contractor names all refer to the assigned provider, Riverside Compliance.",
+        "The engineer did attend on 29/04, based on the on-the-way call. Not confirmed."
+      ]
+    },
+    "situation": "Dishwasher door not closing at Flat 9, 89 Juniper Mews. Troubleshooting failed and the landlord agreed to an engineer. The visit was booked for 29/04/2026 and the engineer appears to have attended, but no outcome has been recorded and the system flagged the job on 02/05.",
     "actions_taken": [
       {
         "tool": "get_ticket_context",
-        "description": "Loaded the ticket, profiles, events and property history",
-        "result": "23 events, no holds, approvals or attachments. Another open ticket for the same problem at this property, R/PM012-1, is in provider_selection",
+        "description": "Loaded the ticket context",
+        "result": "23 events, no holds, approvals or attachments",
         "ok": true
       },
       {
         "tool": "send_message",
-        "description": "Emailed the contractor for the outcome of the 29/04 visit and a quote if more work is needed, with no further work until approved",
-        "result": "Sent (message 40), guard did not block it",
+        "description": "Emailed the contractor for the visit outcome and a quote if more work is needed, without authorising further chargeable work",
+        "result": "Sent (message 28), not blocked by the guard",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant to ask whether the door now closes, and said they would hear from us by 5 May",
+        "result": "Sent (message 29), not blocked by the guard",
         "ok": true
       },
       {
         "tool": "place_hold",
-        "description": "Hold waiting on the contractor's visit report",
-        "result": "Hold 81 placed, follow-up in 2 days",
+        "description": "Hold waiting on the contractor's report, chase in 3 days",
+        "result": "Hold 59 created",
         "ok": true
       },
       {
         "tool": "add_profile_fact",
-        "description": "Recorded on the landlord's profile that they agreed an engineer could investigate and repair the door (no spending limit recorded)",
-        "result": "Fact 51 added",
+        "description": "Recorded on the property that the landlord agreed to an engineer attending, with no cost cap",
+        "result": "Fact 32 saved",
         "ok": true
       }
     ],
     "approvals": [
       {
         "party": "Landlord",
-        "status": "granted (per internal notes, investigate/repair; no amount recorded)",
-        "channel": "unknown (internal note events 008/012)"
+        "status": "granted (attendance only, per internal notes events 008/012; no cost cap)",
+        "channel": "recorded by agency notes"
       }
     ],
     "escalation": {
       "needed": false,
-      "reason": "The contractor can answer the open question; nothing here needs a person to decide yet",
+      "reason": "Not needed yet: the contractor and tenant can tell us the visit outcome.",
       "handover_summary": "",
-      "recommendation": ""
+      "recommendation": "If the contractor doesn't reply by the follow-up, chase again. Escalate if there is still no reply after a second follow-up, or if the quote needs landlord approval beyond attendance."
     },
     "unverified": [
-      "Whether the 29/04 visit actually happened and what was found or done",
-      "Which firm attended: the records name Riverside Compliance (assigned), Cedar Utilities (event 016) and Meadow Services (event 021)",
-      "The repair cost, and whether the landlord's approval has a spending limit",
-      "Tenant phone number: two different numbers appear (07700 900763 and 07700 900410). 900410 is shown as the contractor's number in events 019 and 020"
+      "Whether the engineer actually attended and what they found",
+      "Whether the dishwasher is now fixed",
+      "Whether Cedar Utilities, Meadow Services and Harbour Homes are the same provider as Riverside Compliance",
+      "Exactly what the landlord agreed to, and any cost limit (only internal notes record it)"
     ],
     "failures": [],
     "risks_or_red_flags": [
-      "Three different contractor names appear on the job. They may be trading names, but this needs checking before any invoice is paid",
-      "A second open ticket for the same fault (R/PM012-1) may be a duplicate and could lead to two invoices",
-      "The tenant is named 'Leo Kendall' in event 016 and 'Ruben' in event 004; the tenant on record is Leo Turner",
-      "Any quote will need landlord approval, because no cost limit is recorded"
+      "Several contractor names appear on the ticket. Check the payee carefully when an invoice arrives.",
+      "Ticket R/PM012-1 for the same issue is still open at this property and may be a duplicate."
     ],
-    "final_status": "works, on hold waiting on the contractor (hold 81)",
+    "final_status": "works – on hold waiting for the contractor's visit report (hold 59)",
     "next_follow_up": {
-      "when": "2 days from now (about 2026-05-04)",
-      "what": "If there is no visit report, chase Riverside Compliance and ask the tenant whether the engineer attended and whether the door now closes. If a quote arrives, check it against the contractor and property, then ask the landlord to approve it."
+      "when": "2026-05-05",
+      "what": "Check for a contractor report or tenant reply. Close out if the door is fixed, seek landlord approval if there is a quote, or chase again."
     },
     "confidence": 0.8
   }

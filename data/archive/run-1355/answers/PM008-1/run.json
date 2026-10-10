@@ -1,0 +1,111 @@
+{
+  "case": "PM008-1",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 0,
+  "durationSec": 63.303,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4JWF1RZHPNJE6J9RCPDBB3K",
+  "startedAt": "2026-10-10T12:26:35.488Z",
+  "finishedAt": "2026-10-10T12:27:38.791Z",
+  "usage": {
+    "inputTokens": 103000,
+    "outputTokens": 4258
+  },
+  "eventCount": 314,
+  "dryRun": false,
+  "result": {
+    "case_id": "48 (R/PM008-1, NBL-008-3466)",
+    "decision": "escalate",
+    "summary": "The landlord hasn't approved anything. They've asked for a second contractor quote to compare against the first. I emailed them to say we'll get a second quote and send both side by side. I've passed the case to a person, who needs to pick and instruct the second contractor; there are no other contractors on record to choose from. The email that was meant to send the landlord the estimate seems to have attached the check-out inspection report instead, and I can't find the estimate anywhere in the records. The case is on hold waiting on the agency, with a follow-up in 2 days.",
+    "situation": "Check-out repair works after the tenant left. The first contractor was asked for an estimate (event 003). An 'estimate' was emailed to the landlord (event 006). The landlord replied asking for one more contractor quote to compare (event 009). The CRM stage says 'scheduling', but nothing has been approved.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the case",
+        "result": "9 events, no approvals or holds, no other jobs at the property",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the landlord's reply",
+        "result": "A question, flagged for review; unconditional approval probability 0.02",
+        "ok": true
+      },
+      {
+        "tool": "read_attachment",
+        "description": "Read both attachments",
+        "result": "Both are check-out inspection reports dated 5 Jan 2026; neither is an estimate",
+        "ok": true
+      },
+      {
+        "tool": "search_case",
+        "description": "Searched the case for 'estimate'",
+        "result": "No estimate document or amount found",
+        "ok": true
+      },
+      {
+        "tool": "find_tickets",
+        "description": "Looked for other jobs at the property",
+        "result": "Only this ticket",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the landlord to say we'll get a second quote and won't go ahead in the meantime",
+        "result": "Message 61 sent; guard passed",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded on the landlord's profile that they want comparison quotes",
+        "result": "Fact 73",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Asked a person to source the second contractor and find the original estimate",
+        "result": "Queue item 16",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Put the case on hold waiting on the agency",
+        "result": "Hold 129, follow-up in 2 days",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (Langley)",
+        "status": "not given – asked for a comparison quote first",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "A person needs to pick and instruct a second contractor. The original estimate isn't visible, and the landlord may have been sent the inspection report instead.",
+      "handover_summary": "The landlord wants a second quote before deciding. No other contractors are on record. The 6 Apr email attached the inspection report, not an estimate. The report dates (5 Jan 2026) don't fit the case timeline. The stage says scheduling but nothing is approved.",
+      "recommendation": "Find the first estimate and send it to the landlord; instruct a second contractor to quote for the same scope; send both quotes for approval; check the inspection date and whether any costs go against the deposit; correct the stage to landlord_approval."
+    },
+    "unverified": [
+      "Whether the first contractor's estimate exists and how much it is",
+      "Who the first contractor is",
+      "The inspection date of 5 January 2026 (after the case was created)",
+      "Whether any of the damage is chargeable to the tenant's deposit"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "The landlord may have been sent the inspection report instead of the estimate",
+      "The stage says 'scheduling' but nothing has been approved",
+      "Inspection report dates don't fit the case timeline",
+      "Tenant damage may lead to a deposit claim"
+    ],
+    "final_status": "On hold waiting on the agency (hold 129); passed to a person (queue 16); CRM stage still says scheduling",
+    "next_follow_up": {
+      "when": "In 2 days (2025-04-08)",
+      "what": "Check that a second contractor has been asked to quote and that the original estimate has been found"
+    },
+    "confidence": 0.82
+  }
+}

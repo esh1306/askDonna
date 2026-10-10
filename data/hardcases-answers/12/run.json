@@ -2,159 +2,158 @@
   "case": "12",
   "decision": "request_info",
   "escalated": "no",
-  "failures": 2,
-  "durationSec": 56.003,
+  "failures": 0,
+  "durationSec": 55.251,
   "decisionLine": "request_info",
-  "sessionId": "wrun_01M4JXMGYZ8NSW32MBQ8PZ2MQW",
-  "startedAt": "2026-10-10T12:47:03.521Z",
-  "finishedAt": "2026-10-10T12:47:59.524Z",
+  "sessionId": "wrun_01M4JY93E5K2T4RZA2TG2FX3GB",
+  "startedAt": "2026-10-10T12:58:17.868Z",
+  "finishedAt": "2026-10-10T12:59:13.119Z",
   "usage": {
-    "inputTokens": 100180,
-    "outputTokens": 5848
+    "inputTokens": 99432,
+    "outputTokens": 6035
   },
-  "eventCount": 444,
+  "eventCount": 421,
   "dryRun": false,
   "result": {
-    "case_id": "67 (R/12)",
+    "case_id": "37 (R/12)",
     "decision": "request_info",
-    "summary": "I've asked the landlord to decide how to proceed with the bedroom radiator, and nothing has been booked. Their approval (event 3) only covered Harlow Heating, up to £150. Harlow can't come until 3 November unless it's an emergency visit at double rate (event 4). The other offer, from Quick Fix, is £230, which is over the cap and a different contractor (event 5). I've emailed the landlord the three options, updated the tenant and asked whether anyone in the household is vulnerable, and put the case on hold to follow up in one day.",
+    "summary": "The landlord approved the bedroom radiator repair on two conditions: Harlow Heating only, and no more than £150. Neither option we have meets both. Harlow is fully booked until 3 November, and its sooner emergency visit is double rate and not priced. Quick Fix Heating quoted £230 and is not the named firm. I asked the landlord to choose between three options and gave the tenant safe checks to try and an update. Nothing is booked, and a hold is in place to follow up in 2 days.",
     "case_type": "maintenance",
-    "situation": "At 27 Thistle Lane, one bedroom radiator isn't heating; the rest of the house is fine. The landlord approved the repair only with Harlow Heating and up to £150. Harlow is fully booked until 3 November (sooner only as an emergency visit at double rate). Quick Fix Heating can attend Monday 6 October and quotes £230 including parts.",
     "judgement": {
-      "why_this_decision": "The landlord's approval in event 3 explicitly excludes other contractors and anything over £150 without asking first. Both options available now break those conditions: Quick Fix at £230 (event 5) and a Harlow emergency visit at double rate (event 4). Only the landlord can make this decision, and they can answer quickly, so I asked them directly rather than escalating. One cold room with the rest of the house heated, and no known vulnerability, doesn't meet the emergency criteria, so this doesn't justify acting without approval.",
+      "why_this_decision": "Event 003 is a conditional approval: Harlow only, £150 maximum, ask before spending more. The classifier also read it as conditional_approval, with only 0.02 chance of being unconditional. Event 004: Harlow can't do a standard visit before 3 November, and an emergency visit is double rate. Event 005: Quick Fix quoted £230, which is £80 over the cap and not the firm the landlord named. Neither option is within the landlord's authority, and only the landlord can decide, so I asked them. This is not a safety emergency: one room is affected, the rest of the house heats normally, and no vulnerability has been recorded. So I didn't dispatch anyone without approval.",
       "alternatives_considered": [
         {
-          "option": "Assign Quick Fix at £230",
-          "why_not": "The landlord limited the job to Harlow Heating and £150; booking Quick Fix would breach both conditions."
+          "option": "Assign Quick Fix for Monday 6 October",
+          "why_not": "The landlord explicitly said Harlow only and £150 maximum. £230 is over the cap and the firm isn't the landlord's choice."
         },
         {
-          "option": "Book a Harlow emergency visit",
-          "why_not": "It is double rate with no price given, and would likely go over the £150 cap."
+          "option": "Book Harlow's emergency visit",
+          "why_not": "It is double rate and unpriced, so it would probably go over £150 without the landlord's say-so."
         },
         {
-          "option": "Wait for Harlow on 3 November without asking",
-          "why_not": "That would leave the tenant's bedroom without heating for a month without giving the landlord the choice."
+          "option": "Wait for Harlow's standard slot without asking",
+          "why_not": "The tenant would have a freezing room for about a month. The landlord should make that trade-off knowingly."
         },
         {
           "option": "Escalate to a human",
-          "why_not": "The landlord can resolve this themselves; I'll escalate if they don't reply or if the tenant turns out to be vulnerable."
+          "why_not": "The landlord can resolve this directly. I'll escalate if there's no reply after follow-up or if the tenant reports vulnerability."
         },
         {
           "option": "Treat as an emergency",
-          "why_not": "Only one room is affected, the rest of the house is heated, and no vulnerability is recorded. I've asked the tenant about vulnerability."
+          "why_not": "The classifier's emergency probability was only 0.43. Heating works in the rest of the house and no vulnerability is known, so I asked the tenant about vulnerability instead."
         }
       ],
       "checks_performed": [
-        "Checked the scope and conditions of the landlord's approval (event 3)",
-        "Checked Harlow's availability and its existing profile fact",
-        "Compared the Quick Fix quote of £230 against the £150 cap",
-        "Checked for existing approvals or holds: none",
-        "Ran classify_reply on event 5 (result: review, quote) and classify_intake (category: heating, severity uncertain)",
-        "Checked whether this is an emergency: one room, rest of the house heated"
+        "Approval status: no approval record in the CRM; the landlord's email (event 003) is conditional, so I did not record it as approved",
+        "Compared amounts: Quick Fix £230 against the £150 cap = £80 over",
+        "Contractor: Quick Fix is not the landlord's named contractor (Harlow)",
+        "Harlow's availability and emergency rate (event 004)",
+        "Safety and severity: only one room affected, rest of the heating works, no vulnerability on file",
+        "No existing holds, queue items or property history"
       ],
       "assumptions": [
-        "The landlord prefers email, since the earlier exchange was by email; no preferred channel is recorded.",
-        "'Monday 6th' means Monday 6 October 2026."
+        "Email is a suitable channel for the landlord: no preference is recorded, and the original request (event 002) went by email",
+        "'Monday 6th' in event 005 means Monday 6 October 2026"
       ]
     },
+    "situation": "Tenant at 27 Thistle Lane reports one bedroom radiator not heating (event 001). The landlord approved repairs only by Harlow Heating, up to £150 (event 003). Harlow is booked until 3 November, and its emergency visit is double rate (event 004). Quick Fix Heating offers Monday 6 October at £230 (event 005).",
     "actions_taken": [
       {
         "tool": "get_ticket_context",
         "description": "Loaded the case",
-        "result": "5 events, no approvals or holds",
-        "ok": true
-      },
-      {
-        "tool": "classify_reply",
-        "description": "Classified the Quick Fix email (event 5)",
-        "result": "review; quote; needs a human response 0.92",
+        "result": "5 events, no approvals, holds or property history",
         "ok": true
       },
       {
         "tool": "classify_intake",
-        "description": "Classified the job",
-        "result": "heating; route: request landlord approval; severity uncertain",
+        "description": "Classified the job with the £230 estimate",
+        "result": "Heating category; routed to landlord approval; emergency probability 0.43",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the landlord reply (event 003)",
+        "result": "Conditional approval; flagged for review",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the Quick Fix reply (event 005)",
+        "result": "Quote; flagged for review",
         "ok": true
       },
       {
         "tool": "add_profile_fact",
-        "description": "Recorded on the landlord's profile that heating work must use Harlow Heating only",
-        "result": "fact 51",
+        "description": "Recorded that the landlord wants Harlow Heating for this job",
+        "result": "fact 47",
         "ok": true
       },
       {
         "tool": "add_profile_fact",
-        "description": "Recorded the £150 cap for this job on the landlord's profile",
-        "result": "fact 52",
+        "description": "Recorded the landlord's £150 cap for job R/12",
+        "result": "fact 48",
         "ok": true
       },
       {
-        "tool": "request_landlord_approval",
-        "description": "First attempt to email the landlord the options",
-        "result": "Blocked by the guard as a possible unverified 'approved/done' claim",
-        "ok": false
-      },
-      {
-        "tool": "send_message",
-        "description": "Emailed the tenant: update, safe checks on the radiator valves, and a question about vulnerability",
-        "result": "message 24 sent",
+        "tool": "add_profile_fact",
+        "description": "Recorded Harlow's availability and emergency rate",
+        "result": "fact 49",
         "ok": true
       },
       {
         "tool": "move_stage",
-        "description": "Moved from intake to landlord approval",
+        "description": "Moved the ticket from intake to landlord_approval",
         "result": "ok",
         "ok": true
       },
       {
-        "tool": "request_landlord_approval",
-        "description": "Reworded email to the landlord with the three options (Quick Fix at £230 / Harlow emergency visit / wait until 3 November)",
-        "result": "approval 34, message 25",
+        "tool": "send_message",
+        "description": "Emailed the landlord three options: wait for Harlow, get a price for Harlow's emergency visit, or approve Quick Fix at £230",
+        "result": "message 53 sent",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant an update, safe valve and bleeding checks, and asked about vulnerability",
+        "result": "message 55 sent",
         "ok": true
       },
       {
         "tool": "place_hold",
-        "description": "Hold waiting on the landlord, follow-up in 1 day",
-        "result": "hold 250",
+        "description": "Hold waiting on the landlord, 2-day follow-up",
+        "result": "hold 88",
         "ok": true
       }
     ],
     "approvals": [
       {
         "party": "Landlord",
-        "status": "Conditional approval (event 3, Harlow Heating only, up to £150); not recorded as an approval in the CRM",
-        "channel": "email"
-      },
-      {
-        "party": "Landlord",
-        "status": "requested (approval 34, Quick Fix at £230 or another option)",
+        "status": "granted only with conditions (Harlow only, max £150), which no available option meets; new decision requested",
         "channel": "email"
       }
     ],
     "escalation": {
       "needed": false,
-      "reason": "The landlord can make this decision themselves",
+      "reason": "The landlord can resolve the choice directly. Escalate if there is no reply after follow-up, the tenant reports vulnerability, or the landlord asks for anything above the cap without clear approval.",
       "handover_summary": "",
-      "recommendation": "Escalate if the landlord hasn't replied after follow-up, or if the tenant reports a vulnerable household member."
+      "recommendation": "If the landlord picks option 3, record the approval at £230 and assign Quick Fix. If they pick option 2, ask Harlow for a price and take it back to the landlord. If they pick option 1, book Harlow from 3 November."
     },
     "unverified": [
-      "Price of a Harlow emergency visit",
+      "Price of Harlow's emergency visit",
+      "Whether Quick Fix's £230 is a fixed price or an estimate",
       "Whether anyone in the household is vulnerable",
-      "Whether the Quick Fix 6 October slot is still available",
-      "The landlord's preferred contact channel"
+      "Landlord's preferred contact channel",
+      "Whether the cause is a valve, trapped air or sludge"
     ],
-    "failures": [
-      "First landlord approval email was blocked by the guard; reworded and resent successfully"
-    ],
+    "failures": [],
     "risks_or_red_flags": [
-      "Quote is over the cap and from a contractor the landlord didn't choose",
-      "The tenant's bedroom is cold heading into the colder months",
-      "The Quick Fix slot may be lost if the landlord doesn't reply quickly"
+      "A cold bedroom heading into autumn; if a vulnerable occupant is reported, treat it as urgent and escalate",
+      "Quick Fix's 6 October slot may lapse while we wait for the landlord"
     ],
-    "final_status": "landlord_approval, on hold waiting for the landlord (hold 250)",
+    "final_status": "landlord_approval stage; on hold waiting for the landlord (hold 88)",
     "next_follow_up": {
-      "when": "2026-10-04 (in 1 day)",
-      "what": "Chase the landlord's decision on approval 34; check the tenant's answer on vulnerability"
+      "when": "2 days from now (around 2026-10-05)",
+      "what": "Chase the landlord's choice of option; check the tenant's reply on vulnerability and whether the checks fixed the radiator"
     },
     "confidence": 0.85
   }

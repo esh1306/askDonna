@@ -3,78 +3,105 @@
   "decision": "wait",
   "escalated": "no",
   "failures": 0,
-  "durationSec": 25.362,
+  "durationSec": 29.749,
   "decisionLine": "wait",
-  "sessionId": "wrun_01M4JSXWKRPBDGD1KPF3TB7007",
-  "startedAt": "2026-10-10T11:42:16.063Z",
-  "finishedAt": "2026-10-10T11:42:41.425Z",
+  "sessionId": "wrun_01M4JYCACZK3X0N4X341TX21N7",
+  "startedAt": "2026-10-10T13:00:03.282Z",
+  "finishedAt": "2026-10-10T13:00:33.031Z",
   "usage": {
-    "inputTokens": 51824,
-    "outputTokens": 2507
+    "inputTokens": 82052,
+    "outputTokens": 2871
   },
-  "eventCount": 94,
+  "eventCount": 103,
   "dryRun": false,
   "result": {
-    "case_id": "14 (R/PM029-1)",
+    "case_id": "59 (R/PM029-1)",
     "decision": "wait",
-    "summary": "The case is correctly in scheduling. Henry Quinn was told on 16 Mar to contact the tenant and quote for the cracked bathroom basin. Nothing has come from him since, so the case is waiting on him. The existing hold had no follow-up date, so I replaced it with one that has a 2-day chase date. I also recorded the tenant's claim that the basin was already cracked when she moved in. Someone should check this against the check-in inventory before the quote goes to the landlord.",
-    "situation": "Tenant Freya Fletcher at Flat 6, 24 Lantern Quay reported a broken bathroom sink, which turned out to be a cracked basin. Contractor Henry Quinn (plumbing) was instructed by email and SMS on 16 Mar to arrange a visit and provide a quote. He must not go ahead until the quote is approved. When the agency asked how the basin got cracked, the tenant replied that it was like that when she moved in (event 010). The case was put on hold waiting for the contractor to book an appointment (event 011). No later events. No quote, no landlord approval, and no landlord preferred channel or pre-approved limit on file.",
+    "summary": "The case is in scheduling. Henry Quinn was sent the job on 16 March (events 005 and 006) and is due to contact the tenant to arrange a visit and quote. The tenant answered the agency's question and said the basin was already cracked when she moved in (event 010). I recorded that on the property file as unverified. I replaced the old hold, which had no chase date, with one that follows up with the contractor in 3 days. No messages were sent because nobody needed one.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "The next step belongs to the contractor, who was only instructed on 16 March (event 005), so nothing is overdue. The tenant's reply (event 010) answers the agency's question in event 007. The classifier marked it 'auto' with a low safety score (0.04), so no reply is needed. A cracked basin with no reported leak is routine. The only gap was that hold 129 had no follow-up date, so I replaced it with a dated hold.",
+      "alternatives_considered": [
+        {
+          "option": "Escalate the tenant's claim that the crack was there before she moved in",
+          "why_not": "It only matters if someone later wants to charge the tenant for the damage. It does not block getting a quote. I recorded it as a property fact and noted it in the hold so someone checks the check-in inventory."
+        },
+        {
+          "option": "Ask the landlord for approval now",
+          "why_not": "There is no quote or cost yet. The contractor is attending to quote first, as event 005 says."
+        },
+        {
+          "option": "Chase the contractor or message the tenant now",
+          "why_not": "The contractor was instructed only minutes before, and the tenant has already been told the contractor will contact her (event 004). Another message would not move the job on."
+        }
+      ],
+      "checks_performed": [
+        "Loaded the ticket context: stage is scheduling, there are no approvals and no landlord spend limit on record",
+        "Classified the tenant's reply in event 010: intent 'other', autonomy auto, safety 0.04",
+        "Checked the open holds: hold 129 had no follow-up date",
+        "There are no attachments on the ticket. 'attachment-46-document', mentioned in event 005, is not visible",
+        "There is no earlier job history for this property"
+      ],
+      "assumptions": [
+        "The cracked basin is not currently leaking or a safety risk. Nothing reported suggests it is"
+      ]
+    },
+    "situation": "The tenant reported a cracked bathroom hand basin at Flat 6, 24 Lantern Quay. Contractor Henry Quinn has been asked to arrange a visit and quote. The tenant says the crack was there when she moved in. The case is waiting for the contractor to book an appointment.",
     "actions_taken": [
       {
-        "tool": "get_ticket_context",
-        "description": "Loaded ticket, profiles, events, holds",
-        "result": "Stage scheduling, on hold awaiting contractor (hold 27, no follow-up date); no approvals, no attachments, no property history",
-        "ok": true
-      },
-      {
-        "tool": "place_hold",
-        "description": "New hold waiting on the contractor, with a follow-up date so the case doesn't go quiet",
-        "result": "Hold 29 created, follow-up in 2 days",
-        "ok": true
-      },
-      {
-        "tool": "release_hold",
-        "description": "Released the duplicate hold 27, which had no follow-up date",
-        "result": "Released; ticket remains on_hold under hold 29",
+        "tool": "classify_reply",
+        "description": "Classified the tenant's reply in event 010",
+        "result": "Intent 'other', autonomy auto, needs-human score 0.42, safety 0.04",
         "ok": true
       },
       {
         "tool": "add_profile_fact",
-        "description": "Recorded the basin's condition and the tenant's claim that it was cracked before she moved in",
-        "result": "Fact 26 saved on property 13, no conflict",
+        "description": "Recorded on the property file that the tenant says the basin crack was there before her tenancy (unverified)",
+        "result": "Fact 81 created",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Put the ticket on hold waiting for the contractor, with a 3-day follow-up",
+        "result": "Hold 132 created",
+        "ok": true
+      },
+      {
+        "tool": "release_hold",
+        "description": "Released hold 129, which had no follow-up date and is replaced by hold 132",
+        "result": "Released",
         "ok": true
       }
     ],
     "approvals": [
       {
-        "party": "Landlord (R/PM029-1)",
-        "status": "not_yet_needed (awaiting contractor quote)",
-        "channel": "n/a"
+        "party": "Landlord",
+        "status": "not_yet_needed (approval needed once the contractor sends a quote)",
+        "channel": "none"
       }
     ],
     "escalation": {
       "needed": false,
-      "reason": "No escalation needed now. This is a routine, non-emergency repair and the contractor was only instructed today.",
+      "reason": "Routine job waiting on the contractor",
       "handover_summary": "",
-      "recommendation": "When the quote arrives, a human should compare the tenant's claim (basin already cracked at move-in) with the check-in inventory before deciding who pays. If it is disputed, it becomes a deposit or tenancy matter and should be escalated."
+      "recommendation": "When the quote arrives, ask the landlord to approve it. Check the check-in inventory to see whether the crack was there before the tenancy."
     },
     "unverified": [
-      "Tenant's claim that the basin was cracked when she moved in (not checked against the check-in inventory)",
-      "Whether Henry Quinn has contacted the tenant",
-      "Landlord's contact details, preferred channel and any pre-approved limit (none on file)",
-      "attachment-46-document referenced in the contractor instruction is not available on the ticket"
+      "The tenant's claim that the basin was already cracked when she moved in has not been checked against the check-in inventory",
+      "Whether the basin is leaking",
+      "The contents of 'attachment-46-document', which is mentioned in event 005 but not visible on the ticket",
+      "The landlord's contact details and preferred channel are not on record"
     ],
     "failures": [],
     "risks_or_red_flags": [
-      "Who pays is unclear: the tenant says the damage was there before she moved in, which may affect whether the landlord or the tenant pays",
-      "A cracked basin could leak or have sharp edges; there is no report of either so far",
-      "The landlord has no contact details or preferred channel on file, which will be needed for the quote approval"
+      "Who pays could be disputed if anyone tries to charge the tenant. Her account says the damage was there before her tenancy",
+      "The landlord's contact details are missing, which will be needed when the quote needs approval"
     ],
-    "final_status": "scheduling / on_hold – waiting on contractor (hold 29)",
+    "final_status": "scheduling, on hold waiting for the contractor (hold 132)",
     "next_follow_up": {
-      "when": "2025-03-18 (2 days)",
-      "what": "If no appointment or quote has arrived, chase Henry Quinn and check with the tenant whether he has been in touch"
+      "when": "In 3 days (around 19 March 2025)",
+      "what": "Chase Henry Quinn for an appointment or quote. When the quote arrives, ask the landlord to approve it."
     },
-    "confidence": 0.82
+    "confidence": 0.85
   }
 }

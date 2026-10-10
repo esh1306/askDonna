@@ -1,86 +1,126 @@
 {
   "case": "PM021-2",
   "decision": "act",
-  "escalated": "no",
+  "escalated": "yes",
   "failures": 0,
-  "durationSec": 31.775,
+  "durationSec": 43.009,
   "decisionLine": "act",
-  "sessionId": "wrun_01M4JWGZF3QR4HBXPC5XGYRSHW",
-  "startedAt": "2026-10-10T12:27:38.801Z",
-  "finishedAt": "2026-10-10T12:28:10.576Z",
+  "sessionId": "wrun_01M4JYA0J58R92392G1S7WXY45",
+  "startedAt": "2026-10-10T12:58:47.685Z",
+  "finishedAt": "2026-10-10T12:59:30.694Z",
   "usage": {
-    "inputTokens": 73528,
-    "outputTokens": 3027
+    "inputTokens": 101459,
+    "outputTokens": 4324
   },
-  "eventCount": 177,
+  "eventCount": 275,
   "dryRun": false,
   "result": {
-    "case_id": "56 (R/PM021-2)",
+    "case_id": "44 (R/PM021-2)",
     "decision": "act",
-    "summary": "Alder Compliance says the conservatory back door job at Flat 22, 148 Lantern Quay is finished: they replaced the cylinder and handles, and will drop the remaining keys at the office tomorrow. I moved the ticket on from scheduling to close-out. I emailed the tenant to check the lock works and that she has her 2 keys. I put the ticket on hold with a follow-up in 2 days. There's no need to escalate: the landlord approved the work in event 006, and nothing about cost or safety is in question yet.",
-    "situation": "The landlord approved replacing the lock and supplying 4 keys (event 006): 2 for the tenant, plus 1 for the agency and 1 for the landlord, both left at the office. Alder Compliance was given the job, got the tenant's number, and reported the job finished on 2024-11-22 (event 020). The ticket was still at the scheduling stage. Neither the tenant nor the office has confirmed the work or received the keys yet.",
+    "summary": "Alder Compliance said the approved lock replacement is finished: cylinder and handles replaced, with the agency's and landlord's keys to be left at the office the next day. I moved the ticket to closeout, asked the tenant to confirm the door works and that she has her 2 keys, and set a 4-day follow-up. I also sent a low-priority note to the operations team because ticket 43, which looks like a duplicate of this job, is still open. I recorded the lock change on the property.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "Landlord approval is on record (event 006, approval 19). The contractor's completion report (event 020) was classified as a routine completion report with low need for a human response, so the case is now at closeout. Before closing, the tenant needs to confirm the work, the office keys need to arrive and the invoice needs checking.",
+      "alternatives_considered": [
+        {
+          "option": "Close the ticket now",
+          "why_not": "Completion is only the contractor's word. The keys and the invoice are still outstanding."
+        },
+        {
+          "option": "Do nothing / wait in scheduling",
+          "why_not": "The stage was behind the evidence, and the tenant had not been asked to confirm."
+        },
+        {
+          "option": "Escalate at high priority",
+          "why_not": "There is no safety risk, dispute or invoice problem yet. Only the duplicate ticket needs a human, and that is low priority."
+        }
+      ],
+      "checks_performed": [
+        "Approval 19 is approved, with no amount set",
+        "Contractor message classified as completion_report (auto)",
+        "No open holds before this turn",
+        "find_tickets showed ticket 43 open for the same issue at the same address",
+        "No attachments or invoice visible"
+      ],
+      "assumptions": [
+        "The tenant can confirm the work by email",
+        "Ticket 43 is probably a duplicate, but the operations team needs to check"
+      ]
+    },
+    "situation": "The landlord approved replacing the conservatory back door lock and cutting 4 keys. Alder Compliance was assigned and says the job is done (cylinder and handles), with the agency's and landlord's keys to be dropped at the office on 23 Nov. The ticket was still in scheduling.",
     "actions_taken": [
       {
         "tool": "classify_reply",
-        "description": "Checked the contractor's completion email (event 020)",
-        "result": "Read as a completion report, routine (needs_human_response 0.26, safety 0.04)",
+        "description": "Classified the contractor's completion message",
+        "result": "completion_report, auto, needs_human 0.15",
+        "ok": true
+      },
+      {
+        "tool": "find_tickets",
+        "description": "Looked for other tickets at this property",
+        "result": "Ticket 43 (R/PM021-1) is open in provider_selection for the same issue",
         "ok": true
       },
       {
         "tool": "move_stage",
-        "description": "Moved the ticket from scheduling to closeout because the contractor reported the job finished",
-        "result": "Now in closeout, still open",
+        "description": "Moved from scheduling to closeout based on the contractor's completion report",
+        "result": "Moved to closeout",
         "ok": true
       },
       {
         "tool": "send_message",
-        "description": "Emailed the tenant to ask whether the lock works and whether she has her 2 keys",
-        "result": "Queued as message 71; the outbound check passed",
+        "description": "Emailed the tenant asking her to confirm the lock works and she has 2 keys",
+        "result": "Message 57 queued; guard passed",
         "ok": true
       },
       {
         "tool": "place_hold",
-        "description": "Put the ticket on hold while we wait for the tenant's reply and the office keys",
-        "result": "Hold 134 set, follow-up in 2 days",
+        "description": "Hold for the tenant's confirmation, the office keys and the invoice",
+        "result": "Hold 92, follow-up in 4 days",
         "ok": true
       },
       {
         "tool": "add_profile_fact",
-        "description": "Noted on the property that the contractor says the lock has been replaced (not yet confirmed)",
-        "result": "Fact 76 saved",
+        "description": "Recorded the lock and key change on the property",
+        "result": "Fact 62 saved",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Low-priority note about possible duplicate ticket 43 and checking the invoice",
+        "result": "Queue item 22",
         "ok": true
       }
     ],
     "approvals": [
       {
-        "party": "Quinn (landlord)",
-        "status": "granted",
-        "channel": "email (event 006, approval 30)"
+        "party": "Landlord Quinn",
+        "status": "granted (event 006, approval 19)",
+        "channel": "email"
       }
     ],
     "escalation": {
-      "needed": false,
-      "reason": "Routine completion report on approved work",
-      "handover_summary": "",
-      "recommendation": ""
+      "needed": true,
+      "reason": "Possible duplicate ticket 43 still open for the same job",
+      "handover_summary": "Ticket 44 is in closeout after the contractor reported completion. Ticket 43 (R/PM021-1, same address and title) is still open in provider_selection.",
+      "recommendation": "Close ticket 43 if it is a duplicate. When Alder's invoice arrives, check it covers cylinder, handles and 4 keys, since no cost was ever quoted. Confirm the office keys are received and logged."
     },
     "unverified": [
-      "The job being finished and the door working: only the contractor has said so (event 020); the tenant hasn't confirmed",
-      "Whether the agency and landlord keys have been dropped at the office",
-      "How many keys were cut in total",
-      "The cost: there's no quote or invoice on file"
+      "Job completion (contractor's word only)",
+      "Office keys not yet received",
+      "Cost of the work: no quote or invoice visible",
+      "Whether ticket 43 is a duplicate"
     ],
     "failures": [],
     "risks_or_red_flags": [
-      "The contractor replaced the handles as well as the cylinder. The job was only to replace the lock, so check the invoice against what was approved before paying",
-      "There's no agreed amount on file, so if the invoice looks high, check it with the landlord or escalate",
-      "There's another ticket for the same property, R/PM021-1 'Key Replacement Request', on hold in provider_selection. It may be a duplicate and should be checked and closed so we don't send a second contractor",
-      "Ticket emails (events 012 and 018) gave the contractor a different phone number from the tenant number sent in event 016. It doesn't matter now, but the contact records may need tidying"
+      "Replacing the handles was more than the 'replace the lock' request; cost unknown",
+      "Ticket 43 open for the same issue could lead to a second contractor being sent",
+      "Two different tenant phone numbers appear in the records (07700 900625 in events 012/018, 07700 900336 in event 016)"
     ],
-    "final_status": "closeout, on hold (hold 134) waiting for the tenant to confirm and for the keys to reach the office",
+    "final_status": "closeout, on hold (hold 92), waiting on tenant",
     "next_follow_up": {
-      "when": "2024-11-24",
-      "what": "Chase the tenant if she hasn't confirmed the lock works and she has her 2 keys. Check the office has the agency and landlord keys. When the invoice comes in, check it against the approved job (lock replacement plus 4 keys), then close the ticket"
+      "when": "2024-11-26",
+      "what": "Chase the tenant if she hasn't confirmed; check the 2 keys reached the office and whether Alder's invoice has arrived"
     },
     "confidence": 0.85
   }

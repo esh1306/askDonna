@@ -1,0 +1,110 @@
+{
+  "case": "PM025-1",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 0,
+  "durationSec": 40.404,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4JWHTZDCGV8BBD8ZG9Z7XZM",
+  "startedAt": "2026-10-10T12:28:06.987Z",
+  "finishedAt": "2026-10-10T12:28:47.391Z",
+  "usage": {
+    "inputTokens": 74386,
+    "outputTokens": 4233
+  },
+  "eventCount": 311,
+  "dryRun": false,
+  "result": {
+    "case_id": "59 (R/PM025-1)",
+    "decision": "escalate",
+    "summary": "The landlord replied asking for last year's oven installer (used via Keystone Works) to be contacted for a free warranty repair. That approval depends on there being no charge, and the installer isn't named anywhere in the CRM, so I couldn't assign them. I sent a human the job of identifying the installer, kept approval 31 pending, emailed the tenant an update asking for the oven's make and model, and put the case on hold with a follow-up in 2 days.",
+    "situation": "The oven at Flat 2, 176 Lantern Quay won't heat on any setting. It was replaced last year. The landlord was asked how to proceed on 21/05 and replied (event 006) asking for a warranty call-out through last year's installer at no charge. Property history is empty and no contractor is on record.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded case",
+        "result": "Stage landlord_approval, approval 31 pending, no property history or contractor",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the landlord's reply (event 006)",
+        "result": "review; conditional_approval 0.38, unconditional 0.05",
+        "ok": true
+      },
+      {
+        "tool": "find_tickets",
+        "description": "Looked for earlier jobs at the property",
+        "result": "Only this ticket",
+        "ok": true
+      },
+      {
+        "tool": "search_case",
+        "description": "Searched the case for 'Keystone'",
+        "result": "Only event 006",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the oven's age and warranty belief on the property",
+        "result": "fact 81",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the landlord's preference for last year's installer under warranty",
+        "result": "fact 82",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant an update and asked for the oven's make/model",
+        "result": "message 75 sent, not blocked by the guard",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Asked ops to identify last year's installer",
+        "result": "queue 18",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Put the case on hold waiting for the agency, follow-up in 2 days",
+        "result": "hold 148",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (Felix)",
+        "status": "conditional – warranty/no-charge only; approval 31 left pending",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "The installer the landlord wants isn't identifiable from the CRM, and his approval only covers a free warranty visit",
+      "handover_summary": "Oven not heating at Flat 2, 176 Lantern Quay. The landlord wants last year's installer (used via Keystone Works) called back under warranty at no charge. There are no records of that job in the CRM. The tenant has been asked for the oven's make and model.",
+      "recommendation": "Find last year's installer in the agency's own records, or ask Felix for the installer's details or warranty paperwork. Then assign them as a warranty call-out, and get Felix's approval before agreeing any charge."
+    },
+    "unverified": [
+      "Who last year's installer was",
+      "Whether Keystone Works is the agency's trading name or an outside firm",
+      "Whether the warranty is still valid and covers this fault",
+      "Exact date the oven was replaced"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "The oven failed within about a year of being replaced, the second failure in a row",
+      "The warranty may not cover this or the installer may charge, and the landlord hasn't approved any cost",
+      "The tenant has no working oven while the installer is traced"
+    ],
+    "final_status": "landlord_approval stage; on hold for the agency (hold 148); in the human queue (item 18)",
+    "next_follow_up": {
+      "when": "in 2 days (hold 148)",
+      "what": "Check whether the installer has been identified and whether the tenant has sent the oven's make/model; then assign the installer for the warranty visit"
+    },
+    "confidence": 0.78
+  }
+}

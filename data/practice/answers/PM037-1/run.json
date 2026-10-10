@@ -2,105 +2,122 @@
   "case": "PM037-1",
   "decision": "escalate",
   "escalated": "yes",
-  "failures": 2,
-  "durationSec": 63.069,
+  "failures": 0,
+  "durationSec": 44.471,
   "decisionLine": "escalate",
-  "sessionId": "wrun_01M4JSYNBVG6CBZ6W4G5N5PCMT",
-  "startedAt": "2026-10-10T11:42:41.432Z",
-  "finishedAt": "2026-10-10T11:43:44.501Z",
+  "sessionId": "wrun_01M4JYEBDN98JFZXCKFRQYM1AK",
+  "startedAt": "2026-10-10T13:01:09.857Z",
+  "finishedAt": "2026-10-10T13:01:54.328Z",
   "usage": {
-    "inputTokens": 94528,
-    "outputTokens": 5457
+    "inputTokens": 80739,
+    "outputTokens": 4361
   },
-  "eventCount": 434,
+  "eventCount": 282,
   "dryRun": false,
   "result": {
-    "case_id": "17 (R/PM037-1)",
+    "case_id": "71 (R/PM037-1)",
     "decision": "escalate",
-    "summary": "The landlord, Freya, replied \"Please get the shower hose replaced.\" That answers our question in event 003: she wants us to organise the repair. So the answer to event 006 is that one short reply to her was needed, and I've sent it. I couldn't put the ticket back into auto mode, because it is at provider selection with no contractor and I have no tool to pick or book one. I've passed it to ops to choose a contractor (normal priority) and put a 1-day follow-up on it. The tenant has been sent interim advice and asked whether it's the hose or an electric cable.",
-    "situation": "Tenant reported a damaged, leaking shower \"cable\" by the handle. We had asked the landlord whether she would arrange the repair or wanted us to, and asked the tenant for photos (not received yet). The landlord has now told us to get the shower hose replaced. There is no contractor, no quote and no spend limit on the landlord's profile.",
+    "summary": "The landlord's reply in event 007, \"Please get the shower hose replaced.\", tells us to arrange the repair. She doesn't need a reply. The records show no contractor I can assign: none on the ticket, none named by the landlord and no past jobs at the property. So I've passed contractor selection to the operations team. I also emailed the tenant to say the repair is being arranged, with safety advice, and set a follow-up for one day's time.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "In event 003 we asked the landlord whether she would arrange the repair herself or wanted us to do it. Her reply in event 007 asks us to get the hose replaced. That is a clear go-ahead for the agency to arrange it, and the reply classifier agreed (approve 0.94, unconditional 0.82). The normal next step is to assign a contractor, but I can't pick one without making it up: none is on the ticket, the landlord didn't name one and the property has no job history. A person needs to choose one.",
+      "alternatives_considered": [
+        {
+          "option": "Assign a contractor now",
+          "why_not": "There is no contractor on record or named by the landlord. Picking one would mean inventing a name."
+        },
+        {
+          "option": "Reply to the landlord",
+          "why_not": "Her message was a clear instruction and needs no response (event 006 asked us to check this)."
+        },
+        {
+          "option": "Treat it as an emergency dispatch, as the intake classifier suggested",
+          "why_not": "A leaking shower hose can be contained by not using the shower. The tenant got containment advice, including what to do if the shower is electric."
+        },
+        {
+          "option": "Ask the landlord for a cost cap first",
+          "why_not": "A hose replacement is a small routine job. The team can check the cost with her if the quote turns out high."
+        }
+      ],
+      "checks_performed": [
+        "Loaded ticket context: no open holds, approvals, contractor, spend limit or property history",
+        "Ran classify_reply on event 007: approve, autonomy 'auto'",
+        "Ran classify_intake: plumbing; flagged as an emergency, which I judged too high",
+        "Checked for conflicting information: the tenant says 'cable' and the landlord says 'hose'. Both describe the shower hose, so this is not a conflict"
+      ],
+      "assumptions": [
+        "'Shower cable' in the tenant's report means the flexible shower hose, as the landlord calls it",
+        "The landlord expects the agency to arrange the contractor"
+      ]
+    },
+    "situation": "The tenant reported a damaged, leaking shower hose ('cable') at Flat 14, 44 Lantern Quay. We asked the landlord whether to arrange it and asked the tenant for photos. The landlord replied asking us to get the hose replaced. The ticket is in provider_selection with no contractor available to assign.",
     "actions_taken": [
       {
-        "tool": "get_ticket_context",
-        "description": "Loaded the ticket",
-        "result": "7 events, no attachments, approvals, holds or facts",
+        "tool": "classify_reply",
+        "description": "Classified the landlord's reply in event 007",
+        "result": "approve 0.94, unconditional 0.82, auto",
         "ok": true
       },
       {
         "tool": "classify_intake",
-        "description": "Classified the report",
-        "result": "Plumbing; severity emergency 0.96, safety risk 0.69. I treated this as evidence only: a leaking hose can be contained, so I judged it routine to urgent unless it turns out to be an electric shower cable",
+        "description": "Classified the repair",
+        "result": "plumbing; flagged as an emergency (I treated it as urgent but routine)",
         "ok": true
       },
       {
         "tool": "add_profile_fact",
-        "description": "Recorded on the landlord's profile that she wants the agency to organise this repair (event 007)",
-        "result": "fact 34 saved",
+        "description": "Recorded on the landlord's profile that she asked the agency to organise the hose replacement (event 007)",
+        "result": "fact 104",
         "ok": true
       },
       {
         "tool": "send_message",
-        "description": "Emailed the landlord: we'll organise the hose replacement, no price yet, and we'll ask again if the job grows",
-        "result": "message 23 queued",
-        "ok": true
-      },
-      {
-        "tool": "send_message",
-        "description": "Emailed the tenant: interim containment and electrical safety advice, plus a request for photos and to confirm hose or cable",
-        "result": "message 24 queued",
+        "description": "Emailed the tenant: landlord asked us to arrange the replacement, a contractor will be in touch, update within one working day; safety advice and a request for photos",
+        "result": "message 93 sent, not blocked by the outbound guard",
         "ok": true
       },
       {
         "tool": "escalate_to_human",
-        "description": "First try at the handover",
-        "result": "Error: database is locked",
-        "ok": false
-      },
-      {
-        "tool": "escalate_to_human",
-        "description": "Tried again: handover to ops to assign a contractor",
-        "result": "queue item 6",
+        "description": "Passed contractor selection to the operations team",
+        "result": "queue item 33",
         "ok": true
       },
       {
         "tool": "place_hold",
-        "description": "Hold waiting on ops (agency) for a contractor and on the tenant's photos",
-        "result": "hold 45, follow-up in 1 day",
+        "description": "Placed a hold waiting on the agency, with a follow-up in 1 day",
+        "result": "hold 169",
         "ok": true
       }
     ],
     "approvals": [
       {
         "party": "Landlord (Freya)",
-        "status": "granted: instruction by email to replace the shower hose (event 007); no cost agreed",
+        "status": "granted (instruction to replace the shower hose, no cost cap)",
         "channel": "email"
       }
     ],
     "escalation": {
       "needed": true,
-      "reason": "Landlord has told us to organise the job, but no contractor is assigned and I can't pick or book one. Hose vs electric cable also needs checking.",
-      "handover_summary": "Landlord said by email (event 007) to replace the shower hose. I've acknowledged this to her and sent the tenant safety advice. There is no contractor, no quote and no photos yet.",
-      "recommendation": "Assign a plumber for the hose replacement and move the ticket to scheduling. Switch to an electrician and urgent priority if it is an electric shower cable. Go back to the landlord if the quote is more than a routine hose replacement."
+      "reason": "The landlord approved the hose replacement but there is no contractor on record to assign",
+      "handover_summary": "Landlord asked us to replace the leaking shower hose (event 007). The tenant has been updated. The records show no contractor, property history or spend limit.",
+      "recommendation": "Choose a panel plumber, assign them on ticket 71 and send them the job details. Check the cost with the landlord if the quote is not a typical small amount."
     },
     "unverified": [
-      "Whether the fault is the flexible shower hose or an electric shower power cable",
-      "Cost of the repair",
-      "Whether the outbox messages will be delivered: no email or phone is on file for the tenant or landlord",
-      "The tenant's name (\"Eliza\") comes only from our earlier email"
+      "Whether the shower is electric",
+      "Repair cost",
+      "Whether the tenant has sent photos (none visible)",
+      "Tenant's contact details and availability"
     ],
-    "failures": [
-      "escalate_to_human failed the first time with 'database is locked'; it worked on the second try"
-    ],
+    "failures": [],
     "risks_or_red_flags": [
-      "The report says \"cable\" but the landlord says \"hose\": if it is an electric shower, a leak near the electrics is dangerous",
-      "The classifier flagged the case as an emergency",
-      "Water could get through to the flat below if the leak is not contained"
+      "Water leaking near the shower handle could pose an electrical risk if it is an electric shower. The tenant was told to switch it off at the isolator if so",
+      "No landlord spend limit is recorded"
     ],
-    "final_status": "provider_selection, on hold waiting on the agency (hold 45); ops queue item 6 open",
+    "final_status": "provider_selection: on hold waiting on the agency for contractor selection (queue item 33)",
     "next_follow_up": {
-      "when": "In 1 day (hold 45)",
-      "what": "Check a contractor has been assigned and whether the tenant has sent photos; move to scheduling once a contractor is confirmed"
+      "when": "2024-03-28 (1 day)",
+      "what": "Check a contractor has been assigned, then notify the contractor and the tenant"
     },
-    "confidence": 0.78
+    "confidence": 0.8
   }
 }

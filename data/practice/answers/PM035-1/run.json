@@ -1,0 +1,110 @@
+{
+  "case": "PM035-1",
+  "decision": "wait",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 29.759,
+  "decisionLine": "wait",
+  "sessionId": "wrun_01M4JYDEB93XEPX0BXAN4PBGHQ",
+  "startedAt": "2026-10-10T13:00:40.085Z",
+  "finishedAt": "2026-10-10T13:01:09.844Z",
+  "usage": {
+    "inputTokens": 66789,
+    "outputTokens": 2817
+  },
+  "eventCount": 100,
+  "dryRun": false,
+  "result": {
+    "case_id": "68 (R/PM035-1)",
+    "decision": "wait",
+    "summary": "The tenant's latest message (\"That's great, thank you.\") is just a thank-you, so it doesn't need a reply. The landlord, Isaac, is getting the shower parts and will arrange the fitting with the tenant himself. Imogen's hold from event 007 wasn't open in the CRM, so I put a new hold on the ticket, waiting on the landlord, with a 3-day follow-up. I also saved the landlord's self-repair arrangement and the tenant's \"no pets\" answer as profile facts. The request can go back to auto mode.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "Event 008 asks whether the tenant needs a reply. The tenant's message in event 009 is a thank-you after being told what happens next (event 006). The classifier rated it 'auto', with only a 0.12 chance it needs a human response. The next step is the landlord's: get the parts and contact the tenant. That isn't overdue, so the right call is to wait with a hold and a follow-up date.",
+      "alternatives_considered": [
+        {
+          "option": "Reply to tenant",
+          "why_not": "It was a thank-you and nothing has changed, so a reply wouldn't move the job on."
+        },
+        {
+          "option": "Record approval 32 as approved",
+          "why_not": "The landlord never clearly said approve in the records. The call note (event 004) is vague. Isaac fitting the parts himself means no contractor cost needs approving, but there is no explicit landlord wording to quote, so I left the approval pending."
+        },
+        {
+          "option": "Assign contractor",
+          "why_not": "The landlord is doing the repair himself."
+        },
+        {
+          "option": "Escalate",
+          "why_not": "It's a routine job with no conflict or safety risk."
+        }
+      ],
+      "checks_performed": [
+        "Loaded the full ticket context (9 events, no attachments visible)",
+        "Classified the tenant reply: auto, intent 'other', safety concern 0.02",
+        "Found approval 32 still pending with no amount",
+        "Found no open holds, even though event 007 records one",
+        "Checked safety: low pressure and a loose hose, no uncontained leak, so routine"
+      ],
+      "assumptions": [
+        "Isaac in events 005 and 007 is the landlord on the ticket (contact 171)"
+      ]
+    },
+    "situation": "This is a routine shower repair: low water pressure and a loose hose at the shower head. The agency sent the landlord a photo, and he said he'll get the parts and arrange the fitting with the tenant. The tenant thanked the agency.",
+    "actions_taken": [
+      {
+        "tool": "classify_reply",
+        "description": "Classified the tenant's thank-you message (event 009)",
+        "result": "Rated auto, needs_human_response 0.12",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Put a hold on the ticket waiting on the landlord to source the parts and arrange fitting, replacing the hold from event 007 that wasn't open in the CRM",
+        "result": "Hold 151 created, follow-up in 3 days",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Saved on the landlord's profile that he is sourcing and fitting the shower parts himself and arranging access with the tenant",
+        "result": "Fact 90 recorded",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Saved the tenant's answer that there are no pets at the property",
+        "result": "Fact 91 recorded",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (Isaac)",
+        "status": "pending (approval 32 still open; landlord is doing the repair himself)",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "Routine job, the landlord is handling the repair and the tenant needs no reply",
+      "handover_summary": "",
+      "recommendation": "Return to auto mode. At the follow-up, check with the landlord that he received the photo and has arranged fitting with the tenant."
+    },
+    "unverified": [
+      "Whether the landlord received the shower photo: the attachment from event 005 is not visible in the CRM",
+      "What was agreed on the call in event 004: the note is only a vague summary",
+      "No date has been arranged for fitting the parts"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "The call in event 004 mentions earlier water damage to a ceiling and smoke detector. It may be linked to the loose shower hose and is worth checking if the hose is leaking.",
+      "Approval 32 stays pending until the landlord confirms in writing."
+    ],
+    "final_status": "On hold waiting on the landlord (hold 151); stage stays landlord_approval",
+    "next_follow_up": {
+      "when": "2025-10-15",
+      "what": "Check with the landlord that he has the parts and has arranged fitting with the tenant"
+    },
+    "confidence": 0.85
+  }
+}

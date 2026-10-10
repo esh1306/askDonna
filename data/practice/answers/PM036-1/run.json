@@ -1,96 +1,125 @@
 {
   "case": "PM036-1",
-  "decision": "act",
-  "escalated": "no",
+  "decision": "escalate",
+  "escalated": "yes",
   "failures": 0,
-  "durationSec": 25.982,
-  "decisionLine": "act",
-  "sessionId": "wrun_01M4JWA9JZAX52P6QRC4J8T1EK",
-  "startedAt": "2026-10-10T12:23:59.805Z",
-  "finishedAt": "2026-10-10T12:24:25.787Z",
+  "durationSec": 48.138,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4JYE27C399M34JJJYSRBQJ9",
+  "startedAt": "2026-10-10T13:01:00.447Z",
+  "finishedAt": "2026-10-10T13:01:48.585Z",
   "usage": {
-    "inputTokens": 65962,
-    "outputTokens": 2614
+    "inputTokens": 87016,
+    "outputTokens": 3842
   },
-  "eventCount": 147,
+  "eventCount": 210,
   "dryRun": false,
   "result": {
-    "case_id": "40 (R/PM036-1)",
-    "decision": "act",
-    "summary": "The landlord, Sawyer, replied \"Yes please!\" when asked whether we could send a contractor to fix the shower knob. Jev classified this as an unconditional approval with high confidence, so no further reply to the landlord is needed. I recorded the approval, moved the ticket to provider_selection and emailed the tenant. No contractor is assigned yet, so the agency needs to pick one and book the work.",
-    "situation": "Tenant reported that the cap of the shower pull knob comes off every time it's used. The agency (Leo) emailed the landlord asking whether to send a contractor. The landlord replied \"Yes please!\" (event 006). The system asked whether the landlord needs a reply or the ticket can go back to auto mode.",
+    "case_id": "69 (R/PM036-1)",
+    "decision": "escalate",
+    "summary": "The landlord's \"Yes please!\" (event 006) clearly approves sending a contractor to fix the broken shower knob. I recorded the approval, moved the ticket to provider_selection and saved email as the landlord's preferred channel. Ticket 70 (R/PM036-2) is for the same property and the same report and was created at the same moment, so I passed this to a human to merge the two before anyone assigns a contractor. That avoids booking the job twice. The landlord doesn't need another reply.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "Event 003 asked the landlord if they were happy for a contractor to attend. Event 006 replied 'Yes please!', and the classifier rated it an approval (unconditional 0.82, autonomy 'auto'). So the approval is recorded and the stage moves forward. The landlord named no contractor and none is on this ticket. The property history shows a duplicate ticket (70) with the same description and creation time. Assigning a contractor here could book the job twice, so a human should merge the tickets first.",
+      "alternatives_considered": [
+        {
+          "option": "Assign a contractor on ticket 69 now",
+          "why_not": "No contractor is named or on record for this ticket. A duplicate ticket exists, so assigning here risks double-booking."
+        },
+        {
+          "option": "Reply to the landlord",
+          "why_not": "The approval is clear, so nothing more is needed from the landlord."
+        },
+        {
+          "option": "Leave approval pending",
+          "why_not": "The landlord's answer was clear, so leaving it pending would stall the job."
+        }
+      ],
+      "checks_performed": [
+        "Approval 33 status and landlord wording (event 006)",
+        "classify_reply on the landlord's message",
+        "Whether a contractor is named or on the ticket: none",
+        "Open holds: none",
+        "Attachments: none visible, although event 003 mentions photos",
+        "Property history: duplicate ticket 70 with the same title, description and creation time"
+      ],
+      "assumptions": [
+        "The approval covers a contractor visit to mend the shower knob. No cost cap was given.",
+        "Ticket 70 is the same job. I only compared the description, timestamp and property; I didn't use its later events."
+      ]
+    },
+    "situation": "A tenant reported a broken shower pull knob whose cap comes off. The agency asked the landlord for approval (event 003) and the landlord replied 'Yes please!' (event 006). The system then asked whether the landlord needs a reply.",
     "actions_taken": [
       {
         "tool": "get_ticket_context",
-        "description": "Loaded ticket context",
-        "result": "Stage landlord_approval, approval 21 pending, no open holds, no contractor, no attachments visible",
+        "description": "Loaded ticket 69",
+        "result": "Approval 33 pending, no contractor, duplicate ticket 70 in property history",
+        "ok": true
+      },
+      {
+        "tool": "get_ticket_context",
+        "description": "Checked ticket 70 to see whether it is a duplicate",
+        "result": "Same property, description and creation time",
         "ok": true
       },
       {
         "tool": "classify_reply",
         "description": "Classified the landlord's reply",
-        "result": "intent approve (1.0), unconditional approval 0.85, needs human response 0.13, autonomy auto",
+        "result": "approve, unconditional 0.82, autonomy auto",
         "ok": true
       },
       {
         "tool": "record_approval_response",
-        "description": "Recorded approval 21 as approved, quoting event 006",
-        "result": "Approved; guard not blocked",
-        "ok": true
-      },
-      {
-        "tool": "classify_intake",
-        "description": "Classified the repair",
-        "result": "Plumbing, routine/urgent borderline (0.53/0.46), safety risk 0.19",
+        "description": "Recorded approval 33 as approved",
+        "result": "approved",
         "ok": true
       },
       {
         "tool": "move_stage",
-        "description": "Moved the ticket forward because the landlord approved",
-        "result": "landlord_approval -> provider_selection",
-        "ok": true
-      },
-      {
-        "tool": "send_message",
-        "description": "Emailed the tenant that the landlord approved the repair and a contractor is being arranged, with advice to report it if things get worse",
-        "result": "Message 49 queued; guard passed",
+        "description": "landlord_approval -> provider_selection",
+        "result": "ok",
         "ok": true
       },
       {
         "tool": "add_profile_fact",
-        "description": "Recorded that the landlord answers approval requests by email",
-        "result": "Fact 60 saved",
+        "description": "Recorded landlord preferred_channel=email",
+        "result": "fact 103",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Asked a human to merge the duplicate tickets before a contractor is assigned",
+        "result": "queue 32",
         "ok": true
       }
     ],
     "approvals": [
       {
-        "party": "Landlord (Sawyer)",
+        "party": "Landlord Sawyer",
         "status": "granted",
         "channel": "email"
       }
     ],
     "escalation": {
-      "needed": false,
-      "reason": "The landlord's approval is clear and routine; no response to the landlord is needed",
-      "handover_summary": "",
-      "recommendation": "Ticket can go back to auto mode. The agency should assign a contractor to repair the shower knob."
+      "needed": true,
+      "reason": "Duplicate ticket 70 for the same job; needs merging before a contractor is assigned",
+      "handover_summary": "The landlord approved contractor attendance (event 006) and approval 33 is recorded. Ticket 69 is now in provider_selection with no contractor assigned. Ticket 70 has the same report, property and creation time.",
+      "recommendation": "Merge the two tickets or close 69 as a duplicate, then assign a contractor and notify the tenant on one ticket only."
     },
     "unverified": [
-      "No amount or spend limit was given; the landlord approved the contractor visit but no cost",
-      "Event 003 says photos were attached, but no attachments are visible on the ticket; the tenant's video was never received",
-      "Whether the knob only needs a new cap or a full valve or mixer replacement"
+      "Photos mentioned in event 003 are not visible on the ticket",
+      "Tenant contact details are not on ticket 69",
+      "Which contractor should attend"
     ],
     "failures": [],
     "risks_or_red_flags": [
-      "The approval has no cost on it; if the contractor's quote is significant or the job turns into a mixer or valve replacement, confirm the cost with the landlord first",
-      "No contractor is assigned yet, so the job could stall in provider_selection"
+      "The job could be booked twice through duplicate tickets 69 and 70"
     ],
-    "final_status": "open, provider_selection, landlord approval granted, no contractor assigned",
+    "final_status": "provider_selection; escalated to the ops queue (item 32) to merge the duplicate",
     "next_follow_up": {
-      "when": "Next agency/system action",
-      "what": "Pick a plumber or handyman and arrange access with the tenant"
+      "when": "When ops responds to queue item 32",
+      "what": "Merge or close the duplicate, then assign a contractor and notify the tenant"
     },
-    "confidence": 0.85
+    "confidence": 0.78
   }
 }

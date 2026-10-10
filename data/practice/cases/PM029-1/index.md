@@ -26,6 +26,3 @@ The request was closed after all checks were completed. An internal note recorde
 
 [Read the complete event history](history.md).
 
-## Attachments
-
-No attachments are required or available for this case.

@@ -1,0 +1,81 @@
+{
+  "case": "PM022-1",
+  "decision": "request_info",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 33.927,
+  "decisionLine": "request_info",
+  "sessionId": "wrun_01M4JSWVF4D2RDCV3R9MC1HC3X",
+  "startedAt": "2026-10-10T11:41:42.128Z",
+  "finishedAt": "2026-10-10T11:42:16.055Z",
+  "usage": {
+    "inputTokens": 38645,
+    "outputTokens": 3012
+  },
+  "eventCount": 191,
+  "dryRun": false,
+  "result": {
+    "case_id": "R/PM022-1 (ticket 11)",
+    "decision": "request_info",
+    "summary": "The front door lock is stiff but still locks and opens, so the property is secure and this isn't an emergency. On 18/11 the locksmith told the tenant he was on his way with two locks. By 19/11 nothing had been recorded about the visit, and nothing has come in since. I've emailed the locksmith and the tenant asking what happened, and put the ticket on hold with a chase due in 1 day. I haven't moved the stage because there's no proof the work was done.",
+    "situation": "Stage is scheduling. A locksmith was booked for 17/11. The tenant was about 10 minutes away when he called that day, so the visit apparently didn't happen. On 18/11 he called to say he was on his way with two locks and the tenant said she'd stay in. Nobody has recorded what happened after that, and on 19/11 the agency logged 'No work results'. There are no landlord approvals, holds or attachments on file.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the ticket, profiles and the 12 events",
+        "result": "No approvals, holds, attachments or profile facts. The latest event is the agency's 'No work results' note",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the locksmith (Oliver Sawyer) asking whether he attended, what he did and whether more work is needed, and told him not to do or invoice extra work without landlord approval",
+        "result": "Queued (message_id 11)",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant asking whether the locksmith came on 18/11 and whether the lock now works, and told her to call us urgently if the door won't lock or open",
+        "result": "Queued (message_id 12)",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Put the ticket on hold waiting for the locksmith, with a follow-up date so it doesn't go quiet",
+        "result": "hold_id 21, chase due in 1 day",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord",
+        "status": "none recorded – needed if the lock is replaced or extra cost comes up",
+        "channel": "n/a"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "No escalation yet. The property is secure, and the next step is simply to find out from the locksmith and tenant what happened.",
+      "handover_summary": "",
+      "recommendation": "Escalate if neither replies by the follow-up date, or if the locksmith reports a lock replacement or invoice that the landlord hasn't approved."
+    },
+    "unverified": [
+      "Whether the locksmith attended on 18/11 and what he did",
+      "Whether a lock was replaced, and what it cost",
+      "The locksmith's identity: event 005 names 'Maya' but the emails name Oliver Sawyer",
+      "Whose number 07700 900246 is: it's given as the contact number in both the locksmith's email and the tenant's email",
+      "The appointment time: it was logged as 14:30 on 17/11, but the booking call was at 15:55"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "No landlord approval or spend limit is on record, yet the locksmith said he had two locks in the van, so he may have fitted a replacement without approval. Any invoice must be checked before it's paid.",
+      "The CRM has no contact details or preferred contact method for the tenant, landlord or locksmith",
+      "If the lock gets worse and the door can't be secured, it becomes an emergency"
+    ],
+    "final_status": "Scheduling stage, on hold waiting for the locksmith (hold 21)",
+    "next_follow_up": {
+      "when": "2024-11-20 (1 day after the hold was placed)",
+      "what": "Chase the locksmith and tenant for what happened at the visit. Then move to close-out if the work is confirmed done, or ask the landlord to approve any extra cost. Escalate if there's still no reply."
+    },
+    "confidence": 0.8
+  }
+}

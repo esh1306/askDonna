@@ -6,77 +6,98 @@
 
 ## Summary
 
-The landlord hasn't approved anything. They've asked for a second contractor quote to compare against the first. I emailed them to say we'll get a second quote and send both side by side. I've passed the case to a person, who needs to pick and instruct the second contractor; there are no other contractors on record to choose from. The email that was meant to send the landlord the estimate seems to have attached the check-out inspection report instead, and I can't find the estimate anywhere in the records. The case is on hold waiting on the agency, with a follow-up in 2 days.
+The landlord hasn't approved the first estimate. They've asked for a second contractor's quote to compare against it. I emailed them to say we'll get a second quote and that no work goes ahead until they choose one. I also told them that our last email had the check-out inspection report attached instead of the estimate. Picking and instructing a second contractor, and finding the missing first estimate, need a person at the agency, so I've passed the case to the human queue and put it on hold until we get the second quote.
+
+## Judgement
+
+- **Case type:** maintenance
+- **Why this decision:** Event 009 is a question/conditional request, not an approval (classifier: question 0.73, unconditional approval 0.02, needs human response 0.8). Event 008 asked whether the landlord needs a reply. They do: they asked for a second quote. No second contractor is on record and I can't see the first estimate, so someone at the agency has to source the quote. I let the landlord know so they aren't left waiting.
+
+| Alternative considered | Why not |
+|---|---|
+| Return to auto mode without replying | The landlord asked a direct question and needs a reply. The job also can't progress without a second quote. |
+| Record an approval and assign contractor 1 | The landlord didn't approve anything. They asked for a comparison first. |
+| Assign a second contractor myself | There's no second contractor on record or used before at this property. Choosing one is the agency's call. |
+
+**Checks performed before acting**
+
+- Loaded full context: 9 events, no approvals, holds or property history
+- Searched 'estimate': no estimate document or amount in the records
+- Read both attachments: both are check-out inspection reports, not estimates
+- Classified the landlord reply
+- Checked the stage: it shows 'scheduling', which is ahead of the evidence
+
+**Assumptions**
+
+- 'Can try one other subcontractor' means the landlord wants a second quote before deciding
 
 ## Actions taken
 
 | # | Tool | Input (gist) | Result | Output (gist) |
 |---|---|---|---|---|
-| 1 | `get_ticket_context` | {"ticket_id":48} | ok | {"ok":true,"ticket":{"id":48,"case_ref":"R/PM008-1","property_id":37,"tenant_id":113,"landlord_id":114,"contractor_id":… |
-| 2 | `classify_reply` | {"ticket_id":48,"text":"Morning, Can try one other subcontractor to quote for comparison? Best","sender_role":"landlord","context":"Agency … | ok | {"autonomy":"review","intent":"question","intent_probs":{"approve":0,"decline":0.02,"conditional_approval":0.2,"questio… |
-| 3 | `read_attachment` | {"ticket_id":48,"name":"attachment-03-check-out-inspection-report.pdf"} | ok | {"ok":true,"name":"attachment-03-check-out-inspection-report.pdf","text":"# Transcription: Northbridge Lettings, Check-… |
-| 4 | `read_attachment` | {"ticket_id":48,"name":"attachment-01-check-out-inspection-report.pdf"} | ok | {"ok":true,"name":"attachment-01-check-out-inspection-report.pdf","text":"# Transcription: Northbridge Lettings check-o… |
-| 5 | `search_case` | {"ticket_id":48,"query":"estimate"} | ok | {"query":"estimate","matches":3,"events":[{"id":561,"ticket_id":48,"ts":"2025-04-03T02:34:11Z","kind":"note","direction… |
-| 6 | `find_tickets` | {"property_address":"55 Lantern Quay"} | ok | {"matches":1,"tickets":[{"id":48,"case_ref":"R/PM008-1","title":"Check-Out Works","category":null,"stage":"scheduling",… |
-| 7 | `send_message` | {"ticket_id":48,"to":"landlord","channel":"email","subject":"Flat 5, 55 Lantern Quay – second quote for check-out works (NBL-008-3466 / R/P… | ok | {"ok":true,"message_id":61,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.13,"promises_… |
-| 8 | `add_profile_fact` | {"entity_type":"contact","entity_id":114,"key":"wants_comparison_quotes","value":"yes - asked for a second contractor quote for comparison … | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":73,"entity_type":"contact","entity_id":114,"key":"wants_comp… |
-| 9 | `escalate_to_human` | {"ticket_id":48,"reason":"Landlord wants a second comparison quote; a human must pick and instruct a second contractor, and the original es… | ok | {"ok":true,"queue_id":16} |
-| 10 | `place_hold` | {"ticket_id":48,"reason":"Waiting for agency to instruct a second contractor to quote, and to find the original estimate for comparison, as… | ok | {"ok":true,"hold_id":129} |
+| 1 | `get_ticket_context` | {"ticket_id":17} | ok | {"ok":true,"ticket":{"id":17,"case_ref":"R/PM008-1","property_id":13,"tenant_id":44,"landlord_id":45,"contractor_id":46… |
+| 2 | `classify_reply` | {"ticket_id":17,"text":"Morning, Can try one other subcontractor to quote for comparison? Best","sender_role":"landlord","context":"Agency … | ok | {"autonomy":"review","intent":"question","intent_probs":{"approve":0,"decline":0.01,"conditional_approval":0.25,"questi… |
+| 3 | `read_attachment` | {"ticket_id":17,"name":"attachment-03-check-out-inspection-report.pdf"} | ok | {"ok":true,"name":"attachment-03-check-out-inspection-report.pdf","text":"# Transcription\n\n## Page 1\n\n**Northbridge… |
+| 4 | `read_attachment` | {"ticket_id":17,"name":"attachment-01-check-out-inspection-report.pdf"} | ok | {"ok":true,"name":"attachment-01-check-out-inspection-report.pdf","text":"# Transcription: Northbridge Lettings, Check-… |
+| 5 | `search_case` | {"ticket_id":17,"query":"estimate"} | ok | {"query":"estimate","matches":3,"events":[{"id":219,"ticket_id":17,"ts":"2025-04-03T02:34:11Z","kind":"note","direction… |
+| 6 | `send_message` | {"ticket_id":17,"to":"landlord","channel":"email","subject":"Flat 5, 55 Lantern Quay – second quote for check-out works (Ref R/PM008-1 / NB… | ok | {"ok":true,"message_id":27,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.08,"promises_… |
+| 7 | `add_profile_fact` | {"entity_type":"property","entity_id":13,"key":"occupancy_status","value":"vacant - tenant has vacated, check-out works pending","source_re… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":31,"entity_type":"property","entity_id":13,"key":"occupancy_… |
+| 8 | `add_profile_fact` | {"entity_type":"contact","entity_id":45,"key":"wants_comparison_quotes","value":"yes - asked for a second subcontractor quote for compariso… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":33,"entity_type":"contact","entity_id":45,"key":"wants_compa… |
+| 9 | `escalate_to_human` | {"ticket_id":17,"reason":"Landlord requested a second comparison quote; agency must choose and instruct a second contractor, and the origin… | ok | {"ok":true,"queue_id":10} |
+| 10 | `place_hold` | {"ticket_id":17,"reason":"Agency to instruct a second contractor for comparison quote (landlord request event 009) and locate original esti… | ok | {"ok":true,"hold_id":61} |
 
 Agent's own account of its actions (from the structured result):
 
-- `get_ticket_context` - Loaded the case -> 9 events, no approvals or holds, no other jobs at the property
-- `classify_reply` - Classified the landlord's reply -> A question, flagged for review; unconditional approval probability 0.02
-- `read_attachment` - Read both attachments -> Both are check-out inspection reports dated 5 Jan 2026; neither is an estimate
+- `classify_reply` - Classified the landlord's email from event 009 -> Question; review; needs human response 0.8
+- `read_attachment` - Read both attachments to look for the estimate -> Both are check-out inspection reports; no estimate visible
 - `search_case` - Searched the case for 'estimate' -> No estimate document or amount found
-- `find_tickets` - Looked for other jobs at the property -> Only this ticket
-- `send_message` - Emailed the landlord to say we'll get a second quote and won't go ahead in the meantime -> Message 61 sent; guard passed
-- `add_profile_fact` - Recorded on the landlord's profile that they want comparison quotes -> Fact 73
-- `escalate_to_human` - Asked a person to source the second contractor and find the original estimate -> Queue item 16
-- `place_hold` - Put the case on hold waiting on the agency -> Hold 129, follow-up in 2 days
+- `send_message` - Emailed the landlord: we'll get a second quote, no work goes ahead until they choose, and the previous attachment looked like the inspection report -> Sent (message 27); guard passed
+- `add_profile_fact` - Recorded on the landlord's profile that they want comparison quotes (first attempt failed: invalid entity_type, retried as contact) -> Fact 33 recorded
+- `add_profile_fact` - Recorded that the property is vacant -> Fact 31 recorded
+- `escalate_to_human` - Asked the agency to source a second quote and find the original estimate -> Queue item 10
+- `place_hold` - Put the case on hold, waiting on the agency for the second quote -> Hold 61, follow-up in 5 days
 
 ## Approvals
 
 | Party | Status | Channel |
 |---|---|---|
-| Landlord (Langley) | not given – asked for a comparison quote first | email |
+| Landlord (Langley) | not given: landlord wants a second comparison quote first | email |
 
 ## Escalation & handover
 
 - Escalation needed: **yes**
-- Reason: A person needs to pick and instruct a second contractor. The original estimate isn't visible, and the landlord may have been sent the inspection report instead.
-- Handover summary: The landlord wants a second quote before deciding. No other contractors are on record. The 6 Apr email attached the inspection report, not an estimate. The report dates (5 Jan 2026) don't fit the case timeline. The stage says scheduling but nothing is approved.
-- Recommendation: Find the first estimate and send it to the landlord; instruct a second contractor to quote for the same scope; send both quotes for approval; check the inspection date and whether any costs go against the deposit; correct the stage to landlord_approval.
+- Reason: The landlord wants a second quote. Choosing and instructing another contractor is the agency's call, and the original estimate isn't in the records.
+- Handover summary: The landlord (event 009) wants a second quote for the check-out works before deciding. The estimate emailed in event 006 wasn't actually attached: the inspection report was sent twice. The landlord has had an acknowledgement. No contractor details are in the CRM.
+- Recommendation: 1. Find contractor 1's estimate and add it to the ticket. 2. Instruct a second contractor to quote the same scope. 3. Send both quotes to the landlord together. 4. Correct the ticket stage. 5. Send damage costs to the deposit team if a deduction is intended.
 
 ## What could not be verified
 
-- Whether the first contractor's estimate exists and how much it is
-- Who the first contractor is
-- The inspection date of 5 January 2026 (after the case was created)
-- Whether any of the damage is chargeable to the tenant's deposit
+- Contractor 1's name and estimate amount
+- Whether the landlord ever received the actual estimate
+- The inspection report's appointment date of 5 January 2026, which doesn't fit the April 2025 case dates
 
 ## What failed
 
-_No failures recorded._
+- Agent reported: First add_profile_fact call failed (used entity_type 'landlord'); the retry as 'contact' worked
 
 ## Risks & red flags
 
-- The landlord may have been sent the inspection report instead of the estimate
-- The stage says 'scheduling' but nothing has been approved
-- Inspection report dates don't fit the case timeline
-- Tenant damage may lead to a deposit claim
+- The estimate was apparently never attached to the landlord email
+- The inspection report date conflicts with the case dates
+- The stage shows 'scheduling' with nothing approved
+- There may be deposit deductions (burnt carpet) for the lettings team
 
 ## Final result / next follow-up
 
-- Final status: On hold waiting on the agency (hold 129); passed to a person (queue 16); CRM stage still says scheduling
-- Next follow-up: In 2 days (2025-04-08) - Check that a second contractor has been asked to quote and that the original estimate has been found
-- Confidence: 0.82
+- Final status: Open: on hold waiting on the agency for the second quote (hold 61), and in the human queue (item 10). The stage still says 'scheduling'; it needs correcting by a person, because stages can't move backwards.
+- Next follow-up: In 5 days (hold 61) - Check the second quote has been instructed or received and both quotes sent to the landlord; update the landlord as promised
+- Confidence: 0.85
 
 ## Run metadata
 
 - Case folder: `C:\Users\sahid\Documents\Projects\Hackathons\DwellyHack\dwelly-agent\data\practice\cases\PM008-1`
-- Session id: wrun_01M4JWF1RZHPNJE6J9RCPDBB3K
-- Started: 2026-10-10T12:26:35.488Z  Finished: 2026-10-10T12:27:38.791Z  Duration: 63.3s
-- Events recorded: 314
+- Session id: wrun_01M4JY6W3NM5QHB5XMMEN6HA2E
+- Started: 2026-10-10T12:57:04.836Z  Finished: 2026-10-10T12:58:14.893Z  Duration: 70.1s
+- Events recorded: 371
 - Model(s): anthropic/claude-opus-5.5
-- Tokens: in 103000 / out 4258; cost: not reported
+- Tokens: in 131540 / out 5330; cost: not reported

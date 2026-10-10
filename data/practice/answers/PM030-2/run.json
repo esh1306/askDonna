@@ -1,0 +1,129 @@
+{
+  "case": "PM030-2",
+  "decision": "act",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 48.86,
+  "decisionLine": "act",
+  "sessionId": "wrun_01M4JYCNFAZDATWJB8Z1A3Q7Q6",
+  "startedAt": "2026-10-10T13:00:14.628Z",
+  "finishedAt": "2026-10-10T13:01:03.488Z",
+  "usage": {
+    "inputTokens": 142479,
+    "outputTokens": 4243
+  },
+  "eventCount": 219,
+  "dryRun": false,
+  "result": {
+    "case_id": "61 (R/PM030-2)",
+    "decision": "act",
+    "summary": "Willow Services reported the job complete in event 039: they fitted a new ball valve to the toilet, and the tenants told them the basin taps were fine. I moved the ticket to closeout and asked the tenant to confirm both problems are fixed. I also updated the landlord that no action is needed from her yet, and placed a 3-day hold to wait for the tenant's reply and the invoice. No escalation was needed.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "The contractor's completion report (event 039) is a routine completion report (classifier: intent completion_report 1.0, autonomy auto, safety 0.03). The landlord approved the work (approval 27, events 004-005). The stage was behind the evidence, so I moved it forward to closeout. Before closing, I need the tenant to confirm the fix, because the tap problem was 'reported fine', not repaired. The invoice also still needs checking.",
+      "alternatives_considered": [
+        {
+          "option": "Close the ticket now",
+          "why_not": "The tenant hasn't confirmed the fix, the cold tap problem was not repaired (only reported fine), and no invoice has arrived yet."
+        },
+        {
+          "option": "Escalate to a human",
+          "why_not": "No conflict, cost problem or safety risk. The missed appointment was resolved when the contractor attended later."
+        },
+        {
+          "option": "No action",
+          "why_not": "The stage was behind the evidence, and the tenant and landlord needed an update."
+        }
+      ],
+      "checks_performed": [
+        "Approval 27 is approved (landlord email, events 004-005). No amount or cap is recorded",
+        "No open holds and no pending approvals",
+        "No attachments or invoice on file",
+        "Contractor completion message classified (auto, no amount, no safety concern)",
+        "Contractor name differences (Riverside Works, Keystone, Beacon Works, Willow Services, and staff named Theo, Sawyer, Ruben) look like trading or staff name noise. They don't change payee or approval for now",
+        "Checked the property history: ticket 60 (R/PM030-1) has the same title and is still open in scheduling, so it may be a duplicate"
+      ],
+      "assumptions": [
+        "The 24 Oct visit by Willow Services is the one described in event 039",
+        "The tenant's statement that the taps were fine means the cold tap problem has gone away by itself"
+      ]
+    },
+    "situation": "Routine plumbing job (slow-filling toilet, cold basin tap not working) at Flat 7, 31 Willowmere Road. The landlord approved it, and Willow Services was assigned. They were slow to book and missed the confirmed 20 Oct appointment. They then attended and reported on 24 Oct that the job was complete.",
+    "actions_taken": [
+      {
+        "tool": "classify_reply",
+        "description": "Classified the contractor's completion email (event 039)",
+        "result": "completion_report, autonomy auto, needs_human 0.31",
+        "ok": true
+      },
+      {
+        "tool": "move_stage",
+        "description": "Moved the ticket from scheduling to closeout because the contractor reported completion",
+        "result": "scheduling -> closeout",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant to confirm the toilet fills normally and the cold tap works, and said we'll check back in 3 days",
+        "result": "message 81 queued, guard passed",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the landlord with the contractor's report, said the invoice is still to come, and that no action is needed from her",
+        "result": "message 82 queued, guard passed",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold waiting on the tenant to confirm the fix; the invoice is also outstanding",
+        "result": "hold 150, follow-up in 3 days",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the new toilet fill valve on the property",
+        "result": "fact 86",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded Willow Services' reliability (slow to book, missed an appointment)",
+        "result": "fact 87",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (Freya)",
+        "status": "granted (earlier, approval 27; no amount recorded)",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "Routine completion with no conflict, cost problem or safety issue.",
+      "handover_summary": "",
+      "recommendation": "When the invoice arrives, check the contractor, property and amount, then raise landlord approval if needed. Check whether ticket 60 (R/PM030-1) is a duplicate and should be closed."
+    },
+    "unverified": [
+      "The completion is reported only by the contractor; the tenant hasn't confirmed it yet",
+      "The cold basin tap was not repaired, only reported fine by the tenants",
+      "The cost of the work is unknown; no invoice or quote is visible",
+      "Which trading name or legal entity will invoice (Willow Services, Riverside Works or others named)"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "Several contractor names on the file (Riverside Works, Willow Services, Keystone Solutions, Beacon Works). Check that the invoice payee matches the assigned contractor",
+      "No spend amount was approved, so the invoice may need landlord sign-off",
+      "Ticket 60 (R/PM030-1) may be an open duplicate",
+      "Contractor reliability: slow to book and missed the confirmed appointment"
+    ],
+    "final_status": "closeout, on hold waiting for the tenant to confirm the fix (hold 150); invoice still outstanding",
+    "next_follow_up": {
+      "when": "In 3 days (hold 150)",
+      "what": "Chase the tenant to confirm the toilet and tap are working. Check whether the Willow Services invoice has arrived and check it against the job before closing."
+    },
+    "confidence": 0.85
+  }
+}

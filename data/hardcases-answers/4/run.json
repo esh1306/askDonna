@@ -3,151 +3,144 @@
   "decision": "escalate",
   "escalated": "yes",
   "failures": 3,
-  "durationSec": 79.989,
+  "durationSec": 61.08,
   "decisionLine": "escalate",
-  "sessionId": "wrun_01M4JXE93C1DGYCN693Y0T31F3",
-  "startedAt": "2026-10-10T12:43:38.667Z",
-  "finishedAt": "2026-10-10T12:44:58.656Z",
+  "sessionId": "wrun_01M4JY5GJ6T74A5Y3CMVG6865P",
+  "startedAt": "2026-10-10T12:56:19.982Z",
+  "finishedAt": "2026-10-10T12:57:21.062Z",
   "usage": {
-    "inputTokens": 146325,
-    "outputTokens": 7360
+    "inputTokens": 126954,
+    "outputTokens": 6462
   },
   "eventCount": 574,
   "dryRun": false,
   "result": {
-    "case_id": "57 (R/4, job HC-4-077)",
+    "case_id": "R/4 (ticket 7, job HC-4-077)",
     "decision": "escalate",
     "case_type": "safety_emergency",
-    "summary": "Out of 14 mailbox items, one is a real emergency: the tenant's 25 Sep message about the kitchen ceiling at 2 Alder Mews. It is dripping steadily and sagging, and the light fitting above the cooker is wet and flickering. The bathroom is directly above. I sent the tenant safety advice and told the landlord that make-safe is going ahead without his approval because it is an emergency. I escalated to ops at high priority for urgent plumber and electrician dispatch, because there is no contractor or contact detail on record and the landlord is away. Everything else in the export is noise and needs no action.",
-    "situation": "Kitchen ceiling stain reported 20 Sep 2026. By 25 Sep there was an active leak from the bathroom area above, a sagging ceiling, and water in a light fitting that flickered. Nobody acted on it for over two weeks; the ticket was created 10 Oct. Landlord Mr Quill is away until 12 Oct. The only contractor mentioned is P. Nair of Nair Roofing, who was out of office until 6 Oct; a roofer is not the right trade for a leak from a bathroom. The rest of the export is newsletters, bounces, portal upload errors, a delivery delay and tenant small talk (a neighbour's dog, a council bin collection).",
+    "summary": "Most of the 14-item mailbox export is noise. But the tenant's email of 25 Sep reports water dripping steadily, a sagging kitchen ceiling and a wet light fitting that flickered. That's an emergency with electrical and collapse risk. I sent the tenant safety steps, emailed the landlord that this is emergency safety work, escalated to ops at high priority for urgent plumber and electrician dispatch, and set a same-day hold.",
+    "situation": "Ticket titled as a newsletter bounce. The real signal is the tenant's report of an active leak from the bathroom above, through a sagging kitchen ceiling, into a light fitting. No sign anyone acted on it in the ~2 weeks since. The landlord is on holiday until 12 Oct, and Nair Roofing's P. Nair is out until 6 Oct.",
     "actions_taken": [
       {
         "tool": "get_ticket_context",
-        "description": "Loaded the ticket",
-        "result": "No events, contact details, contractor, facts or history",
+        "description": "Loaded ticket 7",
+        "result": "No contacts' details, facts, history, contractor, holds or approvals",
         "ok": true
       },
       {
         "tool": "classify_intake",
-        "description": "Classified the leak report",
-        "result": "emergency_dispatch, plumbing, severity emergency, safety_risk 0.97",
+        "description": "Classified the worsening leak report",
+        "result": "Emergency, plumbing, safety_risk 0.97, route emergency_dispatch",
         "ok": true
       },
       {
         "tool": "classify_reply",
-        "description": "Classified the tenant's 25 Sep message",
-        "result": "still_broken, safety 0.97, review",
+        "description": "Classified the tenant email of 25 Sep",
+        "result": "new_issue, safety_concern 0.97, review",
         "ok": true
       },
       {
         "tool": "send_message",
-        "description": "First attempt at the tenant safety email",
-        "result": "Blocked by guard (claims_work_done_unverified)",
+        "description": "First drafts to tenant and landlord",
+        "result": "Blocked by outbound guard (unverified work claims); rewritten",
         "ok": false
       },
       {
         "tool": "send_message",
-        "description": "Emergency notice to the landlord: make-safe without prior approval, further repairs need his approval, cost unknown",
-        "result": "Sent, message 7",
+        "description": "SMS to tenant with containment steps (isolate lighting circuit, keep clear of sag, avoid bathroom, stopcock, 999 if sparks or collapse)",
+        "result": "Sent, msg 10",
         "ok": true
       },
       {
         "tool": "send_message",
-        "description": "Second attempt at the tenant safety email",
-        "result": "Blocked by guard (claims_work_done_unverified)",
-        "ok": false
+        "description": "Email to landlord about the emergency and that it is being handled as emergency safety work",
+        "result": "Sent, msg 11",
+        "ok": true
       },
       {
         "tool": "escalate_to_human",
         "description": "High-priority handover for emergency dispatch",
-        "result": "Queue item 5",
-        "ok": true
-      },
-      {
-        "tool": "send_message",
-        "description": "Tenant safety advice (isolate the lighting circuit, cooker off, stopcock off, keep away from the sagging ceiling, call 999 if needed); a colleague will contact her",
-        "result": "Sent, message 11",
+        "result": "Queue item 4",
         "ok": true
       },
       {
         "tool": "add_profile_fact",
         "description": "Landlord away until 12 Oct",
-        "result": "Fact 31",
+        "result": "Recorded fact 15",
         "ok": true
       },
       {
         "tool": "add_profile_fact",
-        "description": "Property layout: bathroom directly above the kitchen",
-        "result": "Fact 32",
+        "description": "Tenant tends to understate urgency",
+        "result": "Recorded fact 16",
         "ok": true
       },
       {
         "tool": "place_hold",
-        "description": "Waiting on agency to dispatch, 6-hour follow-up",
-        "result": "Hold 243",
+        "description": "Same-day chase on agency dispatch",
+        "result": "Hold 28, 0.25 days",
         "ok": true
       }
     ],
     "approvals": [
       {
-        "party": "Landlord (Mr Quill)",
+        "party": "Landlord Mr Quill",
         "status": "not_needed",
         "channel": "email (notified)"
       }
     ],
     "escalation": {
       "needed": true,
-      "reason": "Emergency: escape of water plus electrical danger. No contractor or contact details on record, and the landlord is away.",
-      "handover_summary": "2 Alder Mews, HC-4-077. Since 25 Sep the kitchen ceiling has been dripping and sagging, and the light over the cooker is wet and flickering; the bathroom is directly above. Not actioned for over two weeks. Tenant and landlord have been emailed. No phone numbers or emails are on the CRM.",
-      "recommendation": "Call the tenant today to check she is safe. Dispatch an emergency plumber and an electrician for make-safe and leak tracing only, and record that it was done without approval because of the emergency. Get landlord approval for further repairs. Add contact details to the CRM. Check whether insurance needs to be notified."
+      "reason": "Active leak into an electrical fitting with a sagging ceiling. Emergency dispatch needs phone calls, and there is no contractor or contact details on file.",
+      "handover_summary": "2 Alder Mews, HC-4-077: tenant reported on 25 Sep a steady drip, a sagging kitchen ceiling and a wet, flickering light above the cooker; bathroom directly above. Landlord away until 12 Oct; Nair Roofing out until 6 Oct. Tenant has had safety advice by SMS and the landlord has been told by email.",
+      "recommendation": "Phone the tenant now. Dispatch an emergency plumber and an electrician, and assess the ceiling. Record that the work was done without approval because it is an emergency. Try the landlord by phone."
     },
     "judgement": {
-      "why_this_decision": "The 25 Sep tenant message describes water in a live light fitting and a sagging ceiling. Both count as emergencies, and the classifiers rated safety risk at 0.97. I couldn't dispatch anyone myself: there is no suitable contractor on record, Nair Roofing is the wrong trade, and the landlord is away. So I gave safety advice, notified the landlord and escalated at high priority.",
+      "why_this_decision": "The tenant email of 25 Sep 17:00 describes water reaching a light fitting and a sagging ceiling. That counts as electrical danger plus escape of water, so it is an emergency. Approval does not block it. There is no contractor or tenant phone number on file and the landlord is away, so a human must dispatch by phone.",
       "alternatives_considered": [
         {
+          "option": "no_action (treat the thread as noise)",
+          "why_not": "One real emergency report is buried in the thread"
+        },
+        {
           "option": "Assign Nair Roofing",
-          "why_not": "A roofer is the wrong trade for a leak from the bathroom above. They were also out of office, and nobody has approved them for this job."
+          "why_not": "Out of office until 6 Oct, and roofing is the wrong trade for a leak from the bathroom above"
         },
         {
           "option": "Request landlord approval first",
-          "why_not": "Emergency safety work doesn't wait for approval, and the landlord is away until 12 Oct."
-        },
-        {
-          "option": "No action (treat the export as noise)",
-          "why_not": "One item is a real safety emergency."
+          "why_not": "Emergency safety work, and the landlord is on holiday"
         }
       ],
       "checks_performed": [
-        "Went through all 14 mailbox items and separated noise from the real report",
-        "Ticket context: no contacts, contractor, approvals or holds",
-        "Severity and safety classifiers",
-        "Out-of-office dates for the landlord and contractor"
+        "Triaged all 14 items; 13 are bounces, portal errors, newsletters, out-of-office replies or small talk",
+        "Safety classification",
+        "Contact details and history on file (none)",
+        "Approvals and holds (none)"
       ],
       "assumptions": [
-        "The leak is probably coming from the bathroom above (plumbing)",
-        "The tenant's email address can be reached through the CRM outbox"
+        "The leak may still be ongoing; there are no updates after 25 Sep",
+        "The tenant's contact details are held in the delivery system despite being blank on the profile"
       ]
     },
     "unverified": [
-      "Current state of the leak and ceiling after two weeks",
-      "Whether the messages to the tenant and landlord will be delivered, since no contact details are on record",
-      "Whether the tenant is vulnerable",
-      "Whether the tenant's photos ever uploaded"
+      "Current state of the leak and ceiling after 25 Sep",
+      "Whether the tenant SMS was delivered (no phone number on profile)",
+      "Whether the landlord email reaches Mr Quill while he is away",
+      "The photos never arrived (portal upload errors)"
     ],
     "failures": [
-      "The guard blocked the tenant safety email twice (claimed action without evidence in the records). It was rewritten and sent as message 11."
+      "The first drafts to the tenant and landlord were blocked by the outbound guard; rewritten and sent"
     ],
     "risks_or_red_flags": [
-      "Water in a live light fitting: risk of electric shock or fire",
-      "Ceiling at risk of collapse",
-      "Not acted on for over two weeks",
-      "No contact details on the CRM",
-      "Landlord unreachable until 12 Oct"
+      "Wet light fitting: risk of electric shock or fire",
+      "Sagging ceiling: risk of collapse",
+      "About 2 weeks of apparent inaction on an emergency report",
+      "Landlord and usual contractor both unavailable"
     ],
-    "final_status": "Intake; escalated at high priority (queue 5); on hold waiting for agency dispatch (hold 243)",
+    "final_status": "Escalated (high, queue 4); on hold for agency dispatch, chase in 6 hours; stage intake",
     "next_follow_up": {
-      "when": "In 6 hours (hold 243)",
-      "what": "Check that ops have dispatched an emergency plumber and electrician and that the tenant has confirmed she is safe"
+      "when": "In 6 hours (hold 28)",
+      "what": "Confirm ops has phoned the tenant and that an emergency plumber and electrician have been dispatched"
     },
     "confidence": 0.88
   }

@@ -25,6 +25,3 @@ After receiving the photograph of the completed garden work, the task was closed
 
 [Read the complete event history](history.md).
 
-## Attachments
-
-No attachments are required or available for this case.

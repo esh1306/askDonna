@@ -1,0 +1,118 @@
+{
+  "case": "PM048-2",
+  "decision": "request_info",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 43.227,
+  "decisionLine": "request_info",
+  "sessionId": "wrun_01M4JYHAF9DARXAQPJJ39EDPJD",
+  "startedAt": "2026-10-10T13:02:47.192Z",
+  "finishedAt": "2026-10-10T13:03:30.419Z",
+  "usage": {
+    "inputTokens": 102907,
+    "outputTokens": 3779
+  },
+  "eventCount": 201,
+  "dryRun": false,
+  "result": {
+    "case_id": "R/PM048-2 (ticket 87)",
+    "decision": "request_info",
+    "summary": "The landlord approved the repair and Riverside Solutions were assigned. They then sent two completion reports for a different property (Flat 7, 177 Beacon Close, Kingshaven), so there is no proof the work at Flat 20, 120 Lantern Quay was done. I emailed the contractor to confirm whether and when they attended and what they did, and asked the tenant whether the window now works. The ticket is on hold with a follow-up in 2 days and stays in 'works'.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "Events 016/017 are completion reports naming Flat 7, 177 Beacon Close, not this property. Event 018 set the visit date only after those reports came in, and it was backdated to 12/12. Event 021 says there are no work results. So we can't say the job is done. The contractor and the tenant can both clear this up, so I asked them before escalating.",
+      "alternatives_considered": [
+        {
+          "option": "Move to closeout on the strength of the completion reports",
+          "why_not": "The reports are for a different address, so completion at Flat 20 isn't verified"
+        },
+        {
+          "option": "Escalate to a human now",
+          "why_not": "The contractor or the tenant can resolve the mismatch. No invoice, cost or safety issue yet"
+        },
+        {
+          "option": "No action",
+          "why_not": "Event 021 asks for a check, and there was no hold, so the case would go silent"
+        }
+      ],
+      "checks_performed": [
+        "Landlord approval 46 is approved (event 006, unconditional 'Yes please get that sorted')",
+        "Address in completion reports vs ticket property: mismatch",
+        "Visit date in event 018 (12/12 15:57) was recorded after the completion emails, and no booking confirmation from the contractor is visible",
+        "No invoices or attachments visible",
+        "Open holds: none before this action",
+        "Property history: ticket 86 (R/PM048-1) is the same report at the same property, still showing a pending approval. Looks like a duplicate",
+        "classify_reply: completion_report, review, needs_human_response 0.83, safety 0.03"
+      ],
+      "assumptions": [
+        "The Beacon Close reports were probably sent to the wrong ticket by mistake, but I haven't confirmed this",
+        "Tenant email is the right channel (no preference on record)"
+      ]
+    },
+    "situation": "Stuck bathroom window at Flat 20, 120 Lantern Quay. The landlord approved, and Riverside Solutions were assigned and chased. Their completion reports refer to another property. The visit date was recorded after the reports arrived. Ops noted 'no work results'.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded ticket 87 and the related ticket 86",
+        "result": "Stage 'works', approval granted, no holds. Ticket 86 looks like a duplicate",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the contractor completion report",
+        "result": "completion_report, autonomy review",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the contractor about the address mismatch and asked them to confirm attendance and work at Flat 20, or the booked date",
+        "result": "Queued, message 115",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant to ask whether the contractor has visited and whether the window works now; told her we'll follow up by 17 Dec",
+        "result": "Queued, message 114",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold waiting on the contractor, follow-up in 2 days",
+        "result": "hold_id 215",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (Felix)",
+        "status": "granted",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "The contractor and the tenant can resolve the mismatch; no cost or safety issue",
+      "handover_summary": "",
+      "recommendation": "If no reply by the follow-up date, chase once more, then escalate. Ops should also close ticket 86 as a duplicate of this one."
+    },
+    "unverified": [
+      "Whether Riverside Solutions attended Flat 20, 120 Lantern Quay at all",
+      "Whether the 12/12/2024 15:57 visit took place",
+      "Whether the bathroom window now works",
+      "Whether the handle, gearbox and hinge replacement was done at this property"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "The completion reports name a different address (Flat 7, 177 Beacon Close). Any invoice must be checked against Flat 20 before payment",
+      "The visit date was recorded after the fact (event 018) with no confirmation from the contractor",
+      "Ticket 86 duplicates this job and still shows a pending approval",
+      "The tenant and contractor messages (events 019/020) contain different phone numbers with an odd note ('enter this code when calling')"
+    ],
+    "final_status": "works – on hold waiting on contractor (hold 215)",
+    "next_follow_up": {
+      "when": "2024-12-17",
+      "what": "Check for replies from the contractor and the tenant. Chase if there are none. Move to closeout only once completion at Flat 20 is confirmed."
+    },
+    "confidence": 0.8
+  }
+}

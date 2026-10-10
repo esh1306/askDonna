@@ -1,77 +1,113 @@
 {
   "case": "PM021-1",
-  "decision": "escalate",
+  "decision": "act",
   "escalated": "yes",
   "failures": 0,
-  "durationSec": 47.42,
-  "decisionLine": "escalate",
-  "sessionId": "wrun_01M4JW8NAZAS6B8AHZEH504J7R",
-  "startedAt": "2026-10-10T12:23:06.304Z",
-  "finishedAt": "2026-10-10T12:23:53.724Z",
+  "durationSec": 44.297,
+  "decisionLine": "act",
+  "sessionId": "wrun_01M4JY9SK6K93FRQWZJGN32NZ1",
+  "startedAt": "2026-10-10T12:58:40.550Z",
+  "finishedAt": "2026-10-10T12:59:24.847Z",
   "usage": {
-    "inputTokens": 86697,
-    "outputTokens": 4488
+    "inputTokens": 96659,
+    "outputTokens": 4667
   },
   "eventCount": 325,
   "dryRun": false,
   "result": {
-    "case_id": "R/PM021-1 (ticket 34)",
-    "decision": "escalate",
-    "summary": "The landlord's email approving the work was clear, so I recorded it as approved and moved the ticket to provider selection. I emailed the tenant to ask whether the back door is secure and when a locksmith can visit. I can't book a contractor myself and no contractor is on file. I also don't know if the door can be locked, so I sent it to the operations team (high priority) to book a locksmith.",
-    "situation": "The key snapped in the conservatory back door at Flat 22, 148 Lantern Quay. Neither the tenants nor the agency has a spare. The request is to replace the lock and cut 4 keys: 2 for the tenants, plus 1 for the agency and 1 for the landlord, both left at the office. Landlord Quinn approved the work by email (event 006) without giving a cost. We don't know whether the door is locked shut or can't be locked.",
+    "case_id": "43 (R/PM021-1)",
+    "decision": "act",
+    "summary": "Landlord Quinn clearly approved the lock replacement and new keys (event 006), so I recorded the approval and moved the job to provider selection. I couldn't assign a locksmith because none is named or on record for this property, so I've passed that to the agency. I also emailed the tenant to ask whether the door is secure, since that decides how urgent the job is. A hold has been set with a follow-up in 1 day.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "Event 006 is a clear approval: classify_reply gave approve 0.98 with autonomy 'auto'. The landlord's request for keys for the tenant, landlord and agency matches the original scope, so it isn't a condition. I couldn't pick a contractor without making one up, because the ticket has no contractor, the property has no job history and the landlord named nobody. The intake classifier flagged a safety risk (0.81) because we don't know whether the door is secure, so I asked the tenant directly.",
+      "alternatives_considered": [
+        {
+          "option": "Assign a locksmith myself",
+          "why_not": "No contractor is named or on record, and inventing one would break the rule against making up facts."
+        },
+        {
+          "option": "Treat as an emergency and dispatch now",
+          "why_not": "Nothing in the records says the door is insecure; the report only says the key snapped. I've asked the tenant and told them to call straight away if the door can't be secured."
+        },
+        {
+          "option": "Wait without acting",
+          "why_not": "The approval was clear, so the job should keep moving."
+        }
+      ],
+      "checks_performed": [
+        "Pending approval 18 found and resolved from the landlord's own words",
+        "Reply classified (approve 0.98)",
+        "Intake classified (doors/locks, safety_risk 0.81)",
+        "Searched for other tickets at the property: none",
+        "Contractor, spend limit and profile facts: none on record",
+        "Attachments: none"
+      ],
+      "assumptions": [
+        "The 'Quinn' who signed event 006 is the landlord on record (id 108)",
+        "The approval covers both the lock replacement and the 4 keys described in the original request"
+      ]
+    },
+    "situation": "The key for the conservatory back door snapped and nobody has a spare. The agency asked landlord Quinn for approval (event 003), and Quinn approved in event 006, asking for new keys for the tenant, the landlord and the agency. The ticket was still at landlord_approval with approval 18 pending.",
     "actions_taken": [
       {
-        "tool": "classify_reply",
-        "description": "Classified the landlord's reply (event 006)",
-        "result": "Intent: approve (0.98). Handling: automatic. Unconditional approval: 0.7",
+        "tool": "get_ticket_context",
+        "description": "Loaded the case",
+        "result": "Approval 18 pending; no contractor, facts or job history",
         "ok": true
       },
       {
-        "tool": "classify_intake",
-        "description": "Classified the request",
-        "result": "Category: doors/windows/locks. Severity: emergency (0.47). Safety risk: 0.82",
+        "tool": "classify_reply",
+        "description": "Classified the landlord's email (event 006)",
+        "result": "approve 0.98, auto",
+        "ok": true
+      },
+      {
+        "tool": "find_tickets",
+        "description": "Checked for other tickets at the property",
+        "result": "Only this ticket",
         "ok": true
       },
       {
         "tool": "record_approval_response",
-        "description": "Recorded approval 17 as approved, quoting the landlord's words",
-        "result": "Approved. The guard did not block it",
+        "description": "Recorded approval 18 as approved, quoting event 006",
+        "result": "Approved; guard not blocked",
         "ok": true
       },
       {
-        "tool": "add_profile_fact",
-        "description": "Recorded on the landlord's profile that email seems to be their preferred channel",
-        "result": "Fact 55",
-        "ok": true
-      },
-      {
-        "tool": "add_profile_fact",
-        "description": "Recorded on the property that the agency holds no spare for this door, plus the requested key split",
-        "result": "Fact 56",
+        "tool": "classify_intake",
+        "description": "Classified the job",
+        "result": "doors_windows_locks, safety_risk 0.81",
         "ok": true
       },
       {
         "tool": "move_stage",
-        "description": "Moved the ticket from landlord approval to provider selection",
-        "result": "Done",
+        "description": "Moved landlord_approval to provider_selection",
+        "result": "ok",
         "ok": true
       },
       {
         "tool": "send_message",
-        "description": "Emailed the tenant: the landlord has approved and a locksmith is being arranged. Asked whether the door is secure and when they're available. Gave safe advice (don't force the lock, keep doors secured)",
-        "result": "Message 43 queued",
+        "description": "Emailed the tenant: approval given and a contractor being arranged; asked whether the door is secure and for access availability; gave safety advice",
+        "result": "message 56 queued",
         "ok": true
       },
       {
         "tool": "escalate_to_human",
-        "description": "Asked the operations team to book a locksmith",
-        "result": "Queue item 13, high priority",
+        "description": "Passed locksmith selection to the agency (no contractor on record)",
+        "result": "queue item 20",
         "ok": true
       },
       {
         "tool": "place_hold",
-        "description": "Placed a hold while waiting for the tenant's reply on door security and access",
-        "result": "Hold 87, follow up in 1 day",
+        "description": "Hold waiting on the agency and tenant, follow-up in 1 day",
+        "result": "hold 91",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded that the agency holds no spare key for this door and how the new keys will be split",
+        "result": "fact 61",
         "ok": true
       }
     ],
@@ -84,25 +120,26 @@
     ],
     "escalation": {
       "needed": true,
-      "reason": "A locksmith needs booking and I can't book contractors. We also don't know whether the door is secure.",
-      "handover_summary": "The landlord approved replacing the lock and cutting 4 keys (2 for the tenants, 2 for the office: agency and landlord), with no cost given. The ticket is in provider selection. I've emailed the tenant to ask whether the door is secure and when they're available.",
-      "recommendation": "Book a locksmith today. If the door can't be secured, treat it as an emergency. If the quote is large, check the cost with the landlord by email. Add the tenant's contact details to the CRM."
+      "reason": "A locksmith needs choosing and assigning; none is named or on record.",
+      "handover_summary": "Approved job: replace the conservatory back door lock at Flat 22, 148 Lantern Quay and cut 4 keys (2 for the tenants, 1 for the agency and 1 for the landlord, both delivered to the office). The tenant has been asked whether the door is secure. No cost cap was given.",
+      "recommendation": "Assign a panel locksmith on ticket 43, and arrange same-day attendance if the tenant reports the door can't be secured."
     },
     "unverified": [
-      "Whether the conservatory door is secure",
-      "The cost of the work",
-      "Whether the tenant email reaches them: no tenant contact details are on file"
+      "Whether the door is currently secure",
+      "Cost of the job",
+      "Tenant contact details (none visible on record)",
+      "Tenant availability"
     ],
     "failures": [],
     "risks_or_red_flags": [
-      "The property may not be secure: the risk is unknown, and the classifier rated it as a possible emergency",
-      "The landlord approved without setting a spending limit",
-      "The tenant's contact details are missing"
+      "Possible insecure rear door if the lock can't be locked",
+      "The approval had no amount, so check an unusually high quote with the landlord",
+      "No tenant email or phone visible, so delivery of message 56 is uncertain"
     ],
-    "final_status": "In provider selection. Escalated to operations (high priority). On hold waiting for the tenant",
+    "final_status": "provider_selection, on hold (agency/tenant), human queue item 20",
     "next_follow_up": {
-      "when": "2024-11-22",
-      "what": "Chase the tenant about door security and access, and check the locksmith has been booked"
+      "when": "2024-11-22 (1 day)",
+      "what": "Check a locksmith has been assigned and the tenant has confirmed whether the door is secure; then notify the contractor and tenant"
     },
     "confidence": 0.8
   }

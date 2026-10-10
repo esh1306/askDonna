@@ -1,0 +1,103 @@
+{
+  "case": "PM032-1",
+  "decision": "act",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 35.428,
+  "decisionLine": "act",
+  "sessionId": "wrun_01M4JSY5945AFWCTQBHX8JM1TK",
+  "startedAt": "2026-10-10T11:42:24.950Z",
+  "finishedAt": "2026-10-10T11:43:00.378Z",
+  "usage": {
+    "inputTokens": 75716,
+    "outputTokens": 3560
+  },
+  "eventCount": 224,
+  "dryRun": false,
+  "result": {
+    "case_id": "R/PM032-1 (ticket 15)",
+    "decision": "act",
+    "summary": "I've recorded Ellis's reply (\"Yes please mend it\", event 006) as approval 8 and moved the ticket on to finding a contractor. Ellis was asked whether to send one of our contractors, with a quote first if the job turned out to be big, and his reply clearly says yes. Ellis and the tenant have both been sent an update. The ticket is now waiting for the agency to assign a contractor, with a follow-up in 2 days.",
+    "situation": "The tenant reported a problem with the toilet flush in the second bedroom at Flat 10, 130 Lantern Quay. Harriet emailed Ellis (the landlord) on 12 Oct asking whether he wanted one of our contractors to fix it, or quote first if the job was big, or whether he'd rather deal with it himself. Ellis replied \"Yes please mend it.\" An internal note (event 005) asked us to check whether the landlord needed a reply. There was no open hold in the CRM, even though event 004 says the ticket was put on hold.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the ticket",
+        "result": "Stage was waiting for landlord approval; approval 8 was pending; no attachments, contractor or profile facts",
+        "ok": true
+      },
+      {
+        "tool": "record_approval_response",
+        "description": "Recorded the landlord's approval, quoting his email (event 006)",
+        "result": "Approval 8 set to approved",
+        "ok": true
+      },
+      {
+        "tool": "classify_intake",
+        "description": "Ran the request through the classifier",
+        "result": "Plumbing, rated 'urgent' (0.69); safety risk 0.22",
+        "ok": true
+      },
+      {
+        "tool": "move_stage",
+        "description": "Moved the ticket to provider selection",
+        "result": "Moved from landlord approval to provider selection",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Noted that the landlord is happy for us to use an agency contractor and that he replies by email",
+        "result": "Facts 27 and 28 saved, no conflicts",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed Ellis to confirm we're arranging a contractor and will send a quote first if the job is big",
+        "result": "Message 18 queued",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant to say the repair is approved, a contractor is being arranged and nothing is booked yet, with safe advice on turning off the water to the cistern",
+        "result": "Message 19 queued",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Put the ticket on hold while the agency assigns a contractor",
+        "result": "Hold 36 placed, follow-up in 2 days",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (Ellis)",
+        "status": "granted",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "Simple approved repair with clear instructions from the landlord",
+      "handover_summary": "",
+      "recommendation": "The agency should assign a plumber or handyman. If the job turns out to be big, get a quote approved by the landlord before the work goes ahead."
+    },
+    "unverified": [
+      "Ellis gave no spending limit or amount for the job",
+      "The tenant's contact details are not in the CRM, so the tenant email may not be delivered",
+      "The photo mentioned in event 003 is not available",
+      "The exact fault with the flush is not known"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "Ellis approved the repair but not a cost. Any quote for a bigger job has to go back to him first.",
+      "The classifier rated the job 'urgent'. If water is escaping, it should be treated as more urgent."
+    ],
+    "final_status": "provider_selection; on hold waiting for the agency to assign a contractor (hold 36)",
+    "next_follow_up": {
+      "when": "2026-10-14",
+      "what": "Check that a contractor has been assigned and an appointment arranged with the tenant"
+    },
+    "confidence": 0.85
+  }
+}

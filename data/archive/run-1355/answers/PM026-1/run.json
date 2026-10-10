@@ -1,0 +1,97 @@
+{
+  "case": "PM026-1",
+  "decision": "act",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 34.491,
+  "decisionLine": "act",
+  "sessionId": "wrun_01M4JSXNA89EHQX6TT7EF8BM4D",
+  "startedAt": "2026-10-10T11:42:08.600Z",
+  "finishedAt": "2026-10-10T11:42:43.091Z",
+  "usage": {
+    "inputTokens": 61229,
+    "outputTokens": 3802
+  },
+  "eventCount": 231,
+  "dryRun": false,
+  "result": {
+    "case_id": "R/PM026-1 (ticket 13)",
+    "decision": "act",
+    "summary": "The landlord replied \"Yes go ahead\" (event 009) to the agency's email asking whether Keystone Compliance can attend the oven (event 004). That is a clear yes, so I recorded approval 7 as approved and moved the ticket to provider_selection. I emailed the tenant and the landlord. Keystone Compliance still needs to be instructed: there is no contractor or contact on the ticket, so I put the ticket on hold for the agency with a follow-up in 1 day.",
+    "situation": "Routine appliance repair: the main element in the electric fan oven isn't heating, but the grill works. The tenant moved in recently. The ticket was waiting for landlord approval. The landlord's reply arrived alongside an internal note asking whether we need to respond. No amount was quoted or approved.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the ticket context",
+        "result": "Stage landlord_approval; approval 7 pending; no holds; no contractor linked; no attachments",
+        "ok": true
+      },
+      {
+        "tool": "record_approval_response",
+        "description": "Recorded the landlord's approval, quoting event 009",
+        "result": "Approval 7 set to approved",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Saved 4 property facts from events 002/004/009: electric oven/hob (make Harbour Services), no pets, no access issues, Keystone Compliance as the appliance contractor",
+        "result": "Facts 22-25 added; no conflicts",
+        "ok": true
+      },
+      {
+        "tool": "move_stage",
+        "description": "Moved landlord_approval to provider_selection",
+        "result": "OK",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant: landlord has approved, we'll be in touch to arrange access, plus safety advice",
+        "result": "Message 16 queued",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the landlord: thanks for approving; we'll come back for approval of any extra repair cost",
+        "result": "Message 17 queued",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold for the agency to instruct Keystone Compliance and link them to the ticket",
+        "result": "Hold 30, follow-up in 1 day",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (Palmer)",
+        "status": "granted",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "Routine job with clear landlord approval; no conflicts or safety risk",
+      "handover_summary": "",
+      "recommendation": "Agency to instruct Keystone Compliance and add them as the contractor, then move to scheduling"
+    },
+    "unverified": [
+      "No cost or spend limit was approved; the approval covers sending Keystone Compliance only",
+      "Oven model unknown",
+      "Contact details for Keystone Compliance not in the CRM",
+      "Landlord's preferred channel not recorded (email was used)"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "The approval has no amount. Any parts or repair cost found on the visit should go back to the landlord for approval",
+      "The fault was found shortly after move-in. Check the check-in inventory or appliance records if who pays for it is ever questioned"
+    ],
+    "final_status": "provider_selection, on hold for the agency (hold 30)",
+    "next_follow_up": {
+      "when": "In 1 day (2025-08-27)",
+      "what": "Check that Keystone Compliance has been instructed and linked to the ticket, then move to scheduling and arrange access with the tenant"
+    },
+    "confidence": 0.85
+  }
+}

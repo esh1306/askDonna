@@ -6,33 +6,57 @@
 
 ## Summary
 
-The landlord has clearly agreed to go ahead with the communal garden and hedge works through his own contractor, Riverside Services (event 022). The classifier read his reply as an approval it could handle without review. I recorded approval 13 as approved and moved the ticket to scheduling. I asked the landlord when the contractor will attend and for a copy of the quote, told the tenant the landlord has agreed but no date is set yet, and placed a 5-day hold to chase the landlord.
+The landlord said in event 022 that he has Freya's quotes and agrees to go ahead with the garden maintenance works. I recorded that as approval, assigned his chosen contractor (Riverside Services, Freya) and the ticket moved to scheduling. I emailed the contractor for dates and a copy of the accepted quote, emailed the tenant an update, and set a 5-day follow-up hold on the contractor.
+
+## Judgement
+
+- **Case type:** maintenance
+- **Why this decision:** Since event 007 the landlord had been getting quotes from Freya at Riverside Services. In event 022 he confirmed he has the quotes and agrees to proceed. classify_reply read this as approval: intent approve 1.0, unconditional 0.72, autonomy auto. The work is routine with no safety risk, and the landlord named the contractor himself, so the normal next step was to assign them and notify both sides.
+
+| Alternative considered | Why not |
+|---|---|
+| Escalate to a human because no amount is recorded | The landlord saw the quotes himself and agreed to them with his own contractor. The missing figure is for our records, not a reason to stop, so I asked the contractor for a copy of the accepted quote instead. |
+| Keep waiting or ask the landlord to confirm again | His answer was clear. Holding the job up would only delay routine work the tenant has been waiting on since October. |
+| Treat the different names (Grace Nolan, Leo Ashford, Felix Kendall) as a conflict | They look like summary or signature noise in the landlord's emails. The messages all come from the landlord's channel and all refer to Freya at Riverside Services, so they don't change who approved or who pays. |
+
+**Checks performed before acting**
+
+- Loaded the ticket context: pending approval id 2 with no amount, no open holds, no attachments visible
+- Ran classify_reply on event 022: approve, autonomy auto
+- Checked that the contractor in event 022 matches event 007 (Freya, Riverside Services)
+- Safety: routine external and communal work, no hazards reported
+- Access: the tenant says there are no codes or alarms and there is one cat
+- Noted another open ticket for the same property, R/PM001-1, also in landlord_approval (event 009 calls this case a duplicate)
+
+**Assumptions**
+
+- The landlord's 'agrees to proceed' covers all the quoted garden works: weeds front and back, the side-path hedge and the unused land at the side
+- Riverside Services will deal with scheduling through the agency
 
 ## Actions taken
 
 | # | Tool | Input (gist) | Result | Output (gist) |
 |---|---|---|---|---|
-| 1 | `get_ticket_context` | {"ticket_id":26} | ok | {"ok":true,"ticket":{"id":26,"case_ref":"R/PM001-2","property_id":2,"tenant_id":59,"landlord_id":60,"contractor_id":nul… |
-| 2 | `classify_reply` | {"ticket_id":26,"text":"Felix Kendall confirms receipt of quotes from Freya and agrees to proceed with the garden maintenance works.","send… | ok | {"autonomy":"auto","intent":"approve","intent_probs":{"approve":1,"decline":0,"conditional_approval":0,"question":0,"ot… |
-| 3 | `record_approval_response` | {"approval_id":13,"decision":"approved","landlord_words":"Event 022 (landlord email, 2025-11-03 19:34): \"confirms receipt of quotes from F… | ok | {"ok":true,"approval":{"id":13,"ticket_id":26,"landlord_id":60,"summary":"Landlord approval to proceed: Communal Garden… |
-| 4 | `add_profile_fact` | {"entity_type":"contact","entity_id":60,"key":"uses_own_contractor_garden","value":"Landlord arranges communal garden/hedge works through h… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":46,"entity_type":"contact","entity_id":60,"key":"uses_own_co… |
-| 5 | `add_profile_fact` | {"entity_type":"property","entity_id":2,"key":"has_pets","value":"yes - 1 cat (tenant); no entry codes/alarms reported","source_ref":"event… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":47,"entity_type":"property","entity_id":2,"key":"has_pets","… |
-| 6 | `move_stage` | {"ticket_id":26,"to":"scheduling","reason":"Landlord approved works with his own contractor Riverside Services (event 022); provider is cho… | ok | {"ok":true,"from":"landlord_approval","to":"scheduling","status":"open"} |
-| 7 | `send_message` | {"ticket_id":26,"to":"landlord","channel":"email","subject":"Communal garden works – Flat 26, 46 Copperfield Walk (Ref R/PM001-2)","body":"… | ok | {"ok":true,"message_id":36,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.3,"promises_s… |
-| 8 | `send_message` | {"ticket_id":26,"to":"tenant","channel":"email","subject":"Communal garden and hedge – Flat 26, 46 Copperfield Walk (Ref R/PM001-2)","body"… | ok | {"ok":true,"message_id":35,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.09,"promises_… |
-| 9 | `place_hold` | {"ticket_id":26,"reason":"Waiting for landlord to confirm when Riverside Services (his own contractor) will attend, plus a copy of the quot… | ok | {"ok":true,"hold_id":67} |
+| 1 | `get_ticket_context` | {"ticket_id":5} | ok | {"ok":true,"ticket":{"id":5,"case_ref":"R/PM001-2","property_id":4,"tenant_id":10,"landlord_id":11,"contractor_id":null… |
+| 2 | `classify_reply` | {"ticket_id":5,"text":"Felix Kendall confirms receipt of quotes from Freya and agrees to proceed with the garden maintenance works.","sende… | ok | {"autonomy":"auto","intent":"approve","intent_probs":{"approve":1,"decline":0,"conditional_approval":0,"question":0,"ot… |
+| 3 | `record_approval_response` | {"approval_id":2,"decision":"approved","landlord_words":"Event 022 (landlord email, 2025-11-03): \"Felix Kendall confirms receipt of quotes… | ok | {"ok":true,"approval":{"id":2,"ticket_id":5,"landlord_id":11,"summary":"Landlord approval to proceed: Communal Garden a… |
+| 4 | `assign_contractor` | {"ticket_id":5,"contractor_name":"Freya","company":"Riverside Services","reason":"Landlord's chosen contractor: landlord held site meeting … | ok | {"ok":true,"contractor_id":31,"stage":"scheduling"} |
+| 5 | `send_message` | {"ticket_id":5,"to":"contractor","channel":"email","subject":"Garden maintenance works – Flat 26, 46 Copperfield Walk, Kingshaven ZZ5 7ZZ (… | ok | {"ok":true,"message_id":8,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.11,"promises_s… |
+| 6 | `send_message` | {"ticket_id":5,"to":"tenant","channel":"email","subject":"Communal garden and hedge works – Flat 26, 46 Copperfield Walk (Ref R/PM001-2)","… | ok | {"ok":true,"message_id":9,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.34,"promises_s… |
+| 7 | `place_hold` | {"ticket_id":5,"reason":"Waiting for Riverside Services (Freya) to propose dates and send a copy of the accepted quote.","waiting_on":"cont… | ok | {"ok":true,"hold_id":20} |
+| 8 | `add_profile_fact` | {"entity_type":"contact","entity_id":11,"key":"preferred_gardening_contractor","value":"Riverside Services (Freya) – landlord sources his o… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":9,"entity_type":"contact","entity_id":11,"key":"preferred_ga… |
+| 9 | `add_profile_fact` | {"entity_type":"property","entity_id":4,"key":"has_pets","value":"yes – 1 cat","source_ref":"event 002 (tenant intake Q&A)","confidence":0.… | ok | {"ok":true,"conflict":true,"existing":{"id":5,"entity_type":"property","entity_id":4,"key":"has_pets","value":"yes - 1 … |
 
 Agent's own account of its actions (from the structured result):
 
-- `get_ticket_context` - Loaded the case -> One pending approval (13), no open holds, no attachments, no quote amount on record
-- `classify_reply` - Classified the landlord's reply in event 022 -> Intent: approve (probability 1.0); autonomy auto; probability it is an unconditional approval 0.66
-- `record_approval_response` - Recorded approval 13 using the landlord's words from event 022 -> Approved; outbound guard did not block
-- `add_profile_fact` - Landlord fact: he uses his own contractor, Riverside Services, for the garden works -> Saved (fact 46)
-- `add_profile_fact` - Property fact: tenant has 1 cat; no entry codes or alarms reported -> Saved (fact 47)
-- `move_stage` - Moved from landlord_approval to scheduling, since the landlord approved and chose the contractor -> Stage is now scheduling
-- `send_message` - Emailed the landlord asking when Riverside will attend and for a copy of the quote; mentioned the cat and the duplicate ticket R/PM001-1 -> Queued (message 36)
-- `send_message` - Emailed the tenant that the landlord has agreed to the works and that no date is confirmed yet -> Queued (message 35)
-- `place_hold` - Placed a hold waiting on the landlord for the attendance date, follow-up in 5 days -> Hold 67 created
+- `classify_reply` - Classified the landlord's email in event 022 -> Intent approve (1.0), unconditional 0.72, autonomy auto
+- `record_approval_response` - Recorded approval id 2 as approved, quoting event 022 -> Approved. The guard did not block it
+- `assign_contractor` - Assigned Freya / Riverside Services, the landlord's chosen contractor -> contractor_id 31, stage moved to scheduling
+- `send_message` - Emailed the contractor the job details, access notes and the cat, and asked for proposed dates and a copy of the accepted quote -> message_id 8
+- `send_message` - Emailed the tenant: landlord has agreed, job passed to Riverside Services, we will confirm dates, update expected within 5 working days -> message_id 9
+- `place_hold` - Hold waiting on the contractor for dates and the quote -> hold_id 20, follow-up in 5 days
+- `add_profile_fact` - Landlord's preferred gardening contractor: Riverside Services (Freya) -> Recorded
+- `add_profile_fact` - Property has a pet (1 cat) -> Recorded. The CRM flagged it as a conflict with an existing fact that has the same value (only the dash differs), so it isn't a real conflict
 
 ## Approvals
 
@@ -43,14 +67,15 @@ Agent's own account of its actions (from the structured result):
 ## Escalation & handover
 
 - Escalation needed: **no**
-- Reason: Routine job: the landlord gave a clear approval and is paying his own contractor
+- Reason: Routine job with a clear landlord approval
+- Recommendation: An operator may want to check whether R/PM001-1 is a duplicate and close it.
 
 ## What could not be verified
 
-- The quote amount and scope: I can't see the quotes in the records
-- Who pays Riverside Services. The landlord appears to be arranging and paying them directly, but no record confirms it
-- The landlord's emails are summaries that name different senders (Grace Nolan, Leo Ashford, Felix Kendall). I treated them as summary errors, but who actually sent them isn't confirmed
-- Whether the communal areas are the landlord's responsibility or a managing agent's
+- The quote amount and scope: no quote is visible in the records
+- Whether the landlord pays Riverside Services directly or through the agency
+- Contact details for Riverside Services: none are visible on the contractor record
+- Who the different names in the landlord's emails (Grace Nolan, Leo Ashford, Felix Kendall) refer to
 
 ## What failed
 
@@ -58,21 +83,21 @@ _No failures recorded._
 
 ## Risks & red flags
 
-- Ticket R/PM001-1 for the same property and the same works is still open (on hold). Someone should merge or close it so the job isn't done twice
-- The landlord has been slow to reply before: it took several chases over about 3 weeks
-- Tenant says the side land was meant to be cleared last summer and wasn't, so they may be unhappy
+- No approved amount is on file, so any invoice must be checked against the quote Riverside Services sends
+- There is another open ticket for the same issue, R/PM001-1, which could lead to double handling
+- The 'no man's land' at the side may not be within the landlord's responsibility; this hasn't been confirmed
 
 ## Final result / next follow-up
 
-- Final status: Stage: scheduling. On hold waiting for the landlord to confirm when Riverside Services will attend.
-- Next follow-up: In 5 days (around 2025-11-08) - Chase the landlord for Riverside Services' attendance date and a copy of the quote, then pass the date on to the tenant
-- Confidence: 0.8
+- Final status: Scheduling, on hold waiting for the contractor (hold 20)
+- Next follow-up: In 5 days (about 2025-11-08) - Chase Riverside Services for dates and the accepted quote, then confirm the dates with the tenant
+- Confidence: 0.82
 
 ## Run metadata
 
 - Case folder: `C:\Users\sahid\Documents\Projects\Hackathons\DwellyHack\dwelly-agent\data\practice\cases\PM001-2`
-- Session id: wrun_01M4JW6PNQNPKG5GHRB7ZD958K
-- Started: 2026-10-10T12:22:02.002Z  Finished: 2026-10-10T12:22:48.510Z  Duration: 46.5s
-- Events recorded: 269
+- Session id: wrun_01M4JY5GRBG6CZHZB03KX0CWAN
+- Started: 2026-10-10T12:56:20.109Z  Finished: 2026-10-10T12:57:11.464Z  Duration: 51.4s
+- Events recorded: 251
 - Model(s): anthropic/claude-opus-5.5
-- Tokens: in 112289 / out 4063; cost: not reported
+- Tokens: in 121084 / out 4623; cost: not reported

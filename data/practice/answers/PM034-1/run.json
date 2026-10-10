@@ -2,95 +2,126 @@
   "case": "PM034-1",
   "decision": "request_info",
   "escalated": "no",
-  "failures": 2,
-  "durationSec": 34.182,
+  "failures": 1,
+  "durationSec": 38.201,
   "decisionLine": "request_info",
-  "sessionId": "wrun_01M4JSY8QRKNK50QNZE1WBCW02",
-  "startedAt": "2026-10-10T11:42:28.492Z",
-  "finishedAt": "2026-10-10T11:43:02.674Z",
+  "sessionId": "wrun_01M4JYDBVARQ0M6ND4TKNM1629",
+  "startedAt": "2026-10-10T13:00:37.532Z",
+  "finishedAt": "2026-10-10T13:01:15.733Z",
   "usage": {
-    "inputTokens": 54877,
-    "outputTokens": 3232
+    "inputTokens": 87511,
+    "outputTokens": 3888
   },
-  "eventCount": 202,
+  "eventCount": 232,
   "dryRun": false,
   "result": {
-    "case_id": "16 (R/PM034-1)",
+    "case_id": "67 (R/PM034-1)",
     "decision": "request_info",
-    "summary": "Meadow Works emailed (event 010) to say they cleaned and greased the shower, which fixed \"the main problem\". They said an invoice was attached, but it never reached the ticket. I moved the ticket to close-out and asked Meadow Works to resend the invoice and confirm whether the cold supply works. I asked the tenant to confirm the fix and gave her scald-safety advice. I put a 3-day hold on the case. Nothing will be paid until we have the invoice and have checked it against the job and the approval.",
-    "situation": "The tenant at Flat 9, 9 Willowmere Road reported that no water was coming from the cold side of the shower, so the warm side was sometimes too hot. The landlord approved the job (approval 9, no amount recorded) and Meadow Works was assigned and chased once. Their reply (event 010) says the job was done and an invoice was attached, but the system couldn't read the email (event 009) and there is no attachment on the ticket.",
+    "case_type": "maintenance",
+    "summary": "Meadow Works say they finished the shower job (event 010). Their email says an invoice is attached, but I can't see one in the CRM, and the system couldn't read the email (event 009). I moved the ticket from scheduling to closeout. I asked Meadow Works to resend the invoice and say whether cold water now comes through, and asked the tenant to confirm the cold side works. The ticket is on hold until 4 June. Nothing gets paid until the invoice has been checked.",
+    "situation": "The tenant reported no water from the cold side of the shower, so the hot side was sometimes too hot to use. The landlord approved attendance with no amount set (approval 31). Meadow Works was assigned, and after one reminder they said the engineer cleaned and greased the shower, which fixed 'the main problem', and that an invoice is attached. I can't see any attachment.",
     "actions_taken": [
       {
         "tool": "get_ticket_context",
-        "description": "Loaded the ticket",
-        "result": "Stage was scheduling. No holds, no profile facts, no attachments. Approval 9 approved with no amount.",
+        "description": "Loaded ticket, profiles, events and approvals",
+        "result": "Stage was scheduling. Approval 31 approved with no amount. No attachments, holds or property history visible.",
         "ok": true
       },
       {
-        "tool": "search_case",
-        "description": "Searched the history for 'invoice'",
-        "result": "Only event 010 mentions it, and it has no attachment",
+        "tool": "classify_reply",
+        "description": "Classified the contractor's email (event 010)",
+        "result": "Completion report 0.56, invoice 0.44, needs a person to review 0.68, safety concern 0.04",
         "ok": true
       },
       {
         "tool": "move_stage",
-        "description": "Moved from scheduling to closeout because the contractor says the works are done (event 010)",
-        "result": "Moved to closeout",
+        "description": "Moved stage from scheduling to closeout because the contractor reports the work is done",
+        "result": "Now in closeout",
         "ok": true
       },
       {
         "tool": "send_message",
-        "description": "Emailed Meadow Works asking them to resend the invoice and confirm the cold supply is fixed and whether anything is still outstanding",
-        "result": "Message 20 queued",
+        "description": "Emailed Meadow Works asking them to resend the invoice with the reference and say whether cold water now flows",
+        "result": "Sent (message 85)",
         "ok": true
       },
       {
         "tool": "send_message",
-        "description": "Emailed the tenant asking her to confirm the shower is fixed, with advice to test the water carefully and report straight away if it is still too hot",
-        "result": "Message 21 queued",
+        "description": "Emailed the tenant asking her to confirm the cold side works, with a safety tip and a check-back date of 4 June",
+        "result": "Sent (message 86)",
         "ok": true
       },
       {
         "tool": "place_hold",
-        "description": "Put the case on hold for the invoice and the tenant's confirmation",
-        "result": "Hold 37, follow up in 3 days",
+        "description": "Put the ticket on hold waiting for the invoice and the tenant's confirmation",
+        "result": "Hold 154, follow-up in 3 days",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Noted on Meadow Works' record that they didn't confirm booking after a reminder and that their invoice didn't arrive",
+        "result": "Fact 93 recorded",
         "ok": true
       }
     ],
     "approvals": [
       {
         "party": "Landlord (R/PM034-1)",
-        "status": "granted (approval 9, no amount recorded)",
+        "status": "granted (attendance, no amount set) - approval 31",
         "channel": "email"
       }
     ],
     "escalation": {
       "needed": false,
-      "reason": "There is nothing a person needs to decide yet. The invoice is missing, so there is nothing to check or pay.",
+      "reason": "The contractor and tenant can answer what's missing (the invoice and whether the fix worked). No dispute or safety risk at present.",
       "handover_summary": "",
-      "recommendation": "When the invoice arrives, check that it is from Meadow Works, for this property and for this shower repair. Approval 9 has no amount, so send the cost to a human or back to the landlord for confirmation before paying."
+      "recommendation": "If the invoice doesn't arrive by the follow-up date, or doesn't match Meadow Works, this property or a reasonable amount for the approved attendance, pass it to a person to check before paying."
     },
     "unverified": [
-      "Whether the cold side of the shower actually works now. Only the contractor says so, and only that the 'main problem' was resolved.",
-      "The invoice amount, date and details, because the invoice was not received",
-      "When the engineer visited",
-      "What amount, if any, the landlord's approval covers"
+      "The work being done and the problem being fixed: only the contractor says so",
+      "Whether the cold supply itself was restored. 'Main problem' and 'temperature issue' may not cover the reported lack of cold water",
+      "The invoice amount, payee and contents: no invoice is visible"
     ],
     "failures": [
-      "The invoice said to be attached to event 010 is not on the ticket",
-      "The system could not read the contractor's email (event 009)"
+      "The invoice the contractor says is attached isn't visible in the CRM, and the system couldn't read their email (event 009)"
     ],
     "risks_or_red_flags": [
-      "The contractor's wording ('a temperature issue', 'the main problem') may mean the cold supply fault is only partly fixed",
-      "If the shower still runs too hot, the tenant could be scalded",
-      "The landlord's approval has no amount recorded, so any invoice cost needs checking before payment",
-      "There was no booking confirmation. The contractor seems to have attended without telling us the appointment."
+      "The landlord approved with no amount, so any invoice may need the landlord's sign-off on the cost",
+      "'Resolved the main problem' suggests something may still be outstanding",
+      "Possible scald risk if the cold side still doesn't work"
     ],
-    "final_status": "closeout, on hold (hold 37) waiting for the contractor's invoice and the tenant's confirmation",
+    "final_status": "In closeout, on hold (hold 154) waiting for the contractor's invoice and the tenant's confirmation",
     "next_follow_up": {
       "when": "2025-06-04",
-      "what": "If nothing has arrived, chase Meadow Works for the invoice and the tenant for confirmation. If the tenant says it is still faulty, arrange a return visit. Once the invoice arrives, read it and check it against the job and the approval before any payment."
+      "what": "Chase Meadow Works for the invoice and the tenant for confirmation. When the invoice arrives, check payee, property and amount before going further; close the ticket once the tenant confirms."
     },
-    "confidence": 0.8
+    "confidence": 0.8,
+    "judgement": {
+      "why_this_decision": "Event 010 is a completion report, so the work stage is behind. But there's no invoice to check, and it's not certain the reported fault (no cold water) was fixed. The contractor and tenant can answer both, so I asked them rather than escalating.",
+      "alternatives_considered": [
+        {
+          "option": "Close the ticket now",
+          "why_not": "There's no invoice and no tenant confirmation, and 'main problem' is vague"
+        },
+        {
+          "option": "Escalate to a person",
+          "why_not": "Nothing is in dispute yet, and the missing pieces can be got by asking"
+        },
+        {
+          "option": "Leave it in scheduling",
+          "why_not": "The contractor reports the work is done, so the stage was behind the evidence"
+        }
+      ],
+      "checks_performed": [
+        "Approval status (approved, no amount)",
+        "Attachments (none visible)",
+        "Contractor matches the one assigned (Meadow Works)",
+        "Safety: low, but added a tip to test the water temperature",
+        "Open holds and human queue (none)"
+      ],
+      "assumptions": [
+        "Event 010 comes from Meadow Works, the assigned contractor"
+      ]
+    }
   }
 }

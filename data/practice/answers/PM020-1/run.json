@@ -1,47 +1,80 @@
 {
   "case": "PM020-1",
   "decision": "request_info",
-  "escalated": "no",
+  "escalated": "yes",
   "failures": 0,
-  "durationSec": 35.843,
+  "durationSec": 32.944,
   "decisionLine": "request_info",
-  "sessionId": "wrun_01M4JT2BT8GRGMBM2SPKXS6ZA4",
-  "startedAt": "2026-10-10T11:44:42.644Z",
-  "finishedAt": "2026-10-10T11:45:18.487Z",
+  "sessionId": "wrun_01M4JY9G5FQ8EKF96WGJXZCJYF",
+  "startedAt": "2026-10-10T12:58:30.896Z",
+  "finishedAt": "2026-10-10T12:59:03.840Z",
   "usage": {
-    "inputTokens": 48725,
-    "outputTokens": 2192
+    "inputTokens": 74787,
+    "outputTokens": 3486
   },
-  "eventCount": 113,
+  "eventCount": 220,
   "dryRun": false,
   "result": {
-    "case_id": "R/PM020-1 (ticket 23)",
+    "case_id": "41 (R/PM020-1)",
     "decision": "request_info",
-    "summary": "The tenant asked to move the routine inspection from 13/02/2024 to \"Friday 15th February\" because their dog gets overexcited. 15/02/2024 is actually a Thursday. I texted the tenant to ask whether they want Thu 15 or Fri 16 Feb, and told them the 13/02 booking stands until a new date is confirmed. The ticket is on hold until the tenant replies. No escalation is needed: this is a routine scheduling question the tenant can answer.",
-    "situation": "Routine property inspection at Flat 12, 162 Beacon Close, booked for 13/02/2024 in the morning (approved visit time 11:00, event 004). The tenant emailed asking to move it to \"Friday 15th February\" because of the dog (event 006). A system note (event 005) asked whether the tenant needs a reply. They do.",
+    "summary": "The tenant asked to move the routine inspection from Tuesday 13/02 to \"Friday, 15th February\" because of their dog. But 15 February 2024 is a Thursday. A reply was needed, so I emailed the tenant to ask which date they mean and told them the current booking stands until we confirm. I also passed the inspector rebooking to the inspections team, recorded the dog on the property, and set a 1-day follow-up.",
+    "case_type": "maintenance_admin",
+    "judgement": {
+      "why_this_decision": "Event 006 is a tenant request to reschedule. Event 005 asks whether the tenant needs a reply, and they do. The requested date is unclear (Friday is 16 Feb; 15 Feb is a Thursday), and I have no tool to rebook the inspector. So I asked the tenant to clarify and handed the diary change to the inspections team.",
+      "alternatives_considered": [
+        {
+          "option": "No action / return to auto",
+          "why_not": "The tenant is waiting for an answer to a reschedule request, and the classifier flagged it for review."
+        },
+        {
+          "option": "Confirm 15 Feb straight away",
+          "why_not": "The date is unclear and the inspector's availability isn't confirmed, so promising it would be an unverified booking."
+        },
+        {
+          "option": "Move through repair stages",
+          "why_not": "This is an inspection, not a repair job."
+        }
+      ],
+      "checks_performed": [
+        "Loaded the full context: 6 events, no holds, approvals or history",
+        "Checked the day of the week for 15/02/2024 (it is a Thursday)",
+        "classify_reply: access_or_availability 0.89, autonomy review",
+        "Outbound guard passed"
+      ],
+      "assumptions": [
+        "The agency's inspections team manages the inspector's diary"
+      ]
+    },
+    "situation": "Inspection booked for 13/02/2024 AM (visit time 11:00). The tenant asked to move it to \"Friday 15th February\" because their dog gets overly excited.",
     "actions_taken": [
       {
-        "tool": "get_ticket_context",
-        "description": "Loaded the ticket, profiles and events",
-        "result": "6 events, no holds or approvals. The pet fact is already on the property record from event 006",
-        "ok": true
-      },
-      {
-        "tool": "read_attachment",
-        "description": "Read the inspection report attachment",
-        "result": "Generic Northbridge Lettings report template with the appointment date 16 February 2024. No findings or defects are recorded",
+        "tool": "classify_reply",
+        "description": "Classified the tenant's reschedule email",
+        "result": "access_or_availability, review",
         "ok": true
       },
       {
         "tool": "send_message",
-        "description": "Texted the tenant to ask whether they want Thu 15/02 or Fri 16/02 (morning), and said the 13/02 booking stands until a new date is confirmed",
-        "result": "message_id 30",
+        "description": "Emailed the tenant: request received, which date (Thu 15 or Fri 16), current booking stands until confirmed, update by 9 Feb",
+        "result": "message 50 queued, guard passed",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded has_pets=dog on the property",
+        "result": "fact 55",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Asked the inspections team to rebook the inspector's diary",
+        "result": "queue item 19",
         "ok": true
       },
       {
         "tool": "place_hold",
-        "description": "Hold while waiting for the tenant to confirm the date",
-        "result": "hold_id 50, follow-up in 2 days",
+        "description": "Waiting for the tenant to confirm the date",
+        "result": "hold 87, follow-up in 1 day",
         "ok": true
       }
     ],
@@ -53,27 +86,24 @@
       }
     ],
     "escalation": {
-      "needed": false,
-      "reason": "Routine rescheduling. The only unclear point is the date, and the tenant can answer that.",
-      "handover_summary": "",
-      "recommendation": ""
+      "needed": true,
+      "reason": "The inspector's diary has to be rebooked by the agency, and the requested date is unclear",
+      "handover_summary": "The tenant wants to move the 13/02 inspection because of their dog. They asked for 'Friday 15th Feb', which doesn't match (15th is a Thursday). I've asked them which date they mean.",
+      "recommendation": "Inspections team: check the inspector's availability on Thu 15 / Fri 16 Feb AM. Once the tenant confirms, move the slot and send written confirmation by 9 Feb."
     },
     "unverified": [
-      "Which date the tenant wants: Thursday 15/02 or Friday 16/02/2024",
-      "Whether the inspector is free on the new date",
-      "The 16 Feb date in the report attachment probably comes from a later rebooking or is a template placeholder; it is not confirmed by any event"
+      "Which date the tenant actually wants",
+      "The inspector's availability"
     ],
     "failures": [],
     "risks_or_red_flags": [
-      "The 13/02 booking is still active; it needs moving or keeping before then",
-      "The dog needs managing at the visit; the inspector should be told",
-      "The SMS was sent as Oakfield Services, but the report says Northbridge Lettings. This is probably a trading-name difference, not a real conflict"
+      "If the 13/02 slot isn't changed or confirmed in time, the inspector could turn up with the management key while the dog is loose"
     ],
-    "final_status": "intake – on hold waiting for the tenant (hold 50)",
+    "final_status": "intake, on hold waiting for the tenant (hold 87); human queue item 19 open",
     "next_follow_up": {
-      "when": "2024-02-10",
-      "what": "If the tenant hasn't replied, chase them and decide whether the 13/02 visit goes ahead. Once they confirm, rebook and notify the tenant and inspector."
+      "when": "2024-02-09",
+      "what": "Chase the tenant's date confirmation and make sure the inspection is rebooked and confirmed in writing"
     },
-    "confidence": 0.85
+    "confidence": 0.8
   }
 }

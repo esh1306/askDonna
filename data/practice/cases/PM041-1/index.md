@@ -30,6 +30,3 @@ The landlord confirmed that the repair company had fixed the washing machine. Th
 
 [Read the complete event history](history.md).
 
-## Attachments
-
-No attachments are required or available for this case.

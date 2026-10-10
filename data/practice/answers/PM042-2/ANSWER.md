@@ -6,49 +6,74 @@
 
 ## Summary
 
-Lantern Services sent an invoice for £75.11 (event 024). Nothing on file shows the engineer actually attended or what they did. The contractor's call on 27 Feb (event 022) asked for a callback to book the visit, which suggests the 23 Feb "confirmed" slot never happened. I haven't processed the invoice. I've asked the contractor for the visit date, what they found and did, and the itemised invoice, and asked the tenant whether the engineer came and whether the machine now works. The case is on hold with a follow-up in 2 days.
+Lantern Services has sent a £75.11 invoice, but nothing on file shows the engineer visited or fixed the washing machine. The day before, the contractor (Harper) phoned asking for a callback to schedule his visit. I haven't passed the invoice on. Instead I asked the contractor for a job report and an itemised invoice copy, and asked the tenant whether the visit happened and the machine now heats. The case is on hold with a 3-day follow-up.
+
+## Judgement
+
+- **Case type:** maintenance
+- **Why this decision:** The landlord approved the engineer visit with no cost limit (event 008, approval 39). An invoice is now in (event 024), but there's no report of the visit or the outcome. Event 022 (27/02) suggests the visit hadn't happened yet: Harper asked for a callback to schedule it. The visit dates on file also disagree (event 016 says Tuesday 1pm, events 017–019 say 23/02 at 3:25pm). Paying for unconfirmed work would break the rule against acting on invoices that don't match the job. The contractor and tenant can both clear this up, so I asked them rather than escalating.
+
+| Alternative considered | Why not |
+|---|---|
+| Forward the invoice to the landlord or pass it for payment | Nothing confirms the work was done, event 022 suggests no visit yet, and the invoice document isn't visible. |
+| Escalate to a human now | The contractor and tenant can answer this directly. Escalate if they don't reply or the answers don't match. |
+| Do nothing and keep waiting on the invoice hold | The invoice has arrived but can't be checked. Without these questions the job would stall. |
+
+**Checks performed before acting**
+
+- Approval 39: approved, no amount (event 008)
+- Invoice: only an email summary in event 024. No attachment on the ticket, so the amount, payee and address on the invoice can't be checked
+- Completion: no work report. Event 020 says 'no work results'; event 022 shows the contractor still trying to schedule
+- Visit dates: event 016 (Tuesday 1pm) doesn't match events 017–019 (23/02 3:25pm, recorded after that time had passed)
+- Invoice due date of 22 July 2026 looks unusual
+- Property history: ticket 76 (R/PM042-1) has the same washing machine fault and is still open at landlord approval, so it may be a duplicate
+- classify_reply: invoice intent 0.99, autonomy auto
+
+**Assumptions**
+
+- 'Harper' in event 022 is the Lantern Services engineer
+- £75.11 is the call-out/repair charge for this job
 
 ## Actions taken
 
 | # | Tool | Input (gist) | Result | Output (gist) |
 |---|---|---|---|---|
-| 1 | `get_ticket_context` | {"ticket_id":66} | ok | {"ok":true,"ticket":{"id":66,"case_ref":"R/PM042-2","property_id":1,"tenant_id":159,"landlord_id":160,"contractor_id":1… |
-| 2 | `classify_reply` | {"ticket_id":66,"text":"The email provides details about an invoice from Lantern Services for GBP 75.11, due by July 22, 2026, and offers o… | ok | {"autonomy":"auto","intent":"invoice","intent_probs":{"quote_or_estimate":0,"invoice":1,"completion_report":0,"scheduli… |
-| 3 | `search_case` | {"ticket_id":66,"query":"invoice"} | ok | {"query":"invoice","matches":2,"events":[{"id":821,"ticket_id":66,"ts":"2024-02-27T01:17:34Z","kind":"hold","direction"… |
-| 4 | `send_message` | {"ticket_id":66,"to":"contractor","channel":"email","subject":"Washing machine repair – Flat 20, 120 Alder Lane, Cedarford, ZZ9 0ZZ – ref R… | ok | {"ok":true,"message_id":83,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.16,"promises_… |
-| 5 | `send_message` | {"ticket_id":66,"to":"tenant","channel":"email","subject":"Washing machine – Flat 20, 120 Alder Lane – ref R/PM042-2 (NBL-042)","body":"Dea… | ok | {"ok":true,"message_id":84,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.09,"promises_… |
-| 6 | `place_hold` | {"ticket_id":66,"reason":"Lantern Services invoice GBP 75.11 (event 024) received but no attendance/completion evidence; event 022 (27 Feb)… | ok | {"ok":true,"hold_id":166} |
-| 7 | `add_profile_fact` | {"entity_type":"contact","entity_id":161,"key":"company_name","value":"Lantern Services (engineer referred to as Harper in event 022)","sou… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":88,"entity_type":"contact","entity_id":161,"key":"company_na… |
+| 1 | `get_ticket_context` | {"ticket_id":77} | ok | {"ok":true,"ticket":{"id":77,"case_ref":"R/PM042-2","property_id":56,"tenant_id":190,"landlord_id":191,"contractor_id":… |
+| 2 | `classify_reply` | {"ticket_id":77,"text":"The email provides details about an invoice from Lantern Services for GBP 75.11, due by July 22, 2026, and offers o… | ok | {"autonomy":"auto","intent":"invoice","intent_probs":{"quote_or_estimate":0,"invoice":0.99,"completion_report":0,"sched… |
+| 3 | `search_case` | {"ticket_id":77,"query":"invoice"} | ok | {"query":"invoice","matches":2,"events":[{"id":1125,"ticket_id":77,"ts":"2024-02-27T01:17:34Z","kind":"hold","direction… |
+| 4 | `send_message` | {"ticket_id":77,"to":"contractor","channel":"email","subject":"Flat 20, 120 Alder Lane – washing machine repair (ref NBL-042 / R/PM042-2) –… | ok | {"ok":true,"message_id":101,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.24,"promises… |
+| 5 | `send_message` | {"ticket_id":77,"to":"tenant","channel":"email","subject":"Flat 20, 120 Alder Lane – washing machine (ref NBL-042)","body":"Dear Noah,\n\nW… | ok | {"ok":true,"message_id":102,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.12,"promises… |
+| 6 | `place_hold` | {"ticket_id":77,"reason":"Invoice £75.11 received (event 024) but no confirmation of attendance/completion; event 022 shows contractor stil… | ok | {"ok":true,"hold_id":187} |
+| 7 | `add_profile_fact` | {"entity_type":"contact","entity_id":192,"key":"invoice_received_without_job_report","value":"Lantern Services invoiced £75.11 on R/PM042-2… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":113,"entity_type":"contact","entity_id":192,"key":"invoice_r… |
 
 Agent's own account of its actions (from the structured result):
 
-- `get_ticket_context` - Loaded the ticket, profiles, events and approvals -> Stage is works; approval 34 is approved with no amount; no attachments visible; a related ticket R/PM042-1 is on hold at provider_selection
-- `classify_reply` - Classified the contractor's invoice email -> Intent: invoice; autonomy: auto; needs_human_response 0.33
-- `search_case` - Searched the case for 'invoice' -> Only the hold note (event 021) and the invoice email (event 024)
-- `send_message` - Emailed the contractor asking for the visit date, what was found and done, and the itemised invoice -> Sent (message 83); guard did not block it
-- `send_message` - Emailed the tenant asking whether the engineer attended and whether the machine now heats properly -> Sent (message 84); guard did not block it
-- `place_hold` - Put the case on hold waiting for the contractor to verify attendance and the invoice -> Hold 166; follow-up in 2 days
-- `add_profile_fact` - Recorded the contractor's company name (Lantern Services) and engineer name (Harper) -> Fact 88 recorded
+- `get_ticket_context` - Loaded the ticket context -> Stage: works. Approval 39 approved with no amount. No open holds. No attachments. Related ticket 76 still open
+- `classify_reply` - Classified the contractor's invoice email -> Invoice intent 0.99, autonomy auto, needs human response 0.41
+- `search_case` - Searched the case for 'invoice' -> Only events 021 (hold waiting on invoice) and 024 (invoice email)
+- `send_message` - Emailed the contractor asking for the visit date, findings and work done, and an itemised invoice PDF; asked them to contact the tenant if the visit hasn't happened -> Sent, message 101
+- `send_message` - Emailed the tenant asking whether the engineer has visited and the machine now heats; said we'll follow up within 3 working days -> Sent, message 102
+- `place_hold` - Put the ticket on hold waiting on the contractor, follow-up in 3 days -> Hold 187
+- `add_profile_fact` - Noted on the contractor's profile that they invoiced without a job report -> Fact 113
 
 ## Approvals
 
 | Party | Status | Channel |
 |---|---|---|
-| Landlord (Mercer) | granted (attendance of an engineer, no cost cap stated) | email |
+| Landlord (Mercer) | granted (no cost limit given) | email |
 
 ## Escalation & handover
 
 - Escalation needed: **no**
-- Reason: The contractor and tenant can confirm whether the work happened; nothing yet needs agency judgement
-- Recommendation: If the contractor can't show the visit took place, or the invoice doesn't match, escalate as a disputed invoice
+- Reason: The contractor and tenant can resolve this. Escalate if they don't reply by the follow-up date or if their answers conflict.
+- Recommendation: At the follow-up: if the contractor confirms attendance and the repair, the tenant agrees, and the invoice copy matches (Lantern Services, this property, £75.11), move to closeout and send the invoice to the landlord. Otherwise escalate the invoice/work mismatch. Separately, check whether ticket 76 is a duplicate.
 
 ## What could not be verified
 
-- Whether the engineer has attended at all, and on what date
-- What work was done, and whether the machine is fixed
-- The invoice document: its number, line items and payee details (not visible)
-- The invoice due date of 22 July 2026, which looks wrong
-- Which visit time was actually agreed (23 Feb 3:25pm or Tuesday 1pm)
+- Whether the engineer has visited and whether the repair was done
+- What the invoice contains: the document isn't visible, only an email summary
+- The actual visit date: event 016 and events 017–019 disagree
+- The invoice due date of 22 July 2026
 
 ## What failed
 
@@ -56,23 +81,22 @@ _No failures recorded._
 
 ## Risks & red flags
 
-- The invoice arrived after a contractor call that still asked to schedule the visit, so we may be billed before any work is done
-- The invoice due date (2026) looks wrong
-- The earlier contractor email (event 018) said 'Pets: multiple tenants', but the property record says no pets
-- A related ticket for the same job, R/PM042-1, is still open and on hold, so there is a risk of duplicate handling or payment
-- Event 013 sent the tenant's phone number with a note to 'enter this code when calling'; no code is stored or should be stored
+- Invoice arrived with no evidence the work was done, and a scheduling call the day before suggests no visit yet
+- Invoice due date (22 July 2026) looks unusual
+- Earlier messages to the contractor and tenant included a phone number with an 'enter this code' instruction. No codes were recorded here
+- Ticket 76 may be a duplicate and is still open at landlord approval
 
 ## Final result / next follow-up
 
-- Final status: On hold in works stage, waiting on the contractor to verify attendance and the invoice (hold 166)
-- Next follow-up: 2024-03-01 - Chase Lantern Services for the visit date, what was done and the itemised invoice, and check whether the tenant has replied. Process the invoice only once attendance is confirmed, the invoice matches the job and the amount is reasonable for the approved engineer visit. Otherwise escalate as a disputed invoice.
+- Final status: Works stage, on hold (hold 187) waiting on the contractor's job report and invoice copy, and the tenant's confirmation
+- Next follow-up: In 3 days (hold 187) - Chase Lantern Services for the job report and invoice PDF, and the tenant for confirmation. Close out or escalate depending on what comes back.
 - Confidence: 0.78
 
 ## Run metadata
 
 - Case folder: `C:\Users\sahid\Documents\Projects\Hackathons\DwellyHack\dwelly-agent\data\practice\cases\PM042-2`
-- Session id: wrun_01M4JWK2F3E7EPZR23PPMWQEA2
-- Started: 2026-10-10T12:28:47.398Z  Finished: 2026-10-10T12:29:26.476Z  Duration: 39.1s
-- Events recorded: 223
+- Session id: wrun_01M4JYF8EHM86DA1TZQ07VNYT3
+- Started: 2026-10-10T13:01:39.583Z  Finished: 2026-10-10T13:02:22.435Z  Duration: 42.9s
+- Events recorded: 255
 - Model(s): anthropic/claude-opus-5.5
-- Tokens: in 106700 / out 3914; cost: not reported
+- Tokens: in 112822 / out 4521; cost: not reported

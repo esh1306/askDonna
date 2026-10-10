@@ -3,90 +3,146 @@
   "decision": "escalate",
   "escalated": "yes",
   "failures": 0,
-  "durationSec": 46.908,
+  "durationSec": 59.013,
   "decisionLine": "escalate",
-  "sessionId": "wrun_01M4JWKDG4SPYJWQM6ENEJCSHK",
-  "startedAt": "2026-10-10T12:28:58.706Z",
-  "finishedAt": "2026-10-10T12:29:45.614Z",
+  "sessionId": "wrun_01M4JYFPVFN4MC9286XNEDR72R",
+  "startedAt": "2026-10-10T13:01:54.337Z",
+  "finishedAt": "2026-10-10T13:02:53.350Z",
   "usage": {
-    "inputTokens": 71569,
-    "outputTokens": 4222
+    "inputTokens": 132233,
+    "outputTokens": 5526
   },
-  "eventCount": 271,
+  "eventCount": 352,
   "dryRun": false,
   "result": {
-    "case_id": "67 (R/PM044-1)",
+    "case_id": "79 (R/PM044-1)",
     "decision": "escalate",
-    "summary": "The landlord's reply 'Please go ahead' (event 012) clearly approves sending a contractor to fit a new handle. Jev rated it routine and an unconditional approval (0.87). I couldn't assign a contractor because none is named on the ticket or by the landlord. Ticket 19 (R/PM044-2) is a duplicate of the same request with identical events, so assigning here too could mean two contractors are sent and two invoices come in. I've told the tenant the landlord has approved and a contractor will be in touch. I've escalated so ops can pick the master ticket and assign one contractor, and placed a 1-day hold.",
-    "situation": "The window handle at the top of the stairs at Flat 21, 129 Juniper Mews fell off and the window won't open. The tenant also mentions a broken latch. The agency asked the landlord on 8 Feb and the landlord said 'Please go ahead' on 9 Feb, with no cost given. The ticket is in provider_selection with no contractor on it. A duplicate ticket for the same request exists at this property.",
+    "summary": "The landlord said \"Please go ahead\" (event 12) to sending a contractor to fit a new window handle, so the work is approved. I couldn't assign anyone because no contractor is named on the ticket, by the landlord or in the property's history. There's also a likely duplicate ticket (80) for the same job. I emailed the tenant to say the landlord has agreed, recorded the approval, and passed the ticket to the ops team to pick a contractor and check ticket 80. The ticket is on hold with a 2-day follow-up.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "The landlord's event 12 reply is a clear approval of event 9 ('May I send a contractor to fit a new handle?'), and classify_reply returned approve / auto. The normal next step is assign_contractor, but no contractor is named anywhere in the records up to 9 Feb 08:45, and I can't invent one. find_tickets also showed ticket 80 at the same address, with the same description, created at the same time. Sending a contractor from both tickets could mean two attendances. Picking a contractor and sorting out the duplicate are agency decisions, so I escalated at normal priority. The tenant got an update with a concrete next step.",
+      "alternatives_considered": [
+        {
+          "option": "Assign a contractor now",
+          "why_not": "No contractor is named on the ticket, by the landlord or in the property's job history, and inventing one isn't allowed. Ticket 80's later events (after 9 Feb 08:45) are future information, so I didn't use them to choose a contractor."
+        },
+        {
+          "option": "Reply to the landlord",
+          "why_not": "The landlord gave a clear go-ahead and asked nothing (event 11 asks whether a reply is needed). No reply is required."
+        },
+        {
+          "option": "Request formal approval via request_landlord_approval",
+          "why_not": "Approval was already given clearly by email. Asking again would hold up the job for nothing."
+        },
+        {
+          "option": "Wait with no escalation",
+          "why_not": "The next step needs agency input (contractor choice, the duplicate). Without escalation nobody would pick it up."
+        }
+      ],
+      "checks_performed": [
+        "Loaded ticket 79 context: no contractor, no approvals record, no holds, no attachments",
+        "Classified landlord reply: approve, unconditional 0.9, autonomy auto",
+        "Classified intake: doors_windows_locks, routine",
+        "Searched tickets by address and text: found possible duplicate ticket 80",
+        "Checked for amounts or cost cap: none stated",
+        "Did not use any events dated after 2025-02-09 08:45:56"
+      ],
+      "assumptions": [
+        "'Palmer' is the landlord of record signing the reply",
+        "The window is not an emergency: internal staircase window, not an insecure ground-floor opening"
+      ]
+    },
+    "situation": "Tenant reported 13 Jan 2025 that the handle fell off the window at the top of the staircase and it can't be opened. The agency confirmed which window with the tenant and asked the landlord, who approved on 9 Feb. The ticket is in provider_selection with no contractor assigned.",
     "actions_taken": [
       {
         "tool": "get_ticket_context",
-        "description": "Loaded the context for ticket 67",
-        "result": "12 events, no contractor, no approvals or holds; approval already recorded as property fact 63; duplicate ticket 19 in the property history",
+        "description": "Loaded ticket 79",
+        "result": "No contractor, approvals, holds or attachments; landlord said 'Please go ahead' (event 12)",
         "ok": true
       },
       {
         "tool": "classify_reply",
-        "description": "Classified the landlord's reply from event 012",
-        "result": "intent approve, unconditional 0.87, autonomy auto",
+        "description": "Classified landlord reply",
+        "result": "intent approve, unconditional 0.9, auto",
+        "ok": true
+      },
+      {
+        "tool": "classify_intake",
+        "description": "Classified request",
+        "result": "doors_windows_locks, routine",
+        "ok": true
+      },
+      {
+        "tool": "find_tickets",
+        "description": "Searched for related tickets by address and text",
+        "result": "Found ticket 80 (R/PM044-2), same address and description",
         "ok": true
       },
       {
         "tool": "get_ticket_context",
-        "description": "Opened duplicate ticket 19 to check whether it is the same job",
-        "result": "Same description, same timestamp and identical events up to the landlord's approval, so it is a duplicate",
+        "description": "Checked ticket 80 for duplication",
+        "result": "Same job, created at the same time; later events not used (future)",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded landlord approval for the handle replacement",
+        "result": "fact 118",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded property window defect location",
+        "result": "fact 119",
         "ok": true
       },
       {
         "tool": "send_message",
-        "description": "Emailed the tenant that the landlord has approved and a contractor will be in touch, with safe advice not to force the window",
-        "result": "Sent (message 86), guard not blocked",
+        "description": "Emailed tenant: landlord has agreed, contractor being arranged, update within 2 working days",
+        "result": "message 108, guard passed",
         "ok": true
       },
       {
         "tool": "escalate_to_human",
-        "description": "Asked ops to resolve the duplicate ticket and assign one contractor",
-        "result": "Queue item 20",
+        "description": "Asked ops to pick a contractor and check duplicate ticket 80",
+        "result": "queue 36",
         "ok": true
       },
       {
         "tool": "place_hold",
-        "description": "Hold waiting on the agency for contractor selection",
-        "result": "Hold 167, follow-up in 1 day",
+        "description": "Hold waiting on agency, 2-day follow-up",
+        "result": "hold 203",
         "ok": true
       }
     ],
     "approvals": [
       {
-        "party": "Landlord (signed 'Palmer')",
+        "party": "Landlord (Palmer)",
         "status": "granted",
-        "channel": "email (event 012)"
+        "channel": "email"
       }
     ],
     "escalation": {
       "needed": true,
-      "reason": "Approved job with no contractor to assign, and a duplicate ticket (R/PM044-2) that could lead to two contractors being sent.",
-      "handover_summary": "The landlord approved fitting a new handle to the top-of-stairs window ('Please go ahead', event 012), with no cost cap. The tenant has been told a contractor will be in touch. No contractor is on ticket 67. Ticket 19 is the same request.",
-      "recommendation": "Ops: choose the master ticket, assign one window/handle contractor there, and close or merge the other. Ask the contractor to check the latch and to quote if the cost goes beyond a simple handle replacement."
+      "reason": "Approved job needs a contractor picked (none on record), and there's a possible duplicate ticket 80",
+      "handover_summary": "The landlord approved fitting a new handle to the top-of-stairs window (event 12, no cost cap). No contractor is named or on record. Ticket 80 looks like a duplicate of the same job. The tenant has been told a contractor is being arranged and that she'll hear within 2 working days.",
+      "recommendation": "Check ticket 80. If it duplicates this job, merge or close 79. Otherwise assign the usual window/lock contractor on 79 and notify the contractor and tenant."
     },
     "unverified": [
-      "The cost of the repair (no quote has been obtained)",
-      "Whether the broken latch is in scope",
-      "The tenant's name: she signs 'Harriet'",
-      "Which contractor the agency intends to use"
+      "Cost of the repair (no quote)",
+      "Which contractor should attend",
+      "Whether tickets 79 and 80 are the same job (tenant names differ: Harriet vs Nora Quinn)"
     ],
     "failures": [],
     "risks_or_red_flags": [
-      "Duplicate ticket R/PM044-2 for the same job: risk of sending two contractors and paying twice",
-      "Property fact 37 cites events from the duplicate ticket dated after this case's current point; I did not use it",
-      "The approval has no cost cap"
+      "Possible duplicate ticket 80: two contractors could be sent to the same job",
+      "The window can't be opened (affects ventilation). It has been delayed since 13 Jan"
     ],
-    "final_status": "provider_selection, on hold (waiting on agency), escalated to the human queue",
+    "final_status": "provider_selection, on hold waiting on agency (hold 203), escalated (queue 36)",
     "next_follow_up": {
-      "when": "In 1 day (hold 167)",
-      "what": "Check that ops have picked a contractor and resolved the duplicate; then assign the contractor and notify the contractor and the tenant"
+      "when": "2025-02-11",
+      "what": "Check a contractor has been assigned and ticket 80 resolved, then notify the contractor and tenant"
     },
-    "confidence": 0.7
+    "confidence": 0.8
   }
 }

@@ -6,49 +6,68 @@
 
 ## Summary
 
-The tenant has done all the troubleshooting checks and the dishwasher door still won't close, so an engineer is needed. I emailed the tenant to acknowledge this and advised them not to use the appliance. An internal note says the landlord agreed for 'GS' to attend, but GS isn't recorded as a contractor and there is no formal approval or amount. I've escalated so a human can confirm the approval and instruct GS.
+I replied to the tenant and handed the ticket to a person, because I couldn't safely assign a contractor. The tenant has done the checks and the dishwasher door still won't close. An internal note says the landlord already agreed for "GS" to attend. But "GS" doesn't match any contractor in the records, and ticket 26 looks like a duplicate of this job that is already further on.
+
+## Judgement
+
+- **Case type:** maintenance
+- **Why this decision:** Normally the next step would be to assign a contractor. The landlord agreed to an attendance (event 008) and the tenant confirmed the fault is still there after the checks (event 011). But I'd have to make up a name to assign "GS", and ticket 26 is a parallel record for the same job, so assigning here risks double-booking. Event 010 asked whether the tenant needed a reply. He did, so I sent one.
+
+| Alternative considered | Why not |
+|---|---|
+| Assign a contractor now | "GS" doesn't match any named contractor, and ticket 26 looks like a duplicate of this job, so assigning here could double-book |
+| Ask the landlord for approval again | The landlord already agreed (event 008). The open question is for the agency to answer, not the landlord |
+| No reply to tenant | He had reported the fault was still there and was waiting to hear what happens next |
+
+**Checks performed before acting**
+
+- Loaded the context for ticket 25: no contractor, approvals or facts recorded
+- Classified the tenant's reply: still broken, autonomy auto, low safety risk
+- Checked the property history and found ticket 26 with the same details and creation time
+- Message guard passed
+
+**Assumptions**
+
+- Event 008's "GS" refers to a contractor whose identity the agency knows
+- I only used events up to 23/04/2026. Ticket 26's later events were not used to make decisions
 
 ## Actions taken
 
 | # | Tool | Input (gist) | Result | Output (gist) |
 |---|---|---|---|---|
-| 1 | `get_ticket_context` | {"ticket_id":7} | ok | {"ok":true,"ticket":{"id":7,"case_ref":"R/PM012-1","property_id":6,"tenant_id":15,"landlord_id":16,"contractor_id":null… |
-| 2 | `classify_intake` | {"ticket_id":7,"text":"Dishwasher door not closing. Tenant has completed all troubleshooting checks (racks, spray arms, cutlery basket, sea… | ok | {"route":"request_landlord_approval","category":"appliance","category_probs":{"plumbing":0,"appliance":1,"doors_windows… |
-| 3 | `search_case` | {"ticket_id":7,"query":"GS"} | ok | {"query":"GS","matches":1,"events":[{"id":69,"ticket_id":7,"ts":"2026-04-19T10:22:44Z","kind":"note","direction":"inter… |
-| 4 | `send_message` | {"ticket_id":7,"to":"tenant","channel":"email","subject":"Dishwasher door – Flat 9, 89 Juniper Mews (ref R/PM012-1)","body":"Hi Leo,\n\nTha… | ok | {"ok":true,"message_id":7} |
-| 5 | `add_profile_fact` | {"entity_type":"property","entity_id":6,"key":"dishwasher_door_fault_troubleshooting_done","value":"Tenant completed all self-checks 2026-0… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":14,"entity_type":"property","entity_id":6,"key":"dishwasher_… |
-| 6 | `add_profile_fact` | {"entity_type":"contact","entity_id":15,"key":"signs_off_as","value":"Leo (event 004 internal note refers to the tenant as 'Ruben' – possib… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":15,"entity_type":"contact","entity_id":15,"key":"signs_off_a… |
-| 7 | `escalate_to_human` | {"ticket_id":7,"reason":"Tenant confirms fault persists; contractor 'GS' must be instructed but isn't in CRM and landlord approval is only … | ok | {"ok":true,"queue_id":3} |
+| 1 | `get_ticket_context` | {"ticket_id":25} | ok | {"ok":true,"ticket":{"id":25,"case_ref":"R/PM012-1","property_id":20,"tenant_id":64,"landlord_id":65,"contractor_id":nu… |
+| 2 | `get_ticket_context` | {"ticket_id":26} | ok | {"ok":true,"ticket":{"id":26,"case_ref":"R/PM012-2","property_id":20,"tenant_id":66,"landlord_id":67,"contractor_id":68… |
+| 3 | `classify_reply` | {"ticket_id":25,"text":"Hi Maya,\n\nAll checks done, door still doesn't close.\n\nThanks\nLeo","sender_role":"tenant","context":"Tenant was… | ok | {"autonomy":"auto","intent":"still_broken","intent_probs":{"confirms_fixed":0,"still_broken":1,"access_or_availability"… |
+| 4 | `send_message` | {"ticket_id":25,"to":"tenant","channel":"email","subject":"Dishwasher door – Flat 9, 89 Juniper Mews (ref R/PM012-1)","body":"Hi Leo,\n\nTh… | ok | {"ok":true,"message_id":43,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.58,"promises_… |
+| 5 | `escalate_to_human` | {"ticket_id":25,"reason":"Approved dishwasher callout ready to go ahead, but \"GS\" can't be identified as a contractor and a duplicate tic… | ok | {"ok":true,"queue_id":15} |
+| 6 | `place_hold` | {"ticket_id":25,"reason":"Landlord pre-agreed engineer attendance (event 008) and tenant confirmed fault persists (event 011). Waiting on a… | ok | {"ok":true,"hold_id":81} |
 
 Agent's own account of its actions (from the structured result):
 
-- `get_ticket_context` - Loaded ticket 7 -> 11 events, no contractor, approvals, holds or contact details
-- `classify_intake` - Classified the fault after the tenant's checks -> appliance, routine, needs approval 0.85, safety 0.25
-- `search_case` - Searched for 'GS' -> Only event 008
-- `send_message` - Emailed the tenant: acknowledged the reply, said an engineer is being arranged (no date promised), advised keeping the dishwasher off -> message_id 7
-- `add_profile_fact` - Property: troubleshooting done, fault persists -> fact 14
-- `add_profile_fact` - Tenant signs off as Leo; flagged the 'Ruben' mismatch -> fact 15
-- `escalate_to_human` - Handover to confirm the landlord's approval and instruct GS -> queue_id 3
+- `get_ticket_context` - Loaded ticket 25, then ticket 26 to check the possible duplicate -> No contractor on ticket 25. Ticket 26 is the same job, stage 'works'
+- `classify_reply` - Classified the tenant's email (event 011) -> still_broken, autonomy auto
+- `send_message` - Emailed the tenant: thanks for doing the checks, we're arranging an engineer, update by 27/04 -> message 43 sent, guard passed
+- `escalate_to_human` - Asked a person to identify the "GS" contractor and sort out the duplicate ticket 26 -> queue 15
+- `place_hold` - Hold waiting on the agency, follow-up in 3 days -> hold 81
 
 ## Approvals
 
 | Party | Status | Channel |
 |---|---|---|
-| Landlord | reported as agreed in internal note (event 008); no CRM approval record, needs confirming | unknown |
+| Landlord | granted (internal note event 008, no cost cap, not verified from a landlord message) | unknown |
 
 ## Escalation & handover
 
 - Escalation needed: **yes**
-- Reason: Contractor GS isn't in the CRM and the landlord's approval is only an informal note with no amount
-- Handover summary: Tenant confirmed the door still won't close after the checks (event 011). Tenant has been acknowledged. The landlord reportedly agreed for GS to go out (event 008), but there's no approval record, contractor record or cost.
-- Recommendation: Confirm the landlord's approval and any cost cap, assign and instruct GS, move the ticket to scheduling, and check the tenant name (Ruben or Leo).
+- Reason: I can't tell which contractor "GS" is, and ticket 26 is a possible duplicate of this job
+- Handover summary: Tenant says the door still won't close after the checks. The landlord agreed to "GS" attending (event 008). The tenant was told he'll hear by 27/04. Ticket 26 (R/PM012-2) is the same job and is already in works.
+- Recommendation: If ticket 26 is the live record, close this ticket as a duplicate. Otherwise, name "GS" and assign them, then notify the contractor and the tenant.
 
 ## What could not be verified
 
-- Who GS is
-- Landlord approval scope and amount
-- Tenant name: Ruben (event 004) or Leo (event 011)
-- Dishwasher make, model and age
+- Who "GS" is
+- What exactly the landlord agreed to, and any cost limit
+- Whether ticket 26 is the working record for this job
 
 ## What failed
 
@@ -56,22 +75,21 @@ _No failures recorded._
 
 ## Risks & red flags
 
-- Long-running fault, first reported Sept 2025
-- Possible leak if the dishwasher is used with the door unlatched
-- Tenant name mismatch
-- Troubleshooting email was sent twice
+- Duplicate ticket for the same job, so a contractor could be double-booked
+- The troubleshooting email was sent to the tenant twice (events 005/006)
+- The tenant was told he'll hear by 27/04, so the agency needs to act before then
 
 ## Final result / next follow-up
 
-- Final status: provider_selection, escalated to the ops queue (queue 3)
-- Next follow-up: Within 2 working days - Ops to confirm the landlord's approval and instruct GS, then update the tenant with appointment details
-- Confidence: 0.8
+- Final status: provider_selection, on hold (waiting on the agency), escalated
+- Next follow-up: 2026-04-26 - Check that the agency has identified the contractor or merged the duplicate, and update the tenant by 27/04
+- Confidence: 0.72
 
 ## Run metadata
 
 - Case folder: `C:\Users\sahid\Documents\Projects\Hackathons\DwellyHack\dwelly-agent\data\practice\cases\PM012-1`
-- Session id: wrun_01M4JSVSQDRQ842902AVN6T91G
-- Started: 2026-10-10T11:41:07.584Z  Finished: 2026-10-10T11:41:48.158Z  Duration: 40.6s
-- Events recorded: 229
+- Session id: wrun_01M4JY7TPXBYP3KQGZS8FWS43X
+- Started: 2026-10-10T12:57:36.159Z  Finished: 2026-10-10T12:58:47.676Z  Duration: 71.5s
+- Events recorded: 272
 - Model(s): anthropic/claude-opus-5.5
-- Tokens: in 71501 / out 3614; cost: not reported
+- Tokens: in 103032 / out 4289; cost: not reported

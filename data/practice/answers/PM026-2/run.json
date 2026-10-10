@@ -3,85 +3,120 @@
   "decision": "request_info",
   "escalated": "no",
   "failures": 0,
-  "durationSec": 32.052,
+  "durationSec": 37.244,
   "decisionLine": "request_info",
-  "sessionId": "wrun_01M4JW99WWPHNETXTAKJQS9EKJ",
-  "startedAt": "2026-10-10T12:23:27.272Z",
-  "finishedAt": "2026-10-10T12:23:59.324Z",
+  "sessionId": "wrun_01M4JYBTJK2PQVN1H6NBV6XEBV",
+  "startedAt": "2026-10-10T12:59:47.077Z",
+  "finishedAt": "2026-10-10T13:00:24.321Z",
   "usage": {
-    "inputTokens": 84615,
-    "outputTokens": 3276
+    "inputTokens": 116734,
+    "outputTokens": 3877
   },
   "eventCount": 201,
   "dryRun": false,
   "result": {
-    "case_id": "36 (R/PM026-2)",
+    "case_id": "56 (R/PM026-2)",
     "decision": "request_info",
-    "summary": "The tenant called to say she booked the oven repair with the contractor for 8 September 2025, not the 30/08/2025 slot on our system. She needed a reply, so I didn't escalate: the contractor can settle the date. I emailed Keystone Compliance to ask which date they booked and whether anyone came on 30/08. I emailed the tenant to say we're checking with them, without promising a date. The ticket is on hold for 2 days waiting for the contractor.",
-    "situation": "Routine oven repair: the main oven element doesn't heat but the grill works. The landlord said \"Yes go ahead\" (event 009) and Keystone Compliance was assigned. Our system booked a visit for 30/08/2025, 10–12 (events 017–020), and called it \"Monday morning\", but 30/08/2025 is a Saturday. On 30/08 (event 021) the tenant called to say she had arranged 8 September 2025 and asked us to confirm that date. The classifier marked her call for review (question 0.96, needs a human reply 0.6). The ticket is in stage 'works', but it is really still at scheduling. I didn't move it backwards.",
+    "summary": "I asked Keystone Compliance to confirm the visit date and put the ticket on hold. The tenant called to say she arranged the oven repair for 8 September 2025, but our system recorded the visit as \"Monday 30/08/2025\" — and 30/08/2025 was a Saturday. The contractor booked the visit, so they can settle the date. I told the tenant we are checking and that we will update her by 1 September. No escalation is needed.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "The landlord's 'Yes go ahead' (event 9) approved sending the contractor, and Keystone Compliance was assigned (events 12–14). The only open question is the visit date. Events 16–20 say 'Monday 10–12', tentative and waiting on the tenant's text, and record it as 30/08/2025, which was a Saturday. The tenant's call (event 21) says the visit was arranged for 8 Sept 2025. The contractor booked it, so they can answer. Under the 'ask before escalating' rule, I messaged the contractor and placed a hold. The tenant asked for confirmation, so she needed a reply; she got an acknowledgement with a check-back date.",
+      "alternatives_considered": [
+        {
+          "option": "Confirm 8 Sept to the tenant",
+          "why_not": "The records do not confirm that date, and the guard would reject an unconfirmed date."
+        },
+        {
+          "option": "Escalate to a human",
+          "why_not": "The contractor can settle the date; there is no cost, safety or legal issue."
+        },
+        {
+          "option": "No action",
+          "why_not": "The tenant asked a direct question and the records give two different dates."
+        }
+      ],
+      "checks_performed": [
+        "Approval 24 is approved (event 9: 'Yes go ahead')",
+        "Contractor on the ticket is Keystone Compliance",
+        "Compared dates: 'Monday' vs 30/08/2025 (a Saturday) vs the tenant's 8 Sept",
+        "Name differences (Riverside Works, Lantern Utilities, Keystone Utilities, Isaac Palmer, Grace Mercer / Harriet Fletcher / Clara / Ruben Oakley) treated as trading names or household members",
+        "Found an open related ticket: 55 (R/PM026-1), same property and same title, at the landlord_approval stage",
+        "No open holds before this turn"
+      ],
+      "assumptions": [
+        "Keystone Compliance is the firm that called (event 16) under a different trading name",
+        "Grace Mercer is a member of the tenant household",
+        "No visit took place on 30/08 (not confirmed)"
+      ]
+    },
+    "situation": "This is an approved, routine oven repair (main oven element not heating; grill works) at Flat 3, 3 Willowmere Road. It sits at the works stage. The visit date is disputed: the system says 30/08/2025 and the tenant says 8 Sept 2025.",
     "actions_taken": [
       {
         "tool": "get_ticket_context",
-        "description": "Loaded the ticket, profiles, events and approvals",
-        "result": "22 events, landlord approval 18 approved, no open holds, no attachments",
+        "description": "Loaded the case",
+        "result": "22 events; approval 24 approved; contractor Keystone Compliance; related open ticket 55",
         "ok": true
       },
       {
         "tool": "classify_reply",
-        "description": "Classified the tenant's call (event 021)",
-        "result": "Question 0.96, review, needs a human reply 0.6, dissatisfied 0.32",
+        "description": "Classified the tenant's call (event 21)",
+        "result": "Question 0.98; marked for review; needs_human_response 0.6; dissatisfied 0.24",
         "ok": true
       },
       {
         "tool": "send_message",
-        "description": "Emailed Keystone Compliance to ask which date they booked and whether anyone came on 30/08/2025",
-        "result": "Queued (message 45), guard passed",
+        "description": "Asked Keystone Compliance to confirm the booked date and time, and whether a visit happened on 30/08",
+        "result": "Sent (message 76)",
         "ok": true
       },
       {
         "tool": "send_message",
-        "description": "Emailed the tenant to acknowledge her call and say we're checking the date with the contractor (no date promised)",
-        "result": "Queued (message 46), guard passed",
+        "description": "Told the tenant we are checking the date with the contractor and will update her by 1 Sept",
+        "result": "Sent (message 75)",
         "ok": true
       },
       {
         "tool": "place_hold",
-        "description": "Put the ticket on hold waiting for the contractor to confirm the date",
-        "result": "Hold 88, follow-up in 2 days",
+        "description": "Put the ticket on hold, waiting on the contractor's confirmation",
+        "result": "Hold 130, follow-up in 1 day",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the oven/hob details, no pets and no access considerations",
+        "result": "Fact 75",
         "ok": true
       }
     ],
     "approvals": [
       {
-        "party": "Landlord",
-        "status": "granted (event 009 'Yes go ahead'; no amount stated)",
+        "party": "Landlord (Palmer)",
+        "status": "granted",
         "channel": "email"
       }
     ],
     "escalation": {
       "needed": false,
-      "reason": "The date clash can be settled by asking the contractor; no complaint, safety or cost issue",
+      "reason": "The contractor can settle the date conflict.",
       "handover_summary": "",
-      "recommendation": "If the contractor hasn't replied by the follow-up date, chase them once. Escalate if they still don't reply or if the dates still clash."
+      "recommendation": "If Keystone does not reply by the follow-up date, chase once, then escalate. Separately, someone should review duplicate ticket 55 (R/PM026-1) and close it if appropriate."
     },
     "unverified": [
-      "Whether the contractor booked 8 September 2025 or 30/08/2025",
-      "Whether anyone came on 30/08/2025",
-      "Real visit date: the system calls 30/08/2025 'Monday' but it is a Saturday",
-      "Names don't match: Isaac Palmer/Riverside Works, Lantern Utilities and Keystone Utilities appear to be trading names for Keystone Compliance; tenant listed as Clara, Ruben Oakley, Grace Mercer or Harriet Fletcher",
-      "No repair cost or quote is visible; the landlord approved without an amount"
+      "The actual booked visit date (30/08 or 8 Sept)",
+      "Whether any visit took place on 30/08",
+      "Whether Riverside Works / Lantern Utilities / Keystone Utilities are the same firm as Keystone Compliance"
     ],
     "failures": [],
     "risks_or_red_flags": [
-      "If the contractor came on 30/08 and no one was in, there could be a wasted-call charge",
-      "The system sent the tenant and contractor different phone numbers (07700 900721 vs 07700 900077)",
-      "An earlier ticket for the same property (R/PM026-1, oven repair) is still on hold in provider_selection and may be a duplicate",
-      "Tenant showed mild frustration (dissatisfied 0.32)"
+      "The recorded appointment date has an internal error: 30/08/2025 is labelled Monday but was a Saturday",
+      "Several different contractor and tenant names appear across events",
+      "Ticket 55 (R/PM026-1) is a possible duplicate, still open at landlord_approval",
+      "The tenant may be mildly unhappy about the confusion (dissatisfied 0.24)"
     ],
-    "final_status": "On hold (waiting on contractor), stage left at works",
+    "final_status": "works – on hold waiting on the contractor (hold 130)",
     "next_follow_up": {
-      "when": "2025-09-01",
-      "what": "If Keystone Compliance hasn't confirmed the visit date, chase them; once confirmed, tell the tenant the date"
+      "when": "2025-08-31",
+      "what": "Chase Keystone Compliance for the confirmed visit date, then confirm it to the tenant"
     },
     "confidence": 0.8
   }

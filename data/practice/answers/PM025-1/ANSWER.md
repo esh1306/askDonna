@@ -2,79 +2,105 @@
 
 ## Decision
 
-**escalate**
+**request_info**
 
 ## Summary
 
-The landlord replied asking for last year's oven installer (used via Keystone Works) to be contacted for a free warranty repair. That approval depends on there being no charge, and the installer isn't named anywhere in the CRM, so I couldn't assign them. I sent a human the job of identifying the installer, kept approval 31 pending, emailed the tenant an update asking for the oven's make and model, and put the case on hold with a follow-up in 2 days.
+The landlord (Felix) replied that the oven should go back under warranty, at no charge, to the contractor Keystone Works used to replace it last year. Nothing in the records says who that contractor is, so I can't assign anyone yet. I emailed the landlord asking for the contractor's details and the warranty paperwork, told the tenant what happens next, and put the ticket on hold with a 2-day follow-up. I did not mark the pending approval as resolved: the landlord asked for a free warranty repair and did not approve any cost.
+
+## Judgement
+
+- **Case type:** maintenance
+- **Why this decision:** Event 006: the landlord tells us how he wants the repair handled (warranty, charge-free, through the previous installer). He gives no open approval and no budget. The classifier said 'review' (conditional_approval 0.33, unconditional 0.05, needs_human_response 0.79). Event 005 asked whether a reply to the landlord was needed, and one is: we can't name or contact the installer without his details. The landlord can answer this, so I asked him rather than escalating.
+
+| Alternative considered | Why not |
+|---|---|
+| Record approval as approved and assign a contractor | The approval only covers a free warranty repair, and the contractor is not named anywhere on this ticket, so there is nobody to assign. |
+| Escalate to a human | Nothing needs agency judgement yet and the landlord can supply the missing detail. Escalating would only stall the job. |
+| Instruct an agency contractor at the landlord's cost | This goes against what the landlord asked for (a free warranty repair), and he has given no cost approval. |
+
+**Checks performed before acting**
+
+- Loaded the ticket context: no contractor, no profile facts, approval 20 pending with no amount, no open holds
+- classify_reply on event 006: review, conditional, not an unconditional approval
+- Searched the case for 'Keystone': only event 006 mentions it, and no contractor is named
+- find_tickets by address: found a second ticket, 54 (R/PM025-2), with the same description and created at the same time. It looks like a duplicate. I did not use its later-dated events, which are after the current point in this case
+- Safety: the oven doesn't heat, but there is no gas, electrical or water risk. Routine
+
+**Assumptions**
+
+- 'Keystone Works' is the firm that organised last year's replacement. It could be a previous agency or a contractor; this isn't confirmed
+- The landlord's preferred channel is email, because he replied by email
 
 ## Actions taken
 
 | # | Tool | Input (gist) | Result | Output (gist) |
 |---|---|---|---|---|
-| 1 | `get_ticket_context` | {"ticket_id":59} | ok | {"ok":true,"ticket":{"id":59,"case_ref":"R/PM025-1","property_id":42,"tenant_id":141,"landlord_id":142,"contractor_id":… |
-| 2 | `classify_reply` | {"ticket_id":59,"text":"Felix requests that the contractor used by Keystone Works for the oven replacement last year be contacted for a cha… | ok | {"autonomy":"review","intent":"other","intent_probs":{"approve":0.11,"decline":0.03,"conditional_approval":0.38,"questi… |
-| 3 | `find_tickets` | {"property_address":"176 Lantern Quay"} | ok | {"matches":1,"tickets":[{"id":59,"case_ref":"R/PM025-1","title":"Oven Repair Request","category":null,"stage":"landlord… |
-| 4 | `search_case` | {"ticket_id":59,"query":"Keystone"} | ok | {"query":"Keystone","matches":1,"events":[{"id":710,"ticket_id":59,"ts":"2024-05-21T12:04:07Z","kind":"email","directio… |
-| 5 | `add_profile_fact` | {"entity_type":"property","entity_id":42,"key":"appliance_oven_age","value":"Replaced in 2023 (per tenant \"sometime last year\"); landlord… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":81,"entity_type":"property","entity_id":42,"key":"appliance_… |
-| 6 | `add_profile_fact` | {"entity_type":"contact","entity_id":142,"key":"preferred_contractor_oven","value":"Wants the contractor Keystone Works used for the 2023 o… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":82,"entity_type":"contact","entity_id":142,"key":"preferred_… |
-| 7 | `send_message` | {"ticket_id":59,"to":"tenant","channel":"email","subject":"Oven not heating – Flat 2, 176 Lantern Quay (ref R/PM025-1)","body":"Hello,\n\nT… | ok | {"ok":true,"message_id":75,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.37,"promises_… |
-| 8 | `escalate_to_human` | {"ticket_id":59,"reason":"Landlord wants last year's oven installer (via Keystone Works) called back under warranty, but that contractor is… | ok | {"ok":true,"queue_id":18} |
-| 9 | `place_hold` | {"ticket_id":59,"reason":"Agency to identify last year's oven installer (via Keystone Works) for the warranty call-out. Also waiting for th… | ok | {"ok":true,"hold_id":148} |
+| 1 | `get_ticket_context` | {"ticket_id":53} | ok | {"ok":true,"ticket":{"id":53,"case_ref":"R/PM025-1","property_id":39,"tenant_id":132,"landlord_id":133,"contractor_id":… |
+| 2 | `classify_reply` | {"ticket_id":53,"text":"Felix requests that the contractor used by Keystone Works for the oven replacement last year be contacted for a cha… | ok | {"autonomy":"review","intent":"other","intent_probs":{"approve":0.12,"decline":0.03,"conditional_approval":0.33,"questi… |
+| 3 | `find_tickets` | {"property_address":"176 Lantern Quay"} | ok | {"matches":2,"tickets":[{"id":53,"case_ref":"R/PM025-1","title":"Oven Repair Request","category":null,"stage":"landlord… |
+| 4 | `search_case` | {"ticket_id":53,"query":"Keystone"} | ok | {"query":"Keystone","matches":1,"events":[{"id":691,"ticket_id":53,"ts":"2024-05-21T12:04:07Z","kind":"email","directio… |
+| 5 | `get_ticket_context` | {"ticket_id":54,"events":20} | ok | {"ok":true,"ticket":{"id":54,"case_ref":"R/PM025-2","property_id":39,"tenant_id":134,"landlord_id":135,"contractor_id":… |
+| 6 | `send_message` | {"ticket_id":53,"to":"landlord","channel":"email","subject":"Oven repair – Flat 2, 176 Lantern Quay (ref R/PM025-1) – warranty contractor d… | ok | {"ok":true,"message_id":73,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.4,"promises_s… |
+| 7 | `send_message` | {"ticket_id":53,"to":"tenant","channel":"email","subject":"Oven repair – Flat 2, 176 Lantern Quay (ref R/PM025-1) – update","body":"Hello,\… | ok | {"ok":true,"message_id":74,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.36,"promises_… |
+| 8 | `place_hold` | {"ticket_id":53,"reason":"Waiting for landlord to provide details of the contractor Keystone Works used for last year's oven replacement an… | ok | {"ok":true,"hold_id":127} |
+| 9 | `add_profile_fact` | {"entity_type":"property","entity_id":39,"key":"appliance_oven_replaced","value":"Oven replaced in 2023 (by contractor via Keystone Works);… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":73,"entity_type":"property","entity_id":39,"key":"appliance_… |
+| 10 | `add_profile_fact` | {"entity_type":"contact","entity_id":133,"key":"oven_repair_instruction","value":"Wants oven fault handled under warranty via the contracto… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":74,"entity_type":"contact","entity_id":133,"key":"oven_repai… |
 
 Agent's own account of its actions (from the structured result):
 
-- `get_ticket_context` - Loaded case -> Stage landlord_approval, approval 31 pending, no property history or contractor
-- `classify_reply` - Classified the landlord's reply (event 006) -> review; conditional_approval 0.38, unconditional 0.05
-- `find_tickets` - Looked for earlier jobs at the property -> Only this ticket
-- `search_case` - Searched the case for 'Keystone' -> Only event 006
-- `add_profile_fact` - Recorded the oven's age and warranty belief on the property -> fact 81
-- `add_profile_fact` - Recorded the landlord's preference for last year's installer under warranty -> fact 82
-- `send_message` - Emailed the tenant an update and asked for the oven's make/model -> message 75 sent, not blocked by the guard
-- `escalate_to_human` - Asked ops to identify last year's installer -> queue 18
-- `place_hold` - Put the case on hold waiting for the agency, follow-up in 2 days -> hold 148
+- `get_ticket_context` - Loaded ticket 53 -> Stage landlord_approval, approval 20 pending, no contractor on file
+- `classify_reply` - Classified the landlord's email (event 006) -> review; conditional_approval 0.33; unconditional 0.05
+- `find_tickets` - Checked for other tickets at the property -> Found ticket 54 (R/PM025-2), which looks like a duplicate
+- `search_case` - Searched the case for 'Keystone' -> Only event 006; no contractor named
+- `get_ticket_context` - Inspected ticket 54 to check if it was a duplicate -> Same description and creation time. Its later-dated events were not used
+- `send_message` - Emailed the landlord asking for the warranty contractor's details and the oven's paperwork -> Message 73 queued, guard passed
+- `send_message` - Emailed the tenant with an update, the next step and when we'll be back in touch (by 23 May) -> Message 74 queued, guard passed
+- `place_hold` - Hold waiting on the landlord, 2-day follow-up -> Hold 127
+- `add_profile_fact` - Property fact: oven replaced 2023, believed under warranty -> Fact 73
+- `add_profile_fact` (FAILED) - First attempt to record the landlord's instruction used the wrong entity_type ('landlord') -> Validation error
+- `add_profile_fact` - Recorded the landlord's instruction: warranty repair, charge-free, no cost approval -> Fact 74
 
 ## Approvals
 
 | Party | Status | Channel |
 |---|---|---|
-| Landlord (Felix) | conditional – warranty/no-charge only; approval 31 left pending | email |
+| Landlord (Felix) | pending - conditional instruction (charge-free warranty repair only), not recorded as approved | email |
 
 ## Escalation & handover
 
-- Escalation needed: **yes**
-- Reason: The installer the landlord wants isn't identifiable from the CRM, and his approval only covers a free warranty visit
-- Handover summary: Oven not heating at Flat 2, 176 Lantern Quay. The landlord wants last year's installer (used via Keystone Works) called back under warranty at no charge. There are no records of that job in the CRM. The tenant has been asked for the oven's make and model.
-- Recommendation: Find last year's installer in the agency's own records, or ask Felix for the installer's details or warranty paperwork. Then assign them as a warranty call-out, and get Felix's approval before agreeing any charge.
+- Escalation needed: **no**
+- Reason: The landlord can supply the missing contractor details; no agency judgement is needed yet
+- Recommendation: If the landlord doesn't reply by the follow-up, chase him. If the warranty is refused or a charge comes up, ask the landlord for cost approval.
 
 ## What could not be verified
 
-- Who last year's installer was
-- Whether Keystone Works is the agency's trading name or an outside firm
-- Whether the warranty is still valid and covers this fault
-- Exact date the oven was replaced
+- Who the contractor used by Keystone Works is, and how to contact them
+- Whether the oven is still under warranty (the landlord only says it 'should' be)
+- Who or what Keystone Works is
+- The tenant's contact details (none on file); unclear whether message 74 can be delivered
 
 ## What failed
 
-_No failures recorded._
+- Agent reported: First add_profile_fact call used entity_type 'landlord'. It was rejected, then retried successfully with 'contact'
 
 ## Risks & red flags
 
-- The oven failed within about a year of being replaced, the second failure in a row
-- The warranty may not cover this or the installer may charge, and the landlord hasn't approved any cost
-- The tenant has no working oven while the installer is traced
+- Ticket 54 (R/PM025-2) looks like a duplicate of this job at the same property. Two tickets could lead to two lots of work; the records should be merged by a human
+- The oven was replaced last year and has failed again, so it may be a recurring fault
+- The tenant has no working oven while the warranty route is arranged
 
 ## Final result / next follow-up
 
-- Final status: landlord_approval stage; on hold for the agency (hold 148); in the human queue (item 18)
-- Next follow-up: in 2 days (hold 148) - Check whether the installer has been identified and whether the tenant has sent the oven's make/model; then assign the installer for the warranty visit
-- Confidence: 0.78
+- Final status: On hold (hold 127) in landlord_approval, waiting for the landlord to send the warranty contractor's details
+- Next follow-up: 2024-05-23 - Chase the landlord for the warranty contractor's details if he hasn't replied, then contact that contractor to arrange a free warranty visit and update the tenant
+- Confidence: 0.75
 
 ## Run metadata
 
 - Case folder: `C:\Users\sahid\Documents\Projects\Hackathons\DwellyHack\dwelly-agent\data\practice\cases\PM025-1`
-- Session id: wrun_01M4JWHTZDCGV8BBD8ZG9Z7XZM
-- Started: 2026-10-10T12:28:06.987Z  Finished: 2026-10-10T12:28:47.391Z  Duration: 40.4s
-- Events recorded: 311
+- Session id: wrun_01M4JYBAJ619332FWC5RWNY99F
+- Started: 2026-10-10T12:59:30.705Z  Finished: 2026-10-10T13:00:24.506Z  Duration: 53.8s
+- Events recorded: 308
 - Model(s): anthropic/claude-opus-5.5
-- Tokens: in 74386 / out 4233; cost: not reported
+- Tokens: in 151042 / out 5440; cost: not reported

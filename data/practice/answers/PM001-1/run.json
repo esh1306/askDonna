@@ -3,85 +3,124 @@
   "decision": "wait",
   "escalated": "no",
   "failures": 0,
-  "durationSec": 28.636,
+  "durationSec": 37.935,
   "decisionLine": "wait",
-  "sessionId": "wrun_01M4JSTY19PVGXKH299YT2BY56",
-  "startedAt": "2026-10-10T11:40:38.938Z",
-  "finishedAt": "2026-10-10T11:41:07.574Z",
+  "sessionId": "wrun_01M4JY5GR5N68BCWWSWKC0K3AC",
+  "startedAt": "2026-10-10T12:56:20.108Z",
+  "finishedAt": "2026-10-10T12:56:58.043Z",
   "usage": {
-    "inputTokens": 37231,
-    "outputTokens": 2973
+    "inputTokens": 64464,
+    "outputTokens": 3683
   },
-  "eventCount": 174,
+  "eventCount": 168,
   "dryRun": false,
   "result": {
-    "case_id": "3 (R/PM001-1)",
+    "case_id": "R/PM001-1 (ticket 4)",
     "decision": "wait",
-    "summary": "The landlord's reply (event 007) doesn't approve or decline anything. It says there was a site meeting with Freya from Riverside Services, quotes are awaited, and they'll follow up on Monday 13 Oct. I left approval 3 pending, put the ticket on hold waiting on the landlord with a 3-day follow-up, sent the tenant a status update that doesn't over-promise, and recorded what we learned in the CRM. This is routine, non-urgent communal work, so it doesn't need escalating.",
-    "situation": "The tenant reported an overgrown communal garden and hedge, and unmaintained land beside the flat that they say was due to be cleared last summer. The landlord was emailed on 11 Oct and replied the same evening: Riverside Services visited the site and quotes for various works are pending. No amount or approval has been given yet. The stage is still landlord_approval.",
+    "summary": "The landlord's reply (event 007) is a progress update, not an approval. Their side met Freya from Riverside Services on site, is waiting for quotes, and will chase on Monday if the quotes haven't arrived. I left the approval pending, placed a hold to chase in 3 days, recorded the new facts and told the tenant what happens next.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "Event 007 gives no APPROVE/DECLINE and no amount. It says quotes from Riverside Services are awaited and the landlord's side will chase on Monday 13 Oct. classify_reply gave approve 0.00, unconditional approval 0.02 and autonomy 'auto'. The next step belongs to the landlord or their contractor and nothing is overdue, so a hold with a follow-up date is the right move. The tenant hadn't had an update, so they got one short message.",
+      "alternatives_considered": [
+        {
+          "option": "Record approval as approved and assign Riverside Services",
+          "why_not": "There is no approval, no quote and no amount. The landlord's side seems to be arranging the quotes itself."
+        },
+        {
+          "option": "Escalate to human",
+          "why_not": "The case is routine and there is no conflict, safety risk or complaint that needs agency judgement."
+        },
+        {
+          "option": "Message the landlord again",
+          "why_not": "They have just told us their next step (chase on Monday). Messaging again would be noise, so the hold covers it."
+        }
+      ],
+      "checks_performed": [
+        "Loaded the full ticket context: stage landlord_approval, approval #1 pending with no amount, no holds before this",
+        "Ran classify_reply on event 007: not an approval, routine",
+        "Looked for other tickets at the property: found R/PM001-2 (ticket 5), same title, also open at landlord_approval",
+        "No safety risk: external/communal routine issue, no access codes"
+      ],
+      "assumptions": [
+        "'Grace Nolan' writing for the landlord is the landlord's side or their representative. A different name from 'Rowan' doesn't change who approves.",
+        "Monday means 13 Oct 2025. Following up Tuesday 14 Oct gives their chase time to land."
+      ]
+    },
+    "situation": "The tenant at Flat 26, 46 Copperfield Walk reported weeds in the communal garden, an overgrown hedge on the side path and uncleared land beside the flat. The agency asked the landlord how to respond. The landlord's side replied that they had a site meeting with Freya from Riverside Services and are waiting for quotes.",
     "actions_taken": [
       {
         "tool": "get_ticket_context",
-        "description": "Loaded the ticket, profiles, events and the pending approval",
-        "result": "7 events, approval 3 pending, no holds, no attachments",
+        "description": "Loaded the case",
+        "result": "Stage landlord_approval, approval #1 pending, no holds",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the landlord email from event 007",
+        "result": "intent other 0.98, approval 0.02, autonomy auto",
+        "ok": true
+      },
+      {
+        "tool": "find_tickets",
+        "description": "Checked for duplicate tickets at the property",
+        "result": "Ticket 5 (R/PM001-2) has the same title and is also open",
         "ok": true
       },
       {
         "tool": "place_hold",
         "description": "Hold waiting on the landlord for the Riverside Services quotes",
-        "result": "hold_id 11, follow-up in 3 days",
+        "result": "hold_id 17, follow-up in 3 days",
         "ok": true
       },
       {
         "tool": "add_profile_fact",
-        "description": "Property: quotes for the communal works are being sought from Riverside Services (Freya); the sender's name is unconfirmed",
-        "result": "fact 7 recorded",
+        "description": "Recorded on the property that Riverside Services (Freya) is quoting for the communal works",
+        "result": "fact 4 recorded",
         "ok": true
       },
       {
         "tool": "add_profile_fact",
-        "description": "Tenant: has 1 cat (from the intake Q&A)",
-        "result": "fact 8 recorded",
+        "description": "Recorded the pet at the property (1 cat)",
+        "result": "fact 5 recorded",
         "ok": true
       },
       {
         "tool": "send_message",
-        "description": "Emailed the tenant a status update: landlord informed, site visit done, quotes awaited, nothing booked yet",
-        "result": "message_id 3 queued",
+        "description": "Emailed the tenant an update and the follow-up date",
+        "result": "message 4 queued, passed the guard",
         "ok": true
       }
     ],
     "approvals": [
       {
-        "party": "Landlord (Rowan)",
-        "status": "pending – no decision given; quotes awaited",
+        "party": "Landlord (Rowan / Grace Nolan)",
+        "status": "requested - still pending; event 007 is a progress update, not a decision",
         "channel": "email"
       }
     ],
     "escalation": {
       "needed": false,
-      "reason": "Routine communal maintenance; the landlord is actively getting quotes",
+      "reason": "Routine case waiting on landlord's quotes",
       "handover_summary": "",
       "recommendation": ""
     },
     "unverified": [
-      "Who sent event 007: it names 'Grace Nolan' and refers to 'he', but the landlord on file is Rowan",
-      "Whether the communal garden, hedge and side land are the landlord's responsibility or a freeholder's or managing agent's",
-      "The quote amount and scope from Riverside Services",
-      "The tenant's claim that the land was due to be cleared last summer",
-      "The tenant has no email or phone on file, so the update may not be delivered"
+      "Who Grace Nolan and Harper are in relation to the landlord Rowan",
+      "Whether Riverside Services is quoting for the landlord or for a managing agent or freeholder (the work is communal)",
+      "The quote amounts and timing",
+      "The tenant photos mentioned in event 004 can't be seen (marked unavailable)",
+      "The tenant has no email or phone on file, so I can't confirm the update was delivered"
     ],
     "failures": [],
     "risks_or_red_flags": [
-      "Sender name mismatch (Grace Nolan vs Rowan) in the landlord reply",
-      "Communal areas may be the freeholder's responsibility, so check who should pay before approving any quote",
-      "The tenant says this was promised last summer and not done, so there is a risk of a complaint if it slips again",
-      "The tenant record has no contact details"
+      "A possible duplicate ticket, R/PM001-2 (ticket 5), is open for the same issue. Someone should merge or close one to avoid handling it twice.",
+      "Communal areas may be the freeholder's or managing agent's responsibility rather than this landlord's",
+      "The tenant says the clearance was promised last summer and didn't happen, so they may be unhappy about the delay"
     ],
-    "final_status": "landlord_approval – on hold (hold 11), waiting on the landlord for Riverside Services quotes; approval 3 pending",
+    "final_status": "landlord_approval stage, on hold (hold 17) waiting on landlord for Riverside Services quotes",
     "next_follow_up": {
-      "when": "2025-10-14 (3 days from 11 Oct)",
-      "what": "If no quote or decision has arrived, chase the landlord (Rowan) for the Riverside Services quote and an APPROVE/DECLINE. When the quote arrives, read it, check the scope, property and who is responsible, then ask for approval with the amount."
+      "when": "2025-10-14",
+      "what": "Chase the landlord for the Riverside Services quotes and their instructions, then update the tenant"
     },
     "confidence": 0.8
   }

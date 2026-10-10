@@ -1,0 +1,99 @@
+{
+  "case": "PM006-1",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 0,
+  "durationSec": 40.463,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4JSTY28AZSBEQV9WXPA7BPF",
+  "startedAt": "2026-10-10T11:40:39.106Z",
+  "finishedAt": "2026-10-10T11:41:19.569Z",
+  "usage": {
+    "inputTokens": 69018,
+    "outputTokens": 3960
+  },
+  "eventCount": 322,
+  "dryRun": false,
+  "result": {
+    "case_id": "R/PM006-1 (ticket 5)",
+    "decision": "escalate",
+    "summary": "Cedar Utilities hasn't replied to the instruction or either of the 2 reminders. All three emails told them to book access with a tenant who has moved out, which is probably why nothing happened. I emailed the contractor to correct that: access will go through the agency, and I asked them to confirm the job by end of tomorrow. I've passed the case to the ops team to phone the contractor or reassign the job. Landlord approval isn't needed yet because there's no quote.",
+    "situation": "This is a check-out job: a quote to replace a burnt carpet and repaint a vacated flat. It's at the scheduling stage. The contractor has been silent since 20 Sep, and the system flagged 3+ reminders on 25 Sep. There are no contact details on record for the contractor or the landlord.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the ticket context",
+        "result": "8 events; no holds, approvals, attachments or profile facts",
+        "ok": true
+      },
+      {
+        "tool": "find_tickets",
+        "description": "Checked for other Cedar Utilities tickets",
+        "result": "Only this ticket",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the contractor: property vacated, access via the agency, quote only, confirm by end of tomorrow or say if they can't take it",
+        "result": "Queued in the outbox, msg 4",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded on the property that the tenant has moved out (event 001)",
+        "result": "Fact 9",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded on the contractor profile that they haven't responded",
+        "result": "Fact 10",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Passed to the ops team to phone the contractor, arrange access, add landlord details and check the deposit question",
+        "result": "Queue item 1",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold while waiting for the contractor's reply",
+        "result": "Hold 13, follow-up in 1 day",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord",
+        "status": "not_needed",
+        "channel": "n/a: no quote yet"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "Contractor hasn't replied after the instruction and 2 reminders, and the access instructions sent them to a tenant who has moved out",
+      "handover_summary": "Cedar Utilities hasn't replied to the instruction (20 Sep) or the reminders (21 and 24 Sep). Every email told them to book with former tenant Harriet Ellis, but the property is empty. I've sent a correction (access via the agency) asking them to confirm by end of tomorrow. There are no contact details on record for the contractor or the landlord. The burnt carpet may be a deposit-deduction issue.",
+      "recommendation": "Phone Cedar Utilities today and arrange keys or access. If they haven't confirmed by the follow-up date, reassign the job and consider getting 2 quotes. Add the landlord's contact details and preferred channel for approving the quote. Pass the burnt carpet to the deposit or check-out team."
+    },
+    "unverified": [
+      "Whether the contractor received any of the emails (no contact details on record)",
+      "Tenant's move-out date and who holds the keys",
+      "Landlord's identity, channel and spending limit",
+      "Whether the carpet damage is the tenant's responsibility and will be claimed from the deposit"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "Contractor hasn't replied to the instruction or 2 reminders",
+      "Automated emails gave the former tenant's phone number for access to an empty property",
+      "The burnt carpet may be a deposit dispute, which needs a human to handle",
+      "Long void period if the job stalls"
+    ],
+    "final_status": "Scheduling. On hold waiting for the contractor (hold 13) and with the ops team (queue item 1).",
+    "next_follow_up": {
+      "when": "1 day from now",
+      "what": "Check whether Cedar Utilities has confirmed and suggested a visit date. If not, the ops team reassigns the job."
+    },
+    "confidence": 0.82
+  }
+}

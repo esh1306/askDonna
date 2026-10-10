@@ -1,0 +1,108 @@
+{
+  "case": "PM011-2",
+  "decision": "wait",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 34.708,
+  "decisionLine": "wait",
+  "sessionId": "wrun_01M4JY783RPP3YSN4GQ1AKPSTD",
+  "startedAt": "2026-10-10T12:57:17.111Z",
+  "finishedAt": "2026-10-10T12:57:51.819Z",
+  "usage": {
+    "inputTokens": 76731,
+    "outputTokens": 3600
+  },
+  "eventCount": 143,
+  "dryRun": false,
+  "result": {
+    "case_id": "21 (R/PM011-2)",
+    "decision": "wait",
+    "summary": "I've left this routine dishwasher job in scheduling and put it on hold for 2 days while we wait for the contractor. The landlord approved attendance (event 9) and Oakfield Homes was assigned (events 11–13). The two call logs after that were a contractor phoning the tenant (event 14) and a system note about a call that didn't connect (event 15). Neither needs a reply from us. The only odd thing is that the caller gave the name \"Cedar Maintenance\", not Oakfield Homes. I sent Oakfield one email asking them to confirm that call was made for them and to tell us the visit date once agreed.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "Event 9 is a clear landlord approval ('Yes please go ahead'), approval 9 is recorded as approved, and the contractor has been assigned and notified, so the next step is for the contractor to agree a visit with the tenant. Event 14 shows that is under way: a contractor phoned the tenant to arrange it. classify_reply rated it routine scheduling (autonomy auto, needs_human_response 0.2). Event 15 is just a system note about a call that couldn't connect. Nothing here needs a reply from us. The only loose end is the caller's company name, and Oakfield can confirm that, so I asked them in one message and set a hold to chase.",
+      "alternatives_considered": [
+        {
+          "option": "Escalate the contractor name mismatch to a human",
+          "why_not": "Different trading names for the same contractor are normal. No money, payee or scope is involved yet, and Oakfield can answer it directly."
+        },
+        {
+          "option": "Message the tenant",
+          "why_not": "She has already been told Oakfield will be in touch (event 12), and the contractor is already trying to reach her. Another message wouldn't move the job on."
+        },
+        {
+          "option": "No action at all",
+          "why_not": "The name mismatch should be cleared up before anyone attends, and the job needs a follow-up date so it doesn't go quiet."
+        }
+      ],
+      "checks_performed": [
+        "Landlord approval: approval 9 is approved, and event 9 is an unconditional 'go ahead' with no cost cap",
+        "Contractor assigned and notified: events 11 and 13",
+        "Tenant notified: event 12",
+        "Caller name checked against the contractor on record: 'Cedar Maintenance' and 'Alder Maintenance' don't match Oakfield Homes",
+        "Safety: routine appliance fault, safety_concern 0.02",
+        "Property history: earlier ticket R/PM011-1 (ticket 20) for the same dishwasher is still open at landlord_approval",
+        "No open holds or human-queue items before this action"
+      ],
+      "assumptions": [
+        "The calls in events 14 and 15 came from Oakfield Homes or someone acting for them, using a different trading name or phone system"
+      ]
+    },
+    "situation": "Routine dishwasher fault at Flat 12, 78 Copperfield Walk: the dishwasher won't finish its cycle. The landlord approved attendance and Oakfield Homes is assigned. Since then, a caller from 'Cedar Maintenance' has asked the tenant to call back, and there is a system note about a call to an 'Alder Maintenance' line that didn't connect. The system asked whether we need to reply to the contractor.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the ticket, its approvals, events and the property's history",
+        "result": "Stage is scheduling, approval 9 is approved, Oakfield Homes is assigned, no open holds",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the contractor call in event 14",
+        "result": "Scheduling intent, autonomy auto, needs_human_response 0.2",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed Oakfield Homes asking them to confirm the 'Cedar Maintenance' call was made for them and to tell us the visit date once agreed; reminded them about the pets and to send a quote before doing any work that needs one",
+        "result": "Sent (message 25), passed the outbound guard",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Put the ticket on hold waiting for the contractor to confirm the caller and the visit date",
+        "result": "Hold 50, follow-up in 2 days",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Turner (landlord)",
+        "status": "granted",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "Routine scheduling. The contractor can resolve the name mismatch.",
+      "handover_summary": "",
+      "recommendation": "If Oakfield says the 'Cedar Maintenance' caller was not acting for them, warn the tenant and escalate. Also consider closing or merging the duplicate ticket R/PM011-1."
+    },
+    "unverified": [
+      "Whether 'Ashford at Cedar Maintenance' (event 14) and 'Alder Maintenance' (event 15) are Oakfield Homes or act for it",
+      "Visit date: not yet arranged as far as the records show",
+      "Whether the tenant has returned the call"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "The caller's company names (Cedar Maintenance, Alder Maintenance) don't match the assigned contractor, Oakfield Homes",
+      "Ticket R/PM011-1 (ticket 20) for the same dishwasher is still open at landlord_approval, which risks the work or the approval request being duplicated"
+    ],
+    "final_status": "scheduling, on hold waiting for the contractor (hold 50)",
+    "next_follow_up": {
+      "when": "In 2 days (about 2026-12-08)",
+      "what": "Chase Oakfield Homes to confirm the caller's identity and the agreed visit date"
+    },
+    "confidence": 0.8
+  }
+}
