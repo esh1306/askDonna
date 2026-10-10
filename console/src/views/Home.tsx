@@ -4,6 +4,7 @@ import type { TicketRow } from "../api.ts";
 import { Button, DonnaMark, EmptyState, RichText } from "../components/index.ts";
 import { reduced } from "../components/Toast.tsx";
 import { steps } from "./Queue.tsx";
+import "../home.css";
 
 type Item = { id: string; ticket_id: number; ts: string; kind: string; text: string };
 type Up = { id: number; ticket_id: number; waiting_on: string | null; follow_up_at: string; address: string | null; title: string; created_at?: string };
@@ -53,14 +54,42 @@ const until = (ts: string) => {
   return new Date().toDateString() === d.toDateString() ? `at ${t}` : `${d.toLocaleDateString("en-GB", { weekday: "short" })} ${t}`;
 };
 
+const shortAddr = (a?: string | null, title?: string | null) =>
+  !a || /^unknown/i.test(a) ? title ?? "Unknown property" : a.split(",").slice(0, /^flat/i.test(a) ? 2 : 1).join(",");
+function stepType(i: Item): string {
+  switch (i.kind) {
+    case "place_hold": return "hold";
+    case "queue_message": return /call/.test(i.text) ? "call" : /text/.test(i.text) ? "text" : "email";
+    case "mark_message": return "email";
+    case "request_approval": case "resolve_approval": return "approval";
+    case "move_stage": return "stage";
+    case "assign_contractor": return "assign";
+    case "escalate": return "flag";
+    default: return "note";
+  }
+}
+const ICO: Record<string, string> = {
+  hold: "M12 7v5l3 2M12 3a9 9 0 100 18 9 9 0 000-18z",
+  email: "M4 6h16v12H4zM4 7l8 6 8-6",
+  text: "M4 5h16v11H9l-4 3v-3H4z",
+  call: "M6 4l3 1 1 4-2 1.5a10 10 0 005.5 5.5L15 14l4 1 1 3c-1 2-3 2-5 1.5A15 15 0 014.5 9C4 7 4 5 6 4z",
+  approval: "M5 12.5l4.5 4.5L19 7",
+  stage: "M5 12h14M13 6l6 6-6 6",
+  assign: "M14 6a4 4 0 00-5 5l-5 5 2 2 5-5a4 4 0 005-5l-2.5 2.5-2-2z",
+  flag: "M6 21V4M6 5h11l-2 4 2 4H6",
+  note: "M5 5h14v14H5z",
+};
+const Ico = ({ t }: { t: string }) => (
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d={ICO[t] ?? ICO.note} /></svg>
+);
+
 export default function Home({ tickets, queue, onOpen }: { tickets: TicketRow[]; queue: any[]; onOpen: (id: number) => void }) {
   const [act, setAct] = useState<Activity | null>(null);
-  const [seen, setSeen] = useState<Set<string>>(new Set());
   useEffect(() => {
     let live = true;
     const load = () => api<Activity>("/api/activity?limit=30").then((a) => {
       if (!live) return;
-      setAct((prev) => { if (prev) setSeen(new Set(prev.items.map((i) => i.id))); return a; });
+      setAct(a);
     }).catch(() => {});
     load();
     const t = setInterval(load, 15000);
@@ -94,9 +123,43 @@ export default function Home({ tickets, queue, onOpen }: { tickets: TicketRow[];
   }, [anyGone]);
   const top = rows.slice(0, 5);
 
-  const items = act?.items.slice(0, 15) ?? [];
+  const items = act?.items ?? [];
   const working = !!items[0] && Date.now() - new Date(items[0].ts).getTime() < 120000;
-  const up = act?.upcoming ?? [];
+  const up = [...(act?.upcoming ?? [])].sort((a, b) => a.follow_up_at.localeCompare(b.follow_up_at));
+  const byId = new Map(tickets.map((t) => [t.id, t]));
+  const midnight = new Date(); midnight.setHours(0, 0, 0, 0);
+  const tal = { email: 0, call: 0, approval: 0, hold: 0 };
+  for (const i of items) {
+    if (new Date(i.ts) < midnight) continue;
+    const t = stepType(i);
+    if (t === "email" || t === "text") tal.email++; else if (t === "call") tal.call++; else if (t === "approval") tal.approval++; else if (t === "hold") tal.hold++;
+  }
+  const cases = (() => {
+    const g = new Map<number, Item[]>();
+    for (const i of items) { if (!g.has(i.ticket_id)) g.set(i.ticket_id, []); g.get(i.ticket_id)!.push(i); }
+    return [...g.entries()].slice(0, 6).map(([id, list]) => {
+      const t = byId.get(id);
+      const prop = shortAddr(t?.address, t?.title);
+      const chrono = [...list].reverse();
+      const steps: { t: string; n: number; tip: string }[] = [];
+      for (const i of chrono) {
+        const ty = stepType(i), last = steps[steps.length - 1];
+        if (last && last.t === ty) last.n++; else steps.push({ t: ty, n: 1, tip: i.text.replace(/^I /, "").replace(/^./, (c) => c.toUpperCase()) });
+      }
+      const mv = list.find((i) => i.kind === "move_stage");
+      const move = mv ? (/to (.+)$/.exec(mv.text)?.[1] ?? "").replace(/^./, (c) => c.toUpperCase()) : "";
+      const head = list[0];
+      const uv = up.find((u) => u.ticket_id === id);
+      let last = head.text;
+      for (const x of [` at ${prop}`, ` on ${prop}`, ` at ${t?.address ?? "\u0000"}`]) last = last.replace(x, "");
+      if (head.kind === "place_hold") {
+        const m = /until (.+?) replies/.exec(head.text);
+        last = `Waiting on ${m ? m[1] : "a reply"}${uv ? ` \u00b7 I'll chase at ${new Date(uv.follow_up_at).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}` : ""}`;
+      }
+      const fresh = list.some((i) => Date.now() - new Date(i.ts).getTime() < 600000 && i.kind === "move_stage");
+      return { id, prop, title: t?.title ?? "Case", steps, move, last, ts: head.ts, fresh };
+    });
+  })();
 
   return (
     <div className="page">
@@ -144,31 +207,49 @@ export default function Home({ tickets, queue, onOpen }: { tickets: TicketRow[];
           </section>
 
           <section className="hcol">
-            <h2 className="hh">What Donna is doing {working && <span className="work" aria-label="Donna is working"><i /><i /><i /></span>}</h2>
-            <div className="feed">
-              {items.length === 0 && <div className="small muted" style={{ padding: "8px 0" }}>{act ? "Quiet for now. I'll show my moves here as I make them." : "Checking in..."}</div>}
-              {items.map((i, n) => (
-                <button key={i.id} className={`fi ${seen.size > 0 && !seen.has(i.id) ? "new" : ""}`} onClick={() => onOpen(i.ticket_id)}>
-                  <span className="fm"><DonnaMark size={18} />{n === 0 && working && <span className="nowdot" />}</span>
-                  <span className="ft">{i.text}</span>
-                  <span className="fw">{rel(i.ts)}</span>
+            <h2 className="hh">What Donna is doing</h2>
+            <div className={`agent ${working ? "on" : ""}`}>
+              <span className="wave" aria-hidden><i /><i /><i /><i /><i /></span>
+              <b>{working ? "Donna is working" : `Donna is watching ${live.length} cases`}</b>
+              <span className="tallies">
+                {([["emails", tal.email], ["calls", tal.call], ["approvals", tal.approval], ["holds", tal.hold]] as const).map(([l, n]) => <span key={l}><em>{n}</em> {l}</span>)}
+              </span>
+            </div>
+            {cases.length === 0 && <div className="small muted" style={{ padding: "8px 0" }}>{act ? "Quiet for now. I'll show my moves here as I make them." : "Checking in..."}</div>}
+            <div className="cases">
+              {cases.map((c) => (
+                <button key={c.id} className={`ccard ${c.fresh ? "fresh" : ""}`} onClick={() => onOpen(c.id)}>
+                  <div className="ch"><span className="cp">{c.prop}</span><span className="cw">{c.fresh ? "Just now" : rel(c.ts)}</span></div>
+                  <div className="cti">{c.title}</div>
+                  <div className="chain">
+                    {c.steps.map((st, k) => (
+                      <span key={k} className="stp" data-t={st.t} title={`${st.tip}${st.n > 1 ? ` x${st.n}` : ""}`}>
+                        <Ico t={st.t} />{st.n > 1 && <sub>x{st.n}</sub>}
+                      </span>
+                    ))}
+                    {c.move && <span className="trans" key={c.move}><i className="arr">{"\u2192"}</i><span className="np">{c.move}</span></span>}
+                  </div>
+                  <div className="clast">{c.last}</div>
                 </button>
               ))}
             </div>
             {up.length > 0 && (
               <>
                 <h2 className="hh sub">Up next</h2>
-                <div className="upnext">
+                <div className="tl">
                   {up.map((u) => {
                     const end = new Date(u.follow_up_at).getTime();
                     const start = Math.min(new Date(u.created_at ?? 0).getTime() || end - 86400000, end - 60000);
                     const pct = Math.max(4, Math.min(100, ((Date.now() - start) / (end - start)) * 100));
-                    const w = u.waiting_on ?? "";
-                    const who = !w || /^(landlord|tenant|contractor)$/i.test(w) ? `the ${w.toLowerCase() || "other side"}` : w;
+                    const w = (u.waiting_on ?? "").toLowerCase();
+                    const who = !w ? "the other side" : /^(agency|team|staff)$/.test(w) ? "the team" : /^(landlord|tenant|contractor)$/.test(w) ? `the ${w}` : u.waiting_on!;
+                    const d = new Date(end), sameDay = new Date().toDateString() === d.toDateString();
+                    const hm = d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
                     return (
-                      <button key={u.id} className="up" onClick={() => onOpen(u.ticket_id)}>
-                        <span className="ut">I'll chase {who} for {(u.address ?? u.title).split(",").slice(0, /^flat/i.test(u.address ?? "") ? 2 : 1).join(",")} <b>{until(u.follow_up_at)}</b></span>
-                        <span className="bar"><span style={{ width: `${pct}%` }} /></span>
+                      <button key={u.id} className="tr" onClick={() => onOpen(u.ticket_id)}>
+                        <span className="tt">{hm}{!sameDay && <small>{d.toLocaleDateString("en-GB", { weekday: "short" })}</small>}</span>
+                        <span className="td" />
+                        <span className="tb"><span className="tx">Chase {who} {"\u00b7"} {/^unknown/i.test(u.address ?? "unknown") ? u.title : shortAddr(u.address, u.title)}</span><span className="bar"><span style={{ width: `${pct}%` }} /></span></span>
                       </button>
                     );
                   })}

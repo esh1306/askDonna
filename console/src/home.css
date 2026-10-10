@@ -1,0 +1,44 @@
+.agent{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 12px;border:1px solid var(--hair);border-radius:12px;background:var(--bg);margin-bottom:12px;font-size:13px}
+.agent.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 6%,var(--bg))}
+.agent .wave{display:inline-flex;align-items:center;gap:2px;height:16px}
+.agent .wave i{width:3px;height:5px;border-radius:2px;background:var(--hair);display:block}
+.agent.on .wave i{background:var(--accent);animation:hwave 1s ease-in-out infinite}
+.agent.on .wave i:nth-child(2){animation-delay:.12s}.agent.on .wave i:nth-child(3){animation-delay:.24s}.agent.on .wave i:nth-child(4){animation-delay:.36s}.agent.on .wave i:nth-child(5){animation-delay:.48s}
+@keyframes hwave{0%,100%{height:4px}50%{height:15px}}
+.agent .tallies{margin-left:auto;display:flex;gap:12px;font-family:var(--mono);font-size:11px;opacity:.75}
+.agent .tallies em{font-style:normal;font-weight:600;color:var(--accent)}
+.cases{display:flex;flex-direction:column;gap:8px}
+.ccard{all:unset;box-sizing:border-box;cursor:pointer;display:block;padding:10px 12px;border:1px solid var(--hair);border-radius:12px;background:var(--bg)}
+.ccard:hover{border-color:var(--accent)}
+.ccard.fresh{animation:hpulse 2.2s ease-in-out infinite;border-color:var(--accent)}
+@keyframes hpulse{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 35%,transparent)}50%{box-shadow:0 0 0 5px color-mix(in srgb,var(--accent) 0%,transparent);background:color-mix(in srgb,var(--accent) 7%,var(--bg))}}
+.ccard .ch{display:flex;justify-content:space-between;gap:8px;font-size:11px;opacity:.7}
+.ccard .cp{font-family:var(--mono);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ccard .cw{white-space:nowrap}
+.ccard .cti{font-family:var(--serif);font-size:15px;margin:2px 0 8px}
+.chain{display:flex;align-items:center;flex-wrap:wrap;gap:6px}
+.stp{position:relative;display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;border-radius:12px;border:1px solid var(--hair);color:var(--accent);padding:0 5px;gap:1px}
+.stp+.stp::before{content:"";position:absolute;left:-7px;width:6px;height:1px;background:var(--hair)}
+.stp sub{font-family:var(--mono);font-size:9px;vertical-align:baseline}
+.stp[data-t=flag]{color:#b3261e}.stp[data-t=hold]{color:#9a6700}
+.trans{display:inline-flex;align-items:center;gap:5px;margin-left:8px;font-size:11px}
+.trans .arr{font-style:normal;color:var(--accent);display:inline-block;animation:harr 1.2s ease-in-out 3}
+@keyframes harr{0%,100%{transform:translateX(0)}50%{transform:translateX(5px)}}
+.trans .np{background:var(--accent);color:#fff;padding:2px 9px;border-radius:10px;animation:hin .6s ease-out both}
+@keyframes hin{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:none}}
+.ccard .clast{margin-top:8px;font-size:12.5px;opacity:.85}
+.tl{display:flex;flex-direction:column}
+.tr{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:52px 14px 1fr;gap:8px;padding:6px 0}
+.tr .tt{font-family:var(--mono);font-size:12px;text-align:right;padding-top:1px}
+.tr .tt small{display:block;font-size:9px;opacity:.6}
+.tr .td{position:relative;display:flex;justify-content:center}
+.tr .td::before{content:"";position:absolute;top:0;bottom:-12px;width:1px;background:var(--hair)}
+.tr:last-child .td::before{bottom:50%}
+.tr .td::after{content:"";position:relative;z-index:1;width:9px;height:9px;margin-top:4px;border-radius:50%;background:var(--bg);border:2px solid var(--accent)}
+.tr .tx{display:block;font-size:13px}
+.tr .bar{display:block;height:2px;background:var(--hair);margin-top:5px;border-radius:2px;overflow:hidden}
+.tr .bar span{display:block;height:100%;background:var(--accent)}
+.tr:hover .tx{color:var(--accent)}
+.bcard.moved{position:relative;box-shadow:0 0 0 2px var(--accent)}
+.bcard .moved-l{position:absolute;top:-8px;right:8px;background:var(--accent);color:#fff;font-size:10px;padding:1px 8px;border-radius:8px;animation:hin .4s ease-out both}
+@media (prefers-reduced-motion:reduce){.agent .wave i,.ccard.fresh,.trans .arr,.trans .np{animation:none!important}}

@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { ago, label } from "../api.ts";
 import type { Detail, TicketRow } from "../api.ts";
 import { DonnaMark, Kbd } from "../components/index.ts";
 import type { Notify } from "../components/index.ts";
 import Ticket from "./Ticket.tsx";
 import "../board.css";
+import "../home.css";
 
 type Filter = "all" | "needs" | "waiting" | "auto";
 const COLS: [string, string][] = [
@@ -44,6 +45,37 @@ export default function Board({ tickets, sel, setSel, detail, onChange, toast }:
     return () => window.removeEventListener("keydown", onKey);
   }, [order, sel, setSel]);
 
+  // FLIP: when a refresh moves a ticket to another column, glide the card from its old spot.
+  const cardEls = useRef(new Map<number, HTMLElement>());
+  const prevPos = useRef(new Map<number, { col: string; x: number; y: number }>());
+  const [moved, setMoved] = useState<Set<number>>(new Set());
+  useLayoutEffect(() => {
+    const next = new Map<number, { col: string; x: number; y: number }>();
+    const hit: number[] = [];
+    const rm = typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    cardEls.current.forEach((el, id) => {
+      const t = tickets.find((x) => x.id === id);
+      if (!t || !el.isConnected) return;
+      const r = el.getBoundingClientRect(), col = colOf(t), old = prevPos.current.get(id);
+      next.set(id, { col, x: r.left, y: r.top });
+      if (old && old.col !== col) {
+        hit.push(id);
+        if (!rm) {
+          el.style.transition = "none";
+          el.style.transform = `translate(${old.x - r.left}px, ${old.y - r.top}px)`;
+          el.getBoundingClientRect();
+          el.style.transition = "transform 400ms cubic-bezier(.2,.8,.2,1)";
+          el.style.transform = "";
+        }
+      }
+    });
+    prevPos.current = next;
+    if (hit.length) {
+      setMoved((m) => new Set([...m, ...hit]));
+      setTimeout(() => setMoved((m) => { const n = new Set(m); hit.forEach((i) => n.delete(i)); return n; }), 2000);
+    }
+  });
+
   const live = tickets.filter((t) => t.status !== "closed");
   const cnt = (f: Filter) => (f === "all" ? live.length : live.filter((t) => kind(t) === f).length);
   const idx = order.findIndex((t) => t.id === sel);
@@ -74,7 +106,8 @@ export default function Board({ tickets, sel, setSel, detail, onChange, toast }:
                 {items.map((t) => {
                   const c = chip(t);
                   return (
-                    <div key={t.id} className={`bcard ${kind(t)} ${sel === t.id ? "on" : ""}`} onClick={() => setSel(t.id)} tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter") setSel(t.id); }}>
+                    <div key={t.id} ref={(el) => { if (el) cardEls.current.set(t.id, el); else cardEls.current.delete(t.id); }} className={`bcard ${kind(t)} ${sel === t.id ? "on" : ""} ${moved.has(t.id) ? "moved" : ""}`} onClick={() => setSel(t.id)} tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter") setSel(t.id); }}>
+                      {moved.has(t.id) && <span className="moved-l">Donna moved this</span>}
                       <div className="bt clamp2">{t.title}</div>
                       <div className="ba">{t.address ?? "No address"}</div>
                       <div className="bf"><span className={`bchip ${c[0]}`}>{c[1]}</span>{t.updated_at && <span className="bago">{ago(t.updated_at.includes("T") ? t.updated_at : t.updated_at.replace(" ", "T") + "Z")}</span>}</div>
