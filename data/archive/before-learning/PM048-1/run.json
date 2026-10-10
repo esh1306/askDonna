@@ -1,0 +1,117 @@
+{
+  "case": "PM048-1",
+  "decision": "act",
+  "escalated": "yes",
+  "failures": 0,
+  "durationSec": 43.264,
+  "decisionLine": "act",
+  "sessionId": "wrun_01M4JYH6VDERS23AT0XG61ZBT0",
+  "startedAt": "2026-10-10T13:02:43.504Z",
+  "finishedAt": "2026-10-10T13:03:26.768Z",
+  "usage": {
+    "inputTokens": 87667,
+    "outputTokens": 3550
+  },
+  "eventCount": 186,
+  "dryRun": false,
+  "result": {
+    "case_id": "86 (R/PM048-1)",
+    "decision": "act",
+    "summary": "The landlord said yes with no conditions in event 006 (\"Yes please get that sorted\"), so I recorded approval 45 as approved and moved the ticket to provider_selection. He doesn't need a reply. Ticket 87 (R/PM048-2) looks like a duplicate of this job, so I didn't assign a contractor here, to avoid sending two. I passed it to ops to confirm which ticket to keep and run the job on that one only.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "The landlord's approval in event 006 has no cost cap or conditions, and the classifier rated it 'approve' with 'auto'. So the landlord needs no reply and the approval can be recorded. Ticket 87 has the same property, created time and events 001-006, which points to a system duplicate. Assigning a contractor on both tickets could send two contractors to the same job, and ticket 86 has no contractor or tenant contact details anyway.",
+      "alternatives_considered": [
+        {
+          "option": "Assign a contractor on ticket 86 and notify the tenant",
+          "why_not": "No contractor is on record for this ticket, there are no tenant contact details, and the identical ticket 87 means a likely double dispatch."
+        },
+        {
+          "option": "Reply to the landlord",
+          "why_not": "His approval was clear. Nothing needs answering."
+        },
+        {
+          "option": "Leave the approval pending",
+          "why_not": "The approval is unconditional, so leaving it open would stall the job."
+        }
+      ],
+      "checks_performed": [
+        "Loaded ticket 86 context: approval 45 pending, no holds, no contractor, no attachments",
+        "Ran classify_reply on event 006: approve 1.0, unconditional 0.86, auto",
+        "Checked property history: found ticket 87 with the same description, created time and events 001-006",
+        "Checked for any amount or condition in the approval: none"
+      ],
+      "assumptions": [
+        "'Felix' is the landlord on record for this property",
+        "Ticket 87 is probably a duplicate of the same tenant request"
+      ]
+    },
+    "situation": "Tenant reported a stuck bathroom window. The agency asked the landlord to approve the repair and he replied yes. An internal note asked whether the landlord needs a reply. A matching ticket (87) exists for the same property.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded ticket 86",
+        "result": "Stage landlord_approval, approval 45 pending, no contractor",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified landlord email (event 006)",
+        "result": "approve, auto, unconditional 0.86",
+        "ok": true
+      },
+      {
+        "tool": "get_ticket_context",
+        "description": "Checked related ticket 87 at the same property",
+        "result": "Same job, events 001-006 match word for word; likely duplicate",
+        "ok": true
+      },
+      {
+        "tool": "record_approval_response",
+        "description": "Recorded the landlord's approval",
+        "result": "Approval 45 approved; guard not blocked",
+        "ok": true
+      },
+      {
+        "tool": "move_stage",
+        "description": "Moved the ticket forward after approval",
+        "result": "landlord_approval -> provider_selection",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Flagged the probable duplicate so ops can choose one ticket to run the job on",
+        "result": "Queue item 39",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (Felix)",
+        "status": "granted",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "Probable duplicate of ticket 87 (R/PM048-2); risk of sending two contractors",
+      "handover_summary": "Landlord approved the window repair (event 006). Approval 45 is recorded and ticket 86 is in provider_selection with no contractor assigned. Ticket 87 is the same job word for word.",
+      "recommendation": "Confirm the duplicate, run the job on one ticket and close the other with a cross-reference. If they are separate jobs, assign a window contractor on 86."
+    },
+    "unverified": [
+      "Whether ticket 87 really is a duplicate",
+      "Tenant's name and contact details (not visible on ticket 86)",
+      "Repair cost (none given)"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "Duplicate tickets could lead to two contractors being sent or two invoices for the same job"
+    ],
+    "final_status": "provider_selection; with ops (queue item 39) to resolve the duplicate",
+    "next_follow_up": {
+      "when": "Once ops decides on the duplicate (queue 39)",
+      "what": "Assign a contractor and notify the tenant on whichever ticket is kept"
+    },
+    "confidence": 0.8
+  }
+}

@@ -1,7 +1,7 @@
 import http from "node:http";
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { addEvent, all, one, getTicketContext, resolveApproval, markMessage, run } from "../../crm/repo.ts";
+import { addEvent, all, one, getTicketContext, resolveApproval, markMessage, run, upsertContact, insertEvent, moveStage, queueMessage, linkContact } from "../../crm/repo.ts";
 import type { ApprovalRow, HumanQueueRow } from "../../crm/repo.ts";
 import { runTurn, loadEnvFile } from "../../runner/eve-client.ts";
 import { resultJsonSchema } from "../../runner/output-schema.ts";
@@ -98,6 +98,44 @@ async function runDonna(ticketId: number, message: string) {
     error: outcome.error,
     event_count: outcome.events.length,
   };
+}
+
+async function lessonsMod(): Promise<any> {
+  try {
+    return await import("../../crm/lessons.ts");
+  } catch (e) {
+    throw new HttpError(503, `Lessons module not available: ${(e as Error).message}`);
+  }
+}
+
+function withTimeout<T>(p: Promise<T>, ms: number): Promise<T | { ok: false; error: string }> {
+  return Promise.race([p, new Promise<{ ok: false; error: string }>((r) => setTimeout(() => r({ ok: false, error: "learning timed out" }), ms))]);
+}
+
+async function learn(input: any): Promise<any> {
+  try {
+    const L = await lessonsMod();
+    return await withTimeout(L.learnFromHumanAction(input), 8000);
+  } catch (e) {
+    return { ok: false, error: (e as Error).message };
+  }
+}
+
+function suggestionFor(ticketId: number) {
+  const runs = listRuns(ticketId).filter((r: any) => r.result);
+  const last: any = runs[runs.length - 1];
+  if (!last) return { suggestion: null, lesson_ids: [] as number[] };
+  const r = last.result;
+  let text: string | null = null;
+  let kind = "";
+  if (r.escalation?.needed && r.escalation.recommendation) { text = r.escalation.recommendation; kind = "escalation"; }
+  else if (r.next_follow_up?.what) { text = `${r.next_follow_up.what}${r.next_follow_up.when ? ` (${r.next_follow_up.when})` : ""}`; kind = "follow_up"; }
+  else if (r.planned_actions?.length) { const a = r.planned_actions[0]; text = typeof a === "string" ? a : a.description ?? JSON.stringify(a); kind = "planned"; }
+  else if (r.summary) { text = r.summary; kind = "summary"; }
+  const blob = JSON.stringify([last.events ?? [], r]);
+  const ids = new Set<number>();
+  for (const m of blob.matchAll(/lessons?[\s_#:\\"]*#?(\d+)/gi)) ids.add(Number(m[1]));
+  return { suggestion: text, kind, ts: last.ts, lesson_ids: [...ids], decision: r.decision };
 }
 
 const needTicket = (id: number) => {
@@ -222,6 +260,102 @@ async function handle(req: http.IncomingMessage, res: http.ServerResponse) {
     const r = await placeCall(null, approval);
     if (!r.ok) throw new HttpError(/not configured/.test(r.note) ? 503 : 502, r.note);
     return send(res, 200, r);
+  }
+
+  if (m === "GET" && p === "/api/lessons") {
+    const u = new URL(req.url ?? "/", "http://x");
+    const L = await lessonsMod();
+    return send(res, 200, L.listLessons({ q: u.searchParams.get("q") || undefined, source: u.searchParams.get("source") || undefined, limit: 500 }));
+  }
+  if (m === "POST" && (g = /^\/api\/lessons\/(\d+)\/vote$/.exec(p))) {
+    const b = await readBody(req);
+    if (b.delta !== 1 && b.delta !== -1) throw new HttpError(400, "delta must be 1 or -1");
+    const L = await lessonsMod();
+    const l = L.voteLesson(Number(g[1]), b.delta);
+    if (!l) throw new HttpError(404, "lesson not found");
+    return send(res, 200, l);
+  }
+
+  if (m === "GET" && (g = /^\/api\/tickets\/(\d+)\/suggestion$/.exec(p))) {
+    needTicket(Number(g[1]));
+    return send(res, 200, suggestionFor(Number(g[1])));
+  }
+  if (m === "POST" && (g = /^\/api\/tickets\/(\d+)\/suggestion\/feedback$/.exec(p))) {
+    const id = Number(g[1]);
+    needTicket(id);
+    const b = await readBody(req);
+    if (!["accept", "reject", "edit"].includes(b.verdict)) throw new HttpError(400, "verdict must be accept, reject or edit");
+    const sug = suggestionFor(id);
+    const ids: number[] = Array.isArray(b.lesson_ids) ? b.lesson_ids.map(Number) : sug.lesson_ids ?? [];
+    const L = await lessonsMod().catch(() => null);
+    const vote = (d: 1 | -1) => { if (L) for (const i of ids) try { L.voteLesson(i, d); } catch {} };
+    if (b.verdict === "accept") {
+      vote(1);
+      insertEvent(id, { kind: "note", direction: "internal", party: "human", body: `Human accepted Donna's suggestion: ${sug.suggestion}` });
+      try {
+        run("INSERT INTO action_log (ticket_id, actor, action, args, ok, result, ts) VALUES (?,?,?,?,1,?,?)", id, "human", "accept_suggestion", JSON.stringify({ suggestion: sug.suggestion }), "accepted", new Date().toISOString());
+      } catch {}
+      return send(res, 200, { ok: true, voted: ids.length, lesson: null });
+    }
+    vote(-1);
+    const out = await learn({
+      ticketId: id,
+      action: b.verdict === "reject" ? "reject_suggestion" : "edit_suggestion",
+      details: { suggestion: sug.suggestion, text: b.text ?? "" },
+      note: b.text ?? "",
+      source: "feedback",
+    });
+    return send(res, 200, { ok: true, voted: ids.length, lesson: out.ok ? out.lesson : null, learn_error: out.ok ? undefined : out.error });
+  }
+
+  if (m === "POST" && (g = /^\/api\/tickets\/(\d+)\/human-action$/.exec(p))) {
+    const id = Number(g[1]);
+    needTicket(id);
+    const b = await readBody(req);
+    const d = b.details ?? {};
+    const ticket = one<any>("SELECT * FROM tickets WHERE id=?", id);
+    const now = new Date().toISOString();
+    switch (b.action) {
+      case "assign_contractor": {
+        if (!String(d.name ?? "").trim()) throw new HttpError(400, "contractor name is required");
+        const c = upsertContact({ role: "contractor", name: String(d.name).trim(), company: d.company || null }, { actor: "human" });
+        if (!c.ok) throw new HttpError(400, c.error);
+        run("UPDATE tickets SET contractor_id=?, updated_at=? WHERE id=?", c.contact_id, now, id);
+        if (ticket.property_id) linkContact(ticket.property_id, c.contact_id, "contractor", { actor: "human" });
+        insertEvent(id, { kind: "note", direction: "internal", party: "human", body: `Human assigned contractor ${d.name}${d.company ? ` (${d.company})` : ""}${b.note ? `. ${b.note}` : ""}` });
+        if (["intake", "landlord_approval", "provider_selection"].includes(ticket.stage)) moveStage(id, "scheduling", "Contractor assigned by human", { actor: "human" });
+        break;
+      }
+      case "resolve_escalation": {
+        const row = one<HumanQueueRow>("SELECT * FROM human_queue WHERE id=?", Number(d.queue_id));
+        if (!row) throw new HttpError(404, "queue item not found");
+        run("UPDATE human_queue SET status='resolved' WHERE id=?", row.id);
+        insertEvent(id, { kind: "note", direction: "internal", party: "human", body: `Human resolved escalation (${row.reason}): ${d.resolution ?? ""}` });
+        break;
+      }
+      case "send_message": {
+        const role = String(d.to ?? "tenant");
+        const col = ({ tenant: "tenant_id", landlord: "landlord_id", contractor: "contractor_id" } as Record<string, string>)[role];
+        const to = col && ticket[col] ? Number(ticket[col]) : role;
+        const r = queueMessage(id, d.channel ?? "email", to, d.subject || null, String(d.body ?? ""), { actor: "human" });
+        if (!r.ok) throw new HttpError(400, r.error);
+        break;
+      }
+      case "move_stage": {
+        const r = moveStage(id, d.to, String(d.reason || "Moved by human"), { actor: "human" });
+        if (!r.ok) throw new HttpError(400, r.error);
+        break;
+      }
+      case "note": {
+        if (!String(d.text ?? "").trim()) throw new HttpError(400, "note text is required");
+        addEvent(id, { kind: "note", direction: "internal", party: "human", body: d.text }, { actor: "human" });
+        break;
+      }
+      default:
+        throw new HttpError(400, "unknown action");
+    }
+    const out = await learn({ ticketId: id, action: b.action, details: d, note: b.note || d.resolution || d.reason || d.text || "" });
+    return send(res, 200, { ok: true, lesson: out.ok ? out.lesson : null, learn_error: out.ok ? undefined : out.error });
   }
 
   throw new HttpError(404, "not found");

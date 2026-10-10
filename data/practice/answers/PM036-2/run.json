@@ -3,84 +3,87 @@
   "decision": "wait",
   "escalated": "no",
   "failures": 0,
-  "durationSec": 35.949,
+  "durationSec": 37.1,
   "decisionLine": "wait",
-  "sessionId": "wrun_01M4JYE57Q6D20Y2A3TCYZD6VM",
-  "startedAt": "2026-10-10T13:01:03.500Z",
-  "finishedAt": "2026-10-10T13:01:39.449Z",
+  "sessionId": "wrun_01M4JZX7BV3RB38PHRQ88AS7J7",
+  "startedAt": "2026-10-10T13:26:45.614Z",
+  "finishedAt": "2026-10-10T13:27:22.714Z",
   "usage": {
-    "inputTokens": 94908,
-    "outputTokens": 3664
+    "inputTokens": 102158,
+    "outputTokens": 3792
   },
-  "eventCount": 174,
+  "eventCount": 147,
   "dryRun": false,
   "result": {
-    "case_id": "R/PM036-2 (ticket 70)",
+    "case_id": "R/PM036-2 (ticket 95)",
     "decision": "wait",
-    "summary": "The landlord approved the job and Keystone Services (Oliver Turner) has booked the replacement tap fitting for Wednesday 4 November 2026 at about 9:30am (events 038 and 039). The contractor says the work is free because it replaces a faulty tap he fitted in February. I emailed the tenant to confirm the booking, recorded the free-of-charge arrangement against the contractor, and put the job on hold with a 7-day follow-up to check it was finished.",
+    "summary": "The contractor has confirmed that Oliver (Keystone Services) is booked to fit the replacement taps at 9:30am on Wednesday 4 November 2026. He arranged it directly with the tenant by phone (events 038 and 039). He says the work is free of charge because the tap he fitted in February was faulty. Nothing needs a reply from the agency, so I put the ticket on hold waiting for the contractor. I'll follow up after the visit for a completion report.",
     "case_type": "maintenance",
     "judgement": {
-      "why_this_decision": "The landlord approved in event 006 and the contractor is on the job. The latest inbound message (event 039) books the visit, and it matches the call summary in event 038 (Wed 4 Nov, 9:30–10:00). The classifier rated the message routine scheduling with a low chance of needing a human (0.1). The next step is the contractor's, so the right move is to wait on a hold with a follow-up date. There were no open holds, so I placed a new one.",
+      "why_this_decision": "Event 039 ('All booked in 9.30am Wednesday 4th') matches the contractor's call with the tenant in event 038 (Wed 4 Nov, about 9:30–10:00). classify_reply rated it routine scheduling (autonomy auto, needs_human_response 0.1). The landlord approved the attendance in event 006, and the contractor says the rework is free (event 025), so no new cost decision is needed. The ticket had no open hold, so I added one with a follow-up date so the job doesn't go quiet. This follows lessons #16 and #1: when the provider and tenant have arranged things between them and nothing needs an agency reply, hold rather than intervene. Lesson #19 will apply after the visit: don't assume the work is done, chase for the outcome.",
       "alternatives_considered": [
         {
-          "option": "Escalate to a human",
-          "why_not": "No conflict, complaint, safety risk or cost issue. The approved work is booked."
+          "option": "Message the tenant to confirm the appointment",
+          "why_not": "The tenant booked it directly with the contractor on the phone (event 038), so another message wouldn't move the job on."
         },
         {
-          "option": "Message the contractor",
-          "why_not": "He has just confirmed the booking and said he will report back when it's done (event 037). Chasing him now would add nothing."
+          "option": "Escalate because of the repeated delays and tap problems",
+          "why_not": "A firm date is now booked and the rework is free. Nothing needs agency judgement yet. If the 4 Nov visit fails, I'll reconsider."
         },
         {
-          "option": "Move stage to closeout",
-          "why_not": "The work hasn't been done yet."
-        },
-        {
-          "option": "No message to tenant",
-          "why_not": "The tenant has had repeated delays (events 028–031), and a confirmed date plus a check-in time from the agency helps. That is one message."
+          "option": "Move the ticket to close-out",
+          "why_not": "The work hasn't been done yet. The visit is booked for a future date."
         }
       ],
       "checks_performed": [
-        "Landlord approval: approval 35 approved ('Yes please!', event 006). No amount needed because the contractor says the work is free (event 025).",
-        "Date consistency: event 038 (Wed 4 Nov, 9:30–10:00) matches event 039 (9.30am Wednesday 4th). 4 Nov 2026 is a Wednesday.",
-        "Open holds: none before this action. Open human-queue items: none.",
-        "Property history: a related ticket, R/PM036-1 (id 69, 'Shower Tap Repair'), is still open at landlord_approval.",
-        "Attachments: none on the ticket."
+        "Landlord approval 52 shows as approved ('Yes please!', event 006)",
+        "Checked that the contractor's email (event 039) matches the call record (event 038) on the date and time",
+        "Checked that 4 November 2026 is a Wednesday",
+        "No open holds, approvals or human-queue items before acting",
+        "No invoice or amount on the ticket; rework stated to be free of charge (event 025)",
+        "No safety concern raised: the tenant reports the shower and tap running together (event 030), which is a fault but not a hazard"
       ],
       "assumptions": [
-        "'Oliver'/'Oliver Turner' is the Keystone Services engineer on this ticket. The 'Isaac Kendall' SMS sender is the agency's automated messaging persona.",
-        "The free-of-charge rework covers the whole repair, including the shower/tap running together reported in event 030."
+        "Keystone Services, 'Oliver' and Oliver Turner are the same contractor",
+        "The rework will not be charged to the landlord, based on the contractor's statement"
       ]
     },
-    "situation": "Tenant reported a broken shower pull knob. The landlord approved a contractor visit and Keystone Services attended. The tap Oliver fitted in February turned out faulty, so he ordered a replacement at no charge. There were delays from the part and his leave. The new taps have now arrived and fitting is booked for Wed 4 Nov 2026 at about 9:30am.",
+    "situation": "This is a shower tap repair at Flat 13, 73 Juniper Mews. The landlord approved it, and Keystone Services (Oliver Turner) was assigned. The first fix ran into a faulty part: Oliver says the tap he fitted in February was faulty and he is replacing it free of charge. There were then delays while he was on leave. The new taps have now been delivered, and Oliver has booked the installation with the tenant for 9:30am on Wednesday 4 November 2026.",
     "actions_taken": [
       {
         "tool": "get_ticket_context",
-        "description": "Loaded the full ticket, approvals, holds and history",
-        "result": "Stage works, approval 35 approved, no open holds, related ticket 69 open",
+        "description": "Loaded the ticket context",
+        "result": "Stage is works; approval 52 approved; no open holds",
         "ok": true
       },
       {
         "tool": "classify_reply",
-        "description": "Classified the contractor's booking confirmation (event 039)",
-        "result": "intent scheduling, autonomy auto, needs_human 0.1",
+        "description": "Classified the contractor's email from event 039",
+        "result": "Intent: scheduling; autonomy: auto; needs_human_response 0.1",
         "ok": true
       },
       {
-        "tool": "send_message",
-        "description": "Emailed the tenant: fitting booked Wed 4 Nov around 9:30am, no charge, check-in by Fri 6 Nov",
-        "result": "Queued, message_id 92, guard passed",
-        "ok": true
-      },
-      {
-        "tool": "add_profile_fact",
-        "description": "Recorded on the contractor's profile that the tap replacement is free warranty rework",
-        "result": "Fact 100 saved, no conflict",
+        "tool": "recall_lessons",
+        "description": "Looked up past decisions on similar cases",
+        "result": "Lessons #16, #1 and #19 apply",
         "ok": true
       },
       {
         "tool": "place_hold",
-        "description": "Hold waiting on the contractor to confirm the fitting is complete",
-        "result": "Hold 168, follow-up in 7 days",
+        "description": "Put the ticket on hold waiting for the contractor until after the 4 Nov visit",
+        "result": "Hold 246 created, follow-up in 6 days",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded on the contractor's profile that the rework is free of charge",
+        "result": "Fact 138 recorded",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the shower tap history on the property",
+        "result": "Fact 139 recorded",
         "ok": true
       }
     ],
@@ -93,28 +96,25 @@
     ],
     "escalation": {
       "needed": false,
-      "reason": "Routine booked works. No conflict, cost or safety issue.",
+      "reason": "A routine booking confirmation; nothing needs agency judgement",
       "handover_summary": "",
       "recommendation": ""
     },
     "unverified": [
-      "That the work is free of charge (contractor's word only, events 025 and 031)",
-      "That the appointment goes ahead on 4 Nov",
-      "Whether the problem in event 030 (shower and tap running at the same time) is covered by the new tap",
-      "The 'bank holiday Wednesday' in event 028: there is no UK bank holiday in October, so this call summary may be wrong"
+      "That the replacement work will really be free of charge (the contractor says so; there is no written confirmation)",
+      "That the visit on 4 Nov goes ahead",
+      "There is no contact email or phone in the CRM for the tenant, landlord or contractor"
     ],
     "failures": [],
     "risks_or_red_flags": [
-      "Repeat fault with a tap fitted in February; contractor reliability is worth watching",
-      "If an invoice arrives, it conflicts with the free-of-charge statement in event 025 and should not be paid without checking",
-      "Related ticket R/PM036-1 (id 69) is still open at landlord_approval and may be a duplicate that needs tidying up",
-      "Long delay for the tenant; risk of dissatisfaction"
+      "This is a repeat failure: the tap fitted in February was faulty, there have been several delays, and the tenant has been without a properly working shower since 24 Sept",
+      "If an invoice arrives, it would conflict with the contractor's statement that the work is free of charge"
     ],
-    "final_status": "works – on hold waiting on the contractor (hold 168) until the fitting on 4 Nov is complete",
+    "final_status": "The ticket is still in the works stage, on hold waiting for the contractor (hold 246)",
     "next_follow_up": {
-      "when": "2026-11-06 (7 days from hold)",
-      "what": "Confirm with the contractor and tenant that the tap was fitted on 4 Nov and works. Make sure no invoice is raised for the free rework. Then move to closeout."
+      "when": "2026-11-05",
+      "what": "Chase Keystone Services (Oliver) for the outcome of the 4 Nov installation. If there's no reply, check with the tenant. If an invoice arrives, query it, because the contractor said the work would be free."
     },
-    "confidence": 0.86
+    "confidence": 0.88
   }
 }

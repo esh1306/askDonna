@@ -1,87 +1,69 @@
 {
   "case": "PM048-1",
-  "decision": "act",
+  "decision": "escalate",
   "escalated": "yes",
   "failures": 0,
-  "durationSec": 43.264,
-  "decisionLine": "act",
-  "sessionId": "wrun_01M4JYH6VDERS23AT0XG61ZBT0",
-  "startedAt": "2026-10-10T13:02:43.504Z",
-  "finishedAt": "2026-10-10T13:03:26.768Z",
+  "durationSec": 36,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4JZYVYN15KGB8XE8EYX46QR",
+  "startedAt": "2026-10-10T13:27:39.646Z",
+  "finishedAt": "2026-10-10T13:28:15.646Z",
   "usage": {
-    "inputTokens": 87667,
-    "outputTokens": 3550
+    "inputTokens": 97874,
+    "outputTokens": 3609
   },
-  "eventCount": 186,
+  "eventCount": 239,
   "dryRun": false,
   "result": {
-    "case_id": "86 (R/PM048-1)",
-    "decision": "act",
-    "summary": "The landlord said yes with no conditions in event 006 (\"Yes please get that sorted\"), so I recorded approval 45 as approved and moved the ticket to provider_selection. He doesn't need a reply. Ticket 87 (R/PM048-2) looks like a duplicate of this job, so I didn't assign a contractor here, to avoid sending two. I passed it to ops to confirm which ticket to keep and run the job on that one only.",
+    "case_id": "103 (R/PM048-1)",
+    "decision": "escalate",
+    "summary": "The landlord clearly approved the repair (\"Yes please get that sorted\", event 006), and I've recorded that on this ticket. But ticket 103 appears to be a duplicate of ticket 87 (R/PM048-2), which has the same events and the same approval. On ticket 87, Riverside Solutions is already assigned and the job is at works. So I didn't assign a second contractor or message anyone. I've sent it to ops at low priority to merge or close.",
     "case_type": "maintenance",
     "judgement": {
-      "why_this_decision": "The landlord's approval in event 006 has no cost cap or conditions, and the classifier rated it 'approve' with 'auto'. So the landlord needs no reply and the approval can be recorded. Ticket 87 has the same property, created time and events 001-006, which points to a system duplicate. Assigning a contractor on both tickets could send two contractors to the same job, and ticket 86 has no contractor or tenant contact details anyway.",
+      "why_this_decision": "The landlord's reply in event 006 is a clear, unconditional approval (classifier: approve, 0.87 unconditional). The usual next step would be to assign a contractor (lesson #51). Ticket 87 at the same property has an identical description, created time and landlord exchange. It already has approval 46, Riverside Solutions assigned, both tenant and contractor briefed, and a visit scheduled. Assigning again would send a second contractor to the same window and risk paying twice.",
       "alternatives_considered": [
         {
-          "option": "Assign a contractor on ticket 86 and notify the tenant",
-          "why_not": "No contractor is on record for this ticket, there are no tenant contact details, and the identical ticket 87 means a likely double dispatch."
+          "option": "Assign a contractor and notify tenant and contractor, following lesson #51",
+          "why_not": "Ticket 87 already covers this job, so this would duplicate the dispatch and could lead to a second invoice."
+        },
+        {
+          "option": "Close ticket 103 as a duplicate myself",
+          "why_not": "The tenant contact IDs differ (253 vs 214), so a person should confirm it's a duplicate before closing it."
         },
         {
           "option": "Reply to the landlord",
-          "why_not": "His approval was clear. Nothing needs answering."
-        },
-        {
-          "option": "Leave the approval pending",
-          "why_not": "The approval is unconditional, so leaving it open would stall the job."
+          "why_not": "A clear approval needs no reply (lesson #51)."
         }
       ],
       "checks_performed": [
-        "Loaded ticket 86 context: approval 45 pending, no holds, no contractor, no attachments",
-        "Ran classify_reply on event 006: approve 1.0, unconditional 0.86, auto",
-        "Checked property history: found ticket 87 with the same description, created time and events 001-006",
-        "Checked for any amount or condition in the approval: none"
+        "Approval status on 103 (pending) and on 87 (approved)",
+        "Compared events on 103 and 87: identical bodies and timestamps",
+        "Contractor on 87 is Riverside Solutions, with hold 215 open over the address mismatch",
+        "classify_reply on the landlord email",
+        "Recalled lessons"
       ],
       "assumptions": [
-        "'Felix' is the landlord on record for this property",
-        "Ticket 87 is probably a duplicate of the same tenant request"
+        "Both tickets are the same job because they share the property, description and identical landlord email timestamps"
       ]
     },
-    "situation": "Tenant reported a stuck bathroom window. The agency asked the landlord to approve the repair and he replied yes. An internal note asked whether the landlord needs a reply. A matching ticket (87) exists for the same property.",
+    "situation": "The tenant at Flat 20, 120 Lantern Quay reported a stuck bathroom window. The landlord approved the repair by email. The CRM has a near-identical ticket (87) for the same job, which is already further along.",
     "actions_taken": [
       {
-        "tool": "get_ticket_context",
-        "description": "Loaded ticket 86",
-        "result": "Stage landlord_approval, approval 45 pending, no contractor",
-        "ok": true
-      },
-      {
-        "tool": "classify_reply",
-        "description": "Classified landlord email (event 006)",
-        "result": "approve, auto, unconditional 0.86",
-        "ok": true
-      },
-      {
-        "tool": "get_ticket_context",
-        "description": "Checked related ticket 87 at the same property",
-        "result": "Same job, events 001-006 match word for word; likely duplicate",
-        "ok": true
-      },
-      {
         "tool": "record_approval_response",
-        "description": "Recorded the landlord's approval",
-        "result": "Approval 45 approved; guard not blocked",
-        "ok": true
-      },
-      {
-        "tool": "move_stage",
-        "description": "Moved the ticket forward after approval",
-        "result": "landlord_approval -> provider_selection",
+        "description": "Recorded the landlord's clear approval from event 006 against approval 59",
+        "result": "Approval 59 approved; guard did not block",
         "ok": true
       },
       {
         "tool": "escalate_to_human",
-        "description": "Flagged the probable duplicate so ops can choose one ticket to run the job on",
-        "result": "Queue item 39",
+        "description": "Sent the duplicate-ticket issue to ops with a recommendation to close 103 and link it to 87",
+        "result": "queue_id 46",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Placed a hold on 103 waiting on the agency, follow-up in 2 days",
+        "result": "hold_id 269",
         "ok": true
       }
     ],
@@ -94,24 +76,24 @@
     ],
     "escalation": {
       "needed": true,
-      "reason": "Probable duplicate of ticket 87 (R/PM048-2); risk of sending two contractors",
-      "handover_summary": "Landlord approved the window repair (event 006). Approval 45 is recorded and ticket 86 is in provider_selection with no contractor assigned. Ticket 87 is the same job word for word.",
-      "recommendation": "Confirm the duplicate, run the job on one ticket and close the other with a cross-reference. If they are separate jobs, assign a window contractor on 86."
+      "reason": "Ticket 103 appears to duplicate ticket 87, where a contractor is already assigned",
+      "handover_summary": "The approval is recorded on 103. Ticket 87 has the same job, with Riverside Solutions assigned and a hold over a completion report that names the wrong address.",
+      "recommendation": "Confirm the duplicate, close 103 and link it to 87, and keep handling the job on 87."
     },
     "unverified": [
-      "Whether ticket 87 really is a duplicate",
-      "Tenant's name and contact details (not visible on ticket 86)",
-      "Repair cost (none given)"
+      "Whether 103 and 87 are definitely the same job (tenant contact IDs differ)",
+      "Whether the window has been repaired (Riverside's completion report names another property)"
     ],
     "failures": [],
     "risks_or_red_flags": [
-      "Duplicate tickets could lead to two contractors being sent or two invoices for the same job"
+      "Risk of sending two contractors and paying twice if both tickets are worked",
+      "The completion report on ticket 87 names Flat 7, 177 Beacon Close"
     ],
-    "final_status": "provider_selection; with ops (queue item 39) to resolve the duplicate",
+    "final_status": "Stage landlord_approval (approval granted); on hold waiting on the agency, with an escalation open for ops to merge or close the duplicate",
     "next_follow_up": {
-      "when": "Once ops decides on the duplicate (queue 39)",
-      "what": "Assign a contractor and notify the tenant on whichever ticket is kept"
+      "when": "In 2 days (hold 269)",
+      "what": "Check whether ops has merged or closed 103 into 87"
     },
-    "confidence": 0.8
+    "confidence": 0.85
   }
 }

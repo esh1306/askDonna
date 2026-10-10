@@ -1,0 +1,127 @@
+{
+  "case": "PM042-1",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 0,
+  "durationSec": 52.027,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4JYF8A43PHJXDAXCSSVPPGD",
+  "startedAt": "2026-10-10T13:01:39.458Z",
+  "finishedAt": "2026-10-10T13:02:31.485Z",
+  "usage": {
+    "inputTokens": 124746,
+    "outputTokens": 4317
+  },
+  "eventCount": 229,
+  "dryRun": false,
+  "result": {
+    "case_id": "76 (R/PM042-1, job ref NBL-042)",
+    "decision": "escalate",
+    "summary": "The landlord clearly approved engineer attendance (event 008), so I recorded approval 38 and moved ticket 76 to provider_selection. The landlord's reply doesn't need a response. Ticket 77 (R/PM042-2) is a near-identical ticket for the same property and job. I didn't assign a contractor or message the tenant from 76, because that risks a double booking and duplicate messages. I escalated at normal priority so a human can pick which ticket carries the job.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "Event 008, 'Yes please arrange an engineer, thank you', answers event 004's request for approval to arrange an appliance engineer. classify_reply scored it as an unconditional approval at 0.9, so I recorded the approval. The property history shows ticket 77 with the same description, the same created timestamp, and the same tenant and landlord names. Dispatching from both tickets would book the engineer twice, and there is also no named contractor on 76. So the right next step is for a human to pick one working ticket.",
+      "alternatives_considered": [
+        {
+          "option": "Assign a contractor and notify the tenant and contractor from ticket 76",
+          "why_not": "There is an apparent duplicate ticket for the same job, which risks double dispatch and duplicate messages. No contractor is named on 76 either."
+        },
+        {
+          "option": "Reply to the landlord",
+          "why_not": "Their reply is a clear approval and asks nothing, so no response is needed."
+        },
+        {
+          "option": "Leave the approval pending",
+          "why_not": "The approval is clear and unconditional, so recording it keeps the CRM accurate."
+        }
+      ],
+      "checks_performed": [
+        "Approval 38 status (pending, then recorded as approved) against the landlord's wording",
+        "classify_reply on event 008 (approve, unconditional 0.9, auto)",
+        "No amount quoted and no spend limit on record; the approval covers attendance and diagnosis only",
+        "Property history duplicate check: ticket 77 matches",
+        "No attachments visible; the photo referenced in event 004 is marked unavailable",
+        "Access and pets: none reported (event 002)"
+      ],
+      "assumptions": [
+        "'Harbour Surveying' is the make the tenant reported, though it may not be accurate",
+        "Tickets 76 and 77 probably represent the same job"
+      ]
+    },
+    "situation": "Routine report that the washing machine isn't heating water on 60°C+ cycles at Flat 20, 120 Alder Lane, Cedarford. The landlord has just approved arranging an engineer. An internal note (event 007) asks whether the landlord needs a reply.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded ticket 76",
+        "result": "Stage landlord_approval, approval 38 pending, duplicate ticket 77 in the property history",
+        "ok": true
+      },
+      {
+        "tool": "get_ticket_context",
+        "description": "Checked possible duplicate ticket 77",
+        "result": "Same description, creation time, property and names",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the landlord's reply in event 008",
+        "result": "approve, unconditional 0.9, autonomy auto",
+        "ok": true
+      },
+      {
+        "tool": "record_approval_response",
+        "description": "Recorded approval 38 as approved",
+        "result": "Approved, guard not blocked",
+        "ok": true
+      },
+      {
+        "tool": "move_stage",
+        "description": "Moved landlord_approval to provider_selection",
+        "result": "ok",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the washing machine make reported by the tenant",
+        "result": "fact 114",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Duplicate ticket and contractor choice",
+        "result": "queue item 34",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (Mercer)",
+        "status": "granted",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "Possible duplicate ticket R/PM042-2 for the same job; a human needs to pick one working ticket before dispatch to avoid a double booking.",
+      "handover_summary": "Landlord approved engineer attendance (event 008). Approval 38 is recorded and ticket 76 is in provider_selection. Ticket 77 looks like a duplicate. No contractor is named and no cost has been approved.",
+      "recommendation": "Keep one ticket and close the other as a duplicate. On the kept ticket, assign the agency's appliance engineer, notify the tenant and contractor, and ask for a quote before any repair beyond diagnosis."
+    },
+    "unverified": [
+      "Which appliance engineer the agency uses",
+      "Washing machine make ('Harbour Surveying', as the tenant gave it)",
+      "Whether tickets 76 and 77 are the same job",
+      "Repair cost"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "Duplicate tickets could lead to a double dispatch or duplicate messages to the tenant and contractor",
+      "No cost cap: the approval covers attendance and diagnosis only"
+    ],
+    "final_status": "provider_selection; escalated to the ops queue (item 34) to resolve the duplicate and assign a contractor",
+    "next_follow_up": {
+      "when": "Once ops has decided on the duplicate (queue item 34)",
+      "what": "Assign the engineer on the kept ticket and notify the tenant and contractor"
+    },
+    "confidence": 0.8
+  }
+}

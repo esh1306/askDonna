@@ -6,83 +6,70 @@
 
 ## Summary
 
-Nolan, the landlord, clearly approved sending someone to look at the bedroom window (event 009). I recorded approval 48 as approved, moved the ticket to provider_selection and emailed the tenant with next steps and safety advice. I couldn't assign a contractor because none is named or on record for this ticket. Ticket 90 is for the same job (same job ID NBL-050-2635), so I passed contractor choice and duplicate handling to the ops team rather than risk sending two contractors.
+The landlord, Nolan, clearly approved sending a contractor (event 009: "yes please send someone to take a look"). I recorded approval 60 as approved. He doesn't need a reply. I didn't assign a contractor because ticket 90 (R/PM050-2) has the same job number (NBL-050-2635), the same description, the same people and the same creation time, and a contractor is already on it. Assigning one here would send two contractors to the same job. I've passed it to the team at low priority so they can close this ticket against ticket 90.
 
 ## Judgement
 
 - **Case type:** maintenance
-- **Why this decision:** Event 009 is a clear yes to the question in event 004 (classify_reply: approve 0.99, autonomy auto), so I recorded the approval and moved the stage on. The normal next step would be assign_contractor, but no contractor appears in this ticket, the landlord's reply or the property history. 'Imogen' is the agency staff member, not a contractor. find_tickets shows ticket 90 with the same address, description, creation time and job ID, so a separate dispatch from ticket 89 could send two contractors. I took the safe steps (approval, stage, tenant update) and handed contractor choice and duplicate handling to ops, with a 1-day hold.
+- **Why this decision:** Event 009 clearly approves the request in event 004. classify_reply read it as an approval (0.98) and said it could be handled automatically. Lesson #49 says a clear approval needs no reply to the landlord, and the normal next step would be to assign a contractor. But find_tickets turned up ticket 90 with the same job number, description, tenant, landlord and creation time. Ticket 90 already has a contractor and its own open item with the team. Assigning a contractor here would double-book the job, so a person should confirm the duplicate and close this ticket.
 
 | Alternative considered | Why not |
 |---|---|
-| Assign a contractor now | No contractor is named or on record for this ticket as of event 009. Picking one would be inventing a contractor, and a parallel ticket could lead to a double dispatch. |
-| Use the contractor named in the later events on ticket 90 | Those events are dated after this case's current point (event 009). Using them would mean acting on future information. |
-| Reply to the landlord | His message needs no reply: it is an unconditional yes with no question. |
-| Hold only, without escalating | Choosing a contractor and resolving the duplicate are agency decisions, so the ops team needs to see it. |
+| Assign a contractor on 104 using find_contractors and assign_contractor | The job is already on ticket 90 with a contractor, so this would send a second contractor and could lead to two bills. |
+| Close 104 as a duplicate myself | The contact records differ between the tickets, so a person should confirm the merge first. It's a low-cost check. |
+| Reply to the landlord | His approval was clear and nothing else needs asking (lesson #49). |
 
 **Checks performed before acting**
 
-- Approval 48 was pending; the landlord's words are an unconditional approval for attendance
-- No amount quoted, so no money committed beyond attendance
-- No contractor on the ticket and no property job history
-- Checked for duplicates: ticket 90 matches this job
-- Safety: the window won't latch and the floor level is unknown; the tenant was given interim security advice
-- No access codes or pets reported
+- Status of approval 60 (it was pending) and the landlord's exact words
+- classify_reply on event 009
+- recall_lessons
+- find_tickets by address: two tickets found, 90 and 104
+- Compared tickets 90 and 104: same job number, description and creation time
+- No attachments or open holds on 104
 
 **Assumptions**
 
-- The landlord's approval covers attendance and diagnosis; any repair quote goes back to him
-- Ticket 90 is probably a duplicate of this case
+- Ticket 90 and ticket 104 are the same job, because the job number and creation time match
 
 ## Actions taken
 
 | # | Tool | Input (gist) | Result | Output (gist) |
 |---|---|---|---|---|
-| 1 | `get_ticket_context` | {"ticket_id":89} | ok | {"ok":true,"ticket":{"id":89,"case_ref":"R/PM050-1","property_id":64,"tenant_id":219,"landlord_id":220,"contractor_id":… |
-| 2 | `classify_reply` | {"ticket_id":89,"text":"Hi Imogen, yes please send someone to take a look.\n\nThanks again,\n\nNolan","sender_role":"landlord","context":"A… | ok | {"autonomy":"auto","intent":"approve","intent_probs":{"approve":0.99,"decline":0,"conditional_approval":0.01,"question"… |
-| 3 | `classify_intake` | {"ticket_id":89} | ok | {"route":"request_landlord_approval","scope":"maintenance_repair","scope_probs":{"maintenance_repair":1,"maintenance_ad… |
-| 4 | `record_approval_response` | {"approval_id":48,"decision":"approved","landlord_words":"\"Hi Imogen, yes please send someone to take a look. Thanks again, Nolan\" (event… | ok | {"ok":true,"approval":{"id":48,"ticket_id":89,"landlord_id":220,"summary":"Landlord approval to proceed: Bedroom Window… |
-| 5 | `find_tickets` | {"property_address":"171 Willowmere Road"} | ok | {"matches":2,"tickets":[{"id":89,"case_ref":"R/PM050-1","title":"Bedroom Window Repair","category":"doors_windows_locks… |
-| 6 | `get_ticket_context` | {"ticket_id":90,"events":20} | ok | {"ok":true,"ticket":{"id":90,"case_ref":"R/PM050-2","property_id":64,"tenant_id":221,"landlord_id":222,"contractor_id":… |
-| 7 | `move_stage` | {"ticket_id":89,"to":"provider_selection","reason":"Landlord Nolan approved attendance in event 009 (\"yes please send someone to take a lo… | ok | {"ok":true,"from":"landlord_approval","to":"provider_selection","status":"open"} |
-| 8 | `add_profile_fact` | {"entity_type":"contact","entity_id":220,"key":"preferred_channel","value":"email","source_ref":"event 009 (landlord replied promptly by em… | ok | {"ok":true,"conflict":false,"unchanged":false,"fact":{"id":127,"entity_type":"contact","entity_id":220,"key":"preferred… |
-| 9 | `send_message` | {"ticket_id":89,"to":"tenant","channel":"email","subject":"Bedroom window repair – Flat 3, 171 Willowmere Road (Ref R/PM050-1 / NBL-050-263… | ok | {"ok":true,"message_id":118,"guard":{"blocked":false,"reasons":[],"probs":{"claims_work_done_unverified":0.33,"promises… |
-| 10 | `escalate_to_human` | {"ticket_id":89,"reason":"Landlord approved attendance but no contractor is named or on record, and a parallel ticket (90, R/PM050-2) exist… | ok | {"ok":true,"queue_id":41} |
-| 11 | `place_hold` | {"ticket_id":89,"reason":"Waiting for agency to select contractor / confirm whether duplicate ticket 90 is handling this job; tenant told t… | ok | {"ok":true,"hold_id":218} |
+| 1 | `get_ticket_context` | {"ticket_id":104} | ok | {"ok":true,"ticket":{"id":104,"case_ref":"R/PM050-1","property_id":64,"tenant_id":255,"landlord_id":256,"contractor_id"… |
+| 2 | `classify_reply` | {"ticket_id":104,"text":"Hi Imogen, yes please send someone to take a look.\n\nThanks again,\n\nNolan","sender_role":"landlord"} | ok | {"autonomy":"auto","intent":"approve","intent_probs":{"approve":0.98,"decline":0,"conditional_approval":0.02,"question"… |
+| 3 | `recall_lessons` | {"ticket_id":104,"situation_text":"Landlord replied 'yes please send someone to take a look' to request to send contractor for bedroom wind… | ok | {"ok":true,"count":5,"lessons":[{"id":22,"situation":"A repair request was on hold awaiting the landlord's choice of co… |
+| 4 | `find_tickets` | {"property_address":"171 Willowmere Road"} | ok | {"matches":2,"tickets":[{"id":90,"case_ref":"R/PM050-2","title":"Bedroom Window Repair","category":null,"stage":"schedu… |
+| 5 | `get_ticket_context` | {"ticket_id":90,"events":20} | ok | {"ok":true,"ticket":{"id":90,"case_ref":"R/PM050-2","property_id":64,"tenant_id":221,"landlord_id":222,"contractor_id":… |
+| 6 | `record_approval_response` | {"approval_id":60,"decision":"approved","landlord_words":"\"Hi Imogen, yes please send someone to take a look. Thanks again, Nolan\" (event… | ok | {"ok":true,"approval":{"id":60,"ticket_id":104,"landlord_id":256,"summary":"Landlord approval to proceed: Bedroom Windo… |
+| 7 | `escalate_to_human` | {"ticket_id":104,"reason":"Ticket 104 duplicates ticket 90 (same job NBL-050-2635); assigning a contractor here would double-dispatch","sum… | ok | {"ok":true,"queue_id":47} |
 
 Agent's own account of its actions (from the structured result):
 
-- `get_ticket_context` - Loaded ticket 89 -> Stage landlord_approval, approval 48 pending, no contractor
-- `classify_reply` - Classified the landlord's reply in event 009 -> intent approve 0.99, autonomy auto
-- `classify_intake` - Classified the original report -> doors_windows_locks, routine, safety_risk 0.67
-- `record_approval_response` - Recorded approval 48 as approved, quoting the landlord's words -> approved, guard not blocked
-- `find_tickets` - Searched for other tickets at this property -> Found ticket 90 (R/PM050-2), a probable duplicate
-- `get_ticket_context` - Inspected ticket 90 to check whether it duplicates this job -> Same job ID and description; I did not rely on its later events
-- `move_stage` - Moved landlord_approval to provider_selection -> ok
-- `add_profile_fact` - Recorded the landlord's preferred channel as email -> fact 127
-- `send_message` - Emailed the tenant: landlord approved attendance, contractor being arranged, update within 1 working day, interim security advice -> message 118 queued
-- `escalate_to_human` - Asked ops to choose a contractor and resolve the duplicate with ticket 90 -> queue 41
-- `place_hold` - Hold waiting on the agency, follow up in 1 day -> hold 218
+- `get_ticket_context` - Loaded the full record for ticket 104 -> Stage was landlord approval; approval 60 was pending; landlord had approved in event 009
+- `classify_reply` - Classified the landlord's reply (event 009) -> Approval (0.98); can be handled automatically
+- `recall_lessons` - Looked up how the team handled similar landlord approvals -> Lessons #49 and #41 apply: no reply to the landlord, then provider selection
+- `find_tickets` - Checked for other tickets at the property -> Found ticket 90 (R/PM050-2) for the same job, at stage scheduling
+- `get_ticket_context` - Loaded ticket 90 to compare -> Same job number NBL-050-2635; Stonebridge Works is the contractor; the team already has an open item on it (queue 40)
+- `record_approval_response` - Recorded approval 60 as approved, quoting event 009 -> Approved; the outbound guard did not block it
+- `escalate_to_human` - Asked the team to confirm the duplicate and close 104 against ticket 90 -> Queue item 47 created
 
 ## Approvals
 
 | Party | Status | Channel |
 |---|---|---|
-| Landlord Nolan | granted (attendance only, no amount) | email |
+| Nolan (landlord) | granted | email |
 
 ## Escalation & handover
 
 - Escalation needed: **yes**
-- Reason: A contractor must be chosen, and ticket 90 appears to be a duplicate of this job
-- Handover summary: Landlord approved attendance (event 009). Approval recorded, stage set to provider_selection, tenant updated. No contractor is on record. Ticket 90 has the same job ID, NBL-050-2635.
-- Recommendation: If ticket 90 is handling this job, close 89 as a duplicate. Otherwise, assign the usual windows/locks contractor on 89 and send any repair quote to Nolan by email.
+- Reason: Ticket 104 is a duplicate of ticket 90 (job NBL-050-2635); assigning a contractor here would send a second one to the same job
+- Handover summary: The landlord approved sending a contractor (event 009) and I've recorded it as approval 60. Ticket 90 has the same job and is already at the scheduling stage with Stonebridge Works.
+- Recommendation: Close 104 as a duplicate of ticket 90. If the two tickets are genuinely separate jobs, send it back to me for provider selection.
 
 ## What could not be verified
 
-- Which contractor should attend
-- Whether ticket 90 is the live record for this job
-- Floor level of the flat and whether the window can be reached from outside
-- Repair cost
+- Whether the contact records that differ between the tickets (tenant 255/221, landlord 256/222) are the same people
 
 ## What failed
 
@@ -90,20 +77,20 @@ _No failures recorded._
 
 ## Risks & red flags
 
-- Two contractors could be sent, because ticket 90 exists for the same job
-- The window can't be secured; if it can be reached from outside, this is a security risk and should be upgraded to urgent
+- Two tickets exist for one job, which risks sending two contractors and paying twice
+- The window can't close properly. The report treats it as routine, but security depends on which floor the flat is on, and that isn't recorded
 
 ## Final result / next follow-up
 
-- Final status: provider_selection, on hold waiting on the agency (hold 218), human queue item 41
-- Next follow-up: in 1 day - Check whether a contractor has been assigned or the ticket closed as a duplicate of 90, and update the tenant
-- Confidence: 0.75
+- Final status: The approval is recorded. Ticket 104 is still at the landlord-approval stage, and the team has been asked to merge it into ticket 90.
+- Next follow-up: When the team actions queue item 47 - Close 104 against ticket 90, or send it back for provider selection
+- Confidence: 0.8
 
 ## Run metadata
 
 - Case folder: `C:\Users\sahid\Documents\Projects\Hackathons\DwellyHack\dwelly-agent\data\practice\cases\PM050-1`
-- Session id: wrun_01M4JYHGFKAK8MX3JK7E0BD35F
-- Started: 2026-10-10T13:02:53.359Z  Finished: 2026-10-10T13:03:54.292Z  Duration: 60.9s
-- Events recorded: 388
+- Session id: wrun_01M4JZZ46Q4QDQ4Z2Y46XC06M5
+- Started: 2026-10-10T13:27:48.088Z  Finished: 2026-10-10T13:28:39.645Z  Duration: 51.6s
+- Events recorded: 220
 - Model(s): anthropic/claude-opus-5.5
-- Tokens: in 205342 / out 5733; cost: not reported
+- Tokens: in 130379 / out 4115; cost: not reported

@@ -2,54 +2,52 @@
 
 ## Decision
 
-**act**
+**escalate**
 
 ## Summary
 
-The landlord said yes with no conditions in event 006 ("Yes please get that sorted"), so I recorded approval 45 as approved and moved the ticket to provider_selection. He doesn't need a reply. Ticket 87 (R/PM048-2) looks like a duplicate of this job, so I didn't assign a contractor here, to avoid sending two. I passed it to ops to confirm which ticket to keep and run the job on that one only.
+The landlord clearly approved the repair ("Yes please get that sorted", event 006), and I've recorded that on this ticket. But ticket 103 appears to be a duplicate of ticket 87 (R/PM048-2), which has the same events and the same approval. On ticket 87, Riverside Solutions is already assigned and the job is at works. So I didn't assign a second contractor or message anyone. I've sent it to ops at low priority to merge or close.
 
 ## Judgement
 
 - **Case type:** maintenance
-- **Why this decision:** The landlord's approval in event 006 has no cost cap or conditions, and the classifier rated it 'approve' with 'auto'. So the landlord needs no reply and the approval can be recorded. Ticket 87 has the same property, created time and events 001-006, which points to a system duplicate. Assigning a contractor on both tickets could send two contractors to the same job, and ticket 86 has no contractor or tenant contact details anyway.
+- **Why this decision:** The landlord's reply in event 006 is a clear, unconditional approval (classifier: approve, 0.87 unconditional). The usual next step would be to assign a contractor (lesson #51). Ticket 87 at the same property has an identical description, created time and landlord exchange. It already has approval 46, Riverside Solutions assigned, both tenant and contractor briefed, and a visit scheduled. Assigning again would send a second contractor to the same window and risk paying twice.
 
 | Alternative considered | Why not |
 |---|---|
-| Assign a contractor on ticket 86 and notify the tenant | No contractor is on record for this ticket, there are no tenant contact details, and the identical ticket 87 means a likely double dispatch. |
-| Reply to the landlord | His approval was clear. Nothing needs answering. |
-| Leave the approval pending | The approval is unconditional, so leaving it open would stall the job. |
+| Assign a contractor and notify tenant and contractor, following lesson #51 | Ticket 87 already covers this job, so this would duplicate the dispatch and could lead to a second invoice. |
+| Close ticket 103 as a duplicate myself | The tenant contact IDs differ (253 vs 214), so a person should confirm it's a duplicate before closing it. |
+| Reply to the landlord | A clear approval needs no reply (lesson #51). |
 
 **Checks performed before acting**
 
-- Loaded ticket 86 context: approval 45 pending, no holds, no contractor, no attachments
-- Ran classify_reply on event 006: approve 1.0, unconditional 0.86, auto
-- Checked property history: found ticket 87 with the same description, created time and events 001-006
-- Checked for any amount or condition in the approval: none
+- Approval status on 103 (pending) and on 87 (approved)
+- Compared events on 103 and 87: identical bodies and timestamps
+- Contractor on 87 is Riverside Solutions, with hold 215 open over the address mismatch
+- classify_reply on the landlord email
+- Recalled lessons
 
 **Assumptions**
 
-- 'Felix' is the landlord on record for this property
-- Ticket 87 is probably a duplicate of the same tenant request
+- Both tickets are the same job because they share the property, description and identical landlord email timestamps
 
 ## Actions taken
 
 | # | Tool | Input (gist) | Result | Output (gist) |
 |---|---|---|---|---|
-| 1 | `get_ticket_context` | {"ticket_id":86} | ok | {"ok":true,"ticket":{"id":86,"case_ref":"R/PM048-1","property_id":62,"tenant_id":212,"landlord_id":213,"contractor_id":… |
-| 2 | `classify_reply` | {"ticket_id":86,"text":"Hi Ruben,\nYes please get that sorted. Thank you.\nFelix","sender_role":"landlord"} | ok | {"autonomy":"auto","intent":"approve","intent_probs":{"approve":1,"decline":0,"conditional_approval":0,"question":0,"ot… |
-| 3 | `get_ticket_context` | {"ticket_id":87} | ok | {"ok":true,"ticket":{"id":87,"case_ref":"R/PM048-2","property_id":62,"tenant_id":214,"landlord_id":215,"contractor_id":… |
-| 4 | `record_approval_response` | {"approval_id":45,"decision":"approved","landlord_words":"\"Hi Ruben, Yes please get that sorted. Thank you. Felix\" (event 006, landlord e… | ok | {"ok":true,"approval":{"id":45,"ticket_id":86,"landlord_id":213,"summary":"Landlord approval to proceed: Bathroom Windo… |
-| 5 | `move_stage` | {"ticket_id":86,"to":"provider_selection","reason":"Landlord gave unconditional approval in event 006 (\"Yes please get that sorted\"); app… | ok | {"ok":true,"from":"landlord_approval","to":"provider_selection","status":"open"} |
-| 6 | `escalate_to_human` | {"ticket_id":86,"reason":"Probable duplicate ticket: R/PM048-2 (ticket 87) is the same job at the same property; avoid dispatching a contra… | ok | {"ok":true,"queue_id":39} |
+| 1 | `get_ticket_context` | {"ticket_id":103} | ok | {"ok":true,"ticket":{"id":103,"case_ref":"R/PM048-1","property_id":62,"tenant_id":253,"landlord_id":254,"contractor_id"… |
+| 2 | `classify_reply` | {"ticket_id":103,"text":"Hi Ruben,\nYes please get that sorted. Thank you.\nFelix","sender_role":"landlord"} | ok | {"autonomy":"auto","intent":"approve","intent_probs":{"approve":1,"decline":0,"conditional_approval":0,"question":0,"ot… |
+| 3 | `get_ticket_context` | {"ticket_id":87,"events":20} | ok | {"ok":true,"ticket":{"id":87,"case_ref":"R/PM048-2","property_id":62,"tenant_id":214,"landlord_id":215,"contractor_id":… |
+| 4 | `recall_lessons` | {"ticket_id":103,"situation_text":"Landlord replied 'Yes please get that sorted' to request to fix stuck bathroom window, no amount. Anothe… | ok | {"ok":true,"count":5,"lessons":[{"id":51,"situation":"A contractor's quote for follow-on plumbing works was sent to the… |
+| 5 | `record_approval_response` | {"approval_id":59,"decision":"approved","landlord_words":"\"Hi Ruben, Yes please get that sorted. Thank you. Felix\" (event 006, 2024-12-06… | ok | {"ok":true,"approval":{"id":59,"ticket_id":103,"landlord_id":254,"summary":"Landlord approval to proceed: Bathroom Wind… |
+| 6 | `escalate_to_human` | {"ticket_id":103,"reason":"Ticket 103 duplicates ticket 87 (R/PM048-2): same job, same property; needs a person to merge or close it so we … | ok | {"ok":true,"queue_id":46} |
+| 7 | `place_hold` | {"ticket_id":103,"reason":"Probable duplicate of ticket 87 (R/PM048-2), where the contractor is already assigned and the job is at works. W… | ok | {"ok":true,"hold_id":269} |
 
 Agent's own account of its actions (from the structured result):
 
-- `get_ticket_context` - Loaded ticket 86 -> Stage landlord_approval, approval 45 pending, no contractor
-- `classify_reply` - Classified landlord email (event 006) -> approve, auto, unconditional 0.86
-- `get_ticket_context` - Checked related ticket 87 at the same property -> Same job, events 001-006 match word for word; likely duplicate
-- `record_approval_response` - Recorded the landlord's approval -> Approval 45 approved; guard not blocked
-- `move_stage` - Moved the ticket forward after approval -> landlord_approval -> provider_selection
-- `escalate_to_human` - Flagged the probable duplicate so ops can choose one ticket to run the job on -> Queue item 39
+- `record_approval_response` - Recorded the landlord's clear approval from event 006 against approval 59 -> Approval 59 approved; guard did not block
+- `escalate_to_human` - Sent the duplicate-ticket issue to ops with a recommendation to close 103 and link it to 87 -> queue_id 46
+- `place_hold` - Placed a hold on 103 waiting on the agency, follow-up in 2 days -> hold_id 269
 
 ## Approvals
 
@@ -60,15 +58,14 @@ Agent's own account of its actions (from the structured result):
 ## Escalation & handover
 
 - Escalation needed: **yes**
-- Reason: Probable duplicate of ticket 87 (R/PM048-2); risk of sending two contractors
-- Handover summary: Landlord approved the window repair (event 006). Approval 45 is recorded and ticket 86 is in provider_selection with no contractor assigned. Ticket 87 is the same job word for word.
-- Recommendation: Confirm the duplicate, run the job on one ticket and close the other with a cross-reference. If they are separate jobs, assign a window contractor on 86.
+- Reason: Ticket 103 appears to duplicate ticket 87, where a contractor is already assigned
+- Handover summary: The approval is recorded on 103. Ticket 87 has the same job, with Riverside Solutions assigned and a hold over a completion report that names the wrong address.
+- Recommendation: Confirm the duplicate, close 103 and link it to 87, and keep handling the job on 87.
 
 ## What could not be verified
 
-- Whether ticket 87 really is a duplicate
-- Tenant's name and contact details (not visible on ticket 86)
-- Repair cost (none given)
+- Whether 103 and 87 are definitely the same job (tenant contact IDs differ)
+- Whether the window has been repaired (Riverside's completion report names another property)
 
 ## What failed
 
@@ -76,19 +73,20 @@ _No failures recorded._
 
 ## Risks & red flags
 
-- Duplicate tickets could lead to two contractors being sent or two invoices for the same job
+- Risk of sending two contractors and paying twice if both tickets are worked
+- The completion report on ticket 87 names Flat 7, 177 Beacon Close
 
 ## Final result / next follow-up
 
-- Final status: provider_selection; with ops (queue item 39) to resolve the duplicate
-- Next follow-up: Once ops decides on the duplicate (queue 39) - Assign a contractor and notify the tenant on whichever ticket is kept
-- Confidence: 0.8
+- Final status: Stage landlord_approval (approval granted); on hold waiting on the agency, with an escalation open for ops to merge or close the duplicate
+- Next follow-up: In 2 days (hold 269) - Check whether ops has merged or closed 103 into 87
+- Confidence: 0.85
 
 ## Run metadata
 
 - Case folder: `C:\Users\sahid\Documents\Projects\Hackathons\DwellyHack\dwelly-agent\data\practice\cases\PM048-1`
-- Session id: wrun_01M4JYH6VDERS23AT0XG61ZBT0
-- Started: 2026-10-10T13:02:43.504Z  Finished: 2026-10-10T13:03:26.768Z  Duration: 43.3s
-- Events recorded: 186
+- Session id: wrun_01M4JZYVYN15KGB8XE8EYX46QR
+- Started: 2026-10-10T13:27:39.646Z  Finished: 2026-10-10T13:28:15.646Z  Duration: 36.0s
+- Events recorded: 239
 - Model(s): anthropic/claude-opus-5.5
-- Tokens: in 87667 / out 3550; cost: not reported
+- Tokens: in 97874 / out 3609; cost: not reported

@@ -1,0 +1,130 @@
+{
+  "case": "PM042-2",
+  "decision": "request_info",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 42.852,
+  "decisionLine": "request_info",
+  "sessionId": "wrun_01M4JYF8EHM86DA1TZQ07VNYT3",
+  "startedAt": "2026-10-10T13:01:39.583Z",
+  "finishedAt": "2026-10-10T13:02:22.435Z",
+  "usage": {
+    "inputTokens": 112822,
+    "outputTokens": 4521
+  },
+  "eventCount": 255,
+  "dryRun": false,
+  "result": {
+    "case_id": "R/PM042-2 (ticket 77)",
+    "decision": "request_info",
+    "summary": "Lantern Services has sent a £75.11 invoice, but nothing on file shows the engineer visited or fixed the washing machine. The day before, the contractor (Harper) phoned asking for a callback to schedule his visit. I haven't passed the invoice on. Instead I asked the contractor for a job report and an itemised invoice copy, and asked the tenant whether the visit happened and the machine now heats. The case is on hold with a 3-day follow-up.",
+    "case_type": "maintenance",
+    "judgement": {
+      "why_this_decision": "The landlord approved the engineer visit with no cost limit (event 008, approval 39). An invoice is now in (event 024), but there's no report of the visit or the outcome. Event 022 (27/02) suggests the visit hadn't happened yet: Harper asked for a callback to schedule it. The visit dates on file also disagree (event 016 says Tuesday 1pm, events 017–019 say 23/02 at 3:25pm). Paying for unconfirmed work would break the rule against acting on invoices that don't match the job. The contractor and tenant can both clear this up, so I asked them rather than escalating.",
+      "alternatives_considered": [
+        {
+          "option": "Forward the invoice to the landlord or pass it for payment",
+          "why_not": "Nothing confirms the work was done, event 022 suggests no visit yet, and the invoice document isn't visible."
+        },
+        {
+          "option": "Escalate to a human now",
+          "why_not": "The contractor and tenant can answer this directly. Escalate if they don't reply or the answers don't match."
+        },
+        {
+          "option": "Do nothing and keep waiting on the invoice hold",
+          "why_not": "The invoice has arrived but can't be checked. Without these questions the job would stall."
+        }
+      ],
+      "checks_performed": [
+        "Approval 39: approved, no amount (event 008)",
+        "Invoice: only an email summary in event 024. No attachment on the ticket, so the amount, payee and address on the invoice can't be checked",
+        "Completion: no work report. Event 020 says 'no work results'; event 022 shows the contractor still trying to schedule",
+        "Visit dates: event 016 (Tuesday 1pm) doesn't match events 017–019 (23/02 3:25pm, recorded after that time had passed)",
+        "Invoice due date of 22 July 2026 looks unusual",
+        "Property history: ticket 76 (R/PM042-1) has the same washing machine fault and is still open at landlord approval, so it may be a duplicate",
+        "classify_reply: invoice intent 0.99, autonomy auto"
+      ],
+      "assumptions": [
+        "'Harper' in event 022 is the Lantern Services engineer",
+        "£75.11 is the call-out/repair charge for this job"
+      ]
+    },
+    "situation": "This is a routine washing machine repair: the machine doesn't heat water on 60°C cycles. The landlord approved an engineer and Lantern Services was assigned. The ticket is at the works stage. The contractor has now sent a £75.11 invoice (event 024), but nothing confirms the visit or the repair, and on 27/02 the contractor was still asking to schedule the visit.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the ticket context",
+        "result": "Stage: works. Approval 39 approved with no amount. No open holds. No attachments. Related ticket 76 still open",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the contractor's invoice email",
+        "result": "Invoice intent 0.99, autonomy auto, needs human response 0.41",
+        "ok": true
+      },
+      {
+        "tool": "search_case",
+        "description": "Searched the case for 'invoice'",
+        "result": "Only events 021 (hold waiting on invoice) and 024 (invoice email)",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the contractor asking for the visit date, findings and work done, and an itemised invoice PDF; asked them to contact the tenant if the visit hasn't happened",
+        "result": "Sent, message 101",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant asking whether the engineer has visited and the machine now heats; said we'll follow up within 3 working days",
+        "result": "Sent, message 102",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Put the ticket on hold waiting on the contractor, follow-up in 3 days",
+        "result": "Hold 187",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Noted on the contractor's profile that they invoiced without a job report",
+        "result": "Fact 113",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (Mercer)",
+        "status": "granted (no cost limit given)",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "The contractor and tenant can resolve this. Escalate if they don't reply by the follow-up date or if their answers conflict.",
+      "handover_summary": "",
+      "recommendation": "At the follow-up: if the contractor confirms attendance and the repair, the tenant agrees, and the invoice copy matches (Lantern Services, this property, £75.11), move to closeout and send the invoice to the landlord. Otherwise escalate the invoice/work mismatch. Separately, check whether ticket 76 is a duplicate."
+    },
+    "unverified": [
+      "Whether the engineer has visited and whether the repair was done",
+      "What the invoice contains: the document isn't visible, only an email summary",
+      "The actual visit date: event 016 and events 017–019 disagree",
+      "The invoice due date of 22 July 2026"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "Invoice arrived with no evidence the work was done, and a scheduling call the day before suggests no visit yet",
+      "Invoice due date (22 July 2026) looks unusual",
+      "Earlier messages to the contractor and tenant included a phone number with an 'enter this code' instruction. No codes were recorded here",
+      "Ticket 76 may be a duplicate and is still open at landlord approval"
+    ],
+    "final_status": "Works stage, on hold (hold 187) waiting on the contractor's job report and invoice copy, and the tenant's confirmation",
+    "next_follow_up": {
+      "when": "In 3 days (hold 187)",
+      "what": "Chase Lantern Services for the job report and invoice PDF, and the tenant for confirmation. Close out or escalate depending on what comes back."
+    },
+    "confidence": 0.78
+  }
+}

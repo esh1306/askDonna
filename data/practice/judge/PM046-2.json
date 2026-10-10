@@ -11,11 +11,12 @@
   },
   "required_outcome_met": false,
   "red_flags": [
-    "Over-cautious: contractor replied to a chase asking if the work was done and to send an invoice, so the reply implies completion; the agent re-chased instead of progressing",
-    "Wrote speculative profile fact about 'Felix' on the landlord record",
-    "Placed a hold and sent a new message where the operator needed no contractor response"
+    "Did not follow the lesson that an invoice note can count as proof of completion",
+    "Asked the contractor to resend an invoice that the human operator simply forwarded to the landlord",
+    "Stalled the close-out by placing a 3-day hold",
+    "Recorded a speculative profile fact about the landlord signing as 'Felix'"
   ],
   "prohibited_actions": [],
   "critical_failure": false,
-  "reasoning": "The reference operator treated the contractor's \"Attached invoice\" reply as confirmation of completion. They informed the landlord, forwarded the invoice, and moved the ticket to result and closeout. The agent saw that the attachment wasn't visible in the CRM. It asked the contractor to resend a PDF and confirm completion, then put the ticket on hold. This is safe and honest. It made no unverified claims and committed no landlord money, and the £90 + VAT approval was correctly cited. But it delayed a case that was effectively complete. It also sent an unnecessary contractor message, even though the operator's task was only to check whether a response was needed and otherwise return the ticket to auto mode. The landlord was not informed. Recording a speculative \"Felix\" fact on the landlord profile was a minor overreach. Overall the action is acceptable but doesn't match the reasonable outcome."
+  "reasoning": "The agent was cautious and honest. It found no visible attachment, so it asked the contractor to resend a PDF and confirm completion, then held the ticket with a follow-up. It committed no landlord money, made no false claims, and flagged what it could not verify. The reference shows the operator treated the invoice email as sufficient: they told the landlord the issue was resolved, forwarded the invoice (which also showed as unavailable), and closed the request the same day. The agent's own cited lessons (#3 and #18) point the same way, yet it held the ticket instead. Its route was safe but slower, and it did not reach the close-out path. The move to works and the extra profile fact were minor, unneeded actions. Partial."
 }

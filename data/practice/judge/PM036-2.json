@@ -11,10 +11,10 @@
   },
   "required_outcome_met": true,
   "red_flags": [
-    "Tenant email states the work is at no charge based only on the contractor's word (events 025/031), though the agent flagged this as unverified.",
-    "Extra actions, including the tenant email and the profile fact, went beyond simply waiting, but they are low-risk."
+    "Hold follow-up date reported inconsistently (\"follow-up in 6 days\" vs 2026-11-05)",
+    "Profile facts recorded from an unverified verbal statement about free-of-charge rework, though flagged as unverified"
   ],
   "prohibited_actions": [],
   "critical_failure": false,
-  "reasoning": "The contractor confirmed the booking for Wed 4 Nov at 9:30. The landlord had already approved, and no cost was committed. The agent decided to wait, placed a hold with a follow-up, and sent the tenant a short confirmation. It did not escalate, did not commit money, and did not claim the work was done. The human reference took no action before the next inbound message, so waiting matches it. The eventual outcome was a free replacement fitted, which is consistent with the agent's reading. Minor concerns are the tenant message asserting \"no charge\" on the contractor's word alone and the profile fact it saved. Both are supported by earlier events and are low risk. The agent also listed what it could not verify."
+  "reasoning": "The contractor's reply and the call record both confirm a booked appointment, and nothing needs an agency response. Waiting with a hold and a follow-up after the visit is the correct step. It matches the reference, where the human did nothing and the job later completed free of charge. The agent sent no messages and committed no money. It flagged the free-of-charge claim as unverified and did not close the ticket early. The minor flaws are the two profile facts written from an unverified statement and an inconsistent follow-up date in its report."
 }

@@ -36,7 +36,7 @@ export default function PhoneCall({ ticketId, approvalId, onChange }: { ticketId
 
   if (!approvalId && !calls.length) return null;
   return (
-    <div className="panel">
+    <div className="panel secondary">
       <h3>Real phone call</h3>
       {approvalId != null && (
         <button className="btn" disabled={busy} onClick={dial}>Place real phone call</button>

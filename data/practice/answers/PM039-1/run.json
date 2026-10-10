@@ -3,97 +3,86 @@
   "decision": "act",
   "escalated": "no",
   "failures": 0,
-  "durationSec": 49.429,
+  "durationSec": 37.759,
   "decisionLine": "act",
-  "sessionId": "wrun_01M4JYEH74NB5VB6RWEYZ0WTFG",
-  "startedAt": "2026-10-10T13:01:15.747Z",
-  "finishedAt": "2026-10-10T13:02:05.176Z",
+  "sessionId": "wrun_01M4JZX7D9CMAC99H1TN1DDSDA",
+  "startedAt": "2026-10-10T13:26:45.614Z",
+  "finishedAt": "2026-10-10T13:27:23.373Z",
   "usage": {
-    "inputTokens": 78613,
-    "outputTokens": 3965
+    "inputTokens": 68120,
+    "outputTokens": 3537
   },
-  "eventCount": 204,
+  "eventCount": 201,
   "dryRun": false,
   "result": {
-    "case_id": "73 (R/PM039-1)",
+    "case_id": "R/PM039-1 (ticket 99)",
     "decision": "act",
-    "summary": "The tenant's reply (event 006) answered the agency's question: the noise is a mechanical clicking from the machine and nothing suggests loose items, so the agent's condition for sending someone out is met. There is no landlord approval or spend limit on record, so I emailed the landlord asking for approval of an engineer inspection with no cost stated. I replied to the tenant to accept the video they offered and explain what happens next, and placed a 3-day hold to chase the landlord.",
+    "summary": "Nora (the tenant) has ruled out loose items in the drum. The washing machine clicking is a mechanical fault. The landlord hasn't approved anything on the records, so I emailed them asking to approve an engineer to inspect and quote. I followed lesson #36. I replied to Nora to say yes to her video offer and explain what happens next, and put the ticket on hold until the landlord answers, with a follow-up in 3 days.",
     "case_type": "maintenance",
     "judgement": {
-      "why_this_decision": "Event 003 said someone would be sent if nothing was inside the machine. Event 006 describes a mechanical clicking from the machine, which plausibly answers that question, so I took it at face value. Event 003 says the landlord was 'let know', but no approval and no pre-approved limit are recorded. Committing money without approval is not allowed, so I asked the landlord. Event 005 asked whether the tenant needs a reply. They do: they offered a video, and they need to know the next step and when they'll hear back.",
+      "why_this_decision": "Event 003 told Nora an engineer would be sent if nothing was stuck in the drum. Event 006 meets that condition: she reports a mechanical clicking noise and offers a video. Event 003 also says 'I have let the landlord know', but no approval is recorded, the landlord's profile has no spend limit, and there is no landlord reply. So I can't assign a contractor yet. Lesson #36 (troubleshooting ruled out, then ask the landlord to approve an inspection, reply to the tenant, hold) fits. Lesson #17 only applies when the landlord has already pre-approved, which they haven't here. The fault is routine: the machine still works and Jev rates it routine at 0.99.",
       "alternatives_considered": [
         {
-          "option": "Assign a contractor now",
-          "why_not": "No landlord approval or spend limit recorded, and no contractor on record."
+          "option": "Assign a contractor now (lesson #17)",
+          "why_not": "No landlord approval or pre-approved limit is recorded; telling the landlord about the fault is not the same as approving it."
         },
         {
-          "option": "Ask the tenant again to confirm the drum is empty",
-          "why_not": "Their reply plausibly answers this. Asking again would stall the job."
+          "option": "No reply to tenant / return to auto",
+          "why_not": "Nora offered a video and is waiting to hear what happens next, so she needed a short reply."
         },
         {
-          "option": "Escalate to a human",
-          "why_not": "Routine appliance fault with no safety risk or conflict. The next step can be handled normally."
-        },
-        {
-          "option": "No reply to the tenant",
-          "why_not": "The tenant offered a video and was waiting for a response (event 005 asked whether one is needed)."
+          "option": "Escalate",
+          "why_not": "Nothing conflicting and no safety risk; the normal next step is clear."
         }
       ],
       "checks_performed": [
-        "Loaded full context: 6 events, no holds, approvals, contractor, attachments or property history",
-        "Checked landlord profile: no preferred channel and no spend limit",
-        "Classified the tenant reply: auto, still_broken, safety 0.05",
+        "Loaded ticket context: no approvals, holds, contractor, attachments or property history",
+        "Classified tenant reply (review; intent new_issue/still_broken, safety 0.05)",
         "Classified intake: appliance, routine, route request_landlord_approval",
-        "Name check: tenant is called Nora in the email and Oakley in the hold note. This is a minor difference and doesn't affect the decision"
+        "Recalled lessons (#36 followed, #17 not applicable)",
+        "Checked landlord profile: no spend limit or preferred channel, so used email"
       ],
       "assumptions": [
-        "Used email for the landlord because no preferred channel is recorded",
-        "The tenant's 'mechanical clicking' means no loose items were found",
-        "Stage left at provider_selection because stages only move forward"
+        "Event 006 confirms nothing is loose in the drum (it says the noise is mechanical)",
+        "Email is the right channel because the landlord has no recorded preference"
       ]
     },
-    "situation": "Routine report of a washing machine clicking while rotating, still working. The agency asked the tenant to check for objects in the drum; the tenant says the clicking is mechanical and offered a video. No landlord approval on record.",
+    "situation": "Routine washing machine fault (clicking while the drum rotates, still working). Nora replied to the agency's check (event 006). The ticket is at stage provider_selection, but no landlord approval is recorded.",
     "actions_taken": [
       {
-        "tool": "get_ticket_context",
-        "description": "Load case",
-        "result": "6 events, no holds, approvals or contractor",
+        "tool": "classify_reply",
+        "description": "Classified the tenant's reply (event 006)",
+        "result": "review; new_issue 0.48 / still_broken 0.41; safety 0.05",
         "ok": true
       },
       {
-        "tool": "classify_reply",
-        "description": "Classify tenant reply (event 006)",
-        "result": "auto; still_broken; low safety risk",
+        "tool": "recall_lessons",
+        "description": "Looked up how the team handled similar cases",
+        "result": "Lesson #36 fits and was followed",
         "ok": true
       },
       {
         "tool": "classify_intake",
-        "description": "Classify job",
+        "description": "Classified the request",
         "result": "appliance, routine, route request_landlord_approval",
         "ok": true
       },
       {
         "tool": "request_landlord_approval",
-        "description": "Email landlord asking for approval of an engineer inspection, no cost stated",
-        "result": "approval_id 40, message 95",
+        "description": "Emailed the landlord asking to approve an appliance engineer to inspect and quote; no cost stated",
+        "result": "approval_id 56, message 124, guard passed",
         "ok": true
       },
       {
         "tool": "send_message",
-        "description": "Email tenant: accept the video, explain landlord approval is pending, update within 3 working days, safety advice",
-        "result": "message 96 sent, guard passed",
+        "description": "Emailed Nora: yes to the video, landlord approval requested, update within 3 working days, safety advice",
+        "result": "message 125, guard passed",
         "ok": true
       },
       {
         "tool": "place_hold",
-        "description": "Hold waiting on landlord, follow up in 3 days",
-        "result": "hold_id 174",
-        "ok": true
-      },
-      {
-        "tool": "add_profile_fact",
-        "description": "Record washing machine fault on the property",
-        "result": "fact 109",
+        "description": "Put the ticket on hold waiting for the landlord",
+        "result": "hold 247, follow-up in 3 days",
         "ok": true
       }
     ],
@@ -106,25 +95,24 @@
     ],
     "escalation": {
       "needed": false,
-      "reason": "Routine appliance repair. No conflict, safety risk or cost dispute.",
+      "reason": "Routine job; the next step is the landlord's approval",
       "handover_summary": "",
-      "recommendation": "When the landlord approves, assign an appliance engineer and pass on the tenant's video."
+      "recommendation": ""
     },
     "unverified": [
-      "Whether the tenant actually checked the drum for loose items (inferred from event 006)",
-      "What event 003 means by 'I have let the landlord know'; no message to the landlord is visible",
-      "Repair cost, and any warranty or cover on the machine",
-      "The tenant's name: Nora (event 003) vs Oakley (event 004)"
+      "Event 003 says the landlord was told about the fault; there is no record of any landlord response",
+      "The cost of an inspection or repair is not known",
+      "Nora's video has not been received yet"
     ],
     "failures": [],
     "risks_or_red_flags": [
-      "The fault could get worse, e.g. drum bearing failure. The tenant has been told to stop using the machine if there is burning, smoke or leaking"
+      "The ticket stage (provider_selection) is ahead of the evidence: no landlord approval is recorded"
     ],
-    "final_status": "provider_selection; on hold waiting for landlord approval (approval 40, hold 174)",
+    "final_status": "On hold waiting for landlord approval (approval 56, hold 247); stage left at provider_selection",
     "next_follow_up": {
-      "when": "In 3 days (hold 174)",
-      "what": "Chase the landlord for APPROVE/DECLINE. If approved, assign an appliance engineer and notify the tenant and engineer, including the tenant's video if received."
+      "when": "In 3 days (around 2025-09-10)",
+      "what": "Chase the landlord if there is no answer. If they approve, find and assign an appliance engineer, then brief the engineer and Nora"
     },
-    "confidence": 0.8
+    "confidence": 0.85
   }
 }

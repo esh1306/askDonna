@@ -2,132 +2,130 @@
   "case": "PM046-2",
   "decision": "request_info",
   "escalated": "no",
-  "failures": 1,
-  "durationSec": 48.681,
+  "failures": 0,
+  "durationSec": 41.491,
   "decisionLine": "request_info",
-  "sessionId": "wrun_01M4JYG5JEYQ0WYF36DGFDTV9G",
-  "startedAt": "2026-10-10T13:02:09.396Z",
-  "finishedAt": "2026-10-10T13:02:58.077Z",
+  "sessionId": "wrun_01M4JZYF10KAD3WCM5PSPHMGH9",
+  "startedAt": "2026-10-10T13:27:26.369Z",
+  "finishedAt": "2026-10-10T13:28:07.860Z",
   "usage": {
-    "inputTokens": 127847,
-    "outputTokens": 4642
+    "inputTokens": 129761,
+    "outputTokens": 4170
   },
-  "eventCount": 249,
+  "eventCount": 205,
   "dryRun": false,
   "result": {
-    "case_id": "83 (R/PM046-2)",
+    "case_id": "102 (R/PM046-2)",
     "decision": "request_info",
-    "summary": "Lantern Utilities emailed to say an invoice was attached, but no attachment shows up on the ticket, so there's nothing to check against the approved £90 + VAT. I asked them to resend it as a PDF and confirm the hinge replacement was finished at the 30/09/2025 visit. I moved the ticket from scheduling to works and set a 2-day follow-up.",
-    "case_type": "maintenance_admin",
+    "summary": "Lantern Utilities (Mercer) emailed \"Attached invoice\" (event 041), but no attachment is visible on the ticket, so I can't check it against the landlord's approval of £90 + VAT. I've asked the contractor to resend the invoice as a PDF and confirm the hinge was replaced at the 30/09 visit. The ticket has moved to works and is on hold with a 3-day follow-up. Once the invoice arrives and matches, it goes to the landlord and the ticket moves to close-out.",
+    "case_type": "maintenance",
     "judgement": {
-      "why_this_decision": "The landlord approved the attendance (event 007) and then the hinge replacement at £90 + VAT (events 015, 016, 018). The visit was confirmed for 30/09/2025 (events 027–031). In event 041 the contractor says 'Attached invoice', but get_ticket_context lists no attachments, so the invoice can't be read or checked. Only the contractor can fix that, so asking them and setting a hold is the right next step. The classifier rated the email routine (auto, intent invoice).",
+      "why_this_decision": "The landlord first agreed to a contractor visit (event 007), then approved the hinge replacement at £90 + VAT (events 016/018). The visit was booked for 30/09/2025 (events 027-031). There were no work results afterwards (event 036), so the agency chased for completion and a PDF invoice (event 038). The contractor replied 'Attached invoice' (event 041), but the CRM lists no attachments. Lesson #3 says to forward the invoice to the landlord and move to close-out, and lesson #18 says the invoice note can count as proof of completion. I can't follow either yet because there is no invoice to check for amount, payee or property, and nothing that confirms completion. The contractor is the one who can fix this, so I asked them rather than escalating.",
       "alternatives_considered": [
         {
+          "option": "Forward the invoice to the landlord and move to close-out (lesson #3)",
+          "why_not": "No invoice is visible, so I can't check it against the approved £90 + VAT or send it on."
+        },
+        {
           "option": "Escalate to a human",
-          "why_not": "Nothing is in dispute or in conflict. It's a missing attachment, and the contractor can sort it out."
+          "why_not": "A missing attachment is something the contractor can fix by resending. There's no conflict or dispute yet."
         },
         {
-          "option": "Move to closeout or tell the landlord and tenant the work is done",
-          "why_not": "Neither the contractor nor the tenant has confirmed the work is finished, and the invoice hasn't been seen."
-        },
-        {
-          "option": "No action",
-          "why_not": "The ticket would stall with no invoice to process and no hold set."
+          "option": "No action / return to auto mode",
+          "why_not": "The invoice is missing and completion isn't confirmed, so the job would stall without a follow-up."
         }
       ],
       "checks_performed": [
-        "Approval status: approval 43 is approved. Hinge cost of £90 + VAT approved by email (event 018).",
-        "Attachments: none listed on ticket 83.",
-        "Searched the case for 'invoice': only events 038 and 041.",
-        "Landlord name: replies are signed 'Felix' but Grace is the landlord on record. Most likely a partner or co-owner, and it doesn't change the approval.",
-        "Contractor staff sign as Jenkins and Mercer; both are Lantern Utilities. Normal.",
-        "Ticket 82 (R/PM046-1) has the same property and the same description, and its events copy ticket 83's early events. It looks like a duplicate.",
-        "No open holds before this action."
+        "Checked approval status: approval 58 is approved; the £90 + VAT hinge cost was approved by email (event 018)",
+        "Checked attachments: none listed on the ticket; contractor profile fact 123 already notes the 07/10 invoice email arrived with no visible attachment",
+        "Checked that the visit date (30/09/2025) has passed",
+        "Classified event 041: intent invoice, autonomy auto",
+        "Looked for duplicates: ticket 82 (R/PM046-1), same property and title, is on hold in provider_selection",
+        "Checked open holds: none before I placed hold 267"
       ],
       "assumptions": [
-        "Sending an invoice suggests the contractor attended on 30/09. This isn't confirmed, so the ticket went to works, not closeout."
+        "'Jenkins' and 'Mercer' are both staff at Lantern Utilities",
+        "'Felix', who signed the landlord replies, is the landlord on record (Grace) or acts for them"
       ]
     },
-    "situation": "This is a routine bedroom window hinge repair. The landlord approved the hinge at £90 + VAT and the visit was booked for 30/09/2025. Clara chased for completion and a PDF invoice on 07/10. Lantern Utilities (signed Mercer) replied 'Attached invoice', but no attachment shows on the ticket.",
+    "situation": "Bedroom window hinge repair at Flat 23, 143 Willowmere Road. The landlord approved £90 + VAT for the hinge replacement and the visit was booked for 30/09/2025. After the agency chased, the contractor emailed saying an invoice was attached, but no attachment is visible in the CRM. The ticket was still at the scheduling stage.",
     "actions_taken": [
       {
-        "tool": "classify_reply",
-        "description": "Classified the contractor's invoice email (event 041)",
-        "result": "Intent: invoice. Autonomy: auto. Needs a human response: 0.39.",
-        "ok": true
-      },
-      {
-        "tool": "search_case",
-        "description": "Searched the case for invoice references",
-        "result": "Only the chase (event 038) and the reply (event 041) mention it. No attachment.",
-        "ok": true
-      },
-      {
         "tool": "get_ticket_context",
-        "description": "Checked ticket 82, the related ticket for this property",
-        "result": "Same request as ticket 83, at landlord_approval stage. Looks like a duplicate.",
+        "description": "Loaded the ticket, its events, profiles and approvals",
+        "result": "No attachments; approval 58 approved; ticket at scheduling stage, no open holds",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the contractor's email from event 041",
+        "result": "intent=invoice, autonomy=auto, needs_human_response 0.21",
+        "ok": true
+      },
+      {
+        "tool": "recall_lessons",
+        "description": "Looked up past handling of invoices that arrive after a job",
+        "result": "Lessons #3 and #18 apply once a checkable invoice exists",
+        "ok": true
+      },
+      {
+        "tool": "find_tickets",
+        "description": "Checked for other tickets at this property",
+        "result": "Found ticket 82 (R/PM046-1), same title, on hold in provider_selection",
         "ok": true
       },
       {
         "tool": "send_message",
-        "description": "Emailed the contractor: no attachment came through, please resend the invoice as a PDF, confirm the work was completed, and note the approved £90 + VAT",
-        "result": "Queued (message 110). The guard didn't block it.",
-        "ok": true
-      },
-      {
-        "tool": "add_profile_fact",
-        "description": "Recorded on the landlord's profile that they approved the hinge at £90 + VAT and that the reply was signed Felix",
-        "result": "Saved as fact 122",
-        "ok": true
-      },
-      {
-        "tool": "add_profile_fact",
-        "description": "Recorded on the contractor's profile the PDF invoice request and the missing attachment",
-        "result": "Saved as fact 123",
+        "description": "Asked the contractor to resend the invoice as a PDF and confirm the hinge replacement was completed",
+        "result": "Sent to outbox, message 131; guard did not block it",
         "ok": true
       },
       {
         "tool": "move_stage",
-        "description": "Moved the ticket from scheduling to works, because the visit date has passed and the contractor is invoicing",
-        "result": "Done",
+        "description": "Moved the ticket from scheduling to works, since the visit date has passed and an invoice was mentioned",
+        "result": "Stage is now works",
         "ok": true
       },
       {
         "tool": "place_hold",
-        "description": "Set a hold waiting on the contractor's PDF invoice and completion confirmation",
-        "result": "Hold 204, follow-up in 2 days",
+        "description": "Put the ticket on hold waiting for the contractor to resend the invoice and confirm completion",
+        "result": "Hold 267, follow-up in 3 days",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded that the landlord's replies are signed 'Felix'",
+        "result": "Fact 144 saved, no conflict",
         "ok": true
       }
     ],
     "approvals": [
       {
-        "party": "Landlord (Grace; replies signed Felix)",
-        "status": "granted: attendance (event 007) and hinge replacement at £90 + VAT (event 018)",
+        "party": "Landlord (Grace / signed Felix)",
+        "status": "granted: contractor visit (event 007) and hinge replacement at £90 + VAT (event 018)",
         "channel": "email"
       }
     ],
     "escalation": {
       "needed": false,
-      "reason": "Not needed. The missing invoice attachment can be sorted out with the contractor.",
+      "reason": "The contractor can fix the missing invoice by resending it",
       "handover_summary": "",
-      "recommendation": "When the PDF invoice arrives, check it against £90 + VAT (£108 total), Lantern Utilities and Flat 23, 143 Willowmere Road. If it matches and completion is confirmed, move to closeout. If it doesn't match, escalate. Ops should also review ticket 82 (R/PM046-1) as a likely duplicate."
+      "recommendation": "If no PDF invoice has arrived by the follow-up date, chase once more. Escalate if there is still no reply, or if the invoice differs from £90 + VAT or Lantern Utilities."
     },
     "unverified": [
-      "Whether the hinge replacement was actually completed on 30/09/2025",
-      "Invoice amount, payee and details: the attachment isn't visible",
-      "How Felix is connected to Grace, the landlord on record"
+      "Whether the hinge replacement was actually done on 30/09/2025",
+      "The invoice amount, payee and reference (no invoice visible)",
+      "Whether 'Felix' and 'Grace' are the same landlord"
     ],
-    "failures": [
-      "The invoice the contractor says they attached (event 041) isn't visible in the CRM"
-    ],
+    "failures": [],
     "risks_or_red_flags": [
-      "Ticket 82 (R/PM046-1) looks like a duplicate of this job and is still open at landlord_approval stage. Ops may want to close or merge it to avoid double work or double payment.",
-      "Event 012 says there was a property photo attachment, but it isn't available."
+      "Possible duplicate: ticket 82 (R/PM046-1), same property and title, is still on hold in provider_selection. It should be checked and closed if it is the same job, so it doesn't lead to a second dispatch or a double payment.",
+      "The invoice email had no readable attachment, which happened earlier with this contractor too (fact 123)"
     ],
-    "final_status": "Works stage. On hold (hold 204) waiting for the contractor to resend the invoice as a PDF and confirm completion.",
+    "final_status": "Stage works, on hold waiting for the contractor (hold 267)",
     "next_follow_up": {
-      "when": "In 2 days (around 09/10/2025)",
-      "what": "If nothing has arrived, chase Lantern Utilities for the PDF invoice and completion confirmation. Once received, check the invoice against the approved £90 + VAT."
+      "when": "2025-10-10",
+      "what": "If no PDF invoice or completion confirmation has arrived, chase Lantern Utilities. If one has, check it against £90 + VAT, forward it to the landlord, tell the tenant, and move the ticket to close-out."
     },
     "confidence": 0.85
   }

@@ -3,123 +3,108 @@
   "decision": "escalate",
   "escalated": "yes",
   "failures": 0,
-  "durationSec": 48.138,
+  "durationSec": 40.745,
   "decisionLine": "escalate",
-  "sessionId": "wrun_01M4JYE27C399M34JJJYSRBQJ9",
-  "startedAt": "2026-10-10T13:01:00.447Z",
-  "finishedAt": "2026-10-10T13:01:48.585Z",
+  "sessionId": "wrun_01M4JZX7DH62CS4WJWRHRJT5BA",
+  "startedAt": "2026-10-10T13:26:45.614Z",
+  "finishedAt": "2026-10-10T13:27:26.359Z",
   "usage": {
-    "inputTokens": 87016,
-    "outputTokens": 3842
+    "inputTokens": 107224,
+    "outputTokens": 3970
   },
-  "eventCount": 210,
+  "eventCount": 231,
   "dryRun": false,
   "result": {
-    "case_id": "69 (R/PM036-1)",
+    "case_id": "97 (R/PM036-1)",
     "decision": "escalate",
-    "summary": "The landlord's \"Yes please!\" (event 006) clearly approves sending a contractor to fix the broken shower knob. I recorded the approval, moved the ticket to provider_selection and saved email as the landlord's preferred channel. Ticket 70 (R/PM036-2) is for the same property and the same report and was created at the same moment, so I passed this to a human to merge the two before anyone assigns a contractor. That avoids booking the job twice. The landlord doesn't need another reply.",
+    "summary": "The landlord's reply \"Yes please!\" is a clear approval to send a contractor, so I recorded it against approval 54 with no amount. This ticket looks like a duplicate of ticket 95 (R/PM036-2), which has the same property, description, timestamps and landlord reply, and already has Keystone Services / Oliver Turner assigned. I did not assign a contractor here because the same job would be sent out twice. I've passed it to ops to confirm the duplicate and close or merge it.",
     "case_type": "maintenance",
     "judgement": {
-      "why_this_decision": "Event 003 asked the landlord if they were happy for a contractor to attend. Event 006 replied 'Yes please!', and the classifier rated it an approval (unconditional 0.82, autonomy 'auto'). So the approval is recorded and the stage moves forward. The landlord named no contractor and none is on this ticket. The property history shows a duplicate ticket (70) with the same description and creation time. Assigning a contractor here could book the job twice, so a human should merge the tickets first.",
+      "why_this_decision": "Event 006 is a clear, unconditional approval (classify_reply: approve, unconditional 0.88), so I recorded it. The normal next step would be to assign a contractor. But ticket 95 has events 001–006 identical to this ticket, word for word and to the second, and it already has an assigned provider. Sending a contractor from ticket 97 would duplicate the job and could double-bill the landlord. Lessons #22 and #51 say to move an approved job forward with no further reply to the landlord. I followed them for the approval and stopped before assignment because of the duplicate.",
       "alternatives_considered": [
         {
-          "option": "Assign a contractor on ticket 69 now",
-          "why_not": "No contractor is named or on record for this ticket. A duplicate ticket exists, so assigning here risks double-booking."
+          "option": "Assign a contractor on ticket 97 (lessons #22/#51)",
+          "why_not": "Ticket 95 already covers the same job with a contractor assigned, so this would double-dispatch."
         },
         {
-          "option": "Reply to the landlord",
-          "why_not": "The approval is clear, so nothing more is needed from the landlord."
+          "option": "Close ticket 97 myself as a duplicate",
+          "why_not": "The contact records are split (different tenant and landlord IDs). Closing a ticket should be confirmed by a person, and the cost of waiting is low."
         },
         {
-          "option": "Leave approval pending",
-          "why_not": "The landlord's answer was clear, so leaving it pending would stall the job."
+          "option": "Reply to the landlord again",
+          "why_not": "The approval was clear and needs no response (lesson #51)."
         }
       ],
       "checks_performed": [
-        "Approval 33 status and landlord wording (event 006)",
-        "classify_reply on the landlord's message",
-        "Whether a contractor is named or on the ticket: none",
-        "Open holds: none",
-        "Attachments: none visible, although event 003 mentions photos",
-        "Property history: duplicate ticket 70 with the same title, description and creation time"
+        "Approval status and landlord wording (event 006)",
+        "classify_reply on the landlord message",
+        "Compared ticket 95 events 001–006 with ticket 97: identical",
+        "Property address and landlord name match",
+        "No contractor, attachments or holds on ticket 97"
       ],
       "assumptions": [
-        "The approval covers a contractor visit to mend the shower knob. No cost cap was given.",
-        "Ticket 70 is the same job. I only compared the description, timestamp and property; I didn't use its later events."
+        "Ticket 97 and ticket 95 are the same tenant request, recorded twice in the CRM"
       ]
     },
-    "situation": "A tenant reported a broken shower pull knob whose cap comes off. The agency asked the landlord for approval (event 003) and the landlord replied 'Yes please!' (event 006). The system then asked whether the landlord needs a reply.",
+    "situation": "Landlord Sawyer approved sending a contractor for a broken shower pull knob at Flat 13, 73 Juniper Mews. The same request also exists as ticket 95, where it has been approved and a contractor assigned.",
     "actions_taken": [
       {
         "tool": "get_ticket_context",
-        "description": "Loaded ticket 69",
-        "result": "Approval 33 pending, no contractor, duplicate ticket 70 in property history",
-        "ok": true
-      },
-      {
-        "tool": "get_ticket_context",
-        "description": "Checked ticket 70 to see whether it is a duplicate",
-        "result": "Same property, description and creation time",
+        "description": "Loaded tickets 97 and 95",
+        "result": "Ticket 95 is a near-identical duplicate that is already further along",
         "ok": true
       },
       {
         "tool": "classify_reply",
-        "description": "Classified the landlord's reply",
-        "result": "approve, unconditional 0.82, autonomy auto",
+        "description": "Classified the landlord's reply from event 006",
+        "result": "approve, unconditional 0.88, auto",
+        "ok": true
+      },
+      {
+        "tool": "recall_lessons",
+        "description": "Looked up how the team handles a landlord approval reply",
+        "result": "Lessons #22, #50, #51: clear approval, no further reply, move forward",
         "ok": true
       },
       {
         "tool": "record_approval_response",
-        "description": "Recorded approval 33 as approved",
-        "result": "approved",
-        "ok": true
-      },
-      {
-        "tool": "move_stage",
-        "description": "landlord_approval -> provider_selection",
-        "result": "ok",
-        "ok": true
-      },
-      {
-        "tool": "add_profile_fact",
-        "description": "Recorded landlord preferred_channel=email",
-        "result": "fact 103",
+        "description": "Recorded approval 54 as approved, with no amount",
+        "result": "Approved; guard did not block it",
         "ok": true
       },
       {
         "tool": "escalate_to_human",
-        "description": "Asked a human to merge the duplicate tickets before a contractor is assigned",
-        "result": "queue 32",
+        "description": "Asked ops to confirm the duplicate and close or merge ticket 97",
+        "result": "queue_id 44",
         "ok": true
       }
     ],
     "approvals": [
       {
         "party": "Landlord Sawyer",
-        "status": "granted",
+        "status": "granted (no amount)",
         "channel": "email"
       }
     ],
     "escalation": {
       "needed": true,
-      "reason": "Duplicate ticket 70 for the same job; needs merging before a contractor is assigned",
-      "handover_summary": "The landlord approved contractor attendance (event 006) and approval 33 is recorded. Ticket 69 is now in provider_selection with no contractor assigned. Ticket 70 has the same report, property and creation time.",
-      "recommendation": "Merge the two tickets or close 69 as a duplicate, then assign a contractor and notify the tenant on one ticket only."
+      "reason": "Probable duplicate of ticket 95, which already has a contractor assigned",
+      "handover_summary": "Ticket 97 matches ticket 95 (R/PM036-2) in events 001–006. Landlord approval is recorded here; no contractor is assigned and no messages were sent.",
+      "recommendation": "Confirm it's a duplicate, close ticket 97 and continue on ticket 95. Merge the duplicate contacts (240/235, 241/236)."
     },
     "unverified": [
-      "Photos mentioned in event 003 are not visible on the ticket",
-      "Tenant contact details are not on ticket 69",
-      "Which contractor should attend"
+      "That tickets 97 and 95 are the same job (very likely, but not confirmed by a person)"
     ],
     "failures": [],
     "risks_or_red_flags": [
-      "The job could be booked twice through duplicate tickets 69 and 70"
+      "The same job could be sent out and paid for twice if ticket 97 goes forward on its own",
+      "Tenant and landlord contact records are duplicated"
     ],
-    "final_status": "provider_selection; escalated to the ops queue (item 32) to merge the duplicate",
+    "final_status": "Stage landlord_approval (approval recorded); with ops (queue 44) to confirm the duplicate",
     "next_follow_up": {
-      "when": "When ops responds to queue item 32",
-      "what": "Merge or close the duplicate, then assign a contractor and notify the tenant"
+      "when": "When ops reviews queue item 44",
+      "what": "Close ticket 97 as a duplicate of ticket 95, or move it to provider_selection if it turns out to be a separate fault"
     },
-    "confidence": 0.78
+    "confidence": 0.82
   }
 }

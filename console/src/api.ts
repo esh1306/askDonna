@@ -37,3 +37,10 @@ export type Detail = {
   action_log: { id: number; actor: string; action: string; ok: number; ts: string }[];
   runs: { file: string; ts: string; result?: any; error?: string; events?: any[]; sessionId?: string; message: string }[];
 };
+
+export type Lesson = {
+  id: number; situation: string; trigger: string | null; stage: string | null; category: string | null;
+  action: string; rationale: string; source: "dataset" | "human" | "feedback"; source_ref: string | null;
+  weight: number; uses: number; created_at: string;
+};
+export const when = (ts: string) => new Date(ts).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });

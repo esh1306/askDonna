@@ -74,14 +74,14 @@ export default function CallPanel({ info, onDone }: { info: CallInfo; onDone: ()
   }
 
   return (
-    <div className="panel call">
-      <h3>Call landlord (approval {info.approval_id})</h3>
+    <div className="panel call secondary">
+      <h3>Browser call, landlord (approval {info.approval_id})</h3>
       <div className="muted small">
         Calling as {info.landlord_name}. Your browser will ask for microphone access; you play the landlord.
       </div>
       <div className="row">
         {!live ? (
-          <button className="btn primary" onClick={start}>Call landlord</button>
+          <button className="btn" onClick={start}>Start browser call</button>
         ) : (
           <button className="btn danger" onClick={() => (conversation as any).endSession()}>End call</button>
         )}
