@@ -16,6 +16,8 @@ Donna runs residential maintenance and compliance work end to end. She reads eve
 
 ![Home](docs/img/v8-home.png)
 
+**Demo video (60 s):** [`demo/donna-demo.mp4`](demo/donna-demo.mp4). Home and live activity → a decision in "Needs you" with the document drawer → the case board → "Call the landlord now" (Donna phones and records the answer) → a human decision becomes a lesson → results.
+
 ---
 
 ## 1. What we built
@@ -28,10 +30,12 @@ Donna runs residential maintenance and compliance work end to end. She reads eve
 - **Beyond the dataset.** Any input format (case folders, single `.txt`/`.json`/`.md` files, notes plus CSV), any language, out-of-scope cases (arrears, deposits, neighbour disputes, insurance) handed over properly, compliance work (gas safety CP12, EICR, EPC, alarms, licences), and "do nothing" as a real decision.
 
 ### The AI-native CRM (operations console)
-- **Home:** what Donna handled, what she is waiting on (and when she will chase), what needs you, actions taken today, and an estimate of admin time saved. A live feed shows what Donna is doing, in her own words.
+- **Home:** what Donna handled, what she is waiting on (and when she will chase), what needs you, actions taken today, and an estimate of admin time saved. "What Donna is doing" shows a live agent strip with today's tallies (emails, calls, approvals, holds), one card per case with a chain of action icons and an animated stage change when Donna moves a case, and an "Up next" timeline of her scheduled chases.
 - **Needs you:** each item Donna couldn't close is a decision card: what is wrong, what you need to do, one-click actions. Invoice numbers, people and amounts become clickable chips; documents open in a drawer beside Donna's notes.
+- **Donna's work as a board:** cases flow across pipeline stages; cards glide to their new column with "Donna moved this" when she changes a status; any case opens in a drawer with prev/next.
 - **Tickets read as Donna's story:** an autonomy badge, "What I'm doing next", and a compact typed timeline of "What I did". Manual controls sit behind "Take over".
-- **Floating Donna assistant:** ask her anything about the case and she carries it out.
+- **Floating Donna assistant:** follows the case you are on (or "Today" when none is open), offers context-aware actions ("Call the landlord now", "Chase the contractor", "Summarise what I need to decide") and keeps a per-case history. Ask her anything about the case and she carries it out.
+- **Design:** editorial serif headings, hairline layout, mono labels and a single racing-green accent, built from a small component library (`console/src/components/`).
 - **Learning moment:** when a person resolves, accepts, edits or rejects something, a "New lesson" card flies into Donna's memory and a toast says what she learned.
 
 ### Learning from the team
@@ -120,6 +124,10 @@ sequenceDiagram
 **Home.** What Donna handled, what she is waiting on, what needs you, and her live activity feed.
 
 ![Home](docs/img/v8-home.png)
+
+**What Donna is doing.** One card per case with her chain of actions, animated stage changes, and what she will do next.
+
+![What Donna is doing](docs/img/v9-activity.png)
 
 **A ticket, told by Donna.** Autonomy badge, what she's doing next, and a compact typed timeline of what she did: flagged for you, stage moves, approvals asked by phone with the amount, emails with one-line previews.
 
