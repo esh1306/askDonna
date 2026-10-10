@@ -1,0 +1,97 @@
+{
+  "case": "PM015-1",
+  "decision": "request_info",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 33.404,
+  "decisionLine": "request_info",
+  "sessionId": "wrun_01M4JW89625BQ77JNGP9M7K4MG",
+  "startedAt": "2026-10-10T12:22:53.860Z",
+  "finishedAt": "2026-10-10T12:23:27.264Z",
+  "usage": {
+    "inputTokens": 69910,
+    "outputTokens": 3256
+  },
+  "eventCount": 164,
+  "dryRun": false,
+  "result": {
+    "case_id": "R/PM015-1 (ticket 32)",
+    "decision": "request_info",
+    "summary": "The landlord replied \"Please get Imogen to have a look at it\", which tells us to send a named person. There is no contractor record and no contact details for Imogen, so I emailed the landlord asking for her details and how she will invoice. The ticket is on hold until 2 days from now. No escalation is needed: this is a routine, non-urgent door repair, and the landlord can answer the open question.",
+    "situation": "The tenant reported that the front door sticks at the base, which makes it hard to open and close. There is no obstruction, and the classifier rated it routine, doors/locks. On 5 Jan we asked the landlord whether to send a contractor. The landlord replied asking for \"Imogen\" to look at it. The ticket is in provider_selection with no contractor assigned. No cost has been quoted or approved.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded ticket 32",
+        "result": "7 events, no contractor, no approvals or holds, no profile facts",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified landlord email (event 007)",
+        "result": "intent approve 0.5, autonomy auto, unconditional approval 0.15",
+        "ok": true
+      },
+      {
+        "tool": "classify_intake",
+        "description": "Classified the repair",
+        "result": "doors_windows_locks, routine (0.98), safety_risk 0.36",
+        "ok": true
+      },
+      {
+        "tool": "find_tickets / search_case",
+        "description": "Searched records for 'Imogen'",
+        "result": "Only one match: an 'Imogen Oakley' on an unrelated property (ticket 31), in a future-dated event that appears to be a client/landlord. I did not use it to identify this Imogen.",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the landlord asking for Imogen's full or business name, phone or email, and whether she invoices the landlord directly or through the agency",
+        "result": "Queued, message 42; guard passed",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded on the landlord's profile that they want Imogen to attend (source: event 007)",
+        "result": "Fact 54 created",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold while waiting for the landlord to send Imogen's details",
+        "result": "Hold 82, follow-up in 2 days",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (Harper)",
+        "status": "granted in principle: asked for Imogen to attend; no cost agreed",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "Routine repair. The open question (who Imogen is) can be answered by the landlord.",
+      "handover_summary": "",
+      "recommendation": "Once the landlord sends Imogen's details, contact her to arrange access with the tenant and get a cost if she is billing through the agency."
+    },
+    "unverified": [
+      "Who Imogen is (full name, business, contact details); possibly linked to 'Meadow Homes' in the landlord's email signature",
+      "Whether Imogen invoices the landlord directly or through the agency, and any cost or spend limit",
+      "Landlord's preferred channel (not recorded; used email to match their reply)"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "The door affects the property's security. If it stops closing or locking properly it becomes an emergency (insecure property). The tenant has already been told to report any worsening.",
+      "The landlord email (event 003) mentions a 'Valentines weekend' on 5 Jan: a template mistake, not significant.",
+      "There is an 'Imogen Oakley' on another property's ticket, but it may be a different person. Do not assume they are the same."
+    ],
+    "final_status": "Open, provider_selection, on hold (waiting on landlord for Imogen's details)",
+    "next_follow_up": {
+      "when": "In 2 days (hold 82)",
+      "what": "Chase the landlord for Imogen's contact details if they haven't replied; then contact Imogen and the tenant to arrange access"
+    },
+    "confidence": 0.82
+  }
+}

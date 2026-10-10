@@ -1,0 +1,86 @@
+{
+  "case": "PM046-1",
+  "decision": "request_info",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 31.275,
+  "decisionLine": "request_info",
+  "sessionId": "wrun_01M4JWB8VKDMJF9NRER677780D",
+  "startedAt": "2026-10-10T12:24:31.826Z",
+  "finishedAt": "2026-10-10T12:25:03.101Z",
+  "usage": {
+    "inputTokens": 52856,
+    "outputTokens": 2785
+  },
+  "eventCount": 155,
+  "dryRun": false,
+  "result": {
+    "case_id": "R/PM046-1 (ticket 44)",
+    "decision": "request_info",
+    "summary": "The landlord's reply doesn't yet count as a clear approval. It says \"Felix agrees to have a contractor look at the window\", but the landlord on record is Grace, so I can't tell who actually approved. It also only covers someone looking at the window, while we asked to get it fixed. I've left approval 23 pending and emailed Grace to confirm both points: whether Felix can approve on her behalf, and whether she wants a repair or just an inspection and quote. The ticket is on hold with a follow-up in 2 days.",
+    "situation": "Tenant reported a bedroom window that won't close properly because of a rusted hinge. This is routine, not an emergency: nothing in the records says the window is on the ground floor or that the flat isn't secure. The agency asked Grace for approval (event 003) and the landlord replied (event 007). The classifier read the reply as a conditional approval (0.86) and flagged it for review. No contractor or cost is visible yet.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the ticket context",
+        "result": "Stage is landlord_approval. Approval 23 is pending with no amount. No contractor and no profile facts on file.",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the landlord's reply from event 007",
+        "result": "conditional_approval 0.86, unconditional approval 0.18, autonomy: review",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the landlord to confirm who is authorising the work and whether it's a repair or an inspection and quote",
+        "result": "Message 54 queued; the guard did not block it",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Noted on Grace's profile that the reply named Felix as agreeing, and that his authority is unverified",
+        "result": "Fact 64 recorded, confidence 0.5",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Put the ticket on hold waiting on the landlord",
+        "result": "Hold 108, follow-up in 2 days",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (Grace); the reply names Felix",
+        "status": "pending: reply was conditional/unclear, clarification requested",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "The landlord can answer both open questions, so there's no need to involve a person yet",
+      "handover_summary": "",
+      "recommendation": "If the landlord doesn't reply after follow-ups, or Felix's authority can't be confirmed, escalate."
+    },
+    "unverified": [
+      "Who Felix is and whether he can approve works on this property",
+      "Whether the landlord wants a repair or only an inspection and quote",
+      "Whether the bedroom window is on the ground floor (a security risk if so)",
+      "The landlord's contact details and preferred channel"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "Possible mismatch over who approved: the reply names Felix, but the landlord on record is Grace",
+      "The approval may only cover an inspection, not a repair",
+      "In event 004 the agency called the landlord 'his', but the landlord on record is Grace. This is a small inconsistency."
+    ],
+    "final_status": "landlord_approval, on hold (hold 108), waiting on the landlord's clarification",
+    "next_follow_up": {
+      "when": "2025-09-14",
+      "what": "Chase the landlord to confirm who is approving and the scope. Once confirmed, record approval 23 and move to provider_selection."
+    },
+    "confidence": 0.78
+  }
+}

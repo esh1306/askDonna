@@ -52,3 +52,11 @@ test("checkOutbound fails open without network/key", async () => {
   assert.equal(r.blocked, false);
   assert.match(r.reasons[0], /guard unavailable/);
 });
+
+test("decideAutonomy: confident decline/approve tolerates a moderate needs_human score", () => {
+  const d = { intent: "decline", intent_probs: { decline: 1 }, needs_human_response: 0.72, safety_concern: 0.03, dissatisfied: 0.55 };
+  assert.equal(decideAutonomy(d), "auto");
+  assert.equal(decideAutonomy({ ...d, needs_human_response: AUTONOMY.NEEDS_HUMAN_RESPONSE_CLEAR_DECISION }), "review");
+  assert.equal(decideAutonomy({ ...d, dissatisfied: 0.9 }), "review");
+  assert.equal(decideAutonomy({ ...d, intent_probs: { decline: 0.6 } }), "review");
+});

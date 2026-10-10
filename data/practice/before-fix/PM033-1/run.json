@@ -1,0 +1,92 @@
+{
+  "case": "PM033-1",
+  "decision": "act",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 32.486,
+  "decisionLine": "act",
+  "sessionId": "wrun_01M4JWA94A7W7WS42DFC129KX3",
+  "startedAt": "2026-10-10T12:23:59.331Z",
+  "finishedAt": "2026-10-10T12:24:31.817Z",
+  "usage": {
+    "inputTokens": 69469,
+    "outputTokens": 3306
+  },
+  "eventCount": 186,
+  "dryRun": false,
+  "result": {
+    "case_id": "R/PM033-1 (ticket 39)",
+    "decision": "act",
+    "summary": "The landlord replied (event 008) agreeing that the agency should instruct a contractor for the bathroom tap that squirts water when the shower runs. The landlord doesn't need a reply, so the request can return to normal (auto) handling. I emailed the tenant to say a contractor is being arranged, gave safe containment advice and asked for their availability and access details. I put the ticket on hold for 2 days waiting on the tenant. The ticket stays in provider_selection.",
+    "situation": "Tenant reported a bathroom tap squirting water while the shower runs (a leak that can be contained, not an uncontrolled escape of water). The agency asked the landlord whether to instruct a contractor or whether they would arrange their own (event 003). The landlord agreed to the agency instructing one (event 008). Event 007 asked whether the landlord needs a reply; they don't. No contractor is assigned yet and no cost is known.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded ticket, profiles and events",
+        "result": "8 events; no holds, approvals, contractor or attachments",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the landlord's email from event 008",
+        "result": "intent approve (1.0), autonomy auto, needs_human_response 0.15, mentions_amount 0.02",
+        "ok": true
+      },
+      {
+        "tool": "classify_intake",
+        "description": "Classified the repair",
+        "result": "plumbing; severity: emergency 0.54 / routine 0.37; safety_risk 0.52. Treated as urgent but containable: the leak only happens while the shower runs and can be isolated",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant: landlord agreed to a contractor, containment advice, asked for availability and access",
+        "result": "Queued as message 50; guard did not block it",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded on the landlord's profile that they agreed to the agency instructing a contractor, with no cost limit stated",
+        "result": "Fact 61 recorded, no conflict",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold waiting on the tenant's availability and access reply",
+        "result": "Hold 96, follow-up in 2 days",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord",
+        "status": "granted to instruct a contractor (no cost given or approved)",
+        "channel": "email (event 008)"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "The landlord's answer is clear and the next steps are routine",
+      "handover_summary": "",
+      "recommendation": "Agency: pick a plumber for the tap or shower-diverter fault. When a quote or estimate arrives, confirm the cost with the landlord before committing, because no spend limit was given."
+    },
+    "unverified": [
+      "Who 'Freya Mercer' is: the landlord's email calls her 'the customer', but the landlord contact record has no name",
+      "Whether the landlord's agreement covers any cost; no amount was discussed",
+      "The exact cause of the fault (tap, diverter or seal)",
+      "Whether the property is tenanted; the tenanted flag is empty"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "Intake classifier gave a 0.54 emergency probability. If the tenant reports water they can't stop, or damage to the floor or ceiling, upgrade the job to an emergency",
+      "No contractor has been chosen yet, and there is no tool to assign one; the agency needs to make the selection",
+      "The two duplicate system holds (events 005 and 006) did not show as open holds in the CRM"
+    ],
+    "final_status": "provider_selection, on hold (hold 96) waiting on the tenant's availability and access reply",
+    "next_follow_up": {
+      "when": "In 2 days (hold 96 follow-up)",
+      "what": "Chase the tenant for availability and access if there is no reply. The agency picks a plumber, then confirms the cost with the landlord before booking."
+    },
+    "confidence": 0.8
+  }
+}

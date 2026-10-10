@@ -1,0 +1,91 @@
+{
+  "case": "PM028-1",
+  "decision": "act",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 39.821,
+  "decisionLine": "act",
+  "sessionId": "wrun_01M4JW9EPG0ZCMVV58WCXF0RCN",
+  "startedAt": "2026-10-10T12:23:32.279Z",
+  "finishedAt": "2026-10-10T12:24:12.100Z",
+  "usage": {
+    "inputTokens": 85931,
+    "outputTokens": 3358
+  },
+  "eventCount": 163,
+  "dryRun": false,
+  "result": {
+    "case_id": "R/PM028-1 (ticket 37)",
+    "decision": "act",
+    "summary": "The tenant reported a loose water pipe in the back garden. We asked the landlord whether to send a contractor or whether they would arrange their own. The landlord (Grace Oakley, Director) replied \"We will sort this issue\", so she is arranging the repair herself. I recorded that answer, emailed the tenant to tell them, and put a 7-day hold on the ticket to check the repair gets done. The landlord doesn't need a reply, which answers the internal note in event 006.",
+    "situation": "The ticket is in the landlord_approval stage. The landlord replied in event 007 that they will sort the issue themselves. No leak or damage has been reported, and the classifier rates the job as routine.",
+    "actions_taken": [
+      {
+        "tool": "classify_reply",
+        "description": "Classified the landlord's reply in event 007",
+        "result": "Autonomy 'auto'. Intent was split between approve (0.54) and decline (0.38), meaning the landlord is arranging the work herself. Chance a human reply is needed: 0.19",
+        "ok": true
+      },
+      {
+        "tool": "classify_intake",
+        "description": "Classified the original repair report",
+        "result": "Category garden_external, severity routine (0.92), safety risk 0.59",
+        "ok": true
+      },
+      {
+        "tool": "record_approval_response",
+        "description": "Closed pending approval 19. It is recorded as declined for agency-instructed works only, because the landlord is arranging her own contractor; she is not refusing the repair. Her words are quoted in the record.",
+        "result": "Approval 19 now shows status 'rejected', with a note explaining the landlord is doing the repair herself",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Added a fact to the landlord's profile: arranges own contractor (for this job)",
+        "result": "Fact 58 added, no conflict",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant: the landlord is arranging the repair and may contact them about access; if it leaks, turn off the stopcock if safe and tell us",
+        "result": "Message 47 is in the outbox and passed the outbound check",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Put the ticket on hold, waiting on the landlord to confirm the repair is done",
+        "result": "Hold 90, follow up in 7 days",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (Grace Oakley)",
+        "status": "declined_for_agency_works - landlord arranging own contractor",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "The landlord gave a clear answer that they will handle the repair. There is no safety emergency, complaint or conflict.",
+      "handover_summary": "",
+      "recommendation": ""
+    },
+    "unverified": [
+      "The photo the tenant mentioned can't be seen (the attachment shows as unavailable), so I couldn't check how serious the problem is",
+      "Whether the pipe is leaking: not reported",
+      "When the landlord's contractor will attend: unknown",
+      "How to reach the tenant and landlord: no email, phone or preferred channel is on their profiles"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "The classifier gave a moderate safety risk (0.59) because it is a water pipe, but no leak is reported. The tenant has been told how to contain a leak and to tell us if one starts",
+      "The approval is recorded as 'rejected' because the system has no option for 'landlord arranging own contractor'. The note on the approval explains this"
+    ],
+    "final_status": "The ticket is still in the landlord_approval stage, which is not wrong. It is on hold (hold 90) waiting on the landlord's own contractor.",
+    "next_follow_up": {
+      "when": "In 7 days (hold 90)",
+      "what": "Check with the landlord, or the tenant, that the loose garden pipe has been repaired, then close the ticket"
+    },
+    "confidence": 0.85
+  }
+}

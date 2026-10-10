@@ -1,0 +1,110 @@
+{
+  "case": "PM001-2",
+  "decision": "act",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 46.508,
+  "decisionLine": "act",
+  "sessionId": "wrun_01M4JW6PNQNPKG5GHRB7ZD958K",
+  "startedAt": "2026-10-10T12:22:02.002Z",
+  "finishedAt": "2026-10-10T12:22:48.510Z",
+  "usage": {
+    "inputTokens": 112289,
+    "outputTokens": 4063
+  },
+  "eventCount": 269,
+  "dryRun": false,
+  "result": {
+    "case_id": "26 (R/PM001-2)",
+    "decision": "act",
+    "summary": "The landlord has clearly agreed to go ahead with the communal garden and hedge works through his own contractor, Riverside Services (event 022). The classifier read his reply as an approval it could handle without review. I recorded approval 13 as approved and moved the ticket to scheduling. I asked the landlord when the contractor will attend and for a copy of the quote, told the tenant the landlord has agreed but no date is set yet, and placed a 5-day hold to chase the landlord.",
+    "situation": "This is a routine communal garden, hedge and side-land clearance job. The landlord had his contractor (Freya, Riverside Services) visit and quote. The agency chased him for the quotes several times (events 009, 013, 017). On 2025-11-03 he replied that he had received the quotes and agrees to proceed.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the case",
+        "result": "One pending approval (13), no open holds, no attachments, no quote amount on record",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the landlord's reply in event 022",
+        "result": "Intent: approve (probability 1.0); autonomy auto; probability it is an unconditional approval 0.66",
+        "ok": true
+      },
+      {
+        "tool": "record_approval_response",
+        "description": "Recorded approval 13 using the landlord's words from event 022",
+        "result": "Approved; outbound guard did not block",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Landlord fact: he uses his own contractor, Riverside Services, for the garden works",
+        "result": "Saved (fact 46)",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Property fact: tenant has 1 cat; no entry codes or alarms reported",
+        "result": "Saved (fact 47)",
+        "ok": true
+      },
+      {
+        "tool": "move_stage",
+        "description": "Moved from landlord_approval to scheduling, since the landlord approved and chose the contractor",
+        "result": "Stage is now scheduling",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the landlord asking when Riverside will attend and for a copy of the quote; mentioned the cat and the duplicate ticket R/PM001-1",
+        "result": "Queued (message 36)",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant that the landlord has agreed to the works and that no date is confirmed yet",
+        "result": "Queued (message 35)",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Placed a hold waiting on the landlord for the attendance date, follow-up in 5 days",
+        "result": "Hold 67 created",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (Rowan)",
+        "status": "granted",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "Routine job: the landlord gave a clear approval and is paying his own contractor",
+      "handover_summary": "",
+      "recommendation": ""
+    },
+    "unverified": [
+      "The quote amount and scope: I can't see the quotes in the records",
+      "Who pays Riverside Services. The landlord appears to be arranging and paying them directly, but no record confirms it",
+      "The landlord's emails are summaries that name different senders (Grace Nolan, Leo Ashford, Felix Kendall). I treated them as summary errors, but who actually sent them isn't confirmed",
+      "Whether the communal areas are the landlord's responsibility or a managing agent's"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "Ticket R/PM001-1 for the same property and the same works is still open (on hold). Someone should merge or close it so the job isn't done twice",
+      "The landlord has been slow to reply before: it took several chases over about 3 weeks",
+      "Tenant says the side land was meant to be cleared last summer and wasn't, so they may be unhappy"
+    ],
+    "final_status": "Stage: scheduling. On hold waiting for the landlord to confirm when Riverside Services will attend.",
+    "next_follow_up": {
+      "when": "In 5 days (around 2025-11-08)",
+      "what": "Chase the landlord for Riverside Services' attendance date and a copy of the quote, then pass the date on to the tenant"
+    },
+    "confidence": 0.8
+  }
+}

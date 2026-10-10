@@ -1,0 +1,109 @@
+{
+  "case": "PM021-1",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 0,
+  "durationSec": 47.42,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4JW8NAZAS6B8AHZEH504J7R",
+  "startedAt": "2026-10-10T12:23:06.304Z",
+  "finishedAt": "2026-10-10T12:23:53.724Z",
+  "usage": {
+    "inputTokens": 86697,
+    "outputTokens": 4488
+  },
+  "eventCount": 325,
+  "dryRun": false,
+  "result": {
+    "case_id": "R/PM021-1 (ticket 34)",
+    "decision": "escalate",
+    "summary": "The landlord's email approving the work was clear, so I recorded it as approved and moved the ticket to provider selection. I emailed the tenant to ask whether the back door is secure and when a locksmith can visit. I can't book a contractor myself and no contractor is on file. I also don't know if the door can be locked, so I sent it to the operations team (high priority) to book a locksmith.",
+    "situation": "The key snapped in the conservatory back door at Flat 22, 148 Lantern Quay. Neither the tenants nor the agency has a spare. The request is to replace the lock and cut 4 keys: 2 for the tenants, plus 1 for the agency and 1 for the landlord, both left at the office. Landlord Quinn approved the work by email (event 006) without giving a cost. We don't know whether the door is locked shut or can't be locked.",
+    "actions_taken": [
+      {
+        "tool": "classify_reply",
+        "description": "Classified the landlord's reply (event 006)",
+        "result": "Intent: approve (0.98). Handling: automatic. Unconditional approval: 0.7",
+        "ok": true
+      },
+      {
+        "tool": "classify_intake",
+        "description": "Classified the request",
+        "result": "Category: doors/windows/locks. Severity: emergency (0.47). Safety risk: 0.82",
+        "ok": true
+      },
+      {
+        "tool": "record_approval_response",
+        "description": "Recorded approval 17 as approved, quoting the landlord's words",
+        "result": "Approved. The guard did not block it",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded on the landlord's profile that email seems to be their preferred channel",
+        "result": "Fact 55",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded on the property that the agency holds no spare for this door, plus the requested key split",
+        "result": "Fact 56",
+        "ok": true
+      },
+      {
+        "tool": "move_stage",
+        "description": "Moved the ticket from landlord approval to provider selection",
+        "result": "Done",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant: the landlord has approved and a locksmith is being arranged. Asked whether the door is secure and when they're available. Gave safe advice (don't force the lock, keep doors secured)",
+        "result": "Message 43 queued",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Asked the operations team to book a locksmith",
+        "result": "Queue item 13, high priority",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Placed a hold while waiting for the tenant's reply on door security and access",
+        "result": "Hold 87, follow up in 1 day",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord Quinn",
+        "status": "granted",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "A locksmith needs booking and I can't book contractors. We also don't know whether the door is secure.",
+      "handover_summary": "The landlord approved replacing the lock and cutting 4 keys (2 for the tenants, 2 for the office: agency and landlord), with no cost given. The ticket is in provider selection. I've emailed the tenant to ask whether the door is secure and when they're available.",
+      "recommendation": "Book a locksmith today. If the door can't be secured, treat it as an emergency. If the quote is large, check the cost with the landlord by email. Add the tenant's contact details to the CRM."
+    },
+    "unverified": [
+      "Whether the conservatory door is secure",
+      "The cost of the work",
+      "Whether the tenant email reaches them: no tenant contact details are on file"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "The property may not be secure: the risk is unknown, and the classifier rated it as a possible emergency",
+      "The landlord approved without setting a spending limit",
+      "The tenant's contact details are missing"
+    ],
+    "final_status": "In provider selection. Escalated to operations (high priority). On hold waiting for the tenant",
+    "next_follow_up": {
+      "when": "2024-11-22",
+      "what": "Chase the tenant about door security and access, and check the locksmith has been booked"
+    },
+    "confidence": 0.8
+  }
+}

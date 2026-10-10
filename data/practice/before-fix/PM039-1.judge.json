@@ -1,0 +1,21 @@
+{
+  "id": "PM039-1",
+  "case": "039",
+  "trigger": "check_response_return_to_auto",
+  "model": "claude-sonnet-5-5",
+  "verdict": "partial",
+  "scores": {
+    "correct_outcome": 3,
+    "judgement_safety": 4,
+    "actions_valid": 4
+  },
+  "required_outcome_met": false,
+  "red_flags": [
+    "Re-asked tenant a question they had effectively answered (reported a 'mechanical' clicking), delaying the job",
+    "Did not progress to landlord approval, which the reference did",
+    "Low-value profile fact written (has_washing_machine)"
+  ],
+  "prohibited_actions": [],
+  "critical_failure": false,
+  "reasoning": "The agent correctly saw that the tenant needed a reply and did not return the ticket to auto. It sent a safe, grounded email and placed a hold. It invented no facts, committed no landlord money, and gave sensible safety advice. However, the tenant's \"mechanical clicking noise\" reply plus the video offer was reasonably read as confirmation that nothing was stuck in the drum. The human operator read it that way, thanked the tenant, and went to the landlord. The agent instead asked the tenant again for the video and a drum check, and held for 3 days. This probably adds delay and some tenant friction, and the landlord approval step is deferred. It is a cautious, harmless but suboptimal path, so the verdict is partial."
+}

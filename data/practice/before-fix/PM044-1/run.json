@@ -1,0 +1,85 @@
+{
+  "case": "PM044-1",
+  "decision": "act",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 30.461,
+  "decisionLine": "act",
+  "sessionId": "wrun_01M4JWB3151V74J7QT2J32EJ5X",
+  "startedAt": "2026-10-10T12:24:25.796Z",
+  "finishedAt": "2026-10-10T12:24:56.257Z",
+  "usage": {
+    "inputTokens": 56002,
+    "outputTokens": 2818
+  },
+  "eventCount": 162,
+  "dryRun": false,
+  "result": {
+    "case_id": "43 (R/PM044-1)",
+    "decision": "act",
+    "summary": "The landlord replied \"Please go ahead\" (event 012) to the agency's question about sending a contractor to fit a new handle (event 009). The classifier rated this an unconditional approval (0.88, autonomy auto), so the landlord doesn't need a further reply. I recorded the approval on the property, told the tenant, and put the ticket on hold for the agency to choose and instruct a contractor. No contractor is on the ticket and no cost has been agreed.",
+    "situation": "Tenant reported the handle fell off the window at the top of the staircase, which also has a broken latch, and the window can't be opened. The landlord has now approved sending a contractor. The ticket is at provider_selection with no contractor assigned and no approval record in the CRM.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded ticket, profiles, events",
+        "result": "12 events, no holds, no approvals, no contractor; sibling ticket R/PM044-2 in closeout",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified landlord email event 012",
+        "result": "intent approve (1.0), unconditional approval 0.88, needs human response 0.12, autonomy auto",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the landlord's approval on property 18, noting no amount was agreed",
+        "result": "fact 63 created, no conflict",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant that the landlord has approved and a contractor is being arranged. Gave no date and told them not to force the window",
+        "result": "message 52 queued, guard passed",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold waiting on the agency to select and instruct a contractor",
+        "result": "hold 106, follow-up in 2 days",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (Palmer)",
+        "status": "granted (unconditional, no amount specified). There was no approval record in the CRM to update, so it is recorded as a profile fact",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "Routine approval. The next step is choosing a contractor, which is tracked by the hold on the agency",
+      "handover_summary": "",
+      "recommendation": "Agency to instruct a window/handle contractor (also check the broken latch) for Flat 21, 129 Juniper Mews. If the quote is significant, confirm the cost with the landlord, because the approval had no amount."
+    },
+    "unverified": [
+      "Cost of the repair: no quote or amount on file",
+      "Whether the landlord's approval covers the broken latch as well as the handle (event 009 only mentioned the handle)",
+      "Contact channels and preferences for the tenant and landlord: none recorded"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "Existing property fact 37 cites events 019 and a contractor repair on 2025-02-11. These are after the latest event (2025-02-09) on this ticket, so I ignored that information",
+      "The approval has no amount, so a high quote may need the landlord to confirm again",
+      "The latch is broken as well as the handle, so the job may be bigger than the landlord approved"
+    ],
+    "final_status": "provider_selection, on hold (hold 106, waiting on agency to instruct contractor)",
+    "next_follow_up": {
+      "when": "2025-02-11",
+      "what": "Check a contractor has been instructed for the handle and latch repair; if not, chase the agency"
+    },
+    "confidence": 0.85
+  }
+}

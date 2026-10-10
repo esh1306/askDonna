@@ -1,0 +1,103 @@
+{
+  "case": "PM003-2",
+  "decision": "escalate",
+  "escalated": "yes",
+  "failures": 1,
+  "durationSec": 51.85,
+  "decisionLine": "escalate",
+  "sessionId": "wrun_01M4JW6PPKBJ64CHGP98PQM11Q",
+  "startedAt": "2026-10-10T12:22:02.002Z",
+  "finishedAt": "2026-10-10T12:22:53.852Z",
+  "usage": {
+    "inputTokens": 81450,
+    "outputTokens": 3587
+  },
+  "eventCount": 235,
+  "dryRun": false,
+  "result": {
+    "case_id": "27 (R/PM003-2)",
+    "decision": "escalate",
+    "summary": "The contractor says the invoice for the checkout clean, rubbish removal and carpet clean went straight to Theo. I can't see that invoice in the CRM, and I can't see the approved estimate either, so there's nothing to check it against. I also can't see any landlord approval, confirmation that the work is finished, or a decision on whether the tenant's deposit pays. I've passed it to the operations queue at normal priority so Theo can upload both documents and check them before anything is paid.",
+    "situation": "The agency asked the contractor for an estimate on 22 Jul. The contractor sent it, apparently as an attachment that isn't in the CRM. Theo replied \"Please proceed\" and logged \"Estimate approved\". On 23 Jul the contractor emailed \"invoice sent to Theo\". The ticket is in the scheduling stage and has no approval records.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the full case",
+        "result": "17 events; no approvals, holds or profile facts; one attachment",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the contractor's email in event 17",
+        "result": "Intent: invoice; autonomy: auto; no amount mentioned",
+        "ok": true
+      },
+      {
+        "tool": "read_attachment",
+        "description": "Read the checkout inspection report",
+        "result": "Northbridge Lettings report for Flat 30, with an appointment date of 16 March 2026",
+        "ok": true
+      },
+      {
+        "tool": "search_case",
+        "description": "Searched the case for 'estimate'",
+        "result": "No estimate document or amount visible",
+        "ok": true
+      },
+      {
+        "tool": "find_tickets",
+        "description": "Looked for other tickets on the property",
+        "result": "Ticket 25 (R/PM003-1) has the same title and is on hold",
+        "ok": true
+      },
+      {
+        "tool": "escalate_to_human",
+        "description": "Handed over for the invoice and estimate to be checked and the deposit question decided",
+        "result": "queue_id 11",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Agency (Theo Quinn)",
+        "status": "granted (internal estimate approval, ev 10)",
+        "channel": "email/CRM note"
+      },
+      {
+        "party": "Landlord",
+        "status": "not visible in records",
+        "channel": "n/a"
+      }
+    ],
+    "escalation": {
+      "needed": true,
+      "reason": "The invoice was sent to Theo outside the CRM, and the estimate, the landlord's approval and confirmation that the work is finished aren't visible, so the invoice can't be checked.",
+      "handover_summary": "Job NBL-003-2766 is a checkout clean, rubbish removal and carpet clean. The agency approved the estimate on 22 Jul (ev 9–10). The contractor says the invoice went to Theo (ev 17). Neither document is in the CRM, and the cost may need to be recharged to the tenant's deposit.",
+      "recommendation": "Theo: upload the estimate and invoice and check they match. Confirm landlord authority and decide on any deposit recharge. Confirm the work is finished and move the job to closeout. Check the report date, and check whether ticket 25 is a duplicate. Don't pay until all this is done."
+    },
+    "unverified": [
+      "Estimate amount and contents",
+      "Invoice amount and payee",
+      "That the works have been finished",
+      "That the landlord approved the spend",
+      "Whether the tenant's deposit pays",
+      "The checkout report date of 16 March 2026, which doesn't match this July 2025 job"
+    ],
+    "failures": [
+      "The first search_case call was rejected because the query '£' was too short (it must be at least 2 characters); I didn't retry it"
+    ],
+    "risks_or_red_flags": [
+      "The invoice was sent outside the CRM, so there's no record of it on the ticket",
+      "The estimate was approved by the agency with no landlord approval on record",
+      "The cost may be a deposit deduction",
+      "Ticket 25 may be a duplicate, which risks paying the same invoice twice",
+      "The checkout report date doesn't match the job"
+    ],
+    "final_status": "Stage: scheduling. In the human queue (item 11) for the invoice and estimate to be checked.",
+    "next_follow_up": {
+      "when": "When the operations queue responds or the documents are uploaded",
+      "what": "Check the invoice against the estimate, then move the job to closeout"
+    },
+    "confidence": 0.8
+  }
+}

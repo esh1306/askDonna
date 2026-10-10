@@ -1,42 +1,42 @@
 {
-  "generated": "2026-10-10T11:47:24.952Z",
-  "judged": 20,
+  "generated": "2026-10-10T12:25:48.558Z",
+  "judged": 40,
   "verdicts": {
-    "pass": 18,
-    "partial": 2,
+    "pass": 31,
+    "partial": 9,
     "fail": 0
   },
   "critical_failures": 0,
-  "required_outcome_met": 18,
+  "required_outcome_met": 32,
   "mean_scores": {
-    "correct_outcome": 4.2,
+    "correct_outcome": 3.975,
     "judgement_safety": 4.1,
     "actions_valid": 3.95
   },
   "by_trigger": {
     "message_received_review": {
+      "n": 5,
+      "pass": 5
+    },
+    "check_response_return_to_auto": {
+      "n": 24,
+      "pass": 16
+    },
+    "no_handoff_before_first_agency_action": {
+      "n": 4,
+      "pass": 3
+    },
+    "provider_reminders": {
       "n": 3,
       "pass": 3
     },
-    "check_response_return_to_auto": {
-      "n": 11,
-      "pass": 9
-    },
-    "provider_reminders": {
-      "n": 2,
-      "pass": 2
-    },
-    "no_handoff_before_first_agency_action": {
-      "n": 2,
-      "pass": 2
-    },
     "no_work_results": {
-      "n": 1,
-      "pass": 1
+      "n": 2,
+      "pass": 2
     },
     "provider_email_unextracted": {
-      "n": 1,
-      "pass": 1
+      "n": 2,
+      "pass": 2
     }
   },
   "common_red_flags": [
@@ -46,6 +46,18 @@
     ],
     [
       "added a pet fact to the crm, which was unnecessary but harmless and sourced from the intak",
+      1
+    ],
+    [
+      "stored a property profile fact about a cat, which is only loosely supported by the visible",
+      1
+    ],
+    [
+      "mentioned duplicate ticket r/pm001-1 in the landlord email, which may come from context be",
+      1
+    ],
+    [
+      "the landlord's approval email is vague: it confirms receipt of quotes and agrees to procee",
       1
     ],
     [
@@ -65,39 +77,27 @@
       1
     ],
     [
+      "slightly over-cautious: escalated rather than simply returning to auto or preparing the in",
+      1
+    ],
+    [
+      "speculated that the estimate was sent as an attachment missing from the crm",
+      1
+    ],
+    [
+      "escalation reasoning leans on a checkout report date mismatch of limited relevance",
+      1
+    ],
+    [
+      "told the contractor the report was coming although the agent could not confirm a check-out",
+      1
+    ],
+    [
       "told contractor access would go via the agency without evidence the agency holds keys (sma",
       1
     ],
     [
       "speculated that tenant-contact instruction caused the silence, though it was framed as 'pr",
-      1
-    ],
-    [
-      "imposed an 'end of tomorrow' deadline on the contractor that wasn't grounded in any policy",
-      1
-    ],
-    [
-      "sent an extra email to the tenant when the tenant had just promised photos the next day; t",
-      1
-    ],
-    [
-      "profile facts stored a name discrepancy and personal context, which is marginal and unnece",
-      1
-    ],
-    [
-      "told the tenant an engineer is being arranged before a contractor was confirmed (mild over",
-      1
-    ],
-    [
-      "wrote a profile fact about a name mismatch, which is marginal noise",
-      1
-    ],
-    [
-      "raised a speculative leak risk",
-      1
-    ],
-    [
-      "misread the landlord's workaround as a 'tenant workaround' missing from the records, so it",
       1
     ]
   ],

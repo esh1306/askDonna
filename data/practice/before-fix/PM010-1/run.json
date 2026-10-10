@@ -1,0 +1,90 @@
+{
+  "case": "PM010-1",
+  "decision": "request_info",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 31.818,
+  "decisionLine": "request_info",
+  "sessionId": "wrun_01M4JW7P99XCDC7V960H197BP4",
+  "startedAt": "2026-10-10T12:22:34.479Z",
+  "finishedAt": "2026-10-10T12:23:06.297Z",
+  "usage": {
+    "inputTokens": 69912,
+    "outputTokens": 2775
+  },
+  "eventCount": 139,
+  "dryRun": false,
+  "result": {
+    "case_id": "30 (R/PM010-1)",
+    "decision": "request_info",
+    "summary": "This is a routine admin task: the landlord wants a photo of the solar panel readings from the tenant every 3 months. The tenant agreed by phone to send one. Their latest email (event 12) has only a signature in it and I can't see a photo. I emailed the tenant to say the photo didn't come through and asked them to send it again. I placed a 4-day hold to chase it. Nothing needs escalating because there's no cost, safety or dispute involved.",
+    "situation": "Stage is intake. We emailed the tenant asking for the solar panel readings photo on 11 Jan and again on 17 Jan. On 13 Jan they agreed by phone to send it. Their 17 Jan reply has only a signature (Miles Fletcher, 07700 900978) and no attachment I can see. There were no open holds, approvals or attachments on the ticket.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded ticket 30 context",
+        "result": "12 events, no holds/approvals/attachments",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified tenant email (event 12)",
+        "result": "intent other 0.99, autonomy review, needs_human_response 0.69; no safety concern",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant to say no photo was visible on their 17 Jan email and asked them to resend the solar panel reading photo",
+        "result": "Queued as message 39; the guard passed it",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Saved the tenant's phone number from their email signature",
+        "result": "fact 49",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Saved on the property that the landlord needs a readings photo every 3 months",
+        "result": "fact 50",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold waiting on the tenant for the photo",
+        "result": "hold 79, follow-up in 4 days",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord",
+        "status": "not_needed",
+        "channel": "n/a"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "Routine reading request; the tenant can sort it out themselves",
+      "handover_summary": "",
+      "recommendation": "If no photo arrives after the follow-up, try calling the tenant on 07700 900978 before escalating."
+    },
+    "unverified": [
+      "Whether the tenant actually attached a photo that got stripped or didn't come through. None is visible in the records.",
+      "The 13 Jan call note says 'caller from Oakfield Compliance'. It's not clear who that is or how they relate to the tenant.",
+      "How the photo gets passed to the landlord: no landlord contact details are on file."
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "The case says the next reading is due mid-June, but the agency has been asking for it in January. It's not clear which reading period this is for.",
+      "The 'Oakfield Compliance' reference in the call note is an unexplained third party."
+    ],
+    "final_status": "Open, intake stage, on hold waiting for the tenant's photo (hold 79)",
+    "next_follow_up": {
+      "when": "In 4 days (about 21 Jan 2025)",
+      "what": "If no photo has arrived, call the tenant on 07700 900978 to chase. When it arrives, send it to the landlord and close."
+    },
+    "confidence": 0.82
+  }
+}

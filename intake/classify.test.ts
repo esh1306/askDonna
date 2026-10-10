@@ -47,7 +47,8 @@ test("parseResponse maps choice, score and noul answers", () => {
   assert.equal(r.category_probs.garden_external, 0);
   assert.equal(r.severity, "routine");
   assert.ok(Math.abs(r.severity_probs.urgent - 0.25) < 1e-9);
-  assert.equal(r.needs_landlord_approval, 0.82);
+  assert.equal(r.needs_landlord_approval_raw, 0.82);
+  assert.ok(Math.abs(r.needs_landlord_approval - 0.646) < 1e-9); // calibrateApproval(0.82)
   assert.equal(r.latencyMs, 123);
 });
 

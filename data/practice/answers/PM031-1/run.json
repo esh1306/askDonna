@@ -1,0 +1,85 @@
+{
+  "case": "PM031-1",
+  "decision": "request_info",
+  "escalated": "no",
+  "failures": 1,
+  "durationSec": 31.987,
+  "decisionLine": "request_info",
+  "sessionId": "wrun_01M4JWA3QACZ7WDKWDM05H0MK1",
+  "startedAt": "2026-10-10T12:23:53.733Z",
+  "finishedAt": "2026-10-10T12:24:25.720Z",
+  "usage": {
+    "inputTokens": 67554,
+    "outputTokens": 2645
+  },
+  "eventCount": 148,
+  "dryRun": false,
+  "result": {
+    "case_id": "38 (R/PM031-1)",
+    "decision": "request_info",
+    "summary": "The visit was booked for 26/07/2024, 2–5pm. On 27/07 the contractor emailed, but the system couldn't read it, so we don't know what happened at the visit. I've asked Meadow Solutions to resend the update as plain text, and to say whether the problem is fixed and whether any quote is needed. I've also put the ticket on hold with a 2-day follow-up. The stage stays at 'works' and I haven't escalated, because the contractor can answer this themselves.",
+    "situation": "This is a tenant report of a toilet cistern that keeps filling and never stops. The landlord approved it on 18/07 (approval 20, no amount given). Meadow Solutions was assigned and the visit was booked for 26/07/2024, 2–5pm. On 27/07 an email came in from the provider, but its text can't be read (events 015/016). The records don't show the visit outcome, whether the problem is fixed, or any quote or invoice.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded ticket, profiles, events, approvals",
+        "result": "Stage works; approval 20 approved; no holds or attachments; last inbound contractor email unreadable",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed contractor asking them to resend the visit outcome, quote and photos as plain text, and not to do any extra quoted work without approval",
+        "result": "Queued, message_id 48; the guard didn't block it",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded on the tenant's profile that he is happy for the contractor to attend when he isn't home (event 007)",
+        "result": "Fact 59 saved, no conflict",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Hold waiting on the contractor's resent update",
+        "result": "Hold 94, follow-up in 2 days",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord",
+        "status": "granted (18/07/2024, no amount specified)",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "The contractor can resolve the missing information; no conflict that affects the decision and no safety emergency.",
+      "handover_summary": "",
+      "recommendation": "If the contractor doesn't reply by the follow-up date, chase them and ask the tenant whether the cistern is fixed."
+    },
+    "unverified": [
+      "Whether the 26/07 visit took place and what the outcome was",
+      "Contents of the contractor's 27/07 email (event 016)",
+      "Whether any quote or invoice exists, and its amount",
+      "What the Oakfield Services letter about a water leak was and whether it relates to the cistern",
+      "The landlord approval amount or limit (none recorded)"
+    ],
+    "failures": [
+      "Contractor's email at event 016 couldn't be read by the system (not a failure of my tools)"
+    ],
+    "risks_or_red_flags": [
+      "The provider appears under three names: Meadow Solutions, 'Harbour Services' on the booking call and 'Keystone Solutions' in the SMS. This is probably trading names or system labels, but it should be checked before any invoice is paid",
+      "The booking call said Saturday, but 26/07/2024 was a Friday (a minor slip)",
+      "Different tenant contact numbers were shared (07700 900138 vs 07700 900830)",
+      "A continuously running cistern wastes water, and the tenant mentions a letter about a water leak. Possible water bill or leak issue",
+      "Any quote must not go ahead without landlord approval, because no amount was approved"
+    ],
+    "final_status": "works – on hold waiting on contractor (hold 94)",
+    "next_follow_up": {
+      "when": "2024-07-29",
+      "what": "If nothing is received from Meadow Solutions, chase them and ask the tenant whether the cistern is now fixed"
+    },
+    "confidence": 0.82
+  }
+}

@@ -78,6 +78,16 @@ async function pool<T, R>(items: T[], size: number, fn: (x: T) => Promise<R>): P
   return out;
 }
 
+/** Tune split = cases 001-035 (used for prompt/threshold choices); held-out = 036-050 (never looked at while tuning). */
+export const splitOf = (c: string): "tune" | "heldout" => (Number(c) <= 35 ? "tune" : "heldout");
+
+function sweep(rows: { p: number; y: boolean }[]) {
+  return [0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9].map((t) => {
+    const ok = rows.filter(({ p, y }) => p >= t === y).length;
+    return { t, acc: rows.length ? ok / rows.length : 0 };
+  });
+}
+
 const pct = (x: number) => `${(x * 100).toFixed(1)}%`;
 
 function renderMd(summary: any): string {
@@ -90,6 +100,13 @@ function renderMd(summary: any): string {
   L.push("Confusion matrix (rows = label, columns = predicted):", "");
   L.push(`| label \\ pred | ${used.join(" | ")} |`, `|---|${used.map(() => "---").join("|")}|`);
   for (const r of used) L.push(`| ${r} | ${used.map((c) => summary.category.confusion[r]?.[c] ?? 0).join(" | ")} |`);
+  L.push("");
+  L.push("## Split results (tune = cases 001-035, held-out = 036-050, all = 50)", "");
+  L.push("| question | metric | tune | held-out | all |", "|---|---|---|---|---|");
+  for (const r of summary.splits) L.push(`| ${r.q} | ${r.metric} | ${r.tune} | ${r.heldout} | ${r.all} |`);
+  L.push("");
+  L.push("Accuracy by decision threshold (tune / held-out / all):", "", "| question | " + [0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9].join(" | ") + " |", "|---|---|---|---|---|---|---|---|");
+  for (const sw of summary.sweeps) L.push(`| ${sw.q} | ${sw.cells.join(" | ")} |`);
   L.push("");
   for (const b of summary.binary) {
     L.push(`## ${b.name}`, "");
@@ -163,6 +180,24 @@ async function main() {
     binaryReport("likely_self_fixable (label: resolved_without_contractor)", rows.map(({ l, r }) => ({ p: r.likely_self_fixable, y: l.labels.resolved_without_contractor }))),
   ];
 
+  const sub = (f: (c: string) => boolean) => rows.filter(({ l }) => f(l.case));
+  const parts = { tune: sub((c) => splitOf(c) === "tune"), heldout: sub((c) => splitOf(c) === "heldout"), all: rows };
+  const defs: { q: string; get: (x: { l: CaseLabel; r: IntakeResult }) => { p: number; y: boolean } }[] = [
+    { q: "needs_landlord_approval", get: ({ l, r }) => ({ p: r.needs_landlord_approval, y: l.labels.needs_landlord_approval }) },
+    { q: "likely_self_fixable", get: ({ l, r }) => ({ p: r.likely_self_fixable, y: l.labels.resolved_without_contractor }) },
+  ];
+  const splits: { q: string; metric: string; tune: string; heldout: string; all: string }[] = [];
+  const catAcc = (rs: typeof rows) => rs.filter(({ l, r }) => l.labels.category === r.category).length;
+  splits.push({ q: "category", metric: "accuracy", ...(Object.fromEntries(Object.entries(parts).map(([k, rs]) => [k, `${pct(catAcc(rs) / (rs.length || 1))} (${catAcc(rs)}/${rs.length})`])) as any) });
+  const sweeps: { q: string; cells: string[] }[] = [];
+  for (const d of defs) {
+    const reps = Object.fromEntries(Object.entries(parts).map(([k, rs]) => [k, binaryReport(d.q, rs.map(d.get))])) as Record<string, BinaryReport>;
+    for (const [metric, f] of [["accuracy@0.5", (b: BinaryReport) => pct(b.accuracy)], ["precision@0.5", (b: BinaryReport) => pct(b.precision)], ["recall@0.5", (b: BinaryReport) => pct(b.recall)], ["Brier (base-rate baseline)", (b: BinaryReport) => `${b.brier.toFixed(3)} (${(b.base_rate * (1 - b.base_rate)).toFixed(3)})`]] as const)
+      splits.push({ q: d.q, metric, tune: f(reps.tune), heldout: f(reps.heldout), all: f(reps.all) });
+    const sw = Object.fromEntries(Object.entries(parts).map(([k, rs]) => [k, sweep(rs.map(d.get))]));
+    sweeps.push({ q: d.q, cells: sw.all.map((_, i) => `${pct(sw.tune[i].acc)} / ${pct(sw.heldout[i].acc)} / ${pct(sw.all[i].acc)}`) });
+  }
+
   const withSev = rows.filter(({ l }) => l.labels.dwelly_severity);
   const agree = withSev.filter(({ l, r }) => l.labels.dwelly_severity === r.severity).length;
   const sevDist: Record<string, number> = {};
@@ -196,6 +231,8 @@ async function main() {
     p95_latency_ms: lat[Math.min(lat.length - 1, Math.floor(lat.length * 0.95))] ?? 0,
     category: { accuracy: rows.length ? correct / rows.length : 0, correct, confusion },
     binary,
+    splits,
+    sweeps,
     mean: { safety_risk: mean((r) => r.safety_risk), needs_more_info: mean((r) => r.needs_more_info) },
     severity: { n: withSev.length, agreement: withSev.length ? agree / withSev.length : 0, predicted_distribution: sevDist },
     routes,
@@ -207,8 +244,16 @@ async function main() {
   fs.mkdirSync(path.join(ROOT, "docs"), { recursive: true });
   const detail = rows.map(({ l, r }) => ({ case: l.case, labels: l.labels, result: { ...r, route: decideRoute(r) } }));
   fs.writeFileSync(path.join(ROOT, "data/intake-eval.json"), JSON.stringify({ summary, cases: detail }, null, 2));
-  fs.writeFileSync(path.join(ROOT, "docs/intake-eval.md"), renderMd(summary));
-  console.log(renderMd(summary));
+  // Keep the hand-written "## Iterations" (and anything after it) across regenerations.
+  let tail = "";
+  try {
+    const old = fs.readFileSync(path.join(ROOT, "docs/intake-eval.md"), "utf8");
+    const i = old.indexOf("\n## Iterations");
+    if (i >= 0) tail = old.slice(i);
+  } catch {}
+  const md = renderMd(summary) + tail;
+  fs.writeFileSync(path.join(ROOT, "docs/intake-eval.md"), md);
+  console.log(md);
   console.log(`\nwrote data/intake-eval.json and docs/intake-eval.md`);
 }
 

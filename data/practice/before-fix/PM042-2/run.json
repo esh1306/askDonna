@@ -1,0 +1,100 @@
+{
+  "case": "PM042-2",
+  "decision": "request_info",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 40.38,
+  "decisionLine": "request_info",
+  "sessionId": "wrun_01M4JWB30WRFFQ67AJV586PX9W",
+  "startedAt": "2026-10-10T12:24:25.726Z",
+  "finishedAt": "2026-10-10T12:25:06.106Z",
+  "usage": {
+    "inputTokens": 103893,
+    "outputTokens": 3854
+  },
+  "eventCount": 221,
+  "dryRun": false,
+  "result": {
+    "case_id": "R/PM042-2 (ticket 42)",
+    "decision": "request_info",
+    "summary": "Lantern Services has sent an invoice for £75.11 (event 024). Nothing on file shows the visit happened. The last contractor note (event 022, 27 Feb) is a request for a callback to schedule the visit, event 020 says there were no work results, and the invoice document can't be seen. I have not passed the invoice on or approved it. Instead I asked the contractor for the visit date, what was found and done, and a copy of the invoice. The ticket is on hold until they reply, with a follow-up in 2 days.",
+    "situation": "This is a routine washing machine fault: it doesn't heat on 60°C cycles. The landlord approved sending an engineer but set no cost limit (event 008, approval 22). Lantern Services was assigned. The appointment record is muddled: a slot of 23/02 at 3:25pm was confirmed after the time had already passed, and a call mentions Tuesday at 1pm. On 26/02 there were still no work results. The 27/02 hold was waiting on the contractor's invoice, but the same day the contractor called asking for a callback to schedule the visit. The invoice email then arrived on 28/02.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded ticket, profiles, events, approvals",
+        "result": "Stage works; approval 22 approved with no amount; no attachments visible; no open holds",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the contractor's invoice email (event 024)",
+        "result": "intent invoice 0.99, autonomy auto, needs_human_response 0.36",
+        "ok": true
+      },
+      {
+        "tool": "search_case",
+        "description": "Searched the case for 'invoice'",
+        "result": "Only event 021 (hold) and event 024; no invoice document or work report",
+        "ok": true
+      },
+      {
+        "tool": "find_tickets",
+        "description": "Checked for other tickets at the same property",
+        "result": "Found R/PM042-1 (ticket 2), same washing machine issue, on hold at provider_selection",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed Lantern Services asking for the attendance date, findings and work done, and a copy of the invoice; asked them not to do further chargeable work without approval",
+        "result": "Sent (message 53); outbound guard did not block it",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Put the ticket on hold waiting for the contractor to clarify the invoice and visit",
+        "result": "hold_id 109, follow-up in 2 days",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded the contractor's company name and the engineer name seen in call notes",
+        "result": "fact 65 created",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (Mercer)",
+        "status": "granted (to arrange an engineer; no amount set)",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "The contractor can resolve the gap between the invoice and the missing proof of the visit. Escalate if they don't reply or if the invoice doesn't match.",
+      "handover_summary": "",
+      "recommendation": "At follow-up: if the contractor confirms the visit and the invoice matches this property and the inspection, pass it on for payment. If more repair costs are proposed, ask the landlord for approval. If the contractor doesn't reply or the details conflict, escalate to a human."
+    },
+    "unverified": [
+      "Whether the engineer has visited the property at all",
+      "Whether the washing machine is fixed",
+      "What the £75.11 invoice covers; the invoice document is not visible and the July 2026 due date looks unusual",
+      "The real appointment date (23/02 3:25pm vs Tuesday 1pm)",
+      "Washing machine make (tenant said 'Harbour Surveying')"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "Invoice received with no record of attendance; a scheduling callback was requested the day before",
+      "No cost limit was approved by the landlord",
+      "Possible duplicate ticket R/PM042-1 (ticket 2) for the same fault, left on hold; a human should check and close it if it is a duplicate",
+      "The appointment confirmation in events 018/019 gave a time that had already passed and said 'Pets: multiple tenants', a data quality issue"
+    ],
+    "final_status": "works – on hold waiting for the contractor (hold 109)",
+    "next_follow_up": {
+      "when": "2024-03-01",
+      "what": "Chase Lantern Services for the visit date, report and invoice copy. If there's still no reply, escalate to a human."
+    },
+    "confidence": 0.78
+  }
+}

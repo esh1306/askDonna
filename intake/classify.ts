@@ -17,6 +17,8 @@ export type IntakeResult = {
   severity: Severity;
   severity_probs: Record<Severity, number>;
   needs_landlord_approval: number;
+  /** Raw (uncalibrated) Jev probability; `needs_landlord_approval` is this passed through calibrateApproval. */
+  needs_landlord_approval_raw: number;
   likely_self_fixable: number;
   safety_risk: number;
   needs_more_info: number;
@@ -45,6 +47,17 @@ export const THRESHOLDS = {
   LANDLORD_APPROVAL: 0.5,
 } as const;
 
+/**
+ * Jev's raw needs_landlord_approval is overconfident: it sits at 0.78-0.92 for every repair (only ~65% truly had an approval step;
+ * the label depends on per-landlord standing authority that is not in the request text) and ~0.1-0.25 for admin tasks, which is the
+ * one signal that IS predictable (3/3 admin cases had no approval). Linear shrink for the "yes" side so the output is a calibrated
+ * probability (~0.63-0.68, near the 64% base rate); the low side is halved to ~0.1. Fitted on cases 001-035 only. Decision stays at
+ * THRESHOLDS.LANDLORD_APPROVAL=0.5: every non-admin repair -> request approval, admin -> standard.
+ */
+export function calibrateApproval(raw: number): number {
+  return raw < 0.5 ? raw * 0.5 : 0.4 + 0.3 * raw;
+}
+
 const SCORE_SEVERITY_LEVELS = SEVERITY_KEYS.map((k) => `${k}: ${SEVERITIES[k]}`);
 
 const CATEGORY_CRITERIA: Record<string, string> = Object.fromEntries(CATEGORY_KEYS.map((k) => [k, CATEGORIES[k]]));
@@ -56,7 +69,10 @@ export function buildQuestions() {
       instructions:
         "You triage maintenance requests for a UK residential lettings agency. Choose the single category that best describes the " +
         "PRIMARY fault or job in the request. Judge by what is broken or being asked for, not by who reports it. " +
-        "Requests from the agency about check-out cleaning, carpets, repainting or post-tenancy works are cleaning_checkout_works. " +
+        "Location beats item type for outdoor things: a pipe, tap or drain in the garden or outside the building, and a shed, gate or fence (even its door or hinges), are garden_external, not plumbing or doors_windows_locks. " +
+        "But a door or window of the dwelling itself that merely opens onto the garden or balcony (back door, garden door, patio door) stays doors_windows_locks. " +
+        "Requests from the agency about check-out cleaning, carpets, repainting or post-tenancy works are cleaning_checkout_works, " +
+        "unless the list is plainly a specific electrical, plumbing or appliance fault. " +
         "Inspections, meter/solar readings and photo requests are inspection_admin. Use other only if nothing fits.",
       criteria: CATEGORY_CRITERIA,
     },
@@ -64,26 +80,32 @@ export function buildQuestions() {
       type: "score",
       instructions:
         "Rate how urgent this maintenance request is for a UK lettings agency, from routine to emergency. " +
-        "Emergency means a safety risk or damage in progress: active leak or flooding, gas smell, electrical danger or sparking, " +
-        "no heating in cold weather, or an insecure property (external door will not lock, broken window letting people in). " +
-        "Urgent means it materially affects daily use (e.g. toilet or only shower unusable, no oven, front door hard to lock) and should be dealt with within days. " +
-        "Routine is everything else: wear and tear, cosmetic issues, garden work, quotes, admin. A faulty appliance that is merely inconvenient is routine. " +
-        "Do not escalate just because the tenant sounds frustrated; judge the physical risk and loss of use.",
+        "Nearly all requests are routine: the agency's own intake note rates ordinary repair requests routine. " +
+        "Emergency is rare and needs an explicit, stated danger in progress: active leak or flooding, gas smell, electrical sparking or burning, " +
+        "no heating or hot water in cold weather, or an external door/window that cannot be secured at all. " +
+        "Urgent is also uncommon: the home is largely unusable and the agent should act within days (no working toilet or only shower, no cooking at all). " +
+        "Routine includes: a door or window that is stiff, sticks, is hard to close or lock, a loose handle, hinge or latch, a lock that is hard to turn, " +
+        "a slow-filling cistern, one tap not working, an appliance that works badly or not at all (oven, washing machine, dishwasher), wear and tear, cosmetic issues, garden work, quotes, check-out works and admin. " +
+        "Do not escalate because the tenant sounds frustrated or because an appliance is inconvenient to lose; judge physical danger and loss of use.",
       criteria: SCORE_SEVERITY_LEVELS,
     },
     needs_landlord_approval: {
       type: "noul",
       instructions:
-        "Would the letting agent need the landlord's approval (for the cost or the works) before sending a contractor? " +
-        "Answer yes for repairs or replacements of landlord-owned items or fabric that may cost money, non-urgent works, quotes, and check-out works. " +
-        "Answer no for genuine emergencies where the agent acts immediately, for tenant-only matters, for pure admin tasks (inspections, readings) and for trivial things the tenant can do.",
+        "Would the letting agent, acting for the landlord, normally take the landlord's approval (an authorisation step, or approving a quote or cost) before a contractor is instructed? " +
+        "In UK managed lettings this is the default for any repair or replacement of landlord-owned items or fabric, garden and communal works, redecoration, carpets and check-out works: answer yes. " +
+        "Answer no for pure admin (inspections, meter or solar readings, photos, appointment changes), for tenant-owned or tenant-only matters, " +
+        "and for genuine emergencies where the agent must act at once. " +
+        "Whether the landlord has pre-authorised small jobs is not visible in the request, so do not guess that: stay near the default for ordinary repairs.",
     },
     likely_self_fixable: {
       type: "noul",
       instructions:
-        "Could the tenant plausibly resolve this themselves with simple, safe steps without a contractor " +
-        "(e.g. plunger on a blocked toilet or drain, finding a reset switch, cleaning a filter, lifting or adjusting a sticking door, replacing a fuse or bulb)? " +
-        "Answer no if it needs tools, parts, qualified trades (gas, electrical, locksmith, glazing), involves water or electricity danger, or is landlord/agency work such as check-out works.",
+        "Would this probably be closed WITHOUT any contractor being paid, because the tenant, the landlord or the issue itself sorts it out? " +
+        "Yes signals: the tenant describes a minor, safe fault they could try to deal with (a sticking, sagging or swollen door or shed door that can be lifted or eased, a slow-draining or blocked bath, sink or toilet that a plunger may clear, " +
+        "a fan or appliance that may just need a switch, reset, fuse or filter cleaned, a fault that appears linked to heat, weather or settling, a tenant who already says they have checked or can manage), " +
+        "or an item the tenant may simply replace with their own (a washing machine), or the request mentions the landlord or a family member handling it. " +
+        "No signals: a lock, glazing, gas, electrical, structural or plumbing fault needing parts, tools or a qualified trade; leaks; check-out works; garden clearance; admin; or where the tenant says checks were already done and it still fails.",
     },
     safety_risk: {
       type: "noul",
@@ -207,12 +229,14 @@ export function parseResponse(json: unknown, latencyMs = 0): IntakeResult {
   const a = json.answers;
   const cat = parseChoice(a.category, CATEGORY_KEYS, "category");
   const sev = parseScore(a.severity, SEVERITY_KEYS, SCORE_SEVERITY_LEVELS, "severity");
+  const approvalRaw = parseNoul(a.needs_landlord_approval, "needs_landlord_approval");
   return {
     category: cat.value,
     category_probs: cat.probs,
     severity: sev.value,
     severity_probs: sev.probs,
-    needs_landlord_approval: parseNoul(a.needs_landlord_approval, "needs_landlord_approval"),
+    needs_landlord_approval: calibrateApproval(approvalRaw),
+    needs_landlord_approval_raw: approvalRaw,
     likely_self_fixable: parseNoul(a.likely_self_fixable, "likely_self_fixable"),
     safety_risk: parseNoul(a.safety_risk, "safety_risk"),
     needs_more_info: parseNoul(a.needs_more_info, "needs_more_info"),

@@ -1,0 +1,96 @@
+{
+  "case": "PM036-1",
+  "decision": "act",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 25.982,
+  "decisionLine": "act",
+  "sessionId": "wrun_01M4JWA9JZAX52P6QRC4J8T1EK",
+  "startedAt": "2026-10-10T12:23:59.805Z",
+  "finishedAt": "2026-10-10T12:24:25.787Z",
+  "usage": {
+    "inputTokens": 65962,
+    "outputTokens": 2614
+  },
+  "eventCount": 147,
+  "dryRun": false,
+  "result": {
+    "case_id": "40 (R/PM036-1)",
+    "decision": "act",
+    "summary": "The landlord, Sawyer, replied \"Yes please!\" when asked whether we could send a contractor to fix the shower knob. Jev classified this as an unconditional approval with high confidence, so no further reply to the landlord is needed. I recorded the approval, moved the ticket to provider_selection and emailed the tenant. No contractor is assigned yet, so the agency needs to pick one and book the work.",
+    "situation": "Tenant reported that the cap of the shower pull knob comes off every time it's used. The agency (Leo) emailed the landlord asking whether to send a contractor. The landlord replied \"Yes please!\" (event 006). The system asked whether the landlord needs a reply or the ticket can go back to auto mode.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded ticket context",
+        "result": "Stage landlord_approval, approval 21 pending, no open holds, no contractor, no attachments visible",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the landlord's reply",
+        "result": "intent approve (1.0), unconditional approval 0.85, needs human response 0.13, autonomy auto",
+        "ok": true
+      },
+      {
+        "tool": "record_approval_response",
+        "description": "Recorded approval 21 as approved, quoting event 006",
+        "result": "Approved; guard not blocked",
+        "ok": true
+      },
+      {
+        "tool": "classify_intake",
+        "description": "Classified the repair",
+        "result": "Plumbing, routine/urgent borderline (0.53/0.46), safety risk 0.19",
+        "ok": true
+      },
+      {
+        "tool": "move_stage",
+        "description": "Moved the ticket forward because the landlord approved",
+        "result": "landlord_approval -> provider_selection",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant that the landlord approved the repair and a contractor is being arranged, with advice to report it if things get worse",
+        "result": "Message 49 queued; guard passed",
+        "ok": true
+      },
+      {
+        "tool": "add_profile_fact",
+        "description": "Recorded that the landlord answers approval requests by email",
+        "result": "Fact 60 saved",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord (Sawyer)",
+        "status": "granted",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "The landlord's approval is clear and routine; no response to the landlord is needed",
+      "handover_summary": "",
+      "recommendation": "Ticket can go back to auto mode. The agency should assign a contractor to repair the shower knob."
+    },
+    "unverified": [
+      "No amount or spend limit was given; the landlord approved the contractor visit but no cost",
+      "Event 003 says photos were attached, but no attachments are visible on the ticket; the tenant's video was never received",
+      "Whether the knob only needs a new cap or a full valve or mixer replacement"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "The approval has no cost on it; if the contractor's quote is significant or the job turns into a mixer or valve replacement, confirm the cost with the landlord first",
+      "No contractor is assigned yet, so the job could stall in provider_selection"
+    ],
+    "final_status": "open, provider_selection, landlord approval granted, no contractor assigned",
+    "next_follow_up": {
+      "when": "Next agency/system action",
+      "what": "Pick a plumber or handyman and arrange access with the tenant"
+    },
+    "confidence": 0.85
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "case": "PM026-2",
+  "decision": "request_info",
+  "escalated": "no",
+  "failures": 0,
+  "durationSec": 32.052,
+  "decisionLine": "request_info",
+  "sessionId": "wrun_01M4JW99WWPHNETXTAKJQS9EKJ",
+  "startedAt": "2026-10-10T12:23:27.272Z",
+  "finishedAt": "2026-10-10T12:23:59.324Z",
+  "usage": {
+    "inputTokens": 84615,
+    "outputTokens": 3276
+  },
+  "eventCount": 201,
+  "dryRun": false,
+  "result": {
+    "case_id": "36 (R/PM026-2)",
+    "decision": "request_info",
+    "summary": "The tenant called to say she booked the oven repair with the contractor for 8 September 2025, not the 30/08/2025 slot on our system. She needed a reply, so I didn't escalate: the contractor can settle the date. I emailed Keystone Compliance to ask which date they booked and whether anyone came on 30/08. I emailed the tenant to say we're checking with them, without promising a date. The ticket is on hold for 2 days waiting for the contractor.",
+    "situation": "Routine oven repair: the main oven element doesn't heat but the grill works. The landlord said \"Yes go ahead\" (event 009) and Keystone Compliance was assigned. Our system booked a visit for 30/08/2025, 10–12 (events 017–020), and called it \"Monday morning\", but 30/08/2025 is a Saturday. On 30/08 (event 021) the tenant called to say she had arranged 8 September 2025 and asked us to confirm that date. The classifier marked her call for review (question 0.96, needs a human reply 0.6). The ticket is in stage 'works', but it is really still at scheduling. I didn't move it backwards.",
+    "actions_taken": [
+      {
+        "tool": "get_ticket_context",
+        "description": "Loaded the ticket, profiles, events and approvals",
+        "result": "22 events, landlord approval 18 approved, no open holds, no attachments",
+        "ok": true
+      },
+      {
+        "tool": "classify_reply",
+        "description": "Classified the tenant's call (event 021)",
+        "result": "Question 0.96, review, needs a human reply 0.6, dissatisfied 0.32",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed Keystone Compliance to ask which date they booked and whether anyone came on 30/08/2025",
+        "result": "Queued (message 45), guard passed",
+        "ok": true
+      },
+      {
+        "tool": "send_message",
+        "description": "Emailed the tenant to acknowledge her call and say we're checking the date with the contractor (no date promised)",
+        "result": "Queued (message 46), guard passed",
+        "ok": true
+      },
+      {
+        "tool": "place_hold",
+        "description": "Put the ticket on hold waiting for the contractor to confirm the date",
+        "result": "Hold 88, follow-up in 2 days",
+        "ok": true
+      }
+    ],
+    "approvals": [
+      {
+        "party": "Landlord",
+        "status": "granted (event 009 'Yes go ahead'; no amount stated)",
+        "channel": "email"
+      }
+    ],
+    "escalation": {
+      "needed": false,
+      "reason": "The date clash can be settled by asking the contractor; no complaint, safety or cost issue",
+      "handover_summary": "",
+      "recommendation": "If the contractor hasn't replied by the follow-up date, chase them once. Escalate if they still don't reply or if the dates still clash."
+    },
+    "unverified": [
+      "Whether the contractor booked 8 September 2025 or 30/08/2025",
+      "Whether anyone came on 30/08/2025",
+      "Real visit date: the system calls 30/08/2025 'Monday' but it is a Saturday",
+      "Names don't match: Isaac Palmer/Riverside Works, Lantern Utilities and Keystone Utilities appear to be trading names for Keystone Compliance; tenant listed as Clara, Ruben Oakley, Grace Mercer or Harriet Fletcher",
+      "No repair cost or quote is visible; the landlord approved without an amount"
+    ],
+    "failures": [],
+    "risks_or_red_flags": [
+      "If the contractor came on 30/08 and no one was in, there could be a wasted-call charge",
+      "The system sent the tenant and contractor different phone numbers (07700 900721 vs 07700 900077)",
+      "An earlier ticket for the same property (R/PM026-1, oven repair) is still on hold in provider_selection and may be a duplicate",
+      "Tenant showed mild frustration (dissatisfied 0.32)"
+    ],
+    "final_status": "On hold (waiting on contractor), stage left at works",
+    "next_follow_up": {
+      "when": "2025-09-01",
+      "what": "If Keystone Compliance hasn't confirmed the visit date, chase them; once confirmed, tell the tenant the date"
+    },
+    "confidence": 0.8
+  }
+}

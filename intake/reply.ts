@@ -35,6 +35,15 @@ export const AUTONOMY = {
   NEEDS_HUMAN_RESPONSE: 0.5,
   SAFETY_CONCERN: 0.5,
   DISSATISFIED: 0.6,
+  /**
+   * A clear, confident approve/decline needs no personal reply even when the generic needs_human_response score is moderate
+   * (a flat "No, I will arrange my own contractor" scored 0.72 only because declines feel unusual). Applies only when the intent
+   * itself is >= CLEAR_DECISION_PROB and no question/safety/dissatisfaction/condition signal fires (those checks and REVIEW_INTENTS still run).
+   * Above NEEDS_HUMAN_RESPONSE_CLEAR_DECISION the model really thinks a person must write back, so it still goes to review.
+   */
+  CLEAR_DECISION_INTENTS: ["approve", "decline"] as readonly string[],
+  CLEAR_DECISION_PROB: 0.9,
+  NEEDS_HUMAN_RESPONSE_CLEAR_DECISION: 0.85,
   /** intents that always go to a human */
   REVIEW_INTENTS: ["question", "complaint", "conditional_approval"] as readonly string[],
 } as const;
@@ -105,10 +114,12 @@ export async function classifyReply(input: ReplyInput, opts: { apiKey?: string }
 }
 
 export function decideAutonomy(
-  r: Pick<ReplyResult, "intent" | "needs_human_response" | "safety_concern" | "dissatisfied">,
+  r: Pick<ReplyResult, "intent" | "needs_human_response" | "safety_concern" | "dissatisfied"> & Partial<Pick<ReplyResult, "intent_probs">>,
 ): "auto" | "review" {
   const A = AUTONOMY;
-  if (r.needs_human_response >= A.NEEDS_HUMAN_RESPONSE) return "review";
+  const clearDecision = A.CLEAR_DECISION_INTENTS.includes(r.intent) && (r.intent_probs?.[r.intent] ?? 0) >= A.CLEAR_DECISION_PROB;
+  const humanLimit = clearDecision ? A.NEEDS_HUMAN_RESPONSE_CLEAR_DECISION : A.NEEDS_HUMAN_RESPONSE;
+  if (r.needs_human_response >= humanLimit) return "review";
   if (r.safety_concern >= A.SAFETY_CONCERN) return "review";
   if (r.dissatisfied >= A.DISSATISFIED) return "review";
   if (A.REVIEW_INTENTS.includes(r.intent)) return "review";
