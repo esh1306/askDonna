@@ -43,55 +43,29 @@ Donna takes those handoff decisions herself (reply, advance the stage, hold with
 
 ```mermaid
 flowchart LR
-    subgraph Inputs
-        RT["Reality Test / case folders<br/>(index.md, history.md, attachments, or any text file)"]
-        IN["Inbound message<br/>(tenant / landlord / contractor)"]
-        CALL["Voice call result<br/>(ElevenLabs)"]
-    end
-
-    subgraph Runner["runner/"]
-        NORM["normalise + import case"]
-        REN["render ANSWER.md / REASONING.md<br/>from eve events + CRM diff"]
-    end
-
-    subgraph Agent["agent/ — Donna on eve"]
-        LLM["Claude Opus 5.5<br/>instructions.md (judgement rules)"]
-        TOOLS["14 tools"]
-    end
-
-    subgraph Jev["intake/ — Jev (TypeSafe AI)"]
-        J1["intake classifier"]
-        J2["reply classifier<br/>auto vs review"]
-        J3["outbound guard"]
-        J4["consent check"]
-    end
-
-    CRM[("crm/ — SQLite CRM<br/>tickets · profiles + facts · events<br/>holds · approvals · outbox · human queue")]
-    CLAUDEX["Claude Sonnet 5.5<br/>attachment reader (PDF / photo)"]
-
-    subgraph Console["console/ — operations console"]
-        UI["tickets · profiles · timeline<br/>human queue · inbound simulator"]
-        WORK["outbox worker"]
-    end
-
-    EL["ElevenLabs Agents<br/>browser + Twilio phone"]
-    RS["Resend email"]
-
-    RT --> NORM --> CRM
-    NORM --> LLM
-    IN --> UI --> LLM
-    LLM <--> TOOLS
-    TOOLS <--> CRM
-    TOOLS --> J1 & J2 & J3
-    TOOLS --> CLAUDEX
-    LLM -- "eve event stream" --> REN
-    CRM --> REN
-    CRM --> UI
-    WORK --> EL & RS
-    CRM --> WORK
-    EL --> CALL --> J4 --> CRM
-    CALL --> LLM
+    IN["📨 Event<br/>tenant report · landlord reply<br/>contractor email · case file"] --> D
+    D["🤖 Donna<br/>eve + Claude Opus 5.5"] <-->|14 tools| CRM[("🗂️ CRM<br/>tickets · profiles · history")]
+    D <-->|calibrated checks| J["⚖️ Jev<br/>classify · guard · consent"]
+    D -->|approval call| V["📞 ElevenLabs voice"]
+    V -->|decision| CRM
+    D -->|unsure or risky| H["🧑‍💼 Human queue<br/>with handover"]
+    D -->|every run| A["📄 ANSWER.md + REASONING.md<br/>from the event log"]
 ```
+
+1. **An event arrives**: a tenant report, a landlord or contractor reply, or a Reality Test case file (imported into the CRM).
+2. **Donna loads context** from the CRM: the ticket, the property's history and every person's profile.
+3. **Jev scores it**: what kind of request, how urgent, and whether a reply can be handled automatically.
+4. **Donna acts through tools**: replies, moves the stage, places a hold with a follow-up date, or asks the landlord for approval, by email or a voice call. Jev checks each outbound action before it goes.
+5. **When it isn't her call**, she escalates to the human queue with a handover a person can act on in a minute.
+6. **Every run is recorded**, and the answer files are generated from that log.
+
+### See it
+
+| Donna's handover in the human queue | Profiles Donna built while working |
+|---|---|
+| ![Human queue](docs/img/console-human-queue.png) | ![Ticket with profiles](docs/img/console-heating.png) |
+| **What she actually sent** (no false promises: "no engineer is booked yet") | |
+| ![Outbox and timeline](docs/img/console-outbox-timeline.png) | |
 
 **One request, end to end**
 

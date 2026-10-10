@@ -1,4 +1,8 @@
-# Case 2: Case 2
+# Case 2: Invoice NBL-T2-118
+
+## Case details
+
+- **Property:** 7 Mill Lane, Bellmere, ZZ4 7ZZ
 
 ## Initial request
 

@@ -48,8 +48,15 @@ export async function normaliseCase(src: string, caseNumber: string): Promise<st
   const base = isDir ? src : dirname(src);
   const body: string[] = [];
   for (const f of textFiles) body.push(`### ${f}\n\n${(await readFile(join(base, f), "utf8")).trim()}`);
-  const title = body.join("\n").match(/^#\s+(.+)$/m)?.[1]?.replace(/^Case\s+\S+:\s*/i, "") ?? `Case ${caseNumber}`;
-  await writeFile(join(dst, "index.md"), `# Case ${caseNumber}: ${title}\n\n## Initial request\n\n${body.join("\n\n")}\n`);
+  const all = body.join("\n");
+  const title =
+    all.match(/^#\s+(.+)$/m)?.[1]?.replace(/^Case\s+\S+:\s*/i, "") ??
+    all.match(/^\s*(?:Subject|Title|Issue)\s*:\s*(.+)$/im)?.[1]?.trim() ??
+    all.match(/\(([^)]{6,80})\)/)?.[1]?.trim() ??
+    `Case ${caseNumber}`;
+  const property = all.match(/^\s*(?:\*\*)?(?:Property|Address)(?:\*\*)?\s*:\s*(?:\*\*)?\s*(.+)$/im)?.[1]?.trim();
+  const details = property ? `## Case details\n\n- **Property:** ${property}\n\n` : "";
+  await writeFile(join(dst, "index.md"), `# Case ${caseNumber}: ${title}\n\n${details}## Initial request\n\n${all}\n`);
   if (isDir) {
     for (const n of names) if (!textFiles.includes(n) && (await stat(join(src, n))).isFile()) await copyFile(join(src, n), join(dst, "attachments", n));
     const att = join(src, "attachments");
